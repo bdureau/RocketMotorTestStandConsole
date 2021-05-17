@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/textViewTitleThrustCurveInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elegantTextHeight="true"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center_horizontal"
+        android:textSize="18sp"
+        android:text="@string/thrustcurve_info" />
+
+    <TextView
+        android:id="@+id/thrustCurveNbr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textViewTitleThrustCurveInfo"
+        android:layout_marginTop="18dp"
+        android:text="@string/flight_nbr" />
+
+    <TextView
+        android:id="@+id/thrustCurveNbrValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textViewTitleThrustCurveInfo"
+        android:layout_marginTop="18dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/nbrOfSamples"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/thrustCurveNbr"
+        android:layout_marginTop="18dp"
+        android:text="@string/nbr_of_sample" />
+    <TextView
+        android:id="@+id/nbrOfSamplesValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/thrustCurveNbr"
+        android:layout_marginTop="18dp"
+        android:text="" />
+
+
+
+    <TextView
+        android:id="@+id/thrustCurveDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/nbrOfSamples"
+        android:layout_marginTop="18dp"
+        android:text="@string/flight_duration" />
+
+    <TextView
+        android:id="@+id/thrustCurveDurationValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/nbrOfSamples"
+        android:layout_marginTop="18dp"
+        android:text="secs" />
+
+    <TextView
+        android:id="@+id/burnTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/thrustCurveDuration"
+        android:layout_marginTop="18dp"
+        android:text="@string/burn_time" />
+
+    <TextView
+        android:id="@+id/burnTimeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/thrustCurveDuration"
+        android:layout_marginTop="18dp"
+        android:text="secs" />
+
+    <TextView
+        android:id="@+id/maxVelociy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/burnTime"
+        android:layout_marginTop="18dp"
+        android:text="@string/max_velocity" />
+
+    <TextView
+        android:id="@+id/maxVelociyValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/burnTime"
+        android:layout_marginTop="18dp"
+        android:text="Km/h" />
+
+    <TextView
+        android:id="@+id/maxAcceleration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/maxVelociy"
+        android:layout_marginTop="18dp"
+        android:text="@string/max_acceleration" />
+
+    <TextView
+        android:id="@+id/maxAccelerationValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/maxVelociy"
+        android:layout_marginTop="18dp"
+        android:text="G/secs" />
+
+
+
+
+</RelativeLayout>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/textViewTtitleTab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elegantTextHeight="true"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center_horizontal"
+        android:textSize="18sp"
+        android:text="@string/altimeter_config_tab2" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTtitleTab2"
+        android:text="@string/baudRate"
+        android:id="@+id/txtViewBaudRate"
+        android:layout_marginTop="18dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/spinnerBaudRate"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtViewBaudRate"
+        android:layout_alignParentRight="true"
+        android:spinnerMode="dropdown" />
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/altimeterResolution"
+        android:id="@+id/txtViewTestStandResolution"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/txtViewBaudRate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/spinnerTestStandResolution"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtViewTestStandResolution"
+        android:layout_alignParentRight="true"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/eepromSize"
+        android:id="@+id/txtViewEEpromSize"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/txtViewTestStandResolution"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/spinnerEEpromSize"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtViewEEpromSize"
+        android:layout_alignParentRight="true"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/EndRecordThrust"
+        android:id="@+id/txtViewStopRecordingThrustLevel"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/txtViewEEpromSize"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/editTxtStopRecordingThrustLevel"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtViewStopRecordingThrustLevel"
+        android:layout_alignParentRight="true"
+        android:inputType="number"
+        android:textAlignment="textEnd"
+        android:textSize="13sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/StarRecordThrust"
+        android:id="@+id/txtViewStartRecordingThrustLevel"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/txtViewStopRecordingThrustLevel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/editTxtStartRecordingThrustLevel"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtViewStartRecordingThrustLevel"
+        android:layout_alignParentRight="true"
+        android:inputType="number"
+        android:textAlignment="textEnd"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/txtViewBatteryType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/txtViewStartRecordingThrustLevel"
+        android:text="@string/BatteryType" />
+
+    <Spinner
+        android:id="@+id/spinnerBatteryType"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtViewBatteryType"
+        android:layout_alignParentRight="true"
+        android:spinnerMode="dropdown" />
+
+</RelativeLayout>

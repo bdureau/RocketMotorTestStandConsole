@@ -1,0 +1,289 @@
+<resources>
+    <string name="app_name">Rocket Motor Test Stand</string>
+    <string name="version"> pre 2.0.0 candidate 4</string>
+
+    <!-- Menu -->
+    <string name="help">Help</string>
+    <string name="about">About</string>
+    <string name="action_settings">Application Settings</string>
+    <string name="bluetooth_device">bluetooth Device</string>
+
+    <!-- Screen Test stand config-->
+    <string name="altimeter_outputs">Altimeter Outputs</string>
+    <string name="altimeter_config">Test stand Config</string>
+    <string name="main_altitude">Main altitude</string>
+    <string name="output_1">Output 1</string>
+    <string name="delay1">Delay 1 (ms)</string>
+    <string name="output_2">Output 2</string>
+    <string name="delay2">Delay 2 (ms)</string>
+    <string name="output_3">Output 3</string>
+    <string name="delay3">Delay 3 (ms)</string>
+    <string name="output_4">Output 4</string>
+    <string name="delay4">Delay 4 (ms)</string>
+    <string name="upload">Upload</string>
+    <string name="dismiss_config">Dismiss</string>
+    <!-- AltimeterConfigActivity Spinners -->
+    <string name="main_config">Main</string>
+    <string name="drogue_config">Drogue</string>
+    <string name="timer_config">Timer</string>
+    <string name="disabled_config">Disabled</string>
+    <string name="landing_config">Landing</string>
+    <string name="liftoff_config">Liftoff</string>
+    <string name="altitude_config">Altitude</string>
+    <string name="altitude1">Altitude 1 (meters)</string>
+    <string name="altitude2">Altitude 2 (meters)</string>
+    <string name="altitude3">Altitude 3 (meters)</string>
+    <string name="altitude4">Altitude 4 (meters)</string>
+    <!-- Config tab1 tooltips -->
+    <string name="main_altitude_tooltip">Enter the altitude for the main chute</string>
+    <string name="OutDelay1_tooltip">Enter the firing delay in ms for the 1st output</string>
+    <string name="OutDelay2_tooltip">Enter the firing delay in ms for the 2nd output</string>
+    <string name="OutDelay3_tooltip">Enter the firing delay in ms for the 3rd output</string>
+    <string name="OutDelay4_tooltip">Enter the firing delay in ms for the 4th output</string>
+    <string name="txtOut1_tooltip">Choose what you want to do with the 1st output</string>
+    <string name="txtOut2_tooltip">Choose what you want to do with the 2nd output</string>
+    <string name="txtOut3_tooltip">Choose what you want to do with the 3rd output</string>
+    <string name="txtOut4_tooltip">Choose what you want to do with the 4th output</string>
+    <string name="txtViewBaudRate_tooltip">Choose the altimeter baud rate. Be carefull you might not be able to communicate</string>
+    <string name="editTxtApogeeMeasures_tooltip">Number of measures to determine the apogee</string>
+    <string name="txtViewAltimeterResolution_tooltip">Choose the altimeter resolution. The faster you rocket goes the lower it has to be</string>
+    <string name="txtViewEEpromSize_tooltip">Choose the altimeter eeprom size depending on which eeprom is used</string>
+    <string name="txtViewRecordTemp_tooltip">Choose if you want to record the temperature</string>
+    <string name="EndRecordAltitude_tooltip">At which altitude do you consider that we have landed</string>
+    <string name="LiftOffAltitude_tooltip">At which altitude do you consider that we have lift off</string>
+    <string name="txtViewBatteryType_tooltip">Enter battery type used to make sure that we do not discharge it too much</string>
+    <string name="txtAltiUnit_tooltip">Choose the altitude units you are familiar with</string>
+    <string name="editTxtBipFreq_tooltip">Choose the beeping frequency in Hz</string>
+
+    <!-- Config tab2 -->
+    <string name="altimeter_config_tab2">Test Stand Config</string>
+    <string name="baudRate">Baud Rate</string>
+    <string name="apogeeMeasures">Apogee Measures</string>
+    <string name="altimeterResolution">Test stand Res</string>
+    <string name="eepromSize">EEprom Size</string>
+
+
+    <string name="EndRecordThrust">End recording Thrust</string>
+    <string name="StarRecordThrust">Start recording Thrust</string>
+    <string name="BatteryType">Battery Type</string>
+    <string name="config_unknown">unknown</string>
+    <string name="config_on">On</string>
+    <string name="config_off">Off</string>
+    <!-- Config tab3 -->
+    <string name="teststand_config_tab3">Test Stand Config</string>
+    <string name="teststand_name">Test stand Name</string>
+    <string name="units">Units</string>
+
+    <string name="unit_meter">Kg</string>
+    <string name="unit_feet">Pounds</string>
+
+    <!-- Main Screen -->
+    <string name="teststand_settings">Test Stand Settings</string>
+
+    <string name="read_flights">Read Thrust Curves</string>
+    <string name="reset_settings">Reset settings</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="connect">Connect</string>
+    <string name="telemetry">Telemetry</string>
+
+    <!--connection screen -->
+    <string name="select_device_to_use">Select Device to use</string>
+    <string name="show_paired_devices">Show Paired Devices</string>
+
+    <!-- Thrust curve graph-->
+    <string name="altitude_time">Newton / Time</string>
+    <string name="close">Close</string>
+    <!-- Reset screen -->
+    <string name="dismiss_reset">Dismiss</string>
+    <string name="clear_flights">Clear Thrust Curves</string>
+    <string name="reset_msg1">You are about to erase all thrust curves data, are you sure you want to do it?</string>
+    <string name="reset_msg2">You are about to reset your test stand config, are you sure you want to do it?</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+    <!-- bluetooth messages -->
+    <string name="BT_msg1">Bluetooth Device Not Available</string>
+    <string name="BT_msg2">No Paired Bluetooth Devices Found.</string>
+
+    <!-- main screen msg-->
+    <string name="MS_msg1">Connecting...</string>
+    <string name="MS_msg2">Please wait!!!</string>
+    <string name="MS_msg3">Connection Failed. Is it a SPP Bluetooth? Try again.</string>
+    <string name="MS_msg4">Connected.</string>
+
+    <string name="those_functions_will_reset_the_altimeter">Those functions will reset the test stand</string>
+    <string name="restore_alti_config">Restore Test stand config</string>
+
+    <!--Flight list screen -->
+    <string name="Flight_list">Thrust curves List</string>
+    <string name="title_activity_flight_list">Thrust curves List</string>
+    <string name="dismiss_flight_list">Dismiss</string>
+
+    <!-- About screen -->
+    <string name="about_screen">About</string>
+    <string name="bear_console_version">Rocket test stand version</string>
+    <string name="dismiss_about">Dismiss</string>
+
+    <!-- Messages -->
+    <!-- TestStandConfigActivity -->
+    <string name="msg1">Only one main is allowed. Please review your config</string>
+    <string name="msg2">Only one Drogue is allowed. Please review your config</string>
+    <string name="msg3">Config successfully uploaded</string>
+    <string name="msg4">Failed to upload config</string>
+    <string name="msg5">Retrieving Test stand config...</string>
+    <string name="msg6">Please wait!!!</string>
+    <string name="msg7">Retrieving thrust curves...</string>
+    <string name="msg8">Please wait!!!</string>
+    <string name="msg9">You have changed the baud rate, the test stand might not be able to connect. Are you sure?</string>
+
+
+    <!-- Thrust Curve views screen -->
+    <string name="Meters_fview">Meters</string>
+    <string name="Feet_fview">Feet</string>
+    <string name="Altitude_time">Thrust / Time</string>
+    <string name="Time_fv">Time (ms)</string>
+    <string name="Altitude">Thrust</string>
+    <string name="dismiss_flight_list_view">Dismiss</string>
+    <!-- Application preference screen-->
+    <string name="titre_application_pref">Application preferences</string>
+
+
+    <!-- Config-->
+    <string name="save_config">Save</string>
+    <string name="dismiss_app_config">Dismiss</string>
+    <string name="application_langage_config">Application langage</string>
+    <string name="graph_color_config">Graph color</string>
+    <string name="application_units_config">Application Units</string>
+    <string name="graph_back_color_config">Graph back color</string>
+    <string name="default_config">Default</string>
+    <string name="font_size">Font Size</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="baud_rate">Baud Rate</string>
+    <string name="connection_type">Connection Type</string>
+    <string name="graphiclib_type">Graphics lib </string>
+    <string name="MultipleMainDrogue">Multiple Main/drogue</string>
+    <string name="FullUSBSupport">Full USB Support</string>
+    <string name="color_black">BLACK</string>
+    <string name="color_white">WHITE</string>
+    <string name="color_magenta">MAGENTA</string>
+    <string name="color_blue">BLUE</string>
+    <string name="color_yellow">YELLOW</string>
+    <string name="color_green">GREEN</string>
+    <string name="color_gray">GRAY</string>
+    <string name="color_cyan">CYAN</string>
+    <string name="color_dkgray">DKGRAY</string>
+    <string name="color_ltgray">LTGRAY</string>
+    <string name="color_red">RED</string>
+
+    <string name="phone_english">English</string>
+    <string name="phone_french">French</string>
+    <string name="phone_language">Phone language</string>
+    <string name="config_unit_meters">Meters</string>
+    <string name="config_unit_feet">Feet</string>
+
+    <string name="general_config">General</string>
+    <string name="telemetry_config">Telemetry config</string>
+    <string name="main_event">Main event</string>
+    <string name="apogee_altitude_event">Apogee altitude</string>
+    <string name="main_altitude_event">Main altitude</string>
+    <string name="drogue_event">Drogue event</string>
+    <string name="altitude_event">Altitude event</string>
+    <string name="landing_event">Landing event</string>
+    <string name="burnout_event">Burnout event</string>
+    <string name="warning_event">Warning event</string>
+    <string name="liftoff_event">Lift off event</string>
+
+    <!-- Telemetry -->
+    <string name="stop_telemetry">Stop Telemetry</string>
+    <string name="start_telemetry">Start Telemetry</string>
+    <string name="current_phase">Current Phase</string>
+    <string name="altitude">Altitude</string>
+    <string name="event_time">Event Time</string>
+    <string name="lift_off">Lift off</string>
+    <string name="apogee_drogue">Apogee/drogue</string>
+    <string name="main_chute">Main chute</string>
+    <string name="landed">Landed</string>
+    <string name="max_speed">Max speed</string>
+    <string name="current_thrust">Current Thrust</string>
+    <string name="dis">disconnect</string>
+
+    <!-- Status -->
+    <string name="title_activity_altimeter_status">Test Stand Status</string>
+    <string name="altimeter_status">Test Stand status</string>
+    <string name="altimeter_status_disabled">Disabled</string>
+    <string name="altimeter_status_current_thrust">Current thrust</string>
+    <string name="altimeter_status_battery_voltage">Battery voltage</string>
+    <string name="altimeter_status_link_type">Link type</string>
+    <string name="altimeter_status_bluetooth">Bluetooth</string>
+    <string name="status">Status</string>
+    <string name="status_msg1">Fire Altimeter outputs \nMake sure that you do not have \n any real pyro charges!!!</string>
+    <string name="temperature">Temperature</string>
+
+    <string name="disabled">Disabled</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+
+    <!-- flash firmware -->
+    <string name="msg10">Flashing firmware...</string>
+    <string name="msg11">Please wait!!!</string>
+    <string name="msg12">Upload: </string>
+    <string name="msg13">Cannot open</string>
+    <string name="msg14">Upload : Start \n</string>
+    <string name="msg15">Upload: Failed\n</string>
+    <string name="msg16">Upload: Successful\n</string>
+    <string name="msg17">Cancel uploading\n</string>
+    <string name="msg18">Error: </string>
+    <string name="msg19">Flashing recover firmware...: </string>
+    <string name="firmware_cancel">Cancel</string>
+    <string name="firmware_dismiss">Dismiss</string>
+    <string name="recover_firmware">Recover Firmware</string>
+    <string name="flash_firmware">Flash Firmware</string>
+    <string name="select_altimeter_model">Select your test stand model:</string>
+    <string name="after_complete_upload">After the upload is complete you will be able to flash the real firmware</string>
+    <string name="detect_firmware">Detect firmware</string>
+    <string name="msg_detect_firmware">Attempting to Detect firmware!!!</string>
+
+    <!--- other -->
+    <string name="flight_list_cancel">Cancel</string>
+    <string name="flight_retrieval_canceled">Thrust curve retrieval has been canceled by user</string>
+    <string name="flight_have_been_recorded">No thrust curves have been recorded</string>
+    <string name="main_screen_actity">Cancel</string>
+    <string name="title_activity_flight_view_maps">Map</string>
+    <string name="thrustcurve">Thrust Curve</string>
+    <string name="title_activity_flight_view_tab">FlightViewTabActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="thrustcurve_info">Thrust Curve Info</string>
+    <string name="apogee_altitude">Apogee Altitude</string>
+    <string name="max_velocity">Max Velocity</string>
+    <string name="main_alti">Main Altitude</string>
+    <string name="flight_duration">Thrust duration</string>
+    <string name="burn_time">Burn Time</string>
+    <string name="max_acceleration">Max acceleration</string>
+    <string name="time_to_apogee">Time to Apogee</string>
+    <string name="max_descent_speed">Max descent speed</string>
+    <string name="landing_speed">Landing speed</string>
+    <string name="flight_nbr">Flight nbr</string>
+    <string name="nbr_of_sample">Samples</string>
+    <string name="select_curve">Select Curve</string>
+    <string name="fv_ok">OK</string>
+    <string name="fv_cancel">Cancel</string>
+    <string name="telemetry_voice">Telemetry voice</string>
+    <string name="test_telemetry_voice">Test Voice</string>
+
+    <!--units -->
+    <string name="unit_meters">meters</string>
+    <string name="unit_time">time (ms)</string>
+    <string name="unit_feet_per_secs">feet/secs</string>
+    <string name="unit_feet_per_square_secs">feet/secs²</string>
+
+    <!--curves name -->
+    <string name="curve_thrust">thrust</string>
+
+    <string name="thrustcurve_name">Thrust Curve</string>
+
+
+    <string name="select_bluetooth_device">Select Bluetooth device</string>
+    <string name="telemetry_screen">Telemetry</string>
+    <string name="status_screen">Status</string>
+
+</resources>

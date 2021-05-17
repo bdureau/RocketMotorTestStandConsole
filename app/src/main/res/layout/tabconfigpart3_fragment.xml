@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/textViewTtitleTab3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elegantTextHeight="true"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center_horizontal"
+        android:textSize="18sp"
+        android:text="@string/teststand_config_tab3" />
+    <TextView
+        android:id="@+id/txtTestStandName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTtitleTab3"
+
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="28dp"
+        android:text="@string/teststand_name" />
+
+    <TextView
+        android:id="@+id/txtAltiNameValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/txtTestStandName"
+        android:text="qqqq" />
+
+    <TextView
+        android:id="@+id/txtTestStandUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/txtTestStandName"
+        android:text="@string/units" />
+
+    <Spinner
+        android:id="@+id/spinnerUnit"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBaseline="@+id/txtTestStandUnit"
+        android:spinnerMode="dropdown" />
+
+
+
+</RelativeLayout>
