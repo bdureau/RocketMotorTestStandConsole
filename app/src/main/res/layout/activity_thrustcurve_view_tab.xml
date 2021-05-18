@@ -33,6 +33,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:text="@string/dismiss_flight_list_view" />
+        android:text="@string/dismiss_thrustCurve_list_view" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -181,12 +181,12 @@ public class Telemetry extends AppCompatActivity {
         String myUnits = "";
         if (myBT.getAppConf().getUnits().equals("0"))
             //Meters
-            myUnits = getResources().getString(R.string.Meters_fview);
+            myUnits = getResources().getString(R.string.Kg_fview);
         else
             //Feet
-            myUnits = getResources().getString(R.string.Feet_fview);
+            myUnits = getResources().getString(R.string.Pounds_fview);
 
-        if (myBT.getAppConf().getUnitsValue().equals("Meters")) {
+        if (myBT.getAppConf().getUnitsValue().equals("Kg")) {
             FEET_IN_METER = 1;
         } else {
             FEET_IN_METER = 3.28084;
@@ -195,9 +195,9 @@ public class Telemetry extends AppCompatActivity {
         Font font = new Font("Dialog", Typeface.NORMAL, fontSize);
 
         AFreeChart chart = ChartFactory.createXYLineChart(
-                getResources().getString(R.string.Altitude_time),
+                getResources().getString(R.string.Thrust_time),
                 getResources().getString(R.string.Time_fv),
-                getResources().getString(R.string.Altitude) + " (" + myUnits + ")",
+                getResources().getString(R.string.Thrust) + " (" + myUnits + ")",
                 null,
                 PlotOrientation.VERTICAL, // orientation
                 true,                     // include legend

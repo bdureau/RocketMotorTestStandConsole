@@ -77,18 +77,18 @@ public class ThrustCurveViewActivity extends AppCompatActivity {
      String myUnits="";
      if (myBT.getAppConf().getUnits().equals("0"))
          //Meters
-         myUnits=getResources().getString(R.string.Meters_fview);
+         myUnits=getResources().getString(R.string.Kg_fview);
      else
         //Feet
-         myUnits = getResources().getString(R.string.Feet_fview);
+         myUnits = getResources().getString(R.string.Pounds_fview);
 
      //font
      Font font = new Font("Dialog", Typeface.NORMAL,fontSize);
 
      AFreeChart chart = ChartFactory.createXYLineChart(
-             getResources().getString(R.string.Altitude_time),
+             getResources().getString(R.string.Thrust_time),
              getResources().getString(R.string.Time_fv),
-             getResources().getString(R.string.Altitude) + " (" + myUnits + ")",
+             getResources().getString(R.string.Thrust) + " (" + myUnits + ")",
              null,
              PlotOrientation.VERTICAL, // orientation
              true,                     // include legend

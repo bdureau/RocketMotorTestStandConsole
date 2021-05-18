@@ -55,8 +55,8 @@ public class AppConfigData {
                 context.getResources().getString(R.string.phone_language)//"Phone language"
         };
         itemsUnits = new String[]{
-                context.getResources().getString(R.string.config_unit_meters),//"Meters",
-                context.getResources().getString(R.string.config_unit_feet)  //"Feet"
+                context.getResources().getString(R.string.config_unit_kg),//"Meters",
+                context.getResources().getString(R.string.config_unit_pounds)  //"Feet"
         };
 
         itemsColor = new String[]{

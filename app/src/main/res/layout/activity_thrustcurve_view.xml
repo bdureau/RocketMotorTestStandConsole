@@ -28,7 +28,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal|center_vertical"
-        android:text="@string/dismiss_flight_list_view" />
+        android:text="@string/dismiss_thrustCurve_list_view" />
     <Button
         android:id="@+id/butMap"
         android:layout_width="wrap_content"

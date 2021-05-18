@@ -146,12 +146,12 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         myBT.getAppConf().ReadConfig();
         if (myBT.getAppConf().getUnits().equals("0")) {
             //Meters
-            units[0] = "(" + getResources().getString(R.string.Meters_fview) + ")";
+            units[0] = "(" + getResources().getString(R.string.Kg_fview) + ")";
 
         }
         else {
             //Feet
-            units[0] = getResources().getString(R.string.Feet_fview);
+            units[0] = getResources().getString(R.string.Pounds_fview);
 
         }
 

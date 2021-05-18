@@ -335,7 +335,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 //  msg(myMessage);
             }
             if (myMessage.equals("KO")) {
-                msg(getResources().getString(R.string.msg2));
+                //msg(getResources().getString(R.string.msg2));
             }
 
 
@@ -699,9 +699,9 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
             //units
             dropdownUnits = (Spinner) view.findViewById(R.id.spinnerUnit);
-            //"Meters", "Feet"
-            String[] items2 = new String[]{getResources().getString(R.string.unit_meter),
-                    getResources().getString(R.string.unit_feet)};
+            //"kg", "pounds"
+            String[] items2 = new String[]{getResources().getString(R.string.unit_kg),
+                    getResources().getString(R.string.unit_pound)};
             ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this.getActivity(),
                     android.R.layout.simple_spinner_dropdown_item, items2);
             dropdownUnits.setAdapter(adapter2);

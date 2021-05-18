@@ -20,7 +20,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/read_flights"
+        android:text="@string/read_thrustCurves"
         android:id="@+id/butReadFlight"
         android:layout_marginTop="21dp"
         android:layout_below="@+id/butAltiSettings"

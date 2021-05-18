@@ -47,11 +47,11 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".config.TestStandTabConfigActivity"
-            android:label="@string/altimeter_config"
+            android:label="@string/teststand_config"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ThrustCurve.ThrustCurveListActivity"
-            android:label="@string/Flight_list"
+            android:label="@string/ThrustCurves_list"
             android:screenOrientation="portrait" />
         <activity android:name=".ThrustCurve.ThrustCurveViewActivity" />
         <activity

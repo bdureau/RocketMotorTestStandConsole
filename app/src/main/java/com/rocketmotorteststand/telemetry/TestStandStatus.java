@@ -40,10 +40,10 @@ public class TestStandStatus extends AppCompatActivity {
                     //Value 1 contains the current thrust
                     if (myBT.getAppConf().getUnits().equals("0"))
                         //Meters
-                        myUnits = getResources().getString(R.string.Meters_fview);
+                        myUnits = getResources().getString(R.string.Kg_fview);
                     else
                         //Feet
-                        myUnits = getResources().getString(R.string.Feet_fview);
+                        myUnits = getResources().getString(R.string.Pounds_fview);
                     txtViewThrust.setText((String) msg.obj + " " + myUnits);
                     break;
                 case 13:

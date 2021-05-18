@@ -227,12 +227,12 @@ public class TelemetryMp extends AppCompatActivity {
         String myUnits = "";
         if (myBT.getAppConf().getUnits().equals("0"))
             //Meters
-            myUnits = getResources().getString(R.string.Meters_fview);
+            myUnits = getResources().getString(R.string.Kg_fview);
         else
             //Feet
-            myUnits = getResources().getString(R.string.Feet_fview);
+            myUnits = getResources().getString(R.string.Pounds_fview);
 
-        if (myBT.getAppConf().getUnitsValue().equals("Meters")) {
+        if (myBT.getAppConf().getUnitsValue().equals("Kg")) {
             FEET_IN_METER = 1;
         } else {
             FEET_IN_METER = 3.28084;
