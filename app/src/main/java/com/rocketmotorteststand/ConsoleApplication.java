@@ -508,6 +508,18 @@ public class ConsoleApplication extends Application {
                                         else
                                             TestStandCfg.setBatteryType(0);
 
+                                    // value 11 contains calibration_factor
+                                    if (currentSentence.length > 11)
+                                        if (currentSentence[11].matches("\\d+(?:\\.\\d+)?"))
+                                            TestStandCfg.setCalibrationFactor(Integer.valueOf(currentSentence[11]));
+                                        else
+                                            TestStandCfg.setCalibrationFactor(0);
+                                    // value 12 contains calibration_factor
+                                    if (currentSentence.length > 12)
+                                        if (currentSentence[12].matches("\\d+(?:\\.\\d+)?"))
+                                            TestStandCfg.setCurrentOffset(Integer.valueOf(currentSentence[12]));
+                                        else
+                                            TestStandCfg.setCurrentOffset(0);
                                     myMessage = myMessage + " " + "teststandconfig";
                                 } else {
                                     myMessage = myMessage + "KO" + "teststandconfig";
@@ -609,9 +621,9 @@ public class ConsoleApplication extends Application {
         private String units = "0";
 
         //flight retrieval timeout
-        private long flightRetrievalTimeout;
+       // private long flightRetrievalTimeout;
         //data retrieval timeout
-        private long configRetrievalTimeout;
+        //private long configRetrievalTimeout;
 
         //graph background color
         private String graphBackColor = "1";
@@ -625,9 +637,9 @@ public class ConsoleApplication extends Application {
         private String baudRate = "8";
         private String graphicsLibType = "0";
 
-        private String allowMultipleDrogueMain = "false";
+        //private String allowMultipleDrogueMain = "false";
         private String fullUSBSupport= "false";
-        private String say_main_event= "false";
+        /*private String say_main_event= "false";
         private String say_apogee_altitude= "false";
         private String say_main_altitude= "false";
         private String say_drogue_event= "false";
@@ -637,7 +649,7 @@ public class ConsoleApplication extends Application {
         private String say_warning_event= "false";
         private String say_liftoff_event= "false";
 
-        private String telemetryVoice = "0";
+        private String telemetryVoice = "0";*/
 
         public GlobalConfig(Context current) {
             appConfig = getSharedPreferences("BearConsoleCfg", MODE_PRIVATE);
@@ -657,9 +669,9 @@ public class ConsoleApplication extends Application {
             baudRate = "8"; // default to 38400 baud
             connectionType = "0";
             graphicsLibType = "1"; //Default to MP android chart lib
-            allowMultipleDrogueMain = "false";
+            //allowMultipleDrogueMain = "false";
             fullUSBSupport = "false";
-            say_main_event= "false";
+            /*say_main_event= "false";
             say_apogee_altitude= "false";
             say_main_altitude= "false";
             say_drogue_event= "false";
@@ -668,7 +680,7 @@ public class ConsoleApplication extends Application {
             say_burnout_event= "false";
             say_warning_event= "false";
             say_liftoff_event="false";
-            telemetryVoice ="0";
+            telemetryVoice ="0";*/
             /*edit.clear();
             edit.putString("AppLanguage","0");
             edit.putString("Units", "0");
@@ -729,10 +741,10 @@ public class ConsoleApplication extends Application {
                     setGraphicsLibType(graphicsLibType);
 
                 //Allow multiple drogue and main
-                String allowMultipleDrogueMain;
+              /*  String allowMultipleDrogueMain;
                 allowMultipleDrogueMain = appConfig.getString("AllowMultipleDrogueMain", "false");
                 if (!allowMultipleDrogueMain.equals(""))
-                    setAllowMultipleDrogueMain(allowMultipleDrogueMain);
+                    setAllowMultipleDrogueMain(allowMultipleDrogueMain);*/
 
                 //enable full USB support
                 String fullUSBSupport;
@@ -740,7 +752,7 @@ public class ConsoleApplication extends Application {
                 if (!fullUSBSupport.equals(""))
                     setFullUSBSupport(fullUSBSupport);
 
-                String say_main_event;
+               /* String say_main_event;
                 say_main_event = appConfig.getString("say_main_event", "false");
                 if (!say_main_event.equals(""))
                     setMain_event(say_main_event);
@@ -788,7 +800,7 @@ public class ConsoleApplication extends Application {
                 String telemetryVoice;
                 telemetryVoice = appConfig.getString("telemetryVoice", "0");
                 if(!telemetryVoice.equals(""))
-                    setTelemetryVoice(telemetryVoice);
+                    setTelemetryVoice(telemetryVoice);*/
             } catch (Exception e) {
 
             }
@@ -803,10 +815,10 @@ public class ConsoleApplication extends Application {
             edit.putString("BaudRate", getBaudRate());
             edit.putString("ConnectionType", getConnectionType());
             edit.putString("GraphicsLibType", getGraphicsLibType());
-            edit.putString("AllowMultipleDrogueMain", getAllowMultipleDrogueMain());
+           // edit.putString("AllowMultipleDrogueMain", getAllowMultipleDrogueMain());
             edit.putString("fullUSBSupport", getFullUSBSupport());
 
-            edit.putString("say_main_event", getMain_event());
+            /*edit.putString("say_main_event", getMain_event());
             edit.putString("say_apogee_altitude", getApogee_altitude());
             edit.putString("say_main_altitude", getMain_altitude());
             edit.putString("say_drogue_event", getDrogue_event());
@@ -815,7 +827,7 @@ public class ConsoleApplication extends Application {
             edit.putString("say_burnout_event", getBurnout_event());
             edit.putString("say_warning_event", getWarning_event());
             edit.putString("say_liftoff_event", getLiftOff_event());
-            edit.putString("telemetryVoice", getTelemetryVoice());
+            edit.putString("telemetryVoice", getTelemetryVoice());*/
             edit.commit();
 
         }
@@ -905,12 +917,12 @@ public class ConsoleApplication extends Application {
         }
 
 
-        public void setAllowMultipleDrogueMain(String value) {
+       /* public void setAllowMultipleDrogueMain(String value) {
             allowMultipleDrogueMain = value;
         }
         public String getAllowMultipleDrogueMain() {
             return allowMultipleDrogueMain;//appCfgData.getMultipleDrogueMain();
-        }
+        }*/
         public void setFullUSBSupport(String value) {
             fullUSBSupport = value;
         }
@@ -918,7 +930,7 @@ public class ConsoleApplication extends Application {
             return fullUSBSupport;//appCfgData.getMultipleDrogueMain();
         }
 
-        public void setMain_event(String value) { say_main_event = value;  }
+        /*public void setMain_event(String value) { say_main_event = value;  }
         public String getMain_event() {
             return say_main_event;
         }
@@ -966,7 +978,7 @@ public class ConsoleApplication extends Application {
         public void setTelemetryVoice(String value) {telemetryVoice =value;}
         public String getTelemetryVoice() {
             return telemetryVoice;
-        }
+        }*/
         public int ConvertFont(int font) {
             return font + 8;
         }

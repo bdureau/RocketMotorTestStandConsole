@@ -252,4 +252,10 @@
     <string name="telemetry_screen">Telemetry</string>
     <string name="status_screen">Status</string>
 
+
+    <string name="calibrate_tabconfig">Calibrate</string>
+
+    <string name="calibration_weight">Calibration Weight</string>
+    <string name="calibration_offset">Calibration offset</string>
+    <string name="calibration_factor">Calibration factor</string>
 </resources>

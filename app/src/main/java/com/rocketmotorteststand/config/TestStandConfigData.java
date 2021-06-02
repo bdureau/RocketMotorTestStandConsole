@@ -24,7 +24,8 @@ public class TestStandConfigData {
 
     private int startRecordingThrustLevel =1;
     private int batteryType =0;
-
+    private long calibrationFactor = 0;
+    private long currentOffset=0;
 
     public TestStandConfigData()
     {
@@ -114,5 +115,10 @@ public class TestStandConfigData {
     public void setBatteryType(int value) {batteryType =value;}
     public int getBatteryType(){return batteryType;}
 
+    public void setCalibrationFactor(long value) {calibrationFactor =value;}
+    public long getCalibrationFactor(){return calibrationFactor;}
 
+    //currentOffset
+    public void setCurrentOffset(long value) {currentOffset =value;}
+    public long getCurrentOffset(){return currentOffset;}
 }

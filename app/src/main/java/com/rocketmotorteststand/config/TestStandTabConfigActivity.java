@@ -60,7 +60,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     Tab2Fragment configPage2 = null;
     Tab3Fragment configPage3 = null;
     private Button btnDismiss, btnUpload;
-    ConsoleApplication myBT;
+    static ConsoleApplication myBT;
     private TestStandConfigData TestStandCfg = null;
     private ProgressDialog progress;
 
@@ -114,7 +114,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     }
 
 
-    private boolean readConfig() {
+    public boolean readConfig() {
         // ask for config
         boolean success = false;
         if (myBT.getConnected()) {
@@ -231,10 +231,13 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             TestStandCfg.setStopRecordingThrustLevel(configPage2.getStopRecordingThrustLevel());
             TestStandCfg.setStartRecordingThrustLevel(configPage2.getStartRecordingThrustLevel());
             TestStandCfg.setBatteryType(configPage2.getBatteryType());
+
         }
 
         if (configPage3.isViewCreated()) {
             TestStandCfg.setUnits(configPage3.getDropdownUnits());
+            TestStandCfg.setCalibrationFactor(configPage3.getCalibrationFactor());
+            TestStandCfg.setCurrentOffset(configPage3.getCurrentOffset());
         }
 
         if (configPage2.isViewCreated()) {
@@ -283,7 +286,8 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
         testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getStartRecordingThrustLevel();
         testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getBatteryType();
-
+        testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCalibrationFactor();
+        testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCurrentOffset();
 
         String cfg = testStandCfgStr;
         cfg = cfg.replace("s", "");
@@ -508,6 +512,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             dropdownBatteryType.setSelection(BatteryType);
         }
 
+
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -640,6 +645,9 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                             .show();
                 }
             });
+
+
+
             if (lTestStandCfg != null) {
                 dropdownBaudRate.setSelection(lTestStandCfg.arrayIndex(itemsBaudRate, String.valueOf(lTestStandCfg.getConnectionSpeed())));
 
@@ -649,6 +657,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 StopRecordingThrustLevel.setText(String.valueOf(lTestStandCfg.getStopRecordingThrustLevel()));
                 StartRecordingThrustLevel.setText(String.valueOf(lTestStandCfg.getStartRecordingThrustLevel()));
                 dropdownBatteryType.setSelection(lTestStandCfg.getBatteryType());
+
             }
             ViewCreated = true;
             return view;
@@ -658,8 +667,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     public static class Tab3Fragment extends Fragment {
         private static final String TAG = "Tab3Fragment";
 
-        private TextView testStandName;
+        private TextView testStandName,  CalibrationFactor, CurrentOffset;
         private Spinner dropdownUnits;
+        private EditText calibrationWeight;
+        private Button btnCalibrate;
 
 
         private TestStandConfigData ltestStandNameCfg = null;
@@ -691,12 +702,34 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             this.dropdownUnits.setSelection(Units);
         }
 
+        public int getCalibrationFactor() {
+            int ret;
+            try {
+                ret = Integer.parseInt(this.CalibrationFactor.getText().toString());
+            } catch (Exception e) {
+                ret = 0;
+            }
+            return ret;
+        }
 
+        //getCurrentOffset
+        public int getCurrentOffset() {
+            int ret;
+            try {
+                ret = Integer.parseInt(this.CurrentOffset.getText().toString());
+            } catch (Exception e) {
+                ret = 0;
+            }
+            return ret;
+        }
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.tabconfigpart3_fragment, container, false);
-
+            CalibrationFactor = (TextView) view.findViewById(R.id.txtCalibrationFactorValue);
+            CurrentOffset = (TextView) view.findViewById(R.id.txtCalibrationOffsetValue);
+            calibrationWeight = (EditText) view.findViewById(R.id.txtCalibrationWeightValue);
+            btnCalibrate = (Button) view.findViewById(R.id.butCalibrate);
             //units
             dropdownUnits = (Spinner) view.findViewById(R.id.spinnerUnit);
             //"kg", "pounds"
@@ -722,17 +755,87 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             //Test Stand name
             testStandName = (TextView) view.findViewById(R.id.txtAltiNameValue);
 
+            btnCalibrate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    new Calibration().execute();
+                }
+            });
 
             if (ltestStandNameCfg != null) {
                 testStandName.setText(ltestStandNameCfg.getTestStandName() + " ver: " +
                         ltestStandNameCfg.getTestStandMajorVersion() + "." + ltestStandNameCfg.getTestStandMinorVersion());
 
-
                 dropdownUnits.setSelection(ltestStandNameCfg.getUnits());
+                CalibrationFactor.setText(String.valueOf(ltestStandNameCfg.getCalibrationFactor()));
+                CurrentOffset.setText(String.valueOf(ltestStandNameCfg.getCurrentOffset()));
 
             }
             ViewCreated = true;
             return view;
+        }
+        // calibration
+        private class Calibration extends AsyncTask<Void, Void, Void>  // UI thread
+        {
+            private AlertDialog.Builder builder = null;
+            private AlertDialog alert;
+            private Boolean canceled = false;
+
+            @Override
+            protected void onPreExecute() {
+                //"Calibration in progress..."
+                //"Please wait!!!"
+                //this.getActivity()
+                builder = new AlertDialog.Builder(Tab3Fragment.this.getContext());
+
+                builder.setMessage("Calibration...")
+                        .setTitle("Calibration")
+                        .setCancelable(false)
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int id) {
+                                myBT.setExit(true);
+                                canceled = true;
+                                dialog.cancel();
+                            }
+                        });
+                alert = builder.create();
+                alert.show();
+            }
+
+            @Override
+            protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
+            {
+
+                myBT.flush();
+                myBT.clearInput();
+                myBT.write("c10;".toString());
+                //wait for ok and put the result back
+                String myMessage = "";
+
+                myMessage = myBT.ReadResult(3000);
+                if (myMessage.equals("OK")) {
+                    //getParentFragment().readConfig();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
+            {
+                super.onPostExecute(result);
+                if (!canceled) {
+                    //getParentFragment().readConfig();
+                    /*setAxOffsetValue(GimbalCfg.getAxOffset());
+                    setAyOffsetValue(GimbalCfg.getAyOffset());
+                    setAzOffsetValue(GimbalCfg.getAzOffset());
+                    setGxOffsetValue(GimbalCfg.getGxOffset());
+                    setGyOffsetValue(GimbalCfg.getGyOffset());
+                    setGzOffsetValue(GimbalCfg.getGzOffset());*/
+                    alert.dismiss();
+                }
+
+            }
         }
 
     }

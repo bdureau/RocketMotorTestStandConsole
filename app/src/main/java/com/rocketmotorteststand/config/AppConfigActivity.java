@@ -97,7 +97,7 @@ public class AppConfigActivity extends AppCompatActivity {
             }
         });
 
-        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+        /*mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
@@ -137,7 +137,7 @@ public class AppConfigActivity extends AppCompatActivity {
                     Log.e("TTS", "Init failed");
                 }
             }
-        }, "com.google.android.tts");
+        }, "com.google.android.tts");*/
     }
 
     private void SaveConfig() {
@@ -161,7 +161,7 @@ public class AppConfigActivity extends AppCompatActivity {
         myBT.getAppConf().setWarning_event(appConfigPage2.getWarningEvent());
         myBT.getAppConf().setMain_event(appConfigPage2.getMainEvent());
         myBT.getAppConf().setLiftOff_event(appConfigPage2.getLiftOffEvent());*/
-        myBT.getAppConf().setTelemetryVoice("" + appConfigPage2.getTelemetryVoice() + "");
+       // myBT.getAppConf().setTelemetryVoice("" + appConfigPage2.getTelemetryVoice() + "");
         myBT.getAppConf().SaveConfig();
         finish();
     }
@@ -233,7 +233,7 @@ public class AppConfigActivity extends AppCompatActivity {
         } else {
             appConfigPage2.setLiftOffEvent(false);
         }*/
-        appConfigPage2.setTelemetryVoice(Integer.parseInt(myBT.getAppConf().getTelemetryVoice()));
+        //appConfigPage2.setTelemetryVoice(Integer.parseInt(myBT.getAppConf().getTelemetryVoice()));
 
     }
 
@@ -464,16 +464,16 @@ public class AppConfigActivity extends AppCompatActivity {
         private CheckBox cbBurnoutEvent, cbWarningEvent, cbApogeeAltitude, cbMainAltitude;
         private CheckBox cbLiftOffEvent;
         private ConsoleApplication BT;
-        private Button btnTestVoice;
-        private TextToSpeech mTTS;
-        private Spinner spTelemetryVoice;
-        private int nbrVoices = 0;
+        //private Button btnTestVoice;
+        //private TextToSpeech mTTS;
+        //private Spinner spTelemetryVoice;
+        //private int nbrVoices = 0;
 
         public Tab2Fragment(ConsoleApplication lBT) {
             BT = lBT;
         }
 
-        public String getMainEvent() {
+        /*public String getMainEvent() {
             if (cbMainEvent.isChecked())
                 return "true";
             else
@@ -560,20 +560,20 @@ public class AppConfigActivity extends AppCompatActivity {
         public void setMainAltitude(boolean value) {
             cbMainAltitude.setChecked(value);
         }
-
+*/
         //cbLiftOffEvent
-        public String getLiftOffEvent() {
+      /*  public String getLiftOffEvent() {
             if (cbLiftOffEvent.isChecked())
                 return "true";
             else
                 return "false";
-        }
+        }*/
 
-        public void setLiftOffEvent(boolean value) {
+       /* public void setLiftOffEvent(boolean value) {
             cbLiftOffEvent.setChecked(value);
-        }
+        }*/
 
-        public void setVoices(String itemsVoices[]) {
+       /* public void setVoices(String itemsVoices[]) {
             nbrVoices = itemsVoices.length;
             ArrayAdapter<String> adapterVoice = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, itemsVoices);
             spTelemetryVoice.setAdapter(adapterVoice);
@@ -590,7 +590,7 @@ public class AppConfigActivity extends AppCompatActivity {
 
         public int getTelemetryVoice() {
             return (int) this.spTelemetryVoice.getSelectedItemId();
-        }
+        }*/
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Nullable
@@ -599,7 +599,7 @@ public class AppConfigActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
 
             View view = inflater.inflate(R.layout.activity_app_config_part2, container, false);
-            cbMainEvent = (CheckBox) view.findViewById(R.id.checkBoxAllowTelemetryEvent1);
+            /*cbMainEvent = (CheckBox) view.findViewById(R.id.checkBoxAllowTelemetryEvent1);
             cbDrogueEvent = (CheckBox) view.findViewById(R.id.checkBoxAllowTelemetryEvent2);
             cbAltitudeEvent = (CheckBox) view.findViewById(R.id.checkBoxAllowTelemetryEvent3);
             cbLandingEvent = (CheckBox) view.findViewById(R.id.checkBoxAllowTelemetryEvent4);
@@ -607,10 +607,10 @@ public class AppConfigActivity extends AppCompatActivity {
             cbWarningEvent = (CheckBox) view.findViewById(R.id.checkBoxAllowTelemetryEvent6);
             cbApogeeAltitude = (CheckBox) view.findViewById(R.id.checkBoxAllowTelemetryEvent7);
             cbMainAltitude = (CheckBox) view.findViewById(R.id.checkBoxAllowTelemetryEvent8);
-            cbLiftOffEvent = (CheckBox) view.findViewById(R.id.checkBoxAllowTelemetryEvent9);
-            spTelemetryVoice = (Spinner) view.findViewById(R.id.spinnerTelemetryVoice);
+            cbLiftOffEvent = (CheckBox) view.findViewById(R.id.checkBoxAllowTelemetryEvent9);*/
+            //spTelemetryVoice = (Spinner) view.findViewById(R.id.spinnerTelemetryVoice);
 
-            if (BT.getAppConf().getMain_event().equals("true")) {
+            /*if (BT.getAppConf().getMain_event().equals("true")) {
                 cbMainEvent.setChecked(true);
             } else {
                 cbMainEvent.setChecked(false);
@@ -655,10 +655,10 @@ public class AppConfigActivity extends AppCompatActivity {
                 cbLiftOffEvent.setChecked(true);
             } else {
                 cbLiftOffEvent.setChecked(false);
-            }
+            }*/
 
 
-            btnTestVoice = (Button) view.findViewById(R.id.butTestVoice);
+            /*btnTestVoice = (Button) view.findViewById(R.id.butTestVoice);
             btnTestVoice.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -711,7 +711,7 @@ public class AppConfigActivity extends AppCompatActivity {
                     });
 
                 }
-            });
+            });*/
             return view;
         }
         private void msg(String s) {

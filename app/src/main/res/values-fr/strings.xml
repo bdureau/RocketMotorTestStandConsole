@@ -256,4 +256,10 @@
     <string name="select_bluetooth_device">Select Bluetooth device</string>
     <string name="telemetry_screen">Telemetrie</string>
     <string name="status_screen">Etats</string>
+
+    <string name="calibrate_tabconfig">Calibration</string>
+
+    <string name="calibration_weight">Calibration poids</string>
+    <string name="calibration_offset">Offset de Calibration</string>
+    <string name="calibration_factor">Facteur de Calibration</string>
 </resources>

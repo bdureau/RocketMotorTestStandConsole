@@ -47,6 +47,62 @@
         android:layout_alignBaseline="@+id/txtTestStandUnit"
         android:spinnerMode="dropdown" />
 
+    <TextView
+        android:id="@+id/txtCalibrationWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtTestStandUnit"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="28dp"
+        android:text="@string/calibration_weight" />
 
+    <EditText
+        android:id="@+id/txtCalibrationWeightValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/txtCalibrationWeight"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/txtCalibrationOffset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtCalibrationWeight"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="28dp"
+        android:text="@string/calibration_offset" />
+
+    <TextView
+        android:id="@+id/txtCalibrationOffsetValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/txtCalibrationOffset"
+        android:text="0" />
+    <TextView
+        android:id="@+id/txtCalibrationFactor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtCalibrationOffset"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="28dp"
+        android:text="@string/calibration_factor" />
+
+    <TextView
+        android:id="@+id/txtCalibrationFactorValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/txtCalibrationFactor"
+        android:text="0" />
+    <Button
+        android:id="@+id/butCalibrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtCalibrationFactor"
+        android:layout_gravity="end|bottom"
+        android:gravity="center_horizontal"
+        android:text="@string/calibrate_tabconfig" />
 
 </RelativeLayout>

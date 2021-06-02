@@ -114,8 +114,8 @@ public class TelemetryMp extends AppCompatActivity {
                             mChart.setData(data);
                         }
                         // Tell altitude every 5 secondes
-                        if ((thrustTime - lastSpeakTime) > 5000) {
-                            if (myBT.getAppConf().getAltitude_event().equals("true")) {
+                        /*if ((thrustTime - lastSpeakTime) > 5000) {
+                          if (myBT.getAppConf().getAltitude_event().equals("true")) {
                                 if (Locale.getDefault().getLanguage() == "en")
                                     mTTS.speak("altitude " + (String) msg.obj + " meters", TextToSpeech.QUEUE_FLUSH, null);
                                 else if (Locale.getDefault().getLanguage() == "fr")
@@ -124,7 +124,7 @@ public class TelemetryMp extends AppCompatActivity {
                                     mTTS.speak("altitude " + (String) msg.obj + " meters", TextToSpeech.QUEUE_FLUSH, null);
                             }
                             lastSpeakTime = thrustTime;
-                        }
+                        }*/
 
                     }
                     break;
@@ -161,7 +161,7 @@ public class TelemetryMp extends AppCompatActivity {
         myBT.getAppConf().ReadConfig();
 
         //init text to speech
-        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+       /* mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
@@ -211,7 +211,7 @@ public class TelemetryMp extends AppCompatActivity {
         });
         mTTS.setPitch(1.0f);
         mTTS.setSpeechRate(1.0f);
-
+*/
         int graphBackColor;//= Color.WHITE;
         graphBackColor = myBT.getAppConf().ConvertColor(Integer.parseInt(myBT.getAppConf().getGraphBackColor()));
 
