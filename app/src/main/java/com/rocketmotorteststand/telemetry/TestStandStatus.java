@@ -46,8 +46,8 @@ public class TestStandStatus extends AppCompatActivity {
                         myUnits = getResources().getString(R.string.Pounds_fview);
                     txtViewThrust.setText((String) msg.obj + " " + myUnits);
                     break;
-                case 13:
-                    //Value 13 contains the battery voltage
+                case 3:
+                    //Value 4 contains the battery voltage
                     String voltage = (String) msg.obj;
                     if (voltage.matches("\\d+(?:\\.\\d+)?")) {
                         /*double batVolt;
@@ -61,13 +61,13 @@ public class TestStandStatus extends AppCompatActivity {
                     break;
 
 
-                case 15:
-                    //Value 15 contains the EEprom usage
+                case 4:
+                    //Value 4 contains the EEprom usage
                     txtEEpromUsage.setText((String) msg.obj + " %");
                     break;
 
-                case 16:
-                    //Value 16 contains the number of thrust curves
+                case 5:
+                    //Value 5 contains the number of thrust curves
                     txtNbrOfThrustCurve.setText((String) msg.obj );
                     break;
 

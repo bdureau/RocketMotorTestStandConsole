@@ -390,7 +390,7 @@ public class ConsoleApplication extends Application {
                                                 mHandler.obtainMessage(4, String.valueOf(currentSentence[4])).sendToTarget();
                                             else
                                                 mHandler.obtainMessage(4, String.valueOf(0)).sendToTarget();
-                                        // Value 5 contains the number of flight
+                                        // Value 5 contains the number of thrust curves
                                         if (currentSentence.length > 5)
                                             if (currentSentence[5].matches("\\d+(?:\\.\\d+)?"))
                                                 mHandler.obtainMessage(5, String.valueOf(currentSentence[5])).sendToTarget();
