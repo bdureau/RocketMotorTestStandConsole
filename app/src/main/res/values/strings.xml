@@ -45,7 +45,7 @@
 
     <string name="unit_kg">Kg</string>
     <string name="unit_pound">Pounds</string>
-
+    <string name="unit_newtons">Newtons</string>
     <!-- Main Screen -->
     <string name="teststand_settings">Test Stand Settings</string>
 
@@ -107,6 +107,7 @@
     <!-- Thrust Curve views screen -->
     <string name="Kg_fview">Kg</string>
     <string name="Pounds_fview">Pounds</string>
+    <string name="Newtons_fview">Newtons</string>
     <string name="Thrust_time">Thrust / Time</string>
     <string name="Time_fv">Time (ms)</string>
     <string name="Thrust">Thrust</string>
@@ -128,7 +129,7 @@
     <string name="baud_rate">Baud Rate</string>
     <string name="connection_type">Connection Type</string>
     <string name="graphiclib_type">Graphics lib </string>
-    <string name="MultipleMainDrogue">Multiple Main/drogue</string>
+
     <string name="FullUSBSupport">Full USB Support</string>
     <string name="color_black">BLACK</string>
     <string name="color_white">WHITE</string>
@@ -147,6 +148,7 @@
     <string name="phone_language">Phone language</string>
     <string name="config_unit_kg">Kg</string>
     <string name="config_unit_pounds">Pounds</string>
+    <string name="config_unit_newtons">Newtons</string>
 
     <string name="general_config">General</string>
     <string name="telemetry_config">Telemetry config</string>
@@ -219,16 +221,16 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="thrustcurve_info">Thrust Curve Info</string>
-    <string name="apogee_altitude">Apogee Altitude</string>
+
     <string name="max_velocity">Max Velocity</string>
-    <string name="main_alti">Main Altitude</string>
-    <string name="flight_duration">Thrust duration</string>
-    <string name="burn_time">Burn Time</string>
-    <string name="max_acceleration">Max acceleration</string>
-    <string name="time_to_apogee">Time to Apogee</string>
-    <string name="max_descent_speed">Max descent speed</string>
-    <string name="landing_speed">Landing speed</string>
-    <string name="flight_nbr">Flight nbr</string>
+
+    <string name="recording_duration">Recording duration</string>
+    <string name="thrust_duration">Thrust Duration</string>
+    <string name="max_thrust">Max acceleration</string>
+    <string name="average_thrust">Average Thrust</string>
+    <string name="motor_class">Motor class</string>
+
+    <string name="curve_nbr">Thrust Curve nbr</string>
     <string name="nbr_of_sample">Samples</string>
     <string name="select_curve">Select Curve</string>
     <string name="fv_ok">OK</string>

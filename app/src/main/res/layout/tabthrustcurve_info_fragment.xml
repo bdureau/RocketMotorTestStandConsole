@@ -20,7 +20,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textViewTitleThrustCurveInfo"
         android:layout_marginTop="18dp"
-        android:text="@string/flight_nbr" />
+        android:text="@string/curve_nbr" />
 
     <TextView
         android:id="@+id/thrustCurveNbrValue"
@@ -57,7 +57,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/nbrOfSamples"
         android:layout_marginTop="18dp"
-        android:text="@string/flight_duration" />
+        android:text="@string/recording_duration" />
 
     <TextView
         android:id="@+id/thrustCurveDurationValue"
@@ -69,16 +69,16 @@
         android:text="secs" />
 
     <TextView
-        android:id="@+id/burnTime"
+        android:id="@+id/thrustTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/thrustCurveDuration"
         android:layout_marginTop="18dp"
-        android:text="@string/burn_time" />
+        android:text="@string/thrust_duration" />
 
     <TextView
-        android:id="@+id/burnTimeValue"
+        android:id="@+id/thrustTimeValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -87,42 +87,59 @@
         android:text="secs" />
 
     <TextView
-        android:id="@+id/maxVelociy"
+        android:id="@+id/maxThrust"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/burnTime"
+        android:layout_below="@+id/thrustTime"
         android:layout_marginTop="18dp"
-        android:text="@string/max_velocity" />
+        android:text="@string/max_thrust" />
 
     <TextView
-        android:id="@+id/maxVelociyValue"
+        android:id="@+id/maxThrustValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/burnTime"
+        android:layout_below="@+id/thrustTime"
         android:layout_marginTop="18dp"
-        android:text="Km/h" />
+        android:text="N" />
 
     <TextView
-        android:id="@+id/maxAcceleration"
+        android:id="@+id/averageThrust"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/maxVelociy"
+        android:layout_below="@+id/maxThrust"
         android:layout_marginTop="18dp"
-        android:text="@string/max_acceleration" />
+        android:text="@string/average_thrust" />
 
     <TextView
-        android:id="@+id/maxAccelerationValue"
+        android:id="@+id/averageThrustValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/maxVelociy"
+        android:layout_below="@+id/maxThrust"
         android:layout_marginTop="18dp"
-        android:text="G/secs" />
+        android:text="N/secs" />
 
 
+    <TextView
+        android:id="@+id/motorClass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/averageThrust"
+        android:layout_marginTop="18dp"
+        android:text="@string/motor_class" />
+
+    <TextView
+        android:id="@+id/motorClassValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/averageThrust"
+        android:layout_marginTop="18dp"
+        android:text="A" />
 
 
 </RelativeLayout>

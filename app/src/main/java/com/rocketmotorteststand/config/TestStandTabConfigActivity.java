@@ -809,13 +809,14 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
                 myBT.flush();
                 myBT.clearInput();
-                myBT.write("c10;".toString());
+                myBT.write("c"+calibrationWeight.getText()+";".toString());
                 //wait for ok and put the result back
                 String myMessage = "";
 
                 myMessage = myBT.ReadResult(3000);
                 if (myMessage.equals("OK")) {
                     //getParentFragment().readConfig();
+                    //readConfig();
                 }
                 return null;
             }
@@ -825,7 +826,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             {
                 super.onPostExecute(result);
                 if (!canceled) {
-                    //getParentFragment().readConfig();
+                    //this.getParent().readConfig();
+
+                    CalibrationFactor.setText(String.valueOf(ltestStandNameCfg.getCalibrationFactor()));
+                    CurrentOffset.setText(String.valueOf(ltestStandNameCfg.getCurrentOffset()));
                     /*setAxOffsetValue(GimbalCfg.getAxOffset());
                     setAyOffsetValue(GimbalCfg.getAyOffset());
                     setAzOffsetValue(GimbalCfg.getAzOffset());

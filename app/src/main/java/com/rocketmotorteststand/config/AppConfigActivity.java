@@ -241,10 +241,10 @@ public class AppConfigActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         adapter = new AppConfigActivity.SectionsPageAdapter(getSupportFragmentManager());
         appConfigPage1 = new AppConfigActivity.Tab1Fragment(myBT);
-        appConfigPage2 = new AppConfigActivity.Tab2Fragment(myBT);
+        //appConfigPage2 = new AppConfigActivity.Tab2Fragment(myBT);
 
         adapter.addFragment(appConfigPage1, "TAB1");
-        adapter.addFragment(appConfigPage2, "TAB2");
+        //adapter.addFragment(appConfigPage2, "TAB2");
 
         viewPager.setAdapter(adapter);
     }

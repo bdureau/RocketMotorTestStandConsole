@@ -32,7 +32,7 @@ import java.util.Locale;
  **/
 public class ConsoleApplication extends Application {
     private boolean isConnected = false;
-    // Store number of flight
+    // Store number of thrustcurves
     public int NbrOfFlight = 0;
     public int currentThrustCurveNbr = 0;
     private ThrustCurveData MyThrustCurve = null;
@@ -42,7 +42,7 @@ public class ConsoleApplication extends Application {
     public long lastReceived = 0;
     public String commandRet = "";
 
-    private double FEET_IN_METER = 1;
+   // private double FEET_IN_METER = 1;
     private boolean exit = false;
     private GlobalConfig AppConf = null;
     private String address;
@@ -268,12 +268,12 @@ public class ConsoleApplication extends Application {
     public void initThrustCurveData() {
         MyThrustCurve = new ThrustCurveData(this, TestStandCfg.getTestStandName());
 
-        if(AppConf.getUnits().equals("0"))  {//meters
+     /*   if(AppConf.getUnits().equals("0"))  {//meters
         //if (AppConf.getUnitsValue().equals("Meters")) {
             FEET_IN_METER = 1;
         } else {
             FEET_IN_METER = 3.28084;
-        }
+        }*/
     }
 
 
@@ -433,7 +433,7 @@ public class ConsoleApplication extends Application {
                                             value3 = 0;
                                         //add the thrust
                                         MyThrustCurve.AddToFlight(value2,
-                                                (long) (value3 * FEET_IN_METER), thrustCurveName, 0);
+                                                (long) (value3 ), thrustCurveName, 0);
 
                                     }
 
@@ -481,7 +481,7 @@ public class ConsoleApplication extends Application {
                                             //if you cannot read it, set it to 1 N
                                             TestStandCfg.setStartRecordingThrustLevel(1);
 
-                                    // Value 7 contains the stop recording thrust level
+                                    // Value 7 contains the stop recording time
                                     if (currentSentence.length > 7)
                                         if (currentSentence[7].matches("\\d+(?:\\.\\d+)?"))
                                             TestStandCfg.setStopRecordingThrustLevel(Integer.valueOf(currentSentence[7]));
@@ -620,11 +620,6 @@ public class ConsoleApplication extends Application {
         //Graph units
         private String units = "0";
 
-        //flight retrieval timeout
-       // private long flightRetrievalTimeout;
-        //data retrieval timeout
-        //private long configRetrievalTimeout;
-
         //graph background color
         private String graphBackColor = "1";
         //graph color
@@ -637,22 +632,11 @@ public class ConsoleApplication extends Application {
         private String baudRate = "8";
         private String graphicsLibType = "0";
 
-        //private String allowMultipleDrogueMain = "false";
         private String fullUSBSupport= "false";
-        /*private String say_main_event= "false";
-        private String say_apogee_altitude= "false";
-        private String say_main_altitude= "false";
-        private String say_drogue_event= "false";
-        private String say_altitude_event= "false";
-        private String say_landing_event= "false";
-        private String say_burnout_event= "false";
-        private String say_warning_event= "false";
-        private String say_liftoff_event= "false";
 
-        private String telemetryVoice = "0";*/
 
         public GlobalConfig(Context current) {
-            appConfig = getSharedPreferences("BearConsoleCfg", MODE_PRIVATE);
+            appConfig = getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
             edit = appConfig.edit();
             context = current;
             appCfgData = new AppConfigData(context);
@@ -665,28 +649,13 @@ public class ConsoleApplication extends Application {
             graphBackColor = "1";
             graphColor = "0";
             fontSize = "10";
-            units = "0"; //default to meters
+            units = "0"; //default to kg
             baudRate = "8"; // default to 38400 baud
             connectionType = "0";
             graphicsLibType = "1"; //Default to MP android chart lib
-            //allowMultipleDrogueMain = "false";
+
             fullUSBSupport = "false";
-            /*say_main_event= "false";
-            say_apogee_altitude= "false";
-            say_main_altitude= "false";
-            say_drogue_event= "false";
-            say_altitude_event= "false";
-            say_landing_event= "false";
-            say_burnout_event= "false";
-            say_warning_event= "false";
-            say_liftoff_event="false";
-            telemetryVoice ="0";*/
-            /*edit.clear();
-            edit.putString("AppLanguage","0");
-            edit.putString("Units", "0");
-            edit.putString("GraphColor", "0");
-            edit.putString("GraphBackColor", "1");
-            edit.putString("FontSize", "10");*/
+
 
         }
 
@@ -740,11 +709,6 @@ public class ConsoleApplication extends Application {
                 if (!graphicsLibType.equals(""))
                     setGraphicsLibType(graphicsLibType);
 
-                //Allow multiple drogue and main
-              /*  String allowMultipleDrogueMain;
-                allowMultipleDrogueMain = appConfig.getString("AllowMultipleDrogueMain", "false");
-                if (!allowMultipleDrogueMain.equals(""))
-                    setAllowMultipleDrogueMain(allowMultipleDrogueMain);*/
 
                 //enable full USB support
                 String fullUSBSupport;
@@ -752,55 +716,6 @@ public class ConsoleApplication extends Application {
                 if (!fullUSBSupport.equals(""))
                     setFullUSBSupport(fullUSBSupport);
 
-               /* String say_main_event;
-                say_main_event = appConfig.getString("say_main_event", "false");
-                if (!say_main_event.equals(""))
-                    setMain_event(say_main_event);
-
-                String say_apogee_altitude;
-                say_apogee_altitude = appConfig.getString("say_apogee_altitude", "false");
-                if (!say_apogee_altitude.equals(""))
-                    setApogee_altitude(say_apogee_altitude);
-
-                String say_main_altitude;
-                say_main_altitude = appConfig.getString("say_main_altitude", "false");
-                if (!say_main_altitude.equals(""))
-                    setMain_altitude(say_main_altitude);
-
-                String say_drogue_event;
-                say_drogue_event = appConfig.getString("say_drogue_event", "false");
-                if (!say_drogue_event.equals(""))
-                    setDrogue_event(say_drogue_event);
-
-                String say_altitude_event;
-                say_altitude_event = appConfig.getString("say_altitude_event", "false");
-                if (!say_altitude_event.equals(""))
-                    setAltitude_event(say_altitude_event);
-
-                String say_landing_event;
-                say_landing_event = appConfig.getString("say_landing_event", "false");
-                if (!say_landing_event.equals(""))
-                    setLanding_event(say_landing_event);
-
-                String say_burnout_event;
-                say_burnout_event = appConfig.getString("say_burnout_event", "false");
-                if (!say_burnout_event.equals(""))
-                    setBurnout_event(say_burnout_event);
-
-                String say_warning_event;
-                say_warning_event = appConfig.getString("say_warning_event", "false");
-                if (!say_warning_event.equals(""))
-                    setWarning_event(say_warning_event);
-
-                String say_liftoff_event;
-                say_liftoff_event = appConfig.getString("say_liftoff_event", "false");
-                if (!say_liftoff_event.equals(""))
-                    setLiftOff_event(say_liftoff_event);
-
-                String telemetryVoice;
-                telemetryVoice = appConfig.getString("telemetryVoice", "0");
-                if(!telemetryVoice.equals(""))
-                    setTelemetryVoice(telemetryVoice);*/
             } catch (Exception e) {
 
             }
@@ -815,19 +730,9 @@ public class ConsoleApplication extends Application {
             edit.putString("BaudRate", getBaudRate());
             edit.putString("ConnectionType", getConnectionType());
             edit.putString("GraphicsLibType", getGraphicsLibType());
-           // edit.putString("AllowMultipleDrogueMain", getAllowMultipleDrogueMain());
+
             edit.putString("fullUSBSupport", getFullUSBSupport());
 
-            /*edit.putString("say_main_event", getMain_event());
-            edit.putString("say_apogee_altitude", getApogee_altitude());
-            edit.putString("say_main_altitude", getMain_altitude());
-            edit.putString("say_drogue_event", getDrogue_event());
-            edit.putString("say_altitude_event", getAltitude_event());
-            edit.putString("say_landing_event", getLanding_event());
-            edit.putString("say_burnout_event", getBurnout_event());
-            edit.putString("say_warning_event", getWarning_event());
-            edit.putString("say_liftoff_event", getLiftOff_event());
-            edit.putString("telemetryVoice", getTelemetryVoice());*/
             edit.commit();
 
         }
@@ -917,68 +822,13 @@ public class ConsoleApplication extends Application {
         }
 
 
-       /* public void setAllowMultipleDrogueMain(String value) {
-            allowMultipleDrogueMain = value;
-        }
-        public String getAllowMultipleDrogueMain() {
-            return allowMultipleDrogueMain;//appCfgData.getMultipleDrogueMain();
-        }*/
         public void setFullUSBSupport(String value) {
             fullUSBSupport = value;
         }
         public String getFullUSBSupport() {
-            return fullUSBSupport;//appCfgData.getMultipleDrogueMain();
+            return fullUSBSupport;
         }
 
-        /*public void setMain_event(String value) { say_main_event = value;  }
-        public String getMain_event() {
-            return say_main_event;
-        }
-
-        public void setApogee_altitude(String value) { say_apogee_altitude = value;  }
-        public String getApogee_altitude() {
-            return say_apogee_altitude;
-        }
-
-        public void setMain_altitude(String value) { say_main_altitude = value;  }
-        public String getMain_altitude() {
-            return say_main_altitude;
-        }
-
-        public void setDrogue_event(String value) { say_drogue_event = value;  }
-        public String getDrogue_event() {
-            return say_drogue_event;
-        }
-
-        public void setAltitude_event(String value) { say_altitude_event = value;  }
-        public String getAltitude_event() {
-            return say_altitude_event;
-        }
-
-        public void setLanding_event(String value) { say_landing_event = value;  }
-        public String getLanding_event() {
-            return say_landing_event;
-        }
-
-        public void setBurnout_event(String value) { say_burnout_event = value;  }
-        public String getBurnout_event() {
-            return say_burnout_event;
-        }
-
-        public void setWarning_event(String value) { say_warning_event = value;  }
-        public String getWarning_event() {
-            return say_warning_event;
-        }
-
-        public void setLiftOff_event(String value) { say_liftoff_event = value;  }
-        public String getLiftOff_event() {
-            return say_liftoff_event;
-        }
-
-        public void setTelemetryVoice(String value) {telemetryVoice =value;}
-        public String getTelemetryVoice() {
-            return telemetryVoice;
-        }*/
         public int ConvertFont(int font) {
             return font + 8;
         }

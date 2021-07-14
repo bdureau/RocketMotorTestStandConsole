@@ -70,18 +70,17 @@ public class TelemetryMp extends AppCompatActivity {
     //telemetry var
     private long LiftOffTime = 0;
     private int lastPlotTime = 0;
-    private int lastSpeakTime = 1000;
-    private double FEET_IN_METER = 1;
+
+    private double CONVERT = 1;
     ArrayList<Entry> yValues;
     int thrustTime = 0;
-    //int thrust = 0;
 
     boolean telemetry = true;
 
 
     Button dismissButton;
 
-    private TextToSpeech mTTS;
+    //private TextToSpeech mTTS;
 
     Handler handler = new Handler() {
         @Override
@@ -92,7 +91,7 @@ public class TelemetryMp extends AppCompatActivity {
                     txtCurrentThrust.setText(String.valueOf((String) msg.obj));
                     if (((String) msg.obj).matches("\\d+(?:\\.\\d+)?")) {
 
-                        int thrust = (int) (Integer.parseInt((String) msg.obj) * FEET_IN_METER);
+                        int thrust = (int) (Integer.parseInt((String) msg.obj) * CONVERT);
 
                         yValues.add(new Entry(thrustTime, thrust));
 
@@ -113,18 +112,6 @@ public class TelemetryMp extends AppCompatActivity {
                             mChart.clear();
                             mChart.setData(data);
                         }
-                        // Tell altitude every 5 secondes
-                        /*if ((thrustTime - lastSpeakTime) > 5000) {
-                          if (myBT.getAppConf().getAltitude_event().equals("true")) {
-                                if (Locale.getDefault().getLanguage() == "en")
-                                    mTTS.speak("altitude " + (String) msg.obj + " meters", TextToSpeech.QUEUE_FLUSH, null);
-                                else if (Locale.getDefault().getLanguage() == "fr")
-                                    mTTS.speak("altitude " + (String) msg.obj + " mètres", TextToSpeech.QUEUE_FLUSH, null);
-                                else
-                                    mTTS.speak("altitude " + (String) msg.obj + " meters", TextToSpeech.QUEUE_FLUSH, null);
-                            }
-                            lastSpeakTime = thrustTime;
-                        }*/
 
                     }
                     break;
@@ -160,58 +147,7 @@ public class TelemetryMp extends AppCompatActivity {
         // Read the application config
         myBT.getAppConf().ReadConfig();
 
-        //init text to speech
-       /* mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    int result = 0;
 
-                    if (Locale.getDefault().getLanguage() == "en")
-                        result = mTTS.setLanguage(Locale.ENGLISH);
-                    else if (Locale.getDefault().getLanguage() == "fr")
-                        result = mTTS.setLanguage(Locale.FRENCH);
-                    else
-                        result = mTTS.setLanguage(Locale.ENGLISH);
-
-                    if (!myBT.getAppConf().getTelemetryVoice().equals("")) {
-                        Log.d("Voice", myBT.getAppConf().getTelemetryVoice());
-                        String[] itemsVoices;
-                        String items = "";
-                        int i = 0;
-                        try {
-                            for (Voice tmpVoice : mTTS.getVoices()) {
-
-                                if (tmpVoice.getName().startsWith(Locale.getDefault().getLanguage())) {
-                                    Log.d("Voice", tmpVoice.getName());
-                                    if (myBT.getAppConf().getTelemetryVoice().equals(i + "")) {
-                                        mTTS.setVoice(tmpVoice);
-                                        Log.d("Voice", "Found voice");
-                                        break;
-                                    }
-                                    i++;
-                                }
-                            }
-                        } catch (Exception e) {
-
-                        }
-
-
-                    }
-
-                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.e("TTS", "Language not supported");
-                    } else {
-
-                    }
-                } else {
-                    Log.e("TTS", "Init failed");
-                }
-            }
-        });
-        mTTS.setPitch(1.0f);
-        mTTS.setSpeechRate(1.0f);
-*/
         int graphBackColor;//= Color.WHITE;
         graphBackColor = myBT.getAppConf().ConvertColor(Integer.parseInt(myBT.getAppConf().getGraphBackColor()));
 
@@ -225,18 +161,22 @@ public class TelemetryMp extends AppCompatActivity {
 
         int nbrColor = Color.BLACK;
         String myUnits = "";
-        if (myBT.getAppConf().getUnits().equals("0"))
-            //Meters
+        if (myBT.getAppConf().getUnits().equals("0")) {
+            //kg
             myUnits = getResources().getString(R.string.Kg_fview);
-        else
-            //Feet
-            myUnits = getResources().getString(R.string.Pounds_fview);
-
-        if (myBT.getAppConf().getUnitsValue().equals("Kg")) {
-            FEET_IN_METER = 1;
-        } else {
-            FEET_IN_METER = 3.28084;
+            CONVERT = 1000;
         }
+        else if (myBT.getAppConf().getUnits().equals("1")) {
+            //pounds
+            myUnits = getResources().getString(R.string.Pounds_fview);
+            CONVERT = 2.20462/1000;
+        }
+        else if (myBT.getAppConf().getUnits().equals("2")) {
+            //newtons
+            myUnits = getResources().getString(R.string.config_unit_newtons);
+            CONVERT = 9.80665/1000;
+        }
+
         //font
 
         yValues = new ArrayList<>();

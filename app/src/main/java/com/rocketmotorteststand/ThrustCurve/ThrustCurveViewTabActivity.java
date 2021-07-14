@@ -47,7 +47,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     SectionsPageAdapter adapter;
     private Tab1Fragment ThrustCurvePage1 = null;
     private Tab2Fragment ThrustCurvePage2 = null;
-    private Button btnDismiss,butSelectCurves;
+    private Button btnDismiss,butSelectCurves, butZoom;
     private static ConsoleApplication myBT;
 
     private static String curvesNames[] = null;
@@ -67,6 +67,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     private static String[] units= null;
     public static String SELECTED_THRUSTCURVE = "MyThrustCurve";
     int numberOfCurves =0;
+    private static double CONVERT = 1;
 
     @Override
     protected void onDestroy() {
@@ -117,7 +118,8 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         butSelectCurves = (Button) findViewById(R.id.butSelectCurves);
 
-            numberOfCurves=1;
+        butZoom = (Button) findViewById(R.id.butZoom);
+        numberOfCurves=1;
 
         Intent newint = getIntent();
         ThrustCurveName = newint.getStringExtra(ThrustCurveListActivity.SELECTED_THRUSTCURVE);
@@ -129,7 +131,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         // by default we will display the altitude
         // but then the user will be able to change the data
         thrustCurveData = new XYSeriesCollection();
-        //altitude
+        //thrust
         thrustCurveData.addSeries(allThrustCurveData.getSeries(getResources().getString(R.string.curve_thrust)));
 
         // get a list of all the curves that have been recorded
@@ -145,21 +147,27 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         // Read the application config
         myBT.getAppConf().ReadConfig();
         if (myBT.getAppConf().getUnits().equals("0")) {
-            //Meters
+            //kg
             units[0] = "(" + getResources().getString(R.string.Kg_fview) + ")";
+            CONVERT = 1000;
 
         }
-        else {
-            //Feet
+        else if (myBT.getAppConf().getUnits().equals("1")) {
+            //punds
             units[0] = getResources().getString(R.string.Pounds_fview);
+            CONVERT = 2.20462/1000;
 
+        } else if (myBT.getAppConf().getUnits().equals("2")) {
+            //newtons
+            units[0] = getResources().getString(R.string.Newtons_fview);
+            CONVERT = 9.80665/1000;
         }
 
         if (currentCurvesNames == null) {
             //This is the first time so only display the altitude
             dataSets = new ArrayList<>();
             currentCurvesNames = new String[curvesNames.length];
-            currentCurvesNames[0] =this.getResources().getString(R.string.curve_thrust);//"thrust";
+            currentCurvesNames[0] =this.getResources().getString(R.string.curve_thrust);
             checkedItems = new boolean[curvesNames.length];
             checkedItems[0] = true;
         }
@@ -175,6 +183,12 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             }
         });
 
+        butZoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ThrustCurvePage1.zoomCurves();
+            }
+        });
         butSelectCurves.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,6 +215,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                         // The user checked or unchecked a box
+
                     }
                 });
                 // Add OK and Cancel buttons
@@ -266,6 +281,109 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         }
     }
 
+    public static class ThrustUtil {
+        public String motorClass(double totImpulse){
+            if(totImpulse > 1.26	&& totImpulse <	2.5)
+                return "A";
+            else if(totImpulse > 2.5	&& totImpulse <	5.0)
+                return "B";
+            else if(totImpulse > 5.0	&& totImpulse <	10.0)
+                return "c";
+            else if(totImpulse > 10.0	&& totImpulse <	20.0)
+                return "D";
+            else if(totImpulse > 20.0	&& totImpulse <	40.0)
+                return "E";
+            else if(totImpulse > 40.0	&& totImpulse <	80.0)
+                return "F";
+            else if(totImpulse > 80.0	&& totImpulse <	160.0)
+                return "G";
+            else if(totImpulse > 160.0	&& totImpulse <	320.0)
+                return "H";
+            else if(totImpulse > 320.0	&& totImpulse <	640.0)
+                return "I";
+            else if(totImpulse > 640.0	&& totImpulse <	1280.0)
+                return "J";
+            else if(totImpulse > 1280.0	&& totImpulse <	2560.0)
+                return "K";
+            else if(totImpulse > 2560.0	&& totImpulse <	5120.0)
+                return "L";
+            else if(totImpulse > 5120.0	&& totImpulse <	10240.0)
+                return "M";
+            else if(totImpulse > 10240.0	&& totImpulse <	20480.0)
+                return "N";
+            else if(totImpulse > 20480.0	&& totImpulse <	40960.0)
+                return "O";
+            else if(totImpulse > 40960.0	&& totImpulse <	81920.0)
+                return "P";
+            else if(totImpulse > 81920.0	&& totImpulse <	163840.0)
+                return "Q";
+            else
+                return "unknown";
+        }
+
+        /*
+        Return the position of the first X value it finds from the beginning
+         */
+        public int searchX (XYSeries serie, double searchVal) {
+            int nbrData = serie.getItemCount();
+            int pos = -1;
+            for (int i = 1; i < nbrData; i++) {
+                if((searchVal >= serie.getY(i-1).doubleValue()  )&& (searchVal <= serie.getY(i).doubleValue() )) {
+                    pos =i;
+                    break;
+                }
+            }
+            return pos;
+        }
+
+        /*
+        Return the position of the first Y value it finds from the beginning
+         */
+        public int searchY (XYSeries serie, double searchVal) {
+            int nbrData = serie.getItemCount();
+            int pos = -1;
+            for (int i = 1; i < nbrData; i++) {
+
+                if((searchVal >= serie.getX(i-1).doubleValue()  )&& (searchVal <= serie.getX(i).doubleValue() )) {
+                    pos =i;
+                    break;
+                }
+            }
+            return pos;
+        }
+
+        /*
+        Return the position of the first Y value it finds from the beginning
+         */
+        public int searchYFrom (XYSeries serie, int start, double searchVal) {
+            int nbrData = serie.getItemCount();
+            int pos = -1;
+            for (int i = start; i < nbrData; i++) {
+                if((searchVal >= serie.getX(i-1).doubleValue()  )&& (searchVal <= serie.getX(i).doubleValue() )) {
+                    pos =i;
+                    break;
+                }
+            }
+            return pos;
+        }
+        /*
+        Return the position of the first X value it finds from the beginning
+         */
+        public int searchXFrom (XYSeries serie, int start,double searchVal) {
+            int nbrData = serie.getItemCount();
+            int pos = -1;
+            for (int i = start; i < nbrData; i++) {
+
+                if((searchVal <= serie.getY(i-1).doubleValue()  )&& (searchVal >= serie.getY(i).doubleValue() )) {
+                    pos =i;
+                    break;
+                }
+            }
+            return pos;
+        }
+
+    }
+
     public static class Tab1Fragment extends Fragment {
         private LineChart mChart;
         public XYSeriesCollection allThrustCurveData;
@@ -285,6 +403,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
             mChart.setDragEnabled(true);
             mChart.setScaleEnabled(true);
+
             drawGraph();
             drawAllCurves(allThrustCurveData);
 
@@ -319,7 +438,18 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     ArrayList<Entry> yValues = new ArrayList<>();
 
                     for (int k = 0; k < nbrData; k++) {
-                        yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()));
+                        if (myBT.getAppConf().getUnits().equals("0")) {
+                            //kg
+                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()/1000));
+                        } else
+                        if (myBT.getAppConf().getUnits().equals("1")){
+                            //pound
+                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue()/1000)*(float)2.20462));
+                        }
+                        if (myBT.getAppConf().getUnits().equals("2")){
+                            //newton
+                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue()/1000)*(float)9.80665));
+                        }
                     }
 
                     LineDataSet set1 = new LineDataSet(yValues, "Time");
@@ -340,10 +470,89 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             mChart.clear();
             mChart.setData(data);
             mChart.setBackgroundColor(graphBackColor);
+
             Description desc = new Description();
             //time (ms)
             desc.setText(getResources().getString(R.string.unit_time));
             mChart.setDescription(desc);
+            /*ThrustUtil tu = new ThrustUtil();
+            double maxThrust =  thrustCurveData.getSeries(0).getMaxY();
+            double triggerThrust = maxThrust *(5.0/100.0);
+
+            int curveStart = tu.searchX (thrustCurveData.getSeries(0), triggerThrust);
+            int curveMaxThrust = tu.searchX (thrustCurveData.getSeries(0), maxThrust);
+            int curveStop = tu.searchXFrom (thrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);*/
+            // thrust duration
+            //double thrustDuration = ((double)thrustCurveData.getSeries(0).getX(curveStop )- (double)thrustCurveData.getSeries(0).getX(curveStart))/1000.0;
+
+           // mChart.setVisibleXRange((int)thrustCurveData.getSeries(0).getX(curveStart).intValue(),(int)thrustCurveData.getSeries(0).getX(curveStop ).intValue());
+
+        }
+        private void zoomCurves(/*XYSeriesCollection allThrustCurveData*/){
+            dataSets.clear();
+
+            thrustCurveData = new XYSeriesCollection();
+            for (int i = 0; i < curvesNames.length; i++) {
+                Log.d("drawAllCurves", "i:" +i);
+                Log.d("drawAllCurves", "curvesNames:" +curvesNames[i]);
+                if (checkedItems[i]) {
+                    thrustCurveData.addSeries(allThrustCurveData.getSeries(curvesNames[i]));
+
+                    int nbrData = allThrustCurveData.getSeries(i).getItemCount();
+
+                    ThrustUtil tu = new ThrustUtil();
+                    double maxThrust =  thrustCurveData.getSeries(0).getMaxY();
+                    double triggerThrust = maxThrust *(5.0/100.0);
+
+                    int curveStart = tu.searchX (thrustCurveData.getSeries(0), triggerThrust);
+                    int curveMaxThrust = tu.searchX (thrustCurveData.getSeries(0), maxThrust);
+                    int curveStop = tu.searchXFrom (thrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
+
+                    ArrayList<Entry> yValues = new ArrayList<>();
+
+                    for (int k = curveStart; k < curveStop; k++) {
+                        if (myBT.getAppConf().getUnits().equals("0")) {
+                            //kg
+                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue()-allThrustCurveData.getSeries(i).getX(curveStart).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()/1000));
+                        } else
+                        if (myBT.getAppConf().getUnits().equals("1")){
+                            //pound
+                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue()-allThrustCurveData.getSeries(i).getX(curveStart).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue()/1000)*(float)2.20462));
+                        }
+                        if (myBT.getAppConf().getUnits().equals("2")){
+                            //newton
+                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue()-allThrustCurveData.getSeries(i).getX(curveStart).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue()/1000)*(float)9.80665));
+                        }
+                    }
+
+                    LineDataSet set1 = new LineDataSet(yValues, "Time");
+                    set1.setColor(colors[i]);
+
+                    set1.setDrawValues(false);
+                    set1.setDrawCircles(false);
+                    set1.setLabel(curvesNames[i] + " " + units[i]);
+                    set1.setValueTextColor(labelColor);
+
+                    set1.setValueTextSize(fontSize);
+                    dataSets.add(set1);
+
+                }
+            }
+
+            LineData data = new LineData(dataSets);
+            mChart.clear();
+            mChart.setData(data);
+            mChart.setBackgroundColor(graphBackColor);
+
+            Description desc = new Description();
+            //time (ms)
+            desc.setText(getResources().getString(R.string.unit_time));
+            mChart.setDescription(desc);
+
+            // thrust duration
+
+           // mChart.setVisibleXRange((int)thrustCurveData.getSeries(0).getX(curveStart).intValue(),(int)thrustCurveData.getSeries(0).getX(curveStop ).intValue());
+
         }
     }
 
@@ -355,7 +564,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         private ThrustCurveData mythrustCurve;
 
         private TextView nbrOfSamplesValue, thrustCurveNbrValue;
-        private TextView apogeeAltitudeValue, thrustCurveDurationValue, burnTimeValue, maxVelociyValue, maxAccelerationValue;
+        private TextView  recordingDurationValue, thrustTimeValue, maxThrustValue, averageThrustValue, motorClassValue;
 
         public Tab2Fragment (ThrustCurveData data) {
             mythrustCurve = data;
@@ -367,14 +576,15 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
             View view = inflater.inflate(R.layout.tabthrustcurve_info_fragment, container, false);
 
-            //apogeeAltitudeValue = view.findViewById(R.id.apogeeAltitudeValue);
-            thrustCurveDurationValue = view.findViewById(R.id.thrustCurveDurationValue);
-            burnTimeValue = view.findViewById(R.id.burnTimeValue);
-            maxVelociyValue = view.findViewById(R.id.maxVelociyValue);
-            maxAccelerationValue = view.findViewById(R.id.maxAccelerationValue);
+
+            recordingDurationValue = view.findViewById(R.id.thrustCurveDurationValue);
+            thrustTimeValue = view.findViewById(R.id.thrustTimeValue);
+            maxThrustValue = view.findViewById(R.id.maxThrustValue);
+            averageThrustValue = view.findViewById(R.id.averageThrustValue);
 
             nbrOfSamplesValue= view.findViewById(R.id.nbrOfSamplesValue);
             thrustCurveNbrValue = view.findViewById(R.id.thrustCurveNbrValue);
+            motorClassValue=view.findViewById(R.id.motorClassValue);
 
             XYSeriesCollection thrustCurveData;
 
@@ -387,41 +597,41 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             //nbr of samples
             nbrOfSamplesValue.setText(nbrData +"");
 
-            //ThrustCurve duration
-            double thrustCurveDuration = thrustCurveData.getSeries(0).getMaxX()/1000;
-            thrustCurveDurationValue.setText(thrustCurveDuration +" secs");
+            //Recording duration
+            double recordingDuration = thrustCurveData.getSeries(0).getMaxX()/1000;
+            recordingDurationValue.setText(recordingDuration +" secs");
 
+
+            ThrustUtil tu = new ThrustUtil();
+            double maxThrust =  thrustCurveData.getSeries(0).getMaxY();
+            double triggerThrust = maxThrust *(5.0/100.0);
+
+            int curveStart = tu.searchX (thrustCurveData.getSeries(0), triggerThrust);
+            int curveMaxThrust = tu.searchX (thrustCurveData.getSeries(0), maxThrust);
+            int curveStop = tu.searchXFrom (thrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
+            // thrust duration
+            double thrustDuration = ((double)thrustCurveData.getSeries(0).getX(curveStop )- (double)thrustCurveData.getSeries(0).getX(curveStart))/1000.0;
+            thrustTimeValue.setText(thrustDuration +" secs");
+            double totThurst=0;
+            for (int i=curveStart; i < curveStop ; i++) {
+               totThurst = totThurst + (double)thrustCurveData.getSeries(0).getY(i );
+            }
+            double averageThrust = totThurst /((double)(curveStop-curveStart));
+
+            //max thrust
+            maxThrustValue.setText(String.format("%.0f ",maxThrust*CONVERT) + units[0]);
+            //average thrust
+            averageThrustValue.setText(String.format("%.0f ",averageThrust*CONVERT) + units[0]);
+
+
+            //tot impulse
+            double totalImpulse=0;
+            totalImpulse = averageThrust * (9.80665/1000) *thrustDuration;
+
+            //motor class
+            motorClassValue.setText(tu.motorClass(totalImpulse)+String.format("%.0f ",averageThrust* (9.80665/1000)));
             return view;
         }
 
-        /*
-        Return the position of the first X value it finds from the beginning
-         */
-        public int searchX (XYSeries serie, double searchVal) {
-            int nbrData = serie.getItemCount();
-            int pos = -1;
-            for (int i = 1; i < nbrData; i++) {
-                if((searchVal >= serie.getY(i-1).doubleValue()  )&& (searchVal <= serie.getY(i).doubleValue() )) {
-                    pos =i;
-                    break;
-                }
-            }
-            return pos;
-        }
-
-        /*
-        Return the position of the first Y value it finds from the beginning
-         */
-        public int searchY (XYSeries serie, double searchVal) {
-            int nbrData = serie.getItemCount();
-            int pos = -1;
-            for (int i = 1; i < nbrData; i++) {
-                if((searchVal >= serie.getX(i-1).doubleValue()  )&& (searchVal <= serie.getX(i).doubleValue() )) {
-                    pos =i;
-                    break;
-                }
-            }
-            return pos;
-        }
     }
 }

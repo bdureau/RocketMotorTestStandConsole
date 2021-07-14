@@ -36,15 +36,32 @@ public class TestStandStatus extends AppCompatActivity {
             switch (msg.what) {
 
                 case 1:
-                    String myUnits;
+                    String myUnits="";
                     //Value 1 contains the current thrust
                     if (myBT.getAppConf().getUnits().equals("0"))
-                        //Meters
+                        //kg
                         myUnits = getResources().getString(R.string.Kg_fview);
-                    else
-                        //Feet
+                    else if(myBT.getAppConf().getUnits().equals("1"))
+                        //pounds
                         myUnits = getResources().getString(R.string.Pounds_fview);
-                    txtViewThrust.setText((String) msg.obj + " " + myUnits);
+                    else if(myBT.getAppConf().getUnits().equals("2"))
+                        //Newtons
+                        myUnits = getResources().getString(R.string.unit_newtons);
+                    String thrust = (String) msg.obj;
+                    if (thrust.matches("\\d+(?:\\.\\d+)?")) {
+                        double temp;
+                        temp = Double.parseDouble(thrust);
+                        if (myBT.getAppConf().getUnits().equals("0"))
+                            //kg
+                            thrust =  String.format("%.2f",(temp/1000));
+                        else if(myBT.getAppConf().getUnits().equals("1"))
+                            //pounds
+                            thrust =  String.format("%.2f",(temp/1000)*2.20462);
+                        else if(myBT.getAppConf().getUnits().equals("2"))
+                            //Newtons
+                            thrust =  String.format("%.2f",(temp/1000) * 9.80665);
+                    }
+                    txtViewThrust.setText(thrust + " " + myUnits);
                     break;
                 case 3:
                     //Value 4 contains the battery voltage
@@ -86,9 +103,9 @@ public class TestStandStatus extends AppCompatActivity {
 
         btnDismiss = (Button) findViewById(R.id.butDismiss);
         btnRecording = (Button) findViewById(R.id.butRecording);
-        if (myBT.getTestStandConfigData().getTestStandName().equals("AltiGPS"))
+        /*if (myBT.getTestStandConfigData().getTestStandName().equals("AltiGPS"))
             btnRecording.setVisibility(View.VISIBLE);
-        else
+        else*/
             btnRecording.setVisibility(View.INVISIBLE);
 
         btnDismiss.setOnClickListener(new View.OnClickListener() {

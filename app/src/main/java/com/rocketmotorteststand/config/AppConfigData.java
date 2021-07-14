@@ -40,7 +40,6 @@ public class AppConfigData {
             "usb"};
     private String[] itemsGraphicsLib = new String[] {"AFreeChart",
             "MPAndroidChart"};
-    private String allowMultipleDrogueMain = "false";
 
     private String fullUSBSupport = "false";
 
@@ -55,8 +54,9 @@ public class AppConfigData {
                 context.getResources().getString(R.string.phone_language)//"Phone language"
         };
         itemsUnits = new String[]{
-                context.getResources().getString(R.string.config_unit_kg),//"Meters",
-                context.getResources().getString(R.string.config_unit_pounds)  //"Feet"
+                context.getResources().getString(R.string.config_unit_kg),
+                context.getResources().getString(R.string.config_unit_pounds),
+                        context.getResources().getString(R.string.config_unit_newtons)
         };
 
         itemsColor = new String[]{
@@ -118,7 +118,5 @@ public class AppConfigData {
     }
     public String[] getItemsGraphicsLib() {return itemsGraphicsLib;}
     public String getGraphicsLibTypeByNbr(int graphicsLibNbr) {return itemsGraphicsLib[graphicsLibNbr];}
-    public String getMultipleDrogueMain () {
-        return allowMultipleDrogueMain;
-    }
+
 }
