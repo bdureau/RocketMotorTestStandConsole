@@ -235,6 +235,7 @@
     <string name="thrust_duration">Durée de la poussée</string>
     <string name="max_thrust">Poussée Max</string>
     <string name="average_thrust">Poussée Moyenne</string>
+    <string name="total_impulse">Impulsion totale</string>
     <string name="motor_class">Class du moteur</string>
 
     <string name="curve_nbr">Numéro de courbe</string>

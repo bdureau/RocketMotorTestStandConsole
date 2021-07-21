@@ -228,6 +228,7 @@
     <string name="thrust_duration">Thrust Duration</string>
     <string name="max_thrust">Max acceleration</string>
     <string name="average_thrust">Average Thrust</string>
+    <string name="total_impulse">Total impulse</string>
     <string name="motor_class">Motor class</string>
 
     <string name="curve_nbr">Thrust Curve nbr</string>

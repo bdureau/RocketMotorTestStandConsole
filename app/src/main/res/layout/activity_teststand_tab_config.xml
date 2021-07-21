@@ -28,7 +28,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start|bottom"
         android:text="@string/upload" />
-
+    <Button
+        android:id="@+id/butCalibrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:text="@string/calibrate_tabconfig" />
     <Button
         android:id="@+id/butDismiss"
         android:layout_width="wrap_content"

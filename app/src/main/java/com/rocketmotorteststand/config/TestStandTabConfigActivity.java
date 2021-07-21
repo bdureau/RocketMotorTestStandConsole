@@ -59,7 +59,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     SectionsPageAdapter adapter;
     Tab2Fragment configPage2 = null;
     Tab3Fragment configPage3 = null;
-    private Button btnDismiss, btnUpload;
+    private Button btnDismiss, btnUpload, btnCalibrate;
     static ConsoleApplication myBT;
     private TestStandConfigData TestStandCfg = null;
     private ProgressDialog progress;
@@ -81,7 +81,13 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-
+        btnCalibrate = (Button) findViewById(R.id.butCalibrate);
+        btnCalibrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Calibration().execute();
+            }
+        });
         btnDismiss = (Button) findViewById(R.id.butDismiss);
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -670,7 +676,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         private TextView testStandName,  CalibrationFactor, CurrentOffset;
         private Spinner dropdownUnits;
         private EditText calibrationWeight;
-        private Button btnCalibrate;
+        //private Button btnCalibrate;
 
 
         private TestStandConfigData ltestStandNameCfg = null;
@@ -729,7 +735,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             CalibrationFactor = (TextView) view.findViewById(R.id.txtCalibrationFactorValue);
             CurrentOffset = (TextView) view.findViewById(R.id.txtCalibrationOffsetValue);
             calibrationWeight = (EditText) view.findViewById(R.id.txtCalibrationWeightValue);
-            btnCalibrate = (Button) view.findViewById(R.id.butCalibrate);
+            //btnCalibrate = (Button) view.findViewById(R.id.butCalibrate);
             //units
             dropdownUnits = (Spinner) view.findViewById(R.id.spinnerUnit);
             //"kg", "pounds"
@@ -755,13 +761,13 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             //Test Stand name
             testStandName = (TextView) view.findViewById(R.id.txtAltiNameValue);
 
-            btnCalibrate.setOnClickListener(new View.OnClickListener() {
+            /*btnCalibrate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     new Calibration().execute();
                 }
-            });
+            });*/
 
             if (ltestStandNameCfg != null) {
                 testStandName.setText(ltestStandNameCfg.getTestStandName() + " ver: " +
@@ -844,7 +850,67 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
     }
 
+    // calibration
+    private class Calibration extends AsyncTask<Void, Void, Void>  // UI thread
+    {
+        private AlertDialog.Builder builder = null;
+        private AlertDialog alert;
+        private Boolean canceled = false;
 
+        @Override
+        protected void onPreExecute() {
+            //"Calibration in progress..."
+            //"Please wait!!!"
+            //this.getActivity()
+            builder = new AlertDialog.Builder(TestStandTabConfigActivity.this);
+
+            builder.setMessage("Calibration...")
+                    .setTitle("Calibration")
+                    .setCancelable(false)
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            myBT.setExit(true);
+                            canceled = true;
+                            dialog.cancel();
+                        }
+                    });
+            alert = builder.create();
+            alert.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
+        {
+
+            myBT.flush();
+            myBT.clearInput();
+            myBT.write("c"+configPage3.calibrationWeight.getText()+";".toString());
+            //wait for ok and put the result back
+            String myMessage = "";
+
+            myMessage = myBT.ReadResult(3000);
+            if (myMessage.equals("OK")) {
+                //getParentFragment().readConfig();
+                readConfig();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
+        {
+            super.onPostExecute(result);
+            if (!canceled) {
+                //this.getParent().readConfig();
+                //readConfig();
+                configPage3.CalibrationFactor.setText(String.valueOf(TestStandCfg.getCalibrationFactor()));
+                configPage3.CurrentOffset.setText(String.valueOf(TestStandCfg.getCurrentOffset()));
+
+                alert.dismiss();
+            }
+
+        }
+    }
     private class RetrieveConfig extends AsyncTask<Void, Void, Void>  // UI thread
     {
 
