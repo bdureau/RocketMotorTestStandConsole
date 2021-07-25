@@ -77,10 +77,7 @@ public class TelemetryMp extends AppCompatActivity {
 
     boolean telemetry = true;
 
-
     Button dismissButton;
-
-    //private TextToSpeech mTTS;
 
     Handler handler = new Handler() {
         @Override

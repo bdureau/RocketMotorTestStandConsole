@@ -4,6 +4,8 @@ package com.rocketmotorteststand.config;
  * The user can then load it back to the test stand
  * @author: boris.dureau@neuf.fr
  **/
+import android.os.Handler;
+import android.os.Message;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -63,7 +65,37 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     static ConsoleApplication myBT;
     private TestStandConfigData TestStandCfg = null;
     private ProgressDialog progress;
+    private AlertDialog alert;
+    private boolean calibrationComplete = false;
 
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    // Value 1 contains the offset
+                    Log.d("Calibration", "offset: "+(String) msg.obj );
+                    if (((String) msg.obj).matches("^-?[0-9]\\d+(?:\\.\\d+)?")) {
+                        //progress.
+                        configPage3.CurrentOffset.setText((String) msg.obj);
+                    }
+                    break;
+                case 2:
+                    // Value 2 contains the calibration
+                    Log.d("Calibration", "factor: "+(String) msg.obj );
+                    if (((String) msg.obj).matches("^-?[0-9]\\d+(?:\\.\\d+)?")) {
+                        configPage3.CalibrationFactor.setText((String) msg.obj);
+                    }
+                    break;
+                case 3:
+                    // Value 3 contains the flag
+                    if (((String) msg.obj).equals("Done"))
+                        calibrationComplete=true;
+
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,19 +104,17 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         myBT = (ConsoleApplication) getApplication();
 
         readConfig();
-        //Assync config does not work so do not use it for now
-        //new RetrieveConfig().execute();
-        //Check the local and force it if needed
-        //getApplicationContext().getResources().updateConfiguration(myBT.getAppLocal(), null);
+
         setContentView(R.layout.activity_teststand_tab_config);
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
-
+        myBT.setHandler(handler);
         btnCalibrate = (Button) findViewById(R.id.butCalibrate);
         btnCalibrate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                calibrationComplete =false;
                 new Calibration().execute();
             }
         });
@@ -854,7 +884,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     private class Calibration extends AsyncTask<Void, Void, Void>  // UI thread
     {
         private AlertDialog.Builder builder = null;
-        private AlertDialog alert;
+       // private AlertDialog alert;
         private Boolean canceled = false;
 
         @Override
@@ -876,6 +906,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                     });
             alert = builder.create();
             alert.show();
+
         }
 
         @Override
@@ -888,10 +919,13 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             //wait for ok and put the result back
             String myMessage = "";
 
-            myMessage = myBT.ReadResult(3000);
+           /* while (!calibrationComplete) {
+
+            }*/
+            myMessage = myBT.ReadResult(30000);
             if (myMessage.equals("OK")) {
                 //getParentFragment().readConfig();
-                readConfig();
+                //readConfig();
             }
             return null;
         }
@@ -903,8 +937,8 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             if (!canceled) {
                 //this.getParent().readConfig();
                 //readConfig();
-                configPage3.CalibrationFactor.setText(String.valueOf(TestStandCfg.getCalibrationFactor()));
-                configPage3.CurrentOffset.setText(String.valueOf(TestStandCfg.getCurrentOffset()));
+                //configPage3.CalibrationFactor.setText(String.valueOf(TestStandCfg.getCalibrationFactor()));
+                //configPage3.CurrentOffset.setText(String.valueOf(TestStandCfg.getCurrentOffset()));
 
                 alert.dismiss();
             }

@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Handler;
+import android.util.Log;
 
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveData;
 import com.rocketmotorteststand.config.TestStandConfigData;
@@ -358,41 +359,69 @@ public class ConsoleApplication extends Application {
 
                         long chk = 0;
                         switch (currentSentence[0]) {
+                            case "calibration":
+                                if (currentSentence[currentSentence.length - 1].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
+                                    chk = Long.valueOf(currentSentence[currentSentence.length - 1]);
+                                if (calculateSentenceCHK(currentSentence) == chk) {
+                                    if (mHandler != null) {
+                                        // Value 1 contains the offset factor
+                                        if (currentSentence.length > 1)
+                                            if (currentSentence[1].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
+                                                mHandler.obtainMessage(1, String.valueOf(currentSentence[1])).sendToTarget();
+                                            else
+                                                mHandler.obtainMessage(1, String.valueOf(0)).sendToTarget();
+
+                                        // value 2 contains the calibration factor
+                                        if (currentSentence.length > 2) {
+                                            if (currentSentence[2].matches("^-?[0-9]\\d+(?:\\.\\d+)?")) {
+                                                mHandler.obtainMessage(2, String.valueOf(currentSentence[2])).sendToTarget();
+                                                Log.d("Calibration", "factorApp!=0: " + String.valueOf(currentSentence[2]));
+                                            } else {
+                                                mHandler.obtainMessage(2, String.valueOf(0)).sendToTarget();
+                                                Log.d("Calibration", "factorApp=0: " + String.valueOf(currentSentence[2]));
+                                            }
+                                        }
+
+                                        // Value 3 contains the flag
+                                        if (currentSentence.length > 3)
+                                            mHandler.obtainMessage(3, String.valueOf(currentSentence[3])).sendToTarget();
+                                    }
+                                }
                             case "telemetry":
-                                if (currentSentence[currentSentence.length - 1].matches("\\d+(?:\\.\\d+)?"))
+                                if (currentSentence[currentSentence.length - 1].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                     chk = Long.valueOf(currentSentence[currentSentence.length - 1]);
                                 if (calculateSentenceCHK(currentSentence) == chk) {
                                     if (mHandler != null) {
                                         // Value 1 contains the current thrust
                                         if (currentSentence.length > 1)
-                                            if (currentSentence[1].matches("\\d+(?:\\.\\d+)?"))
+                                            if (currentSentence[1].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                                 mHandler.obtainMessage(1, String.valueOf(currentSentence[1])).sendToTarget();
                                             else
                                                 mHandler.obtainMessage(1, String.valueOf(0)).sendToTarget();
 
                                         // value 2 time
                                         if (currentSentence.length > 2)
-                                            if (currentSentence[2].matches("\\d+(?:\\.\\d+)?"))
+                                            if (currentSentence[2].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                                 mHandler.obtainMessage(2, String.valueOf(currentSentence[2])).sendToTarget();
                                             else
                                                 mHandler.obtainMessage(2, String.valueOf(0)).sendToTarget();
 
                                         // Value 3 contains the battery voltage
                                         if (currentSentence.length > 3)
-                                            if (currentSentence[3].matches("\\d+(?:\\.\\d+)?"))
+                                            if (currentSentence[3].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                                 mHandler.obtainMessage(3, String.valueOf(currentSentence[3])).sendToTarget();
                                             else
                                                 mHandler.obtainMessage(3, String.valueOf(0)).sendToTarget();
 
                                         // Value 4 contains the eeprom
                                         if (currentSentence.length > 4)
-                                            if (currentSentence[4].matches("\\d+(?:\\.\\d+)?"))
+                                            if (currentSentence[4].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                                 mHandler.obtainMessage(4, String.valueOf(currentSentence[4])).sendToTarget();
                                             else
                                                 mHandler.obtainMessage(4, String.valueOf(0)).sendToTarget();
                                         // Value 5 contains the number of thrust curves
                                         if (currentSentence.length > 5)
-                                            if (currentSentence[5].matches("\\d+(?:\\.\\d+)?"))
+                                            if (currentSentence[5].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                                 mHandler.obtainMessage(5, String.valueOf(currentSentence[5])).sendToTarget();
                                             else
                                                 mHandler.obtainMessage(5, String.valueOf(0)).sendToTarget();
@@ -402,7 +431,7 @@ public class ConsoleApplication extends Application {
                                 break;
 
                             case "data":
-                                if (currentSentence[currentSentence.length - 1].matches("\\d+(?:\\.\\d+)?"))
+                                if (currentSentence[currentSentence.length - 1].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                     chk = Long.valueOf(currentSentence[currentSentence.length - 1]);
                                 String thrustCurveName = "Thrust CurveXX";
                                 if (calculateSentenceCHK(currentSentence) == chk) {
@@ -427,7 +456,7 @@ public class ConsoleApplication extends Application {
                                         else
                                             value2 = 0;
                                     if (currentSentence.length > 3) {
-                                        if (currentSentence[3].matches("\\d+(?:\\.\\d+)?"))
+                                        if (currentSentence[3].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                             value3 = Integer.valueOf(currentSentence[3]);
                                         else
                                             value3 = 0;
@@ -510,13 +539,13 @@ public class ConsoleApplication extends Application {
 
                                     // value 11 contains calibration_factor
                                     if (currentSentence.length > 11)
-                                        if (currentSentence[11].matches("\\d+(?:\\.\\d+)?"))
+                                        if (currentSentence[11].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                             TestStandCfg.setCalibrationFactor(Integer.valueOf(currentSentence[11]));
                                         else
                                             TestStandCfg.setCalibrationFactor(0);
                                     // value 12 contains calibration_factor
                                     if (currentSentence.length > 12)
-                                        if (currentSentence[12].matches("\\d+(?:\\.\\d+)?"))
+                                        if (currentSentence[12].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                             TestStandCfg.setCurrentOffset(Integer.valueOf(currentSentence[12]));
                                         else
                                             TestStandCfg.setCurrentOffset(0);
@@ -530,7 +559,7 @@ public class ConsoleApplication extends Application {
                             case "nbrOfThrustCurve":
                                 // Value 1 contains the number of Thrust curve
                                 if (currentSentence.length > 1)
-                                    if (currentSentence[1].matches("\\d+(?:\\.\\d+)?"))
+                                    if (currentSentence[1].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                         NbrOfFlight = (Integer.valueOf(currentSentence[1]));
                                 myMessage = myMessage + " " + "nbrOfThrustCurve";
                                 break;
