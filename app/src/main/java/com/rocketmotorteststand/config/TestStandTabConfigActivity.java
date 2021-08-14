@@ -812,7 +812,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             return view;
         }
         // calibration
-        private class Calibration extends AsyncTask<Void, Void, Void>  // UI thread
+        /*private class Calibration extends AsyncTask<Void, Void, Void>  // UI thread
         {
             private AlertDialog.Builder builder = null;
             private AlertDialog alert;
@@ -866,17 +866,12 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
                     CalibrationFactor.setText(String.valueOf(ltestStandNameCfg.getCalibrationFactor()));
                     CurrentOffset.setText(String.valueOf(ltestStandNameCfg.getCurrentOffset()));
-                    /*setAxOffsetValue(GimbalCfg.getAxOffset());
-                    setAyOffsetValue(GimbalCfg.getAyOffset());
-                    setAzOffsetValue(GimbalCfg.getAzOffset());
-                    setGxOffsetValue(GimbalCfg.getGxOffset());
-                    setGyOffsetValue(GimbalCfg.getGyOffset());
-                    setGzOffsetValue(GimbalCfg.getGzOffset());*/
+
                     alert.dismiss();
                 }
 
             }
-        }
+        }*/
 
     }
 
@@ -891,7 +886,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         protected void onPreExecute() {
             //"Calibration in progress..."
             //"Please wait!!!"
-            //this.getActivity()
             builder = new AlertDialog.Builder(TestStandTabConfigActivity.this);
 
             builder.setMessage("Calibration...")
