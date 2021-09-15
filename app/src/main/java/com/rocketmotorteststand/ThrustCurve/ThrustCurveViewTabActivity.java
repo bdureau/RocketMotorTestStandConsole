@@ -1,9 +1,12 @@
 package com.rocketmotorteststand.ThrustCurve;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.rocketmotorteststand.ConsoleApplication;
@@ -24,6 +27,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 
@@ -36,6 +40,10 @@ import org.afree.data.xy.XYSeries;
 import org.afree.data.xy.XYSeriesCollection;
 import org.afree.graphics.geom.Font;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -99,6 +107,15 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (Build.VERSION.SDK_INT >= 23) {
+            int REQUEST_CODE_ASK_PERMISSIONS = 123;
+            int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_CODE_ASK_PERMISSIONS);
+
+            }
+        }
         // recovering the instance state
         if (savedInstanceState != null) {
             currentCurvesNames = savedInstanceState.getStringArray("CURRENT_CURVES_NAMES_KEY");
@@ -164,7 +181,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         }
 
         if (currentCurvesNames == null) {
-            //This is the first time so only display the altitude
+            //This is the first time so only display the thrust
             dataSets = new ArrayList<>();
             currentCurvesNames = new String[curvesNames.length];
             currentCurvesNames[0] = this.getResources().getString(R.string.curve_thrust);
@@ -548,6 +565,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
             }
         }
+
     }
 
     /*
@@ -559,6 +577,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         private TextView nbrOfSamplesValue, thrustCurveNbrValue;
         private TextView recordingDurationValue, thrustTimeValue, maxThrustValue, averageThrustValue, motorClassValue, totalImpulseValue;
+        private Button buttonExportToCsv;
 
         public Tab2Fragment(ThrustCurveData data) {
             mythrustCurve = data;
@@ -571,7 +590,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
             View view = inflater.inflate(R.layout.tabthrustcurve_info_fragment, container, false);
 
-
+            buttonExportToCsv= (Button) view.findViewById(R.id.butExportToCsv);
             recordingDurationValue = view.findViewById(R.id.thrustCurveDurationValue);
             thrustTimeValue = view.findViewById(R.id.thrustTimeValue);
             maxThrustValue = view.findViewById(R.id.maxThrustValue);
@@ -628,7 +647,61 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 //motor class
                 motorClassValue.setText(tu.motorClass(totalImpulse) + String.format("%.0f ", averageThrust * (9.80665 / 1000)));
             }
+            buttonExportToCsv.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    saveData();      //export the data to a csv file
+                }
+            });
+
             return view;
+        }
+        private void saveData(){
+
+
+            String csv_data = "time,thrust\n";/// your csv data as string;
+            int nbrData = thrustCurveData.getSeries(0).getItemCount();
+            for ( int i = 0; i < nbrData; i++) {
+
+                csv_data = csv_data + (double) thrustCurveData.getSeries(0).getX(i) +"," + (double) thrustCurveData.getSeries(0).getY(i)+"\n";
+
+            }
+            File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+            //if you want to create a sub-dir
+            root = new File(root, "RocketMotorTestStand");
+            root.mkdir();
+
+            // select the name for your file
+            root = new File(root , ThrustCurveName +".csv");
+
+            try {
+                FileOutputStream fout = new FileOutputStream(root);
+                fout.write(csv_data.getBytes());
+
+                fout.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+
+                boolean bool = false;
+                try {
+                    // try to create the file
+                    bool = root.createNewFile();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+                if (bool){
+                    // call the method again
+                    saveData();
+                }else {
+                    throw new IllegalStateException("Failed to create image file");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
