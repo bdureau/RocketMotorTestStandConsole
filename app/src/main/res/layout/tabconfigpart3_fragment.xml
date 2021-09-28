@@ -60,9 +60,9 @@
         android:id="@+id/txtCalibrationWeightValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:inputType="number"
         android:layout_alignTop="@+id/txtCalibrationWeight"
+        android:layout_alignParentRight="true"
+        android:inputType="number|numberDecimal"
         android:text="0" />
 
     <TextView
