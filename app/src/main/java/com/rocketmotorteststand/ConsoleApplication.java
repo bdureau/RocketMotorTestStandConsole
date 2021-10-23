@@ -408,23 +408,29 @@ public class ConsoleApplication extends Application {
 
                                         // Value 3 contains the battery voltage
                                         if (currentSentence.length > 3)
-                                            if (currentSentence[3].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
+                                            if (currentSentence[3].matches("\\d+(?:\\.\\d+)?"))
                                                 mHandler.obtainMessage(3, String.valueOf(currentSentence[3])).sendToTarget();
                                             else
                                                 mHandler.obtainMessage(3, String.valueOf(0)).sendToTarget();
 
                                         // Value 4 contains the eeprom
                                         if (currentSentence.length > 4)
-                                            if (currentSentence[4].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
+                                            if (currentSentence[4].matches("\\d+(?:\\.\\d+)?"))
                                                 mHandler.obtainMessage(4, String.valueOf(currentSentence[4])).sendToTarget();
                                             else
                                                 mHandler.obtainMessage(4, String.valueOf(0)).sendToTarget();
                                         // Value 5 contains the number of thrust curves
-                                        if (currentSentence.length > 5)
-                                            if (currentSentence[5].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
+
+                                        if (currentSentence.length > 5) {
+                                            Log.d("TestStand console", currentSentence[5]);
+                                            if (currentSentence[5].trim().matches("\\d+(?:\\.\\d+)?")) {
+
                                                 mHandler.obtainMessage(5, String.valueOf(currentSentence[5])).sendToTarget();
-                                            else
+                                            } else
                                                 mHandler.obtainMessage(5, String.valueOf(0)).sendToTarget();
+                                        }
+                                        else
+                                            Log.d("TestStand console", "Length: " +currentSentence.length);
 
                                     }
                                 }
@@ -504,18 +510,22 @@ public class ConsoleApplication extends Application {
 
                                     // Value 6 contains start recording thrust level
                                     if (currentSentence.length > 6)
-                                        if (currentSentence[6].matches("\\d+(?:\\.\\d+)?"))
-                                            TestStandCfg.setStartRecordingThrustLevel(Integer.valueOf(currentSentence[6]));
-                                        else
+                                        if (currentSentence[6].matches("\\d+(?:\\.\\d+)?")){
+
+                                        }
+                                            //TestStandCfg.setStartRecordingThrustLevel(Integer.valueOf(currentSentence[6]));
+                                        else {
+
+                                        }
                                             //if you cannot read it, set it to 1 N
-                                            TestStandCfg.setStartRecordingThrustLevel(1);
+                                            //TestStandCfg.setStartRecordingThrustLevel(1);
 
                                     // Value 7 contains the stop recording time
                                     if (currentSentence.length > 7)
                                         if (currentSentence[7].matches("\\d+(?:\\.\\d+)?"))
-                                            TestStandCfg.setStopRecordingThrustLevel(Integer.valueOf(currentSentence[7]));
+                                            TestStandCfg.setStopRecordingTime(Integer.valueOf(currentSentence[7]));
                                         else
-                                            TestStandCfg.setStopRecordingThrustLevel(0);
+                                            TestStandCfg.setStopRecordingTime(0);
 
                                     // Value 8 contains the test stand resolution
                                     if (currentSentence.length > 8)

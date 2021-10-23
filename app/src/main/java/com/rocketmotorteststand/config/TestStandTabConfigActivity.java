@@ -264,8 +264,8 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             TestStandCfg.setTestStandResolution(configPage2.getTestStandResolution());
             TestStandCfg.setEepromSize(configPage2.getEEpromSize());
 
-            TestStandCfg.setStopRecordingThrustLevel(configPage2.getStopRecordingThrustLevel());
-            TestStandCfg.setStartRecordingThrustLevel(configPage2.getStartRecordingThrustLevel());
+            TestStandCfg.setStopRecordingTime(configPage2.getStopRecordingTime());
+            //TestStandCfg.setStartRecordingThrustLevel(configPage2.getStartRecordingThrustLevel());
             TestStandCfg.setBatteryType(configPage2.getBatteryType());
 
         }
@@ -316,11 +316,11 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         testStandCfgStr = "s," +
                 TestStandCfg.getUnits() + "," +
                 TestStandCfg.getConnectionSpeed() + "," +
-                TestStandCfg.getStopRecordingThrustLevel() + "," +
+                TestStandCfg.getStopRecordingTime() + "," +
                 TestStandCfg.getTestStandResolution() + "," +
                 TestStandCfg.getEepromSize();
 
-        testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getStartRecordingThrustLevel();
+        testStandCfgStr = testStandCfgStr + "," + "0";//TestStandCfg.getStartRecordingThrustLevel();
         testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getBatteryType();
         testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCalibrationFactor();
         testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCurrentOffset();
@@ -461,8 +461,8 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         private Spinner dropdownTestStandResolution, dropdownEEpromSize;
 
         private Spinner dropdownBatteryType;
-        private EditText StopRecordingThrustLevel;
-        private EditText StartRecordingThrustLevel;
+        private EditText StopRecordingTime;
+        //private EditText StartRecordingThrustLevel;
         private boolean ViewCreated = false;
         private TextView txtViewEEpromSize;
 
@@ -512,33 +512,33 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         }
 
 
-        public int getStopRecordingThrustLevel() {
+        public int getStopRecordingTime() {
             int ret;
             try {
-                ret = Integer.parseInt(this.StopRecordingThrustLevel.getText().toString());
+                ret = Integer.parseInt(this.StopRecordingTime.getText().toString());
             } catch (Exception e) {
                 ret = 0;
             }
             return ret;
         }
 
-        public void setStopRecordingThrustLevel(int StopRecordingThrustLevel) {
-            this.StopRecordingThrustLevel.setText(String.valueOf(StopRecordingThrustLevel));
+        public void setStopRecordingTime(int StopRecordingTime) {
+            this.StopRecordingTime.setText(String.valueOf(StopRecordingTime));
         }
 
-        public int getStartRecordingThrustLevel() {
+        /*public int getStartRecordingTime() {
             int ret;
             try {
-                ret = Integer.parseInt(this.StartRecordingThrustLevel.getText().toString());
+                ret = Integer.parseInt(this.StartRecordingTime.getText().toString());
             } catch (Exception e) {
                 ret = 0;
             }
             return ret;
-        }
+        }*/
 
-        public void setStartRecordingThrustLevel(int StartRecordingThrustLevel) {
-            this.StartRecordingThrustLevel.setText(String.valueOf(StartRecordingThrustLevel));
-        }
+        /*public void setStartRecordingTime(int StartRecordingTime) {
+            this.StartRecordingTime.setText(String.valueOf(StartRecordingThrustLevel));
+        }*/
 
         public int getBatteryType() {
             return (int) this.dropdownBatteryType.getSelectedItemId();
@@ -630,9 +630,9 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
 
             // nbr of newtons to stop recording thrust
-            StopRecordingThrustLevel = (EditText) view.findViewById(R.id.editTxtStopRecordingThrustLevel);
+            StopRecordingTime = (EditText) view.findViewById(R.id.editTxtStopRecordingTime);
             // Tool tip
-            StopRecordingThrustLevel.setOnClickListener(new View.OnClickListener() {
+            StopRecordingTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ViewTooltip
@@ -645,10 +645,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 }
             });
             // nbr of meters to consider that we have a lift off
-            StartRecordingThrustLevel = (EditText) view.findViewById(R.id.editTxtStartRecordingThrustLevel);
+           // StartRecordingThrustLevel = (EditText) view.findViewById(R.id.editTxtStartRecordingThrustLevel);
 
             // Tool tip
-            StartRecordingThrustLevel.setOnClickListener(new View.OnClickListener() {
+            /*StartRecordingThrustLevel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ViewTooltip
@@ -659,7 +659,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                             .text(getResources().getString(R.string.LiftOffAltitude_tooltip))
                             .show();
                 }
-            });
+            });*/
             dropdownBatteryType = (Spinner) view.findViewById(R.id.spinnerBatteryType);
             //"Unknown",
             itemsBatteryType = new String[]{getResources().getString(R.string.config_unknown),
@@ -690,8 +690,8 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 dropdownTestStandResolution.setSelection(lTestStandCfg.getTestStandResolution());
                 dropdownEEpromSize.setSelection(lTestStandCfg.arrayIndex(itemsEEpromSize, String.valueOf(lTestStandCfg.getEepromSize())));
 
-                StopRecordingThrustLevel.setText(String.valueOf(lTestStandCfg.getStopRecordingThrustLevel()));
-                StartRecordingThrustLevel.setText(String.valueOf(lTestStandCfg.getStartRecordingThrustLevel()));
+                StopRecordingTime.setText(String.valueOf(lTestStandCfg.getStopRecordingTime()));
+                //StartRecordingThrustLevel.setText(String.valueOf(lTestStandCfg.getStartRecordingTime()));
                 dropdownBatteryType.setSelection(lTestStandCfg.getBatteryType());
 
             }
@@ -979,7 +979,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                     configPage2.setBaudRate(TestStandCfg.getConnectionSpeed());
                     configPage2.setTestStandResolution(TestStandCfg.getTestStandResolution());
                     configPage2.setEEpromSize(TestStandCfg.getEepromSize());
-                    configPage2.setStopRecordingThrustLevel(TestStandCfg.getStopRecordingThrustLevel());
+                    configPage2.setStopRecordingTime(TestStandCfg.getStopRecordingTime());
                 }
 
                 if (configPage3.isViewCreated()) {

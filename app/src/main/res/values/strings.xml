@@ -32,8 +32,8 @@
     <string name="baudRate">Baud Rate</string>
     <string name="testStandResolution">Test stand Res</string>
     <string name="eepromSize">EEprom Size</string>
-    <string name="EndRecordThrust">End recording Thrust</string>
-    <string name="StarRecordThrust">Start recording Thrust</string>
+    <string name="RecordingTimeOut">Record time</string>
+
     <string name="BatteryType">Battery Type</string>
     <string name="config_unknown">unknown</string>
     <string name="config_on">On</string>

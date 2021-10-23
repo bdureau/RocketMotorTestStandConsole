@@ -71,49 +71,31 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/EndRecordThrust"
-        android:id="@+id/txtViewStopRecordingThrustLevel"
+        android:text="@string/RecordingTimeOut"
+        android:id="@+id/txtViewStopRecordingTime"
         android:layout_marginTop="18dp"
         android:layout_below="@+id/txtViewEEpromSize"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/editTxtStopRecordingThrustLevel"
+        android:id="@+id/editTxtStopRecordingTime"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txtViewStopRecordingThrustLevel"
+        android:layout_alignBaseline="@+id/txtViewStopRecordingTime"
         android:layout_alignParentRight="true"
         android:inputType="number"
         android:textAlignment="textEnd"
         android:textSize="13sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/StarRecordThrust"
-        android:id="@+id/txtViewStartRecordingThrustLevel"
-        android:layout_marginTop="18dp"
-        android:layout_below="@+id/txtViewStopRecordingThrustLevel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
-    <EditText
-        android:id="@+id/editTxtStartRecordingThrustLevel"
-        android:layout_width="175dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txtViewStartRecordingThrustLevel"
-        android:layout_alignParentRight="true"
-        android:inputType="number"
-        android:textAlignment="textEnd"
-        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/txtViewBatteryType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:layout_below="@+id/txtViewStartRecordingThrustLevel"
+        android:layout_below="@+id/txtViewStopRecordingTime"
         android:text="@string/BatteryType" />
 
     <Spinner

@@ -20,9 +20,9 @@ public class TestStandConfigData {
     private long connectionSpeed= 38400;
     private int testStandResolution = 0;
     private int eepromSize= 512;
-    private int stopRecordingThrustLevel =0;
+    private int stopRecordingTime =10; //10s
 
-    private int startRecordingThrustLevel =1;
+    //private int startRecordingThrustLevel =1;
     private int batteryType =0;
     private long calibrationFactor = 0;
     private long currentOffset=0;
@@ -76,9 +76,9 @@ public class TestStandConfigData {
 
 
 
-    //Minimum recording thrust
-    public void setStopRecordingThrustLevel(int value) {stopRecordingThrustLevel =value;}
-    public int getStopRecordingThrustLevel(){return stopRecordingThrustLevel;}
+    //Number of second during which we are reconding
+    public void setStopRecordingTime(int value) {stopRecordingTime =value;}
+    public int getStopRecordingTime(){return stopRecordingTime;}
 
 
     //test stand baud rate
@@ -109,8 +109,8 @@ public class TestStandConfigData {
 
 
     //start recoding thrust
-    public void setStartRecordingThrustLevel(int value) {startRecordingThrustLevel =value;}
-    public int getStartRecordingThrustLevel(){return startRecordingThrustLevel;}
+    //public void setStartRecordingThrustLevel(int value) {startRecordingThrustLevel =value;}
+    //public int getStartRecordingThrustLevel(){return startRecordingThrustLevel;}
 
     public void setBatteryType(int value) {batteryType =value;}
     public int getBatteryType(){return batteryType;}

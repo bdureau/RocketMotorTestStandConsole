@@ -6,6 +6,7 @@ import android.os.Message;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -26,8 +27,8 @@ public class TestStandStatus extends AppCompatActivity {
     boolean recording = false;
 
     private TextView txtViewBatteryVoltage;
-    private TextView txtViewThrust, txtViewVoltage, txtViewLink,  txtEEpromUsage,txtNbrOfThrustCurve;
-    private TextView  txtViewEEprom, txtViewThrustCurve;
+    private TextView txtViewThrust, txtViewVoltage, txtViewLink, txtEEpromUsage, txtNbrOfThrustCurve;
+    private TextView txtViewEEprom, txtViewThrustCurve;
 
 
     Handler handler = new Handler() {
@@ -36,15 +37,15 @@ public class TestStandStatus extends AppCompatActivity {
             switch (msg.what) {
 
                 case 1:
-                    String myUnits="";
+                    String myUnits = "";
                     //Value 1 contains the current thrust
                     if (myBT.getAppConf().getUnits().equals("0"))
                         //kg
                         myUnits = getResources().getString(R.string.Kg_fview);
-                    else if(myBT.getAppConf().getUnits().equals("1"))
+                    else if (myBT.getAppConf().getUnits().equals("1"))
                         //pounds
                         myUnits = getResources().getString(R.string.Pounds_fview);
-                    else if(myBT.getAppConf().getUnits().equals("2"))
+                    else if (myBT.getAppConf().getUnits().equals("2"))
                         //Newtons
                         myUnits = getResources().getString(R.string.unit_newtons);
                     String thrust = (String) msg.obj;
@@ -53,13 +54,13 @@ public class TestStandStatus extends AppCompatActivity {
                         temp = Double.parseDouble(thrust);
                         if (myBT.getAppConf().getUnits().equals("0"))
                             //kg
-                            thrust =  String.format("%.2f",(temp/1000));
-                        else if(myBT.getAppConf().getUnits().equals("1"))
+                            thrust = String.format("%.2f", (temp / 1000));
+                        else if (myBT.getAppConf().getUnits().equals("1"))
                             //pounds
-                            thrust =  String.format("%.2f",(temp/1000)*2.20462);
-                        else if(myBT.getAppConf().getUnits().equals("2"))
+                            thrust = String.format("%.2f", (temp / 1000) * 2.20462);
+                        else if (myBT.getAppConf().getUnits().equals("2"))
                             //Newtons
-                            thrust =  String.format("%.2f",(temp/1000) * 9.80665);
+                            thrust = String.format("%.2f", (temp / 1000) * 9.80665);
                     }
                     txtViewThrust.setText(thrust + " " + myUnits);
                     break;
@@ -85,7 +86,8 @@ public class TestStandStatus extends AppCompatActivity {
 
                 case 5:
                     //Value 5 contains the number of thrust curves
-                    txtNbrOfThrustCurve.setText((String) msg.obj );
+                    txtNbrOfThrustCurve.setText((String) msg.obj);
+                    Log.d("TestStandStatus", (String) msg.obj);
                     break;
 
             }
@@ -103,10 +105,8 @@ public class TestStandStatus extends AppCompatActivity {
 
         btnDismiss = (Button) findViewById(R.id.butDismiss);
         btnRecording = (Button) findViewById(R.id.butRecording);
-        /*if (myBT.getTestStandConfigData().getTestStandName().equals("AltiGPS"))
-            btnRecording.setVisibility(View.VISIBLE);
-        else*/
-            btnRecording.setVisibility(View.INVISIBLE);
+
+        btnRecording.setVisibility(View.INVISIBLE);
 
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,13 +158,13 @@ public class TestStandStatus extends AppCompatActivity {
 
         txtViewBatteryVoltage = (TextView) findViewById(R.id.txtViewBatteryVoltage);
 
-        txtEEpromUsage= (TextView) findViewById(R.id.txtViewEEpromUsage);
-        txtNbrOfThrustCurve= (TextView) findViewById(R.id.txtViewNbrOfThrustCurve);
+        txtEEpromUsage = (TextView) findViewById(R.id.txtViewEEpromUsage);
+        txtNbrOfThrustCurve = (TextView) findViewById(R.id.txtViewNbrOfThrustCurve);
         txtViewEEprom = (TextView) findViewById(R.id.txtViewEEprom);
         txtViewThrustCurve = (TextView) findViewById(R.id.txtViewThrustCurve);
 
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32") ) {
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32")) {
             txtViewVoltage.setVisibility(View.VISIBLE);
             txtViewBatteryVoltage.setVisibility(View.VISIBLE);
         } else {
@@ -173,16 +173,13 @@ public class TestStandStatus extends AppCompatActivity {
         }
 
 
-
-
-            txtViewEEprom.setVisibility(View.VISIBLE);
-            txtViewThrustCurve.setVisibility(View.VISIBLE);
-            txtEEpromUsage.setVisibility(View.VISIBLE);
-            txtNbrOfThrustCurve.setVisibility(View.VISIBLE);
+        txtViewEEprom.setVisibility(View.VISIBLE);
+        txtViewThrustCurve.setVisibility(View.VISIBLE);
+        txtEEpromUsage.setVisibility(View.VISIBLE);
+        txtNbrOfThrustCurve.setVisibility(View.VISIBLE);
 
 
         txtViewLink.setText(myBT.getConnectionType());
-
 
 
         myBT.setHandler(handler);
@@ -232,7 +229,6 @@ public class TestStandStatus extends AppCompatActivity {
 
         myMessage = myBT.ReadResult(10000);
     }
-
 
 
     // fast way to call Toast

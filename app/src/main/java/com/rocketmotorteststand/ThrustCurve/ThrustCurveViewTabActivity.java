@@ -578,6 +578,10 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         private TextView nbrOfSamplesValue, thrustCurveNbrValue;
         private TextView recordingDurationValue, thrustTimeValue, maxThrustValue, averageThrustValue, motorClassValue, totalImpulseValue;
         private Button buttonExportToCsv, buttonExportToEng;
+        double totalImpulse = 0;
+        String motorClass="";
+        double thrustDuration =0;
+        double averageThrust=0;
 
         public Tab2Fragment(ThrustCurveData data) {
             mythrustCurve = data;
@@ -591,6 +595,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             View view = inflater.inflate(R.layout.tabthrustcurve_info_fragment, container, false);
 
             buttonExportToCsv= (Button) view.findViewById(R.id.butExportToCsv);
+            buttonExportToEng= (Button) view.findViewById(R.id.butExportToEng);
             recordingDurationValue = view.findViewById(R.id.thrustCurveDurationValue);
             thrustTimeValue = view.findViewById(R.id.thrustTimeValue);
             maxThrustValue = view.findViewById(R.id.maxThrustValue);
@@ -626,13 +631,13 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             int curveStop = tu.searchXFrom(thrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
             if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
                 // thrust duration
-                double thrustDuration = ((double) thrustCurveData.getSeries(0).getX(curveStop) - (double) thrustCurveData.getSeries(0).getX(curveStart)) / 1000.0;
+                thrustDuration = ((double) thrustCurveData.getSeries(0).getX(curveStop) - (double) thrustCurveData.getSeries(0).getX(curveStart)) / 1000.0;
                 thrustTimeValue.setText(thrustDuration + " secs");
                 double totThurst = 0;
                 for (int i = curveStart; i < curveStop; i++) {
                     totThurst = totThurst + (double) thrustCurveData.getSeries(0).getY(i);
                 }
-                double averageThrust = totThurst / ((double) (curveStop - curveStart));
+                averageThrust = totThurst / ((double) (curveStop - curveStart));
 
                 //max thrust
                 maxThrustValue.setText(String.format("%.1f ", maxThrust * CONVERT) + units[0]);
@@ -641,10 +646,11 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
 
                 //tot impulse
-                double totalImpulse = 0;
+                //double totalImpulse = 0;
                 totalImpulse = averageThrust * (9.80665 / 1000) * thrustDuration;
                 totalImpulseValue.setText(String.format("%.0f ",totalImpulse) + " Newtons");
                 //motor class
+                motorClass =tu.motorClass(totalImpulse) + String.format("%.0f ", averageThrust * (9.80665 / 1000));
                 motorClassValue.setText(tu.motorClass(totalImpulse) + String.format("%.0f ", averageThrust * (9.80665 / 1000)));
             }
             buttonExportToCsv.setOnClickListener(new View.OnClickListener()
@@ -656,18 +662,69 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 }
             });
 
+            buttonExportToEng.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    exportToEng(motorClass);      //export the data to an eng file
+                }
+            });
+
             return view;
         }
         private void exportToCSV(){
 
 
             String csv_data = "time,thrust\n";/// your csv data as string;
-            int nbrData = thrustCurveData.getSeries(0).getItemCount();
+            /*int nbrData = thrustCurveData.getSeries(0).getItemCount();
             for ( int i = 0; i < nbrData; i++) {
 
                 csv_data = csv_data +  String.format("%.3f ",(double)thrustCurveData.getSeries(0).getX(i) ) +"," + String.format("%.1f ",(double)thrustCurveData.getSeries(0).getY(i))+"\n";
 
+            }*/
+            ThrustUtil tu = new ThrustUtil();
+            double maxThrust = thrustCurveData.getSeries(0).getMaxY();
+            double triggerThrust = maxThrust * (5.0 / 100.0);
+
+            int curveStart = tu.searchX(thrustCurveData.getSeries(0), triggerThrust);
+            int curveMaxThrust = tu.searchX(thrustCurveData.getSeries(0), maxThrust);
+            int curveStop = tu.searchXFrom(thrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
+
+            //ArrayList<Entry> yValues = new ArrayList<>();
+            if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
+                for (int k = curveStart; k < curveStop; k++) {
+
+                    //newton
+                    //yValues.add(new Entry(thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue(),
+                    // (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665));
+                    String curTime = String.format("%.3f ",(thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue())/1000);
+                    if(curTime.contains(","))
+                        curTime = curTime+";";
+                    else
+                        curTime = curTime+",";
+                    String currData="";
+                    if (myBT.getAppConf().getUnits().equals("0")) {
+                        //kg
+                        currData = String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) );
+                    }else if (myBT.getAppConf().getUnits().equals("1")) {
+                        //pound
+                        currData = String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 2.20462);
+                    }
+                    if (myBT.getAppConf().getUnits().equals("2")) {
+                        //newton
+                        currData = String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
+                    }
+
+                    /*currData =currData.replace(",",".");
+                    if(currData.contains(","))
+                        currData = currData.replace(",",".")+";";*/
+                    csv_data = csv_data + curTime+ currData+"\n";
+
+
+                }
             }
+
             File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
             //if you want to create a sub-dir
@@ -704,19 +761,46 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             }
         }
 
-        private void exportToEng() {
+        private void exportToEng(String motorClass) {
 
             String motorfile_data = ";File generated by RocketMotorTestStand \n;\n";
+            //K1530 54 714 0 1.287998 1.499998 TruCore
 
             motorfile_data = motorfile_data +"\n";
+            motorfile_data = motorfile_data + motorClass + " " + "motorDiam" + " "+ "casinglength"
+                    + " " + "delay" + " " + "propellantWeight" + " " + "totalWeight" + " " +"manufacturer" + "\n";
+
+            ThrustUtil tu = new ThrustUtil();
+            double maxThrust = thrustCurveData.getSeries(0).getMaxY();
+            double triggerThrust = maxThrust * (5.0 / 100.0);
+
+            int curveStart = tu.searchX(thrustCurveData.getSeries(0), triggerThrust);
+            int curveMaxThrust = tu.searchX(thrustCurveData.getSeries(0), maxThrust);
+            int curveStop = tu.searchXFrom(thrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
+
+            //ArrayList<Entry> yValues = new ArrayList<>();
+            if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
+                for (int k = curveStart; k < curveStop; k++) {
+
+                    //newton
+                    //yValues.add(new Entry(thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue(),
+                    // (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665));
+                    String currData = String.format("%.3f ",(thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue())/1000) +" " +
+                            String.format("%.1f ",(thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
+                    currData =currData.replace(",",".");
+                    motorfile_data = motorfile_data +  currData+"\n";
+
+
+                }
+            }
 
             File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             int nbrData = thrustCurveData.getSeries(0).getItemCount();
-            for ( int i = 0; i < nbrData; i++) {
+            /*for ( int i = 0; i < nbrData; i++) {
 
                 motorfile_data = motorfile_data +  String.format("%.3f ",(double)thrustCurveData.getSeries(0).getX(i) ) +" " + String.format("%.1f ",(double)thrustCurveData.getSeries(0).getY(i))+"\n";
 
-            }
+            }*/
             motorfile_data = motorfile_data +";\n";
 
             //if you want to create a sub-dir
@@ -744,7 +828,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
                 if (bool){
                     // call the method again
-                    exportToEng();
+                    exportToEng(motorClass);
                 }else {
                     throw new IllegalStateException("Failed to create eng file");
                 }

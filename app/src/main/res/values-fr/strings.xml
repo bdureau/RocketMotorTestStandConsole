@@ -36,8 +36,8 @@
     <string name="testStandResolution">Resolution Banc de test</string>
     <string name="eepromSize">Capacité EEprom</string>
 
-    <string name="EndRecordThrust">Poussée de fin enr</string>
-    <string name="StarRecordThrust">Poussée de début enr</string>
+    <string name="RecordingTimeOut">Durée enr</string>
+
     <string name="BatteryType">Type de batterie</string>
     <string name="config_unknown">inconnu</string>
     <string name="config_on">Activé</string>
