@@ -109,7 +109,6 @@ public class TelemetryMp extends AppCompatActivity {
                             mChart.clear();
                             mChart.setData(data);
                         }
-
                     }
                     break;
 

@@ -19,15 +19,13 @@
 
     <!-- Config tab1 tooltips -->
     <string name="txtViewBaudRate_tooltip">Choisissez la vitesse de communication du banc de test. Attention cela peut comprometre la communication</string>
-
-    <string name="txtViewAltimeterResolution_tooltip">Choisir la résolution du capteur de pression.  </string>
+    <string name="txtViewTestStandResolution_tooltip">Choisir la résolution du capteur de poussée.  </string>
     <string name="txtViewEEpromSize_tooltip">Choisissez la taille de l\'eeprom du banc de test en fonction de l\'eeprom utilisée</string>
+    <string name="EndRecordTime_tooltip">Entrer la durée d\'enregistrement</string>
 
-    <string name="EndRecordAltitude_tooltip">Altitude à laquelle on considère que la fusée a attèrie</string>
-    <string name="LiftOffAltitude_tooltip">Altitude à laquelle on considère que la fusée a décollée</string>
     <string name="txtViewBatteryType_tooltip">Entrer le type de batterie utilisé pour s\'assurer de ne pas trop la décharger</string>
-    <string name="txtAltiUnit_tooltip">Choisiez les unités pour la poussée avec lesquelle vous etes familié</string>
-    <string name="editTxtBipFreq_tooltip">Choisissez la fréquence des bip en Hz</string>
+    <string name="txtTestStandUnit_tooltip">Choisiez les unités pour la poussée avec lesquelle vous etes familié</string>
+
 
     <!-- Config tab2 -->
     <string name="altimeter_config_tab2">Config du banc de test</string>
@@ -80,6 +78,7 @@
     <!-- Reset screen -->
     <string name="reset_msg1">Vous allez effacer toutes vos courbes de poussées, etes vous certain de vouloir le faire?</string>
     <string name="reset_msg2">Vous allez réinitialiser la configuration de votre banc de test, etes vous certain de vouloir le faire?</string>
+    <string name="reset_msg3">Vous allez effacer votre derniere courbe de poussée, etes vous certain de vouloir le faire?</string>
 
     <!-- bluetooth messages -->
     <string name="BT_msg1">Périphérique Bluetooth non disponible</string>
@@ -98,7 +97,7 @@
 
     <!-- About screen -->
     <string name="about_screen">A propos</string>
-    <string name="bear_console_version">Version du banc de test</string>
+    <string name="teststand_version">Version du banc de test</string>
     <string name="dismiss_about">Fermer</string>
 
     <!-- Messages -->
@@ -159,7 +158,7 @@
 
     <string name="general_config">Configuration principale</string>
     <string name="telemetry_config">Configuration télémétrie</string>
-    <string name="main_event">Evenement Main</string>
+    <!--<string name="main_event">Evenement Main</string>
     <string name="apogee_altitude_event">Altitude de l\'apogée</string>
     <string name="main_altitude_event">Altitude Main</string>
     <string name="drogue_event">Evenement Drogue</string>
@@ -167,7 +166,7 @@
     <string name="landing_event">Evenement atterrissage</string>
     <string name="burnout_event">Fin de combustion moteur</string>
     <string name="warning_event">Attention</string>
-    <string name="liftoff_event">Evenement décollage</string>
+    <string name="liftoff_event">Evenement décollage</string>-->
 
     <!-- Telemetry -->
     <string name="stop_telemetry">Arret Tel</string>
@@ -175,22 +174,22 @@
     <string name="current_phase">Phase courante</string>
     <string name="thrust">Poussée</string>
     <string name="event_time">Heure Evenement</string>
-    <string name="lift_off">Décollage</string>
+    <!--<string name="lift_off">Décollage</string>
     <string name="apogee_drogue">Apogée/drogue</string>
     <string name="main_chute">Parachute Main</string>
     <string name="landed">Attérie</string>
-    <string name="max_speed">Vitesse max</string>
+    <string name="max_speed">Vitesse max</string>-->
     <string name="current_thrust">Poussée en court</string>
     <string name="dis">Déconnecter</string>
 
     <!-- Status -->
     <string name="title_activity_teststand_status">Etat du banc de test</string>
-    <string name="altimeter_status">Etat du banc de test</string>
-    <string name="altimeter_status_disabled">Désactivé</string>
-    <string name="altimeter_status_current_thrust">Poussée</string>
-    <string name="altimeter_status_battery_voltage">Tension batterie</string>
-    <string name="altimeter_status_link_type">Type de connexion</string>
-    <string name="altimeter_status_bluetooth">Bluetooth</string>
+    <string name="teststand_status">Etat du banc de test</string>
+    <string name="teststand_status_disabled">Désactivé</string>
+    <string name="teststand_status_current_thrust">Poussée</string>
+    <string name="teststand_status_battery_voltage">Tension batterie</string>
+    <string name="teststand_status_link_type">Type de connexion</string>
+    <string name="teststand_status_bluetooth">Bluetooth</string>
     <string name="status">Etat</string>
 
 
@@ -220,7 +219,7 @@
     <!-- other -->
     <string name="flight_list_cancel">Annuler</string>
     <string name="flight_retrieval_canceled">Le chargement des courbes de poussées a été annulé</string>
-    <string name="flight_have_been_recorded">Aucun vol n\'a été enregistré</string>
+    <string name="flight_have_been_recorded">Aucune courbe de poussée n\'a été enregistré</string>
     <string name="main_screen_actity">Annuler</string>
 
     <string name="thrustcurve">Courbes de poussées</string>
@@ -229,7 +228,7 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="thrustcurve_info">Info courbe de poussée</string>
 
-    <string name="max_velocity">Vitesse Max</string>
+    <!---<string name="max_velocity">Vitesse Max</string>-->
 
     <string name="recording_duration">Durée du l\'enregistrement</string>
     <string name="thrust_duration">Durée de la poussée</string>
@@ -266,4 +265,44 @@
     <string name="calibration_weight">Calibration poids</string>
     <string name="calibration_offset">Offset de Calibration</string>
     <string name="calibration_factor">Facteur de Calibration</string>
+    <string name="export_to_csv">Export to CSV</string>
+    <string name="export_to_eng">Export to ENG</string>
+    <string name="n_secs">N/secs</string>
+    <!--telemetry module config -->
+    <string name="m3DR_load_cfg">Chargement de la configuration du module 3DR</string>
+    <string name="m3DR_retrieving_cfg">Récupération de la config</string>
+    <string name="m3DR_no_errors">Aucune erreur sauvegarde des données\n Execution de la commande AT&amp;W</string>
+    <string name="m3DR_we_have_errors">Nous avons une erreur\n abandon de la sauvegarde\n Merci de rééssayer</string>
+    <string name="m3DR_saving_cancelled">Annulation de la sauvegarde</string>
+    <string name="m3DR_run_command">Execution de la command </string>
+    <string name="m3DR_cancel_retrieve">Annulation de la récupération</string>
+    <string name="m3DR_run_at0">Execution de la commande AT0 pour quitter le mode AT</string>
+    <string name="m3DR_run_save">Execution des commandes de sauvegarde</string>
+    <string name="m3DR_save_cfg">Sauvegarde de la config</string>
+    <string name="m3DR_Cancel">Annuler</string>
+    <string name="m3DR_attempt_con">Tentative de connexion au module 3DR</string>
+    <string name="m3DR_attempt_con2">Tentative de connexion à:</string>
+    <string name="m3DR_connect_ok">Connexion avec succès à:</string>
+    <string name="m3DR_failed_con">Echec de connexion.\n Deconnecter le cable USB et reconnectez le\n Redémarez l\'application\n et réessayez</string>
+    <string name="m3DR_connecting">Connexion en cours</string>
+    <string name="configure_telemetry_module">Configuration du module de télémetrie</string>
+    <string name="m3DR_version">Version:</string>
+    <string name="rssi">RSSI:</string>
+    <string name="format">Format:</string>
+    <string name="baud">Baud</string>
+    <string name="air_speed">Air speed</string>
+    <string name="net_id">Net ID</string>
+    <string name="tx_power">TX Power</string>
+    <string name="ecc">ECC</string>
+    <string name="op_resend">Op Resend</string>
+    <string name="rts_cts">RTS CTS</string>
+    <string name="mavlink">Mavlink</string>
+    <string name="lbt_rssi">LBT RSSI</string>
+    <string name="min_freq">Freq Min</string>
+    <string name="max_freq">Freq Max</string>
+    <string name="nbr_of_channels"># de canneaux</string>
+    <string name="duty_cycle">Duty Cycle</string>
+    <string name="max_win_ms">Max Win (ms)</string>
+    <string name="retrieve_config">Charger cfg</string>
+    <string name="m3DR_save_config">Sauver Cfg</string>
 </resources>

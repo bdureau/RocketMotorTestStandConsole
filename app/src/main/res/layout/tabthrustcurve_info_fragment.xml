@@ -120,7 +120,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/maxThrust"
         android:layout_marginTop="18dp"
-        android:text="N/secs" />
+        android:text="@string/n_secs" />
 
     <TextView
         android:id="@+id/totalImpulse"
@@ -138,7 +138,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/averageThrust"
         android:layout_marginTop="18dp"
-        android:text="N/secs" />
+        android:text="@string/n_secs" />
     <TextView
         android:id="@+id/motorClass"
         android:layout_width="wrap_content"
@@ -163,7 +163,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/motorClass"
-        android:text="Export to CSV" />
+        android:text="@string/export_to_csv" />
 
     <Button
         android:id="@+id/butExportToEng"
@@ -171,7 +171,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/butExportToCsv"
-        android:text="Export to ENG" />
+        android:text="@string/export_to_eng" />
 
 
 </RelativeLayout>

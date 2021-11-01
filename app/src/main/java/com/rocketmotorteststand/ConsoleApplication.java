@@ -34,7 +34,7 @@ import java.util.Locale;
 public class ConsoleApplication extends Application {
     private boolean isConnected = false;
     // Store number of thrustcurves
-    public int NbrOfFlight = 0;
+    public int NbrOfThrustCurves = 0;
     public int currentThrustCurveNbr = 0;
     private ThrustCurveData MyThrustCurve = null;
     private TestStandConfigData TestStandCfg = null;
@@ -144,6 +144,14 @@ public class ConsoleApplication extends Application {
 
     public ThrustCurveData getThrustCurveData() {
         return MyThrustCurve;
+    }
+
+    public int getNbrOfThrustCurves() {
+        return NbrOfThrustCurves;
+    }
+
+    public void setNbrOfThrustCurves(int value) {
+        NbrOfThrustCurves=value;
     }
 
     // connect to the bluetooth adapter
@@ -467,7 +475,7 @@ public class ConsoleApplication extends Application {
                                         else
                                             value3 = 0;
                                         //add the thrust
-                                        MyThrustCurve.AddToFlight(value2,
+                                        MyThrustCurve.AddToThrustCurve(value2,
                                                 (long) (value3 ), thrustCurveName, 0);
 
                                     }
@@ -569,8 +577,8 @@ public class ConsoleApplication extends Application {
                             case "nbrOfThrustCurve":
                                 // Value 1 contains the number of Thrust curve
                                 if (currentSentence.length > 1)
-                                    if (currentSentence[1].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
-                                        NbrOfFlight = (Integer.valueOf(currentSentence[1]));
+                                    if (currentSentence[1].matches("\\d+(?:\\.\\d+)?"))
+                                        NbrOfThrustCurves = (Integer.valueOf(currentSentence[1]));
                                 myMessage = myMessage + " " + "nbrOfThrustCurve";
                                 break;
                             case "start":

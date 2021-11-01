@@ -58,7 +58,7 @@ public class Telemetry extends AppCompatActivity {
     //telemetry var
     private long LiftOffTime = 0;
     private int lastPlotTime = 0;
-    private int lastSpeakTime = 1000;
+    //private int lastSpeakTime = 1000;
     private double FEET_IN_METER = 1;
 
     int altitudeTime = 0;
@@ -69,7 +69,7 @@ public class Telemetry extends AppCompatActivity {
 
     Button dismissButton;
 
-    private TextToSpeech mTTS;
+    //private TextToSpeech mTTS;
 
     Handler handler = new Handler() {
         @Override
@@ -83,7 +83,7 @@ public class Telemetry extends AppCompatActivity {
 
                         //int altitudeTime = (int)(System.currentTimeMillis()-LiftOffTime);
                         int altitude = (int) (Integer.parseInt((String) msg.obj) * FEET_IN_METER);
-                        myThrustCurve.AddToFlight(altitudeTime, altitude, "Telemetry");
+                        myThrustCurve.AddToThrustCurve(altitudeTime, altitude, "Telemetry");
 
                         //plot every seconde
                         if ((altitudeTime - lastPlotTime) > 1000) {
@@ -92,16 +92,6 @@ public class Telemetry extends AppCompatActivity {
                             flightData = myThrustCurve.GetThrustCurveData("Telemetry");
                             plot.setDataset(0, flightData);
                             //mTTS.speak("rocket has lift off", TextToSpeech.QUEUE_FLUSH,null);
-                        }
-                        // Tell thrust every 5 secondes
-                        if ((altitudeTime - lastSpeakTime) > 5000) {
-                            if (Locale.getDefault().getLanguage() == "en")
-                                mTTS.speak("altitude " + (String) msg.obj + " meters", TextToSpeech.QUEUE_FLUSH, null);
-                            else if (Locale.getDefault().getLanguage() == "fr")
-                                mTTS.speak("altitude " + (String) msg.obj + " mètres", TextToSpeech.QUEUE_FLUSH, null);
-                            else
-                                mTTS.speak("altitude " + (String) msg.obj + " meters", TextToSpeech.QUEUE_FLUSH, null);
-                            lastSpeakTime = altitudeTime;
                         }
 
                     }
@@ -128,7 +118,7 @@ public class Telemetry extends AppCompatActivity {
         myBT = (ConsoleApplication) getApplication();
 
         //init text to speech
-        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+        /*mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
@@ -152,7 +142,7 @@ public class Telemetry extends AppCompatActivity {
             }
         });
         mTTS.setPitch(1.0f);
-        mTTS.setSpeechRate(1.0f);
+        mTTS.setSpeechRate(1.0f);*/
 
 
         txtCurrentThrust = (TextView) findViewById(R.id.textViewCurrentThrust);
@@ -296,7 +286,7 @@ public class Telemetry extends AppCompatActivity {
 
     }
 
-    public void onClickStartTelemetry(View view) {
+    /*public void onClickStartTelemetry(View view) {
 
         telemetry = true;
         //startTelemetryButton.setEnabled(false);
@@ -334,7 +324,7 @@ public class Telemetry extends AppCompatActivity {
         myBT.clearInput();
         myBT.flush();
 
-    }
+    }*/
 
 
     @Override

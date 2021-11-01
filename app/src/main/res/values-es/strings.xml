@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Rocket Motor Test Stand</string>
     <string name="version"> pre 2.0.0 candidate 4</string>
@@ -19,7 +20,7 @@
     <!-- Config tab1 tooltips -->
     <string name="txtViewBaudRate_tooltip">Choose the test stand baud rate. Be carefull you might not be able to communicate</string>
     <string name="txtViewTestStandResolution_tooltip">Choose the Test Stand resolution.</string>
-    <string name="txtViewEEpromSize_tooltip">Choose the Test Stand eeprom size depending on which eeprom is used</string>
+    <string name="txtViewEEpromSize_tooltip">Choose the altimeter eeprom size depending on which eeprom is used</string>
 
     <string name="EndRecordTime_tooltip">Enter the recording duration</string>
 
@@ -153,31 +154,31 @@
 
     <string name="general_config">General</string>
     <string name="telemetry_config">Telemetry config</string>
-    <!--<string name="main_event">Main event</string>
-    <string name="apogee_altitude_event">Apogee altitude</string>
-    <string name="main_altitude_event">Main altitude</string>
-    <string name="drogue_event">Drogue event</string>
-    <string name="altitude_event">Altitude event</string>
-    <string name="landing_event">Landing event</string>
-    <string name="burnout_event">Burnout event</string>
-    <string name="warning_event">Warning event</string>
-    <string name="liftoff_event">Lift off event</string>-->
+    <!-- <string name="main_event">Main event</string>
+     <string name="apogee_altitude_event">Apogee altitude</string>
+     <string name="main_altitude_event">Main altitude</string>
+     <string name="drogue_event">Drogue event</string>
+     <string name="altitude_event">Altitude event</string>
+     <string name="landing_event">Landing event</string>
+     <string name="burnout_event">Burnout event</string>
+     <string name="warning_event">Warning event</string>
+     <string name="liftoff_event">Lift off event</string>-->
 
-    <!-- Telemetry -->
+     <!-- Telemetry -->
     <string name="stop_telemetry">Stop Telemetry</string>
     <string name="start_telemetry">Start Telemetry</string>
     <string name="current_phase">Current Phase</string>
     <string name="thrust">Thrust</string>
     <string name="event_time">Event Time</string>
-    <!-- <string name="lift_off">Lift off</string>
-     <string name="apogee_drogue">Apogee/drogue</string>
-     <string name="main_chute">Main chute</string>
-     <string name="landed">Landed</string>
-     <string name="max_speed">Max speed</string>-->
-     <string name="current_thrust">Current Thrust</string>
-     <string name="dis">disconnect</string>
+    <!--<string name="lift_off">Lift off</string>
+    <string name="apogee_drogue">Apogee/drogue</string>
+    <string name="main_chute">Main chute</string>
+    <string name="landed">Landed</string>
+    <string name="max_speed">Max speed</string>-->
+    <string name="current_thrust">Current Thrust</string>
+    <string name="dis">disconnect</string>
 
-     <!-- Status -->
+    <!-- Status -->
     <string name="title_activity_teststand_status">Test Stand Status</string>
     <string name="teststand_status">Test Stand status</string>
     <string name="teststand_status_disabled">Disabled</string>
@@ -303,5 +304,4 @@
     <string name="max_win_ms">Max Win (ms)</string>
     <string name="retrieve_config">Retrieve config</string>
     <string name="m3DR_save_config">Save Config</string>
-
 </resources>

@@ -101,7 +101,7 @@ public class ThrustCurveData {
 
         return exist;
     }
-    public void AddToFlight (long X, long Y, String thrustCurveName)
+    public void AddToThrustCurve (long X, long Y, String thrustCurveName)
     {
 
         //Find out if the flight exist
@@ -118,7 +118,7 @@ public class ThrustCurveData {
         thrustCurveData.getSeries(0).add(X, Y);
 
     }
-    public void AddToFlight (long X, long Y, String thrustCurveName, int serie)
+    public void AddToThrustCurve (long X, long Y, String thrustCurveName, int serie)
     {
 
         //Find out if the flight exist

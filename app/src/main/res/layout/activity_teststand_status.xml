@@ -17,14 +17,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:fontFamily="sans-serif-black"
-        android:text="@string/altimeter_status"
+        android:text="@string/teststand_status"
         android:textSize="18sp" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/altimeter_status_current_thrust"
+        android:text="@string/teststand_status_current_thrust"
         android:id="@+id/txtViewCurrentThrust"
         android:layout_below="@+id/txtViewTitle"
         android:layout_alignParentLeft="true"
@@ -40,7 +40,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/altimeter_status_battery_voltage"
+        android:text="@string/teststand_status_battery_voltage"
         android:id="@+id/txtViewBatteryVoltage"
         android:layout_below="@+id/txtViewCurrentThrust"
         android:layout_alignParentLeft="true"
@@ -85,7 +85,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/altimeter_status_link_type"
+        android:text="@string/teststand_status_link_type"
         android:id="@+id/txtViewLinkType"
         android:layout_below="@+id/txtViewThrustCurve"
         android:layout_alignParentLeft="true"
@@ -95,7 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtViewLink"
-        android:text="@string/altimeter_status_bluetooth"
+        android:text="@string/teststand_status_bluetooth"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/txtViewThrustCurve"/>
 

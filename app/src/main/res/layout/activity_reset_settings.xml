@@ -21,16 +21,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/clear_thrustCurves"
-        android:id="@+id/butClearFlights"
+        android:id="@+id/butClearThrustCurves"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="62dp" />
+    <Button
+        android:id="@+id/butDeleteLastCurve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/butClearThrustCurves"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="62dp"
+        android:text="Delete Last Thrust Curve" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/restore_teststand_config"
-        android:id="@+id/butRestoreAltiCfg"
+        android:id="@+id/butRestoreTestStandCfg"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 

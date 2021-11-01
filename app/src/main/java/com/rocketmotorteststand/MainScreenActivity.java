@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.rocketmotorteststand.Flash.FlashFirmware;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveListActivity;
+import com.rocketmotorteststand.config.Config3DR;
 import com.rocketmotorteststand.config.TestStandConfigData;
 import com.rocketmotorteststand.config.TestStandTabConfigActivity;
 import com.rocketmotorteststand.config.AppConfigActivity;
@@ -453,6 +454,11 @@ public class MainScreenActivity extends AppCompatActivity {
         }
         if (id == R.id.action_about) {
             Intent i = new Intent(MainScreenActivity.this, AboutActivity.class);
+            startActivity(i);
+            return true;
+        }
+        if (id == R.id.action_mod3dr_settings) {
+            Intent i = new Intent(MainScreenActivity.this, Config3DR.class);
             startActivity(i);
             return true;
         }

@@ -1,12 +1,10 @@
 package com.rocketmotorteststand.ThrustCurve;
 /**
- *
  * @description: This retrieve the flight list from the teststand and store it in a
  * FlightData instance
- *
  * @author: boris.dureau@neuf.fr
- *
  **/
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +12,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +30,7 @@ import org.afree.data.xy.XYSeries;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class ThrustCurveListActivity extends AppCompatActivity {
     ConsoleApplication myBT;
     List<String> thrustCurveNames = null;
     private ThrustCurveData myThrustCurve = null;
+    private AlertDialog alert;
 
     private Button buttonDismiss;
 
@@ -82,39 +85,6 @@ public class ThrustCurveListActivity extends AppCompatActivity {
         });
     }
 
-    private void getThrustCurves() {
-        //get thrust curves
-        if (myBT.getConnected()) {
-            //clear anything on the connection
-            myBT.flush();
-            myBT.clearInput();
-            myBT.getThrustCurveData().ClearThrustCurve();
-            // Send command to retrieve the config
-            myBT.write("a;".toString());
-            myBT.flush();
-
-            try {
-                //wait for data to arrive
-                while (myBT.getInputStream().available() <= 0) ;
-            } catch (IOException e) {
-
-            }
-
-            String myMessage = "";
-            myBT.setDataReady(false);
-            myBT.initThrustCurveData();
-            myMessage = myBT.ReadResult(60000);
-
-            if (myMessage.equals("start end")) {
-
-                thrustCurveNames = new ArrayList<String>();
-
-                myThrustCurve = myBT.getThrustCurveData();
-                thrustCurveNames = myThrustCurve.getAllThrustCurveNames2();
-
-            }
-        }
-    }
 
     private void msg(String s) {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
@@ -124,8 +94,10 @@ public class ThrustCurveListActivity extends AppCompatActivity {
     private class RetrieveThrustCurves extends AsyncTask<Void, Void, Void>  // UI thread
     {
         private AlertDialog.Builder builder = null;
-        private AlertDialog alert;
+
         private Boolean canceled = false;
+        private String myMessage = "";
+        private int NbrOfCurves = 0;
 
         @Override
         protected void onPreExecute() {
@@ -150,7 +122,83 @@ public class ThrustCurveListActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
         {
-            getThrustCurves();
+            //get flights
+            if (myBT.getConnected()) {
+                //clear anything on the connection
+                myBT.flush();
+                myBT.clearInput();
+                myBT.setNbrOfThrustCurves(0);
+                myBT.getThrustCurveData().ClearThrustCurve();
+                // Send command to retrieve the config
+
+                myBT.write("n;".toString());
+                myBT.flush();
+
+                try {
+                    //wait for data to arrive
+                    while (myBT.getInputStream().available() <= 0) ;
+                } catch (IOException e) {
+                    // msg("Failed to retrieve flights");
+                }
+
+                myBT.setDataReady(false);
+                myBT.initThrustCurveData();
+
+                myMessage = myBT.ReadResult(60000);
+
+                if (myMessage.equals("start nbrOfThrustCurve end")) {
+                    NbrOfCurves = myBT.getNbrOfThrustCurves();
+                }
+
+                if (NbrOfCurves > 0) {
+
+                    for (int j = 0; j < NbrOfCurves; j++) {
+                        dialogAppend("Retrieving Thrust curve:" + (j + 1));
+                        Log.d("FlightList", "Thrust curve:" + j);
+                        myBT.flush();
+                        myBT.clearInput();
+
+                        myBT.write("r" + j + ";".toString());
+                        myBT.flush();
+
+
+                        try {
+                            //wait for data to arrive
+                            while (myBT.getInputStream().available() <= 0) ;
+                        } catch (IOException e) {
+                            // msg("Failed to retrieve Thrust curve");
+                        }
+                        myMessage = "";
+                        myBT.setDataReady(false);
+
+                        myMessage = myBT.ReadResult(60000);
+
+                        if (myMessage.equals("start end")) {
+
+                        }
+
+                        if (canceled) {
+                            Log.d("Thrust curve List", "Canceled retrieval");
+                            j = NbrOfCurves;
+                        }
+                    }
+                    Log.d("Thrust curve List",  "ready?" +myBT.getDataReady());
+
+                    Log.d("Thrust curve List", "myMessage:"+ myMessage);
+                    thrustCurveNames = new ArrayList<String>();
+
+                    myThrustCurve = myBT.getThrustCurveData();
+                    thrustCurveNames = myThrustCurve.getAllThrustCurveNames2();
+                    if (canceled) {
+                        //order the names in the collection
+                        Collections.sort(thrustCurveNames);
+                        //remove the last Thrust curve which might have incomplete data
+                        thrustCurveNames.remove(thrustCurveNames.size() - 1);
+                    }
+
+
+                }
+            }
             return null;
         }
 
@@ -158,18 +206,18 @@ public class ThrustCurveListActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
         {
             super.onPostExecute(result);
-            if (!canceled) {
-                final ArrayAdapter adapter = new ArrayAdapter(ThrustCurveListActivity.this, android.R.layout.simple_list_item_1, thrustCurveNames);
-                adapter.sort(new Comparator<String>() {
-                    public int compare(String object1, String object2) {
-                        return object1.compareTo(object2);
-                    }
-                });
 
-                thrustCurveList = (ListView) findViewById(R.id.listViewFlightList);
-                thrustCurveList.setAdapter(adapter);
-                thrustCurveList.setOnItemClickListener(myListClickListener);
-            }
+            final ArrayAdapter adapter = new ArrayAdapter(ThrustCurveListActivity.this, android.R.layout.simple_list_item_1, thrustCurveNames);
+            adapter.sort(new Comparator<String>() {
+                public int compare(String object1, String object2) {
+                    return object1.compareTo(object2);
+                }
+            });
+
+            thrustCurveList = (ListView) findViewById(R.id.listViewFlightList);
+            thrustCurveList.setAdapter(adapter);
+            thrustCurveList.setOnItemClickListener(myListClickListener);
+
 
             alert.dismiss();
 
@@ -179,5 +227,17 @@ public class ThrustCurveListActivity extends AppCompatActivity {
             if (myThrustCurve == null && !canceled)
                 msg(getResources().getString(R.string.flight_have_been_recorded));
         }
+    }
+
+    Handler mHandler = new Handler();
+
+    private void dialogAppend(CharSequence text) {
+        final CharSequence ftext = text;
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                alert.setMessage(ftext);
+            }
+        });
     }
 }

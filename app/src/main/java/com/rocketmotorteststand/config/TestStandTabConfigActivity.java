@@ -78,6 +78,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                     if (((String) msg.obj).matches("^-?[0-9]\\d+(?:\\.\\d+)?")) {
                         //progress.
                         configPage3.CurrentOffset.setText((String) msg.obj);
+
                     }
                     break;
                 case 2:
@@ -85,6 +86,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                     Log.d("Calibration", "factor: "+(String) msg.obj );
                     if (((String) msg.obj).matches("^-?[0-9]\\d+(?:\\.\\d+)?")) {
                         configPage3.CalibrationFactor.setText((String) msg.obj);
+                        alert.setMessage((String) msg.obj);
                     }
                     break;
                 case 3:
@@ -265,7 +267,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             TestStandCfg.setEepromSize(configPage2.getEEpromSize());
 
             TestStandCfg.setStopRecordingTime(configPage2.getStopRecordingTime());
-            //TestStandCfg.setStartRecordingThrustLevel(configPage2.getStartRecordingThrustLevel());
+
             TestStandCfg.setBatteryType(configPage2.getBatteryType());
 
         }
@@ -601,11 +603,11 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                             .color(Color.BLACK)
                             .position(ViewTooltip.Position.TOP)
                             //Choose the altimeter resolution. The faster you rocket goes the lower it has to be
-                            .text(getResources().getString(R.string.txtViewAltimeterResolution_tooltip))
+                            .text(getResources().getString(R.string.txtViewTestStandResolution_tooltip))
                             .show();
                 }
             });
-            //Altimeter external eeprom size
+            //Test Stand external eeprom size
             txtViewEEpromSize = (TextView) view.findViewById(R.id.txtViewEEpromSize);
             dropdownEEpromSize = (Spinner) view.findViewById(R.id.spinnerEEpromSize);
             itemsEEpromSize = new String[]{"32", "64", "128", "256", "512", "1024"};
@@ -639,27 +641,12 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                             .on(v)
                             .color(Color.BLACK)
                             .position(ViewTooltip.Position.TOP)
-                            //At which altitude do you consider that we have landed
-                            .text(getResources().getString(R.string.EndRecordAltitude_tooltip))
+                            //recording timeout
+                            .text(getResources().getString(R.string.EndRecordTime_tooltip))
                             .show();
                 }
             });
-            // nbr of meters to consider that we have a lift off
-           // StartRecordingThrustLevel = (EditText) view.findViewById(R.id.editTxtStartRecordingThrustLevel);
 
-            // Tool tip
-            /*StartRecordingThrustLevel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ViewTooltip
-                            .on(v)
-                            .color(Color.BLACK)
-                            .position(ViewTooltip.Position.TOP)
-                            //At which altitude do you consider that we have lift off
-                            .text(getResources().getString(R.string.LiftOffAltitude_tooltip))
-                            .show();
-                }
-            });*/
             dropdownBatteryType = (Spinner) view.findViewById(R.id.spinnerBatteryType);
             //"Unknown",
             itemsBatteryType = new String[]{getResources().getString(R.string.config_unknown),
@@ -691,7 +678,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 dropdownEEpromSize.setSelection(lTestStandCfg.arrayIndex(itemsEEpromSize, String.valueOf(lTestStandCfg.getEepromSize())));
 
                 StopRecordingTime.setText(String.valueOf(lTestStandCfg.getStopRecordingTime()));
-                //StartRecordingThrustLevel.setText(String.valueOf(lTestStandCfg.getStartRecordingTime()));
+
                 dropdownBatteryType.setSelection(lTestStandCfg.getBatteryType());
 
             }
@@ -706,7 +693,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         private TextView testStandName,  CalibrationFactor, CurrentOffset;
         private Spinner dropdownUnits;
         private EditText calibrationWeight;
-        //private Button btnCalibrate;
 
 
         private TestStandConfigData ltestStandNameCfg = null;
@@ -784,7 +770,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                             .color(Color.BLACK)
                             .position(ViewTooltip.Position.TOP)
                             //Choose the altitude units you are familiar with
-                            .text(getResources().getString(R.string.txtAltiUnit_tooltip))
+                            .text(getResources().getString(R.string.txtTestStandUnit_tooltip))
                             .show();
                 }
             });
@@ -939,7 +925,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
         }
     }
-    private class RetrieveConfig extends AsyncTask<Void, Void, Void>  // UI thread
+   /* private class RetrieveConfig extends AsyncTask<Void, Void, Void>  // UI thread
     {
 
         @Override
@@ -993,7 +979,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             }
             progress.dismiss();
         }
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -1013,7 +999,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         //open help screen
         if (id == R.id.action_help) {
             Intent i = new Intent(TestStandTabConfigActivity.this, HelpActivity.class);
-            i.putExtra("help_file", "help_config_alti");
+            i.putExtra("help_file", "help_config_teststand");
             startActivity(i);
             return true;
         }
