@@ -56,7 +56,7 @@ public class AppConfigData {
         itemsUnits = new String[]{
                 context.getResources().getString(R.string.config_unit_kg),
                 context.getResources().getString(R.string.config_unit_pounds),
-                        context.getResources().getString(R.string.config_unit_newtons)
+                context.getResources().getString(R.string.config_unit_newtons)
         };
 
         itemsColor = new String[]{

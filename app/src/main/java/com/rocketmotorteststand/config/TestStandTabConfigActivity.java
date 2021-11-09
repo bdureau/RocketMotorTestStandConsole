@@ -756,7 +756,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             dropdownUnits = (Spinner) view.findViewById(R.id.spinnerUnit);
             //"kg", "pounds"
             String[] items2 = new String[]{getResources().getString(R.string.unit_kg),
-                    getResources().getString(R.string.unit_pound)};
+                    getResources().getString(R.string.unit_pound), "Newtons"};
             ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this.getActivity(),
                     android.R.layout.simple_spinner_dropdown_item, items2);
             dropdownUnits.setAdapter(adapter2);

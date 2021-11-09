@@ -283,7 +283,7 @@
     <string name="m3DR_attempt_con">Tentative de connexion au module 3DR</string>
     <string name="m3DR_attempt_con2">Tentative de connexion à:</string>
     <string name="m3DR_connect_ok">Connexion avec succès à:</string>
-    <string name="m3DR_failed_con">Echec de connexion.\n Deconnecter le cable USB et reconnectez le\n Redémarez l\'application\n et réessayez</string>
+    <string name="m3DR_failed_con">Echec de connexion.\n Déconnecter le cable USB et reconnectez le\n Redémarez l\'application\n et réessayez</string>
     <string name="m3DR_connecting">Connexion en cours</string>
     <string name="configure_telemetry_module">Configuration du module de télémetrie</string>
     <string name="m3DR_version">Version:</string>
@@ -303,6 +303,18 @@
     <string name="nbr_of_channels"># de canneaux</string>
     <string name="duty_cycle">Duty Cycle</string>
     <string name="max_win_ms">Max Win (ms)</string>
-    <string name="retrieve_config">Charger cfg</string>
-    <string name="m3DR_save_config">Sauver Cfg</string>
+    <string name="retrieve_config">Charge cfg</string>
+    <string name="m3DR_save_config">Sauve Cfg</string>
+    <string name="flash_firmware_msg">Mise à jour du firmware</string>
+    <string name="flash_firmware_long_msg">Cela vous permettra de mettre à jour le firmware de votre banc de
+        test pour etre certain que celui ci soit compatible avec cette application.
+        Vous aurez besoin d\'un cable TTL cable et d\'un adaptateur pour connecter votre carte teststand à votre téléphone.
+        Merci de consulter l\'aide en ligne</string>
+    <string name="flash_firmware_ok">OK</string>
+    <string name="firmware_ver_detected">Version du firmware détécté: </string>
+    <string name="firmware_file_not_found">fichier non trouvé: </string>
+    <string name="firmware_starting">Démarrage ...</string>
+    <string name="dr_config_msg">Cela vous permettra de configurer votre module de télémetrie 3DR.
+        Vous aurez besoin d\'un cable TTL cable et d\'un adaptateur pour connecter votre module 3DR à votre téléphone.
+        Merci de consulter l\'aide en ligne</string>
 </resources>

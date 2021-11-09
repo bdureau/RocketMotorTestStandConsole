@@ -44,7 +44,7 @@ public class AppConfigActivity extends AppCompatActivity {
     Button btnDismiss, btnSave, bdtDefault;
     private ViewPager mViewPager;
     SectionsPageAdapter adapter;
-    private TextToSpeech mTTS;
+    //private TextToSpeech mTTS;
 
     private Tab1Fragment appConfigPage1 = null;
     private Tab2Fragment appConfigPage2 = null;

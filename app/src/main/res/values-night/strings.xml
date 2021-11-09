@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="MultipleMainDrogue" >Multiple Main/drogue</string>
     <string name="flash_firmware_msg">Flash firmware</string>
     <string name="flash_firmware_long_msg">This will allows you to flash your teststand firmware to make sure it is compatible with this application. You will need a ttl cable and an adaptator to connect your teststand board to your phone. Please look at the on line help</string>
     <string name="flash_firmware_ok">OK</string>
