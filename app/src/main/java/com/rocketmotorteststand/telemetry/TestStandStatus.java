@@ -1,5 +1,6 @@
 package com.rocketmotorteststand.telemetry;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -68,11 +69,14 @@ public class TestStandStatus extends AppCompatActivity {
                     //Value 4 contains the battery voltage
                     String voltage = (String) msg.obj;
                     if (voltage.matches("\\d+(?:\\.\\d+)?")) {
-                        /*double batVolt;
 
-                        batVolt =  (3.1972*((Double.parseDouble(voltage) * 3300) / 4096)/1000);
-                        txtViewVoltage.setText(String.format("%.2f",batVolt)+ " Volts");*/
                         txtViewVoltage.setText(voltage + " Volts");
+                        if(Double.parseDouble(voltage)< 7.0){
+                            txtViewVoltage.setTextColor(Color.RED);
+                        }
+                        else {
+                            txtViewVoltage.setTextColor(Color.BLACK);
+                        }
                     } else {
                         txtViewVoltage.setText("NA");
                     }
@@ -81,12 +85,36 @@ public class TestStandStatus extends AppCompatActivity {
 
                 case 4:
                     //Value 4 contains the EEprom usage
-                    txtEEpromUsage.setText((String) msg.obj + " %");
+                    String eepromUsage = (String) msg.obj;
+                    txtEEpromUsage.setText(eepromUsage + " %");
+                    if (eepromUsage.matches("\\d+(?:\\.\\d+)?")) {
+                        if (Integer.parseInt(eepromUsage)==100){
+                            txtEEpromUsage.setTextColor(Color.RED);
+                        }
+                        else {
+                            txtEEpromUsage.setTextColor(Color.BLACK);
+                        }
+                    }
+
                     break;
 
                 case 5:
                     //Value 5 contains the number of thrust curves
-                    txtNbrOfThrustCurve.setText((String) msg.obj);
+                    String nbrOfThrustCurve = (String) msg.obj;
+                    txtNbrOfThrustCurve.setText(nbrOfThrustCurve);
+                    if (nbrOfThrustCurve.matches("\\d+(?:\\.\\d+)?")) {
+                        if (Integer.parseInt(nbrOfThrustCurve)==25){
+                            //txtNbrOfThrustCurve.setHighlightColor(Color.RED);
+                            txtNbrOfThrustCurve.setTextColor(Color.RED);
+                            Log.d("TestStandStatus", "RED");
+                        }
+                        else {
+                            //txtNbrOfThrustCurve.setHighlightColor(Color.BLACK);
+                            txtNbrOfThrustCurve.setTextColor(Color.BLACK);
+                            Log.d("TestStandStatus", "BLACK");
+                        }
+                    }
+
                     Log.d("TestStandStatus", (String) msg.obj);
                     break;
 

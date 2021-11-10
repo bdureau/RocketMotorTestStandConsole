@@ -25,6 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RocketMotorTestStand">
+
         <activity
             android:name=".config.Config3DR"
             android:screenOrientation="portrait">

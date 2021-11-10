@@ -575,6 +575,7 @@ public class ConsoleApplication extends Application {
                                 break;
 
                             case "nbrOfThrustCurve":
+                                NbrOfThrustCurves =0;
                                 // Value 1 contains the number of Thrust curve
                                 if (currentSentence.length > 1)
                                     if (currentSentence[1].matches("\\d+(?:\\.\\d+)?"))

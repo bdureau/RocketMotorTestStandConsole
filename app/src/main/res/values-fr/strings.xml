@@ -60,8 +60,8 @@
     <!-- Reset screen -->
     <string name="dismiss_reset">Fermer</string>
     <string name="clear_thrustCurves">Effacer courbes poussées</string>
-    <string name="restore_teststand_config">Réinitialiser la config du banc de test</string>
-    <string name="those_functions_will_reset_the_teststand">Ces fonctions réinitialiseront banc de test moteur</string>
+    <string name="restore_teststand_config">Réinitialiser la config du banc</string>
+    <string name="those_functions_will_reset_the_teststand">Ces fonctions réinitialiseront le banc de test moteur</string>
     <string name="Yes">Oui</string>
     <string name="No">Non</string>
 
@@ -76,9 +76,9 @@
     <string name="close">Fermer</string>
 
     <!-- Reset screen -->
-    <string name="reset_msg1">Vous allez effacer toutes vos courbes de poussées, etes vous certain de vouloir le faire?</string>
-    <string name="reset_msg2">Vous allez réinitialiser la configuration de votre banc de test, etes vous certain de vouloir le faire?</string>
-    <string name="reset_msg3">Vous allez effacer votre derniere courbe de poussée, etes vous certain de vouloir le faire?</string>
+    <string name="reset_msg1">Vous allez effacer toutes vos courbes de poussées, êtes vous certain de vouloir le faire?</string>
+    <string name="reset_msg2">Vous allez réinitialiser la configuration de votre banc de test, êtes  vous certain de vouloir le faire?</string>
+    <string name="reset_msg3">Vous allez effacer votre dernière courbe de poussée, êtes vous certain de vouloir le faire?</string>
 
     <!-- bluetooth messages -->
     <string name="BT_msg1">Périphérique Bluetooth non disponible</string>
@@ -158,15 +158,6 @@
 
     <string name="general_config">Configuration principale</string>
     <string name="telemetry_config">Configuration télémétrie</string>
-    <!--<string name="main_event">Evenement Main</string>
-    <string name="apogee_altitude_event">Altitude de l\'apogée</string>
-    <string name="main_altitude_event">Altitude Main</string>
-    <string name="drogue_event">Evenement Drogue</string>
-    <string name="altitude_event">Evenement Altitude</string>
-    <string name="landing_event">Evenement atterrissage</string>
-    <string name="burnout_event">Fin de combustion moteur</string>
-    <string name="warning_event">Attention</string>
-    <string name="liftoff_event">Evenement décollage</string>-->
 
     <!-- Telemetry -->
     <string name="stop_telemetry">Arret Tel</string>
@@ -174,11 +165,6 @@
     <string name="current_phase">Phase courante</string>
     <string name="thrust">Poussée</string>
     <string name="event_time">Heure Evenement</string>
-    <!--<string name="lift_off">Décollage</string>
-    <string name="apogee_drogue">Apogée/drogue</string>
-    <string name="main_chute">Parachute Main</string>
-    <string name="landed">Attérie</string>
-    <string name="max_speed">Vitesse max</string>-->
     <string name="current_thrust">Poussée en court</string>
     <string name="dis">Déconnecter</string>
 
@@ -235,7 +221,7 @@
     <string name="max_thrust">Poussée Max</string>
     <string name="average_thrust">Poussée Moyenne</string>
     <string name="total_impulse">Impulsion totale</string>
-    <string name="motor_class">Class du moteur</string>
+    <string name="motor_class">Classe du moteur</string>
 
     <string name="curve_nbr">Numéro de courbe</string>
     <string name="nbr_of_sample">Echantillons</string>
@@ -256,8 +242,8 @@
 
     <string name="thrustcurve_name">Courbe poussée</string>
 
-    <string name="select_bluetooth_device">Select Bluetooth device</string>
-    <string name="telemetry_screen">Telemetrie</string>
+    <string name="select_bluetooth_device">Choisir le module Bluetooth</string>
+    <string name="telemetry_screen">Télémétrie</string>
     <string name="status_screen">Etats</string>
 
     <string name="calibrate_tabconfig">Calibration</string>
@@ -285,7 +271,7 @@
     <string name="m3DR_connect_ok">Connexion avec succès à:</string>
     <string name="m3DR_failed_con">Echec de connexion.\n Déconnecter le cable USB et reconnectez le\n Redémarez l\'application\n et réessayez</string>
     <string name="m3DR_connecting">Connexion en cours</string>
-    <string name="configure_telemetry_module">Configuration du module de télémetrie</string>
+    <string name="configure_telemetry_module">Configuration module télémetrie</string>
     <string name="m3DR_version">Version:</string>
     <string name="rssi">RSSI:</string>
     <string name="format">Format:</string>
@@ -317,4 +303,5 @@
     <string name="dr_config_msg">Cela vous permettra de configurer votre module de télémetrie 3DR.
         Vous aurez besoin d\'un cable TTL cable et d\'un adaptateur pour connecter votre module 3DR à votre téléphone.
         Merci de consulter l\'aide en ligne</string>
+    <string name="delete_last_thrust_curve">Effacer dernière courbe</string>
 </resources>

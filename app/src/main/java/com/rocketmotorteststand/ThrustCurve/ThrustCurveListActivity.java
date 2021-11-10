@@ -182,21 +182,19 @@ public class ThrustCurveListActivity extends AppCompatActivity {
                             j = NbrOfCurves;
                         }
                     }
-                    Log.d("Thrust curve List",  "ready?" +myBT.getDataReady());
+                }
+                Log.d("Thrust curve List",  "ready?" +myBT.getDataReady());
 
-                    Log.d("Thrust curve List", "myMessage:"+ myMessage);
-                    thrustCurveNames = new ArrayList<String>();
+                Log.d("Thrust curve List", "myMessage:"+ myMessage);
+                thrustCurveNames = new ArrayList<String>();
 
-                    myThrustCurve = myBT.getThrustCurveData();
-                    thrustCurveNames = myThrustCurve.getAllThrustCurveNames2();
-                    if (canceled) {
-                        //order the names in the collection
-                        Collections.sort(thrustCurveNames);
-                        //remove the last Thrust curve which might have incomplete data
-                        thrustCurveNames.remove(thrustCurveNames.size() - 1);
-                    }
-
-
+                myThrustCurve = myBT.getThrustCurveData();
+                thrustCurveNames = myThrustCurve.getAllThrustCurveNames2();
+                if (canceled) {
+                    //order the names in the collection
+                    Collections.sort(thrustCurveNames);
+                    //remove the last Thrust curve which might have incomplete data
+                    thrustCurveNames.remove(thrustCurveNames.size() - 1);
                 }
             }
             return null;
