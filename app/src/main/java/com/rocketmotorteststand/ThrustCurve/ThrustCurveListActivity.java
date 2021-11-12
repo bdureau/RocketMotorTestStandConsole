@@ -153,7 +153,7 @@ public class ThrustCurveListActivity extends AppCompatActivity {
                 if (NbrOfCurves > 0) {
 
                     for (int j = 0; j < NbrOfCurves; j++) {
-                        dialogAppend("Retrieving Thrust curve:" + (j + 1));
+                        dialogAppend(getString(R.string.retrieving_thrust_curve) + (j + 1));
                         Log.d("FlightList", "Thrust curve:" + j);
                         myBT.flush();
                         myBT.clearInput();

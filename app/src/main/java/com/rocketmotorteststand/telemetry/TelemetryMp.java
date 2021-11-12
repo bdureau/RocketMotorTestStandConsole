@@ -177,9 +177,8 @@ public class TelemetryMp extends AppCompatActivity {
 
         yValues = new ArrayList<>();
         yValues.add(new Entry(0, 0));
-        //yValues.add(new Entry(1,0));
 
-        LineDataSet set1 = new LineDataSet(yValues, "Thrust");
+        LineDataSet set1 = new LineDataSet(yValues, getString(R.string.telemetry_thrust));
         mChart = (LineChart) findViewById(R.id.telemetryChartView);
 
         mChart.setDragEnabled(true);
@@ -191,7 +190,7 @@ public class TelemetryMp extends AppCompatActivity {
         LineData data = new LineData(dataSets);
         mChart.setData(data);
         Description desc = new Description();
-        desc.setText("Telemetry");
+        desc.setText(getString(R.string.tel_telemetry));
         mChart.setDescription(desc);
         startTelemetry();
         dismissButton.setOnClickListener(new View.OnClickListener() {

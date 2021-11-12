@@ -213,7 +213,7 @@ public class Config3DR extends AppCompatActivity {
         builder = new AlertDialog.Builder(this);
         //Running Saving commands
         builder.setMessage(getResources().getString(R.string.dr_config_msg))
-                .setTitle("3DR module configuration")
+                .setTitle(R.string.DR_module_config)
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {

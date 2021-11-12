@@ -146,7 +146,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         allThrustCurveData = new XYSeriesCollection();
         allThrustCurveData = mythrustCurve.GetThrustCurveData(ThrustCurveName);
 
-        // by default we will display the altitude
+        // by default we will display the thrust
         // but then the user will be able to change the data
         thrustCurveData = new XYSeriesCollection();
         //thrust
@@ -170,7 +170,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             CONVERT = 1.0/1000;
 
         } else if (myBT.getAppConf().getUnits().equals("1")) {
-            //punds
+            //pounds
             units[0] = getResources().getString(R.string.Pounds_fview);
             CONVERT = 2.20462 / 1000;
 
@@ -619,7 +619,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
             //Recording duration
             double recordingDuration = thrustCurveData.getSeries(0).getMaxX() / 1000;
-            recordingDurationValue.setText(recordingDuration + " secs");
+            recordingDurationValue.setText(String.format("%.3f ",recordingDuration) + " secs");
 
 
             ThrustUtil tu = new ThrustUtil();
@@ -632,7 +632,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
                 // thrust duration
                 thrustDuration = ((double) thrustCurveData.getSeries(0).getX(curveStop) - (double) thrustCurveData.getSeries(0).getX(curveStart)) / 1000.0;
-                thrustTimeValue.setText(thrustDuration + " secs");
+                thrustTimeValue.setText(String.format("%.2f ",thrustDuration) + " secs");
                 double totThurst = 0;
                 for (int i = curveStart; i < curveStop; i++) {
                     totThurst = totThurst + (double) thrustCurveData.getSeries(0).getY(i);

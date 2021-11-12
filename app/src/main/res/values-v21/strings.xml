@@ -9,4 +9,7 @@
     <string name="firmware_starting">Starting ...</string>
     <string name="dr_config_msg">This will allows you to configure a 3DR telemetry module. You will need a ttl cable and an adaptator to connect your 3DR module to your phone. Please look at the on line help</string>
     <string name="delete_last_thrust_curve">Delete Last Thrust Curve</string>
+    <string name="telemetry_thrust">Thrust</string>
+    <string name="tel_telemetry">Telemetry</string>
+    <string name="retrieving_thrust_curve">Retrieving Thrust curve:</string>
 </resources>

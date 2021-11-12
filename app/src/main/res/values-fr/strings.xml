@@ -214,8 +214,6 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="thrustcurve_info">Info courbe de poussée</string>
 
-    <!---<string name="max_velocity">Vitesse Max</string>-->
-
     <string name="recording_duration">Durée du l\'enregistrement</string>
     <string name="thrust_duration">Durée de la poussée</string>
     <string name="max_thrust">Poussée Max</string>
@@ -228,14 +226,13 @@
     <string name="select_curve">Courbes</string>
     <string name="fv_ok">OK</string>
     <string name="fv_cancel">Annuler</string>
-    <string name="telemetry_voice">Voix télémetrie</string>
-    <string name="test_telemetry_voice">Tester la voix</string>
+
 
     <!--units -->
-    <string name="unit_meters">mètres</string>
+    <!--<string name="unit_meters">mètres</string>-->
     <string name="unit_time">temps (ms)</string>
-    <string name="unit_feet_per_secs">pieds/secs</string>
-    <string name="unit_feet_per_square_secs">pieds/secs²</string>
+    <!--<string name="unit_feet_per_secs">pieds/secs</string>
+    <string name="unit_feet_per_square_secs">pieds/secs²</string>-->
 
     <!--curves name -->
     <string name="curve_thrust">poussée</string>
@@ -251,8 +248,8 @@
     <string name="calibration_weight">Calibration poids</string>
     <string name="calibration_offset">Offset de Calibration</string>
     <string name="calibration_factor">Facteur de Calibration</string>
-    <string name="export_to_csv">Export to CSV</string>
-    <string name="export_to_eng">Export to ENG</string>
+    <string name="export_to_csv">Exporter en CSV</string>
+    <string name="export_to_eng">Exporter en ENG</string>
     <string name="n_secs">N/secs</string>
     <!--telemetry module config -->
     <string name="m3DR_load_cfg">Chargement de la configuration du module 3DR</string>
@@ -269,7 +266,7 @@
     <string name="m3DR_attempt_con">Tentative de connexion au module 3DR</string>
     <string name="m3DR_attempt_con2">Tentative de connexion à:</string>
     <string name="m3DR_connect_ok">Connexion avec succès à:</string>
-    <string name="m3DR_failed_con">Echec de connexion.\n Déconnecter le cable USB et reconnectez le\n Redémarez l\'application\n et réessayez</string>
+    <string name="m3DR_failed_con">Echec de connexion.\n Déconnecter le câble USB et reconnectez le\n Redémarez l\'application\n et réessayez</string>
     <string name="m3DR_connecting">Connexion en cours</string>
     <string name="configure_telemetry_module">Configuration module télémetrie</string>
     <string name="m3DR_version">Version:</string>
@@ -293,15 +290,31 @@
     <string name="m3DR_save_config">Sauve Cfg</string>
     <string name="flash_firmware_msg">Mise à jour du firmware</string>
     <string name="flash_firmware_long_msg">Cela vous permettra de mettre à jour le firmware de votre banc de
-        test pour etre certain que celui ci soit compatible avec cette application.
-        Vous aurez besoin d\'un cable TTL cable et d\'un adaptateur pour connecter votre carte teststand à votre téléphone.
+        test pour être certain que celui-ci soit compatible avec cette application.
+        Vous aurez besoin d\'un câble TTL et d\'un adaptateur pour connecter votre carte test stand à votre appareil Android.
         Merci de consulter l\'aide en ligne</string>
     <string name="flash_firmware_ok">OK</string>
     <string name="firmware_ver_detected">Version du firmware détécté: </string>
     <string name="firmware_file_not_found">fichier non trouvé: </string>
     <string name="firmware_starting">Démarrage ...</string>
-    <string name="dr_config_msg">Cela vous permettra de configurer votre module de télémetrie 3DR.
-        Vous aurez besoin d\'un cable TTL cable et d\'un adaptateur pour connecter votre module 3DR à votre téléphone.
+    <string name="dr_config_msg">Cela vous permettra de configurer votre module de télémétrie 3DR.
+        Vous aurez besoin d\'un câble TTL et d\'un adaptateur pour connecter votre module 3DR à votre appareil Android.
         Merci de consulter l\'aide en ligne</string>
     <string name="delete_last_thrust_curve">Effacer dernière courbe</string>
+    <string name="telemetry_thrust">Poussée</string>
+    <string name="tel_telemetry">Télémétrie</string>
+    <string name="retrieving_thrust_curve">Chargement de la courbe de pousée:</string>
+    <string name="DR_module_config">Configuration module 3DR</string>
+    <string name="_3dr_settings">Config module 3DR ...</string>
+    <string name="bt_settings">Config module BT ...</string>
+    <string name="configure_bluetooth_module">Configure module Bluetooth </string>
+    <string name="module">Module:</string>
+    <string name="bt_baud_rate">Baud rate:</string>
+    <string name="pin">Pin:</string>
+    <string name="bt_info_msg">Cela vous permettra de configurer votre module bluetooth.
+        Vous aurez besoin d\'un cable ttl et d\'un adaptateur to connect your bluetooth module to your phone. Please look at the on line help</string>
+    <string name="bt_info_title">Bluetooth module configuration</string>
+    <string name="bt_info_ok">OK</string>
+    <string name="loading_bt_config_msg">Loading bluetooth module config</string>
+    <string name="module_name">Nom Module:</string>
 </resources>
