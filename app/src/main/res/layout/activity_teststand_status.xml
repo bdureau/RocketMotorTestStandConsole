@@ -99,7 +99,13 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/txtViewThrustCurve"/>
 
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tare"
+        android:id="@+id/butTare"
+        android:layout_below="@+id/txtViewLinkType"
+        />
 
     <Button
         android:layout_width="wrap_content"

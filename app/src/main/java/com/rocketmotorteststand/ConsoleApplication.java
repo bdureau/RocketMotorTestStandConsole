@@ -38,6 +38,7 @@ public class ConsoleApplication extends Application {
     public int currentThrustCurveNbr = 0;
     private ThrustCurveData MyThrustCurve = null;
     private TestStandConfigData TestStandCfg = null;
+    private TestTrame testTrame = null;
 
     private static boolean DataReady = false;
     public long lastReceived = 0;
@@ -67,6 +68,7 @@ public class ConsoleApplication extends Application {
         super.onCreate();
         TestStandCfg = new TestStandConfigData();
         MyThrustCurve = new ThrustCurveData(this, TestStandCfg.getTestStandName());
+        testTrame = new TestTrame();
         AppConf = new GlobalConfig(this);
         AppConf.ReadConfig();
         BTCon = new BluetoothConnection();
@@ -136,6 +138,10 @@ public class ConsoleApplication extends Application {
 
     public TestStandConfigData getTestStandConfigData() {
         return TestStandCfg;
+    }
+
+    public TestTrame getTestTrame() {
+        return testTrame;
     }
 
     public void setFlightData(ThrustCurveData fData) {
@@ -276,13 +282,6 @@ public class ConsoleApplication extends Application {
 
     public void initThrustCurveData() {
         MyThrustCurve = new ThrustCurveData(this, TestStandCfg.getTestStandName());
-
-     /*   if(AppConf.getUnits().equals("0"))  {//meters
-        //if (AppConf.getUnitsValue().equals("Meters")) {
-            FEET_IN_METER = 1;
-        } else {
-            FEET_IN_METER = 3.28084;
-        }*/
     }
 
 
@@ -571,7 +570,22 @@ public class ConsoleApplication extends Application {
                                 } else {
                                     myMessage = myMessage + "KO" + "teststandconfig";
                                 }
+                                break;
 
+                            case "testTrame":
+                                if (currentSentence[currentSentence.length - 1].matches("\\d+(?:\\.\\d+)?"))
+                                    chk = Long.valueOf(currentSentence[currentSentence.length - 1]);
+                                if (calculateSentenceCHK(currentSentence) == chk) {
+                                    testTrame.setTrameStatus(true);
+                                } else
+                                {
+                                    testTrame.setTrameStatus(false);
+                                }
+                                if (currentSentence.length > 1)
+                                    testTrame.setCurrentTrame(currentSentence[1]);
+                                else
+                                    testTrame.setCurrentTrame("Error reading packet");
+                                myMessage = myMessage + " " + "testTrame";
                                 break;
 
                             case "nbrOfThrustCurve":
@@ -655,6 +669,28 @@ public class ConsoleApplication extends Application {
 
     public void setAppConf(GlobalConfig value) {
         AppConf = value;
+    }
+
+    public class TestTrame {
+
+        private String currentTrame = "";
+        private boolean trameStatus = false;
+
+        public void setCurrentTrame (String trame) {
+            currentTrame = trame;
+        }
+
+        public String getCurrentTrame() {
+            return currentTrame;
+        }
+
+        public void setTrameStatus (boolean val) {
+            trameStatus = val;
+        }
+
+        public boolean getTrameStatus () {
+            return trameStatus;
+        }
     }
 
     public class GlobalConfig {

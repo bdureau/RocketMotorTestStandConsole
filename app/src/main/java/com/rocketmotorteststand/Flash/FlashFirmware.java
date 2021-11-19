@@ -89,6 +89,7 @@ public class FlashFirmware extends AppCompatActivity {
         tvRead = (TextView) findViewById(R.id.tvRead);
         rbTestStand = (RadioButton) findViewById(R.id.radioButTestStand);
         rbTestStandSTM32 = (RadioButton) findViewById(R.id.radioButTestStandSTM32);
+        rbTestStandSTM32.setChecked(true);
 
         mPhysicaloid = new Physicaloid(this);
         mBoardList = new ArrayList<Boards>();

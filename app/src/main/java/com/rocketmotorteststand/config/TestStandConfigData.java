@@ -76,7 +76,7 @@ public class TestStandConfigData {
 
 
 
-    //Number of second during which we are reconding
+    //Number of second during which we are recording
     public void setStopRecordingTime(int value) {stopRecordingTime =value;}
     public int getStopRecordingTime(){return stopRecordingTime;}
 

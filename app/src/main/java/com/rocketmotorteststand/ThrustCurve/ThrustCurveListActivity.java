@@ -53,12 +53,16 @@ public class ThrustCurveListActivity extends AppCompatActivity {
             // Get the thrust curve name
             String currentThrustCurve = ((TextView) v).getText().toString();
             Intent i;
-            // Make an intent to start next activity.
-            if (myBT.getAppConf().getGraphicsLibType().equals("0"))
-                i = new Intent(ThrustCurveListActivity.this, ThrustCurveViewActivity.class);
-            else
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+                //if android ver = 8 or greater use the MPlib
                 i = new Intent(ThrustCurveListActivity.this, ThrustCurveViewTabActivity.class);
-
+            } else {
+                // Make an intent to start next activity.
+                if (myBT.getAppConf().getGraphicsLibType().equals("0"))
+                    i = new Intent(ThrustCurveListActivity.this, ThrustCurveViewActivity.class);
+                else
+                    i = new Intent(ThrustCurveListActivity.this, ThrustCurveViewTabActivity.class);
+            }
             //Change the activity.
             i.putExtra(SELECTED_THRUSTCURVE, currentThrustCurve);
             startActivity(i);

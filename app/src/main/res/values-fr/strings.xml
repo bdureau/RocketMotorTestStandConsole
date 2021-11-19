@@ -34,7 +34,7 @@
     <string name="testStandResolution">Resolution Banc de test</string>
     <string name="eepromSize">Capacité EEprom</string>
 
-    <string name="RecordingTimeOut">Durée enr</string>
+    <string name="RecordingTimeOut">Durée enr (en secs)</string>
 
     <string name="BatteryType">Type de batterie</string>
     <string name="config_unknown">inconnu</string>
@@ -312,9 +312,23 @@
     <string name="bt_baud_rate">Baud rate:</string>
     <string name="pin">Pin:</string>
     <string name="bt_info_msg">Cela vous permettra de configurer votre module bluetooth.
-        Vous aurez besoin d\'un cable ttl et d\'un adaptateur to connect your bluetooth module to your phone. Please look at the on line help</string>
-    <string name="bt_info_title">Bluetooth module configuration</string>
+        Vous aurez besoin d\'un câble ttl et d\'un adaptateur pour connecter votre module bluetooth à votre appareil Android.
+        Merci de consulter la documentation en ligne</string>
+    <string name="bt_info_title">Configuration module Bluetooth</string>
     <string name="bt_info_ok">OK</string>
-    <string name="loading_bt_config_msg">Loading bluetooth module config</string>
+    <string name="loading_bt_config_msg">Chargement de la config du module bluetooth</string>
     <string name="module_name">Nom Module:</string>
+    <string name="unsuported_firmware_msg">Firmware incompatible</string>
+    <string name="flash_advice_msg">La version du firmware est peut etre incompatible, il est conseillé de flasher la carte du banc</string>
+    <string name="test_start">Démarrer</string>
+    <string name="test_stop">Arreter</string>
+    <string name="test_your_connection">Tester votre connexion</string>
+    <string name="nbr_packets_sent">Nb packets envoyés:</string>
+    <string name="nbr_packets_received">Nb packets reçu:</string>
+    <string name="nbr_received_ok">Nb reçu ok:</string>
+    <string name="nbr_packets_not_ok">Nb packets non ok :</string>
+    <string name="percentage_of_errors">Pourcentage d\'erreurs:</string>
+    <string name="msg_test_connection">Cela vous permettra d\'évaluer la fiabilité de la connexion</string>
+    <string name="msg_test_connection_title">Information</string>
+    <string name="test_connection">Test connexion</string>
 </resources>

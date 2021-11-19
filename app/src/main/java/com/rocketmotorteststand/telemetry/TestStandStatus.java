@@ -21,7 +21,7 @@ import com.rocketmotorteststand.R;
 import java.io.IOException;
 
 public class TestStandStatus extends AppCompatActivity {
-    Button btnDismiss, btnRecording;
+    Button btnDismiss, btnRecording, btnTare;
     ConsoleApplication myBT;
     Thread testStandStatus;
     boolean status = true;
@@ -133,8 +133,20 @@ public class TestStandStatus extends AppCompatActivity {
 
         btnDismiss = (Button) findViewById(R.id.butDismiss);
         btnRecording = (Button) findViewById(R.id.butRecording);
-
+        btnTare = (Button) findViewById(R.id.butTare);
         btnRecording.setVisibility(View.INVISIBLE);
+
+        btnTare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //Send tare command
+                myBT.flush();
+                myBT.clearInput();
+                myBT.write("j;\n".toString());
+
+            }
+        });
 
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override

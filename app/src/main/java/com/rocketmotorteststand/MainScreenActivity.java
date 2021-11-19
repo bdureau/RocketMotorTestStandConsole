@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.rocketmotorteststand.Flash.FlashFirmware;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveListActivity;
+import com.rocketmotorteststand.ThrustCurve.ThrustCurveViewTabActivity;
 import com.rocketmotorteststand.config.Config3DR;
 import com.rocketmotorteststand.config.ConfigBT;
 import com.rocketmotorteststand.config.TestStandConfigData;
@@ -31,6 +32,7 @@ import com.rocketmotorteststand.config.AppConfigActivity;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.connection.SearchBluetooth;
+import com.rocketmotorteststand.connection.TestConnection;
 import com.rocketmotorteststand.telemetry.TestStandStatus;
 import com.rocketmotorteststand.telemetry.Telemetry;
 import com.rocketmotorteststand.telemetry.TelemetryMp;
@@ -39,7 +41,9 @@ import com.rocketmotorteststand.telemetry.TelemetryMp;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class MainScreenActivity extends AppCompatActivity {
     String address = null;
@@ -53,6 +57,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
     ConsoleApplication myBT;
     private TestStandConfigData AltiCfg = null;
+    private FirmwareCompatibility firmCompat =null;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -96,8 +101,9 @@ public class MainScreenActivity extends AppCompatActivity {
 
         //get the bluetooth and USB Application pointer
         myBT = (ConsoleApplication) getApplication();
-        //Check the local and force it if needed
-        //getApplicationContext().getResources().updateConfiguration(myBT.getAppLocal(), null);
+
+        //This will check if the firmware is compatible with the app and advice on flashing the firmware
+        firmCompat = new FirmwareCompatibility();
 
         setContentView(R.layout.activity_main_screen);
         IntentFilter filter = new IntentFilter();
@@ -166,10 +172,15 @@ public class MainScreenActivity extends AppCompatActivity {
                     myBT.write("y1;".toString());
                 }
                 Intent i;
-                if (myBT.getAppConf().getGraphicsLibType().equals("0"))
-                    i = new Intent(MainScreenActivity.this, Telemetry.class);
-                else
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+                    //if android ver = 8 or greater use the MPlib
                     i = new Intent(MainScreenActivity.this, TelemetryMp.class);
+                } else {
+                    if (myBT.getAppConf().getGraphicsLibType().equals("0"))
+                        i = new Intent(MainScreenActivity.this, Telemetry.class);
+                    else
+                        i = new Intent(MainScreenActivity.this, TelemetryMp.class);
+                }
                 startActivity(i);
             }
         });
@@ -263,6 +274,8 @@ public class MainScreenActivity extends AppCompatActivity {
 
         btnReset.setEnabled(false);
         btnStatus.setEnabled(false);
+        // now enable or disable the menu entries by invalidating it
+        invalidateOptionsMenu();
     }
 
     private void EnableUI() {
@@ -310,12 +323,19 @@ public class MainScreenActivity extends AppCompatActivity {
             msg(getResources().getString(R.string.MS_msg4));
             btnConnectDisconnect.setText(getResources().getString(R.string.disconnect));
             btnFlashFirmware.setEnabled(false);
+            if(!firmCompat.IsCompatible(myBT.getTestStandConfigData().getTestStandName(),
+                    myBT.getTestStandConfigData().getTestStandMajorVersion()+ "."+ myBT.getTestStandConfigData().getTestStandMinorVersion())) {
+                msg(getString(R.string.flash_advice_msg));
+            }
+            else {
+                msg(getResources().getString(R.string.MS_msg4));
+            }
         } else {
-            msg("Unsupported firmware");
-
+            msg(getString(R.string.unsuported_firmware_msg));
             myBT.Disconnect();
-            //myBT.setConnected(false);
         }
+        // now enable or disable the menu entries by invalidating it
+        invalidateOptionsMenu();
     }
 
     // fast way to call Toast
@@ -369,10 +389,9 @@ public class MainScreenActivity extends AppCompatActivity {
                         AltiCfg = myBT.getTestStandConfigData();
                         success = true;
                     } catch (Exception e) {
-                        //  msg("pb ready data");
+
                     }
                 } else {
-                    // msg("data not ready");
                     //try again
                     myBT.setDataReady(false);
                     myBT.flush();
@@ -393,7 +412,7 @@ public class MainScreenActivity extends AppCompatActivity {
                             AltiCfg = myBT.getTestStandConfigData();
                             success = true;
                         } catch (Exception e) {
-                            //  msg("pb ready data");
+
                         }
                     }
                 }
@@ -427,6 +446,38 @@ public class MainScreenActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        myBT.getAppConf().ReadConfig();
+        //only enable bluetooth module search if connection type is bluetooth
+        if(myBT.getAppConf().getConnectionType().equals("1")) {
+            menu.findItem(R.id.action_bluetooth).setEnabled(false);
+        }
+        else {
+            menu.findItem(R.id.action_bluetooth).setEnabled(true);
+        }
+
+        //if we are connected then enable some menu options and if not disable them
+        if(myBT.getConnected()){
+            // We are connected so no need to choose the bluetooth
+            menu.findItem(R.id.action_bluetooth).setEnabled(false);
+            // We are connected so we do not want to configure the 3DR module
+            menu.findItem(R.id.action_mod3dr_settings).setEnabled(false);
+            // same goes for the BT module
+            menu.findItem(R.id.action_modbt_settings).setEnabled(false);
+            // Allow connection testing
+            menu.findItem(R.id.action_test_connection).setEnabled(true);
+        } else {
+            // not connected so allow those
+            menu.findItem(R.id.action_mod3dr_settings).setEnabled(true);
+            menu.findItem(R.id.action_modbt_settings).setEnabled(true);
+            //cannot do connection testing until we are connected
+            menu.findItem(R.id.action_test_connection).setEnabled(false);
+        }
+        return true;
+
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -463,8 +514,15 @@ public class MainScreenActivity extends AppCompatActivity {
             startActivity(i);
             return true;
         }
+        //Open the bluetooth module config
         if (id == R.id.action_modbt_settings) {
             Intent i = new Intent(MainScreenActivity.this, ConfigBT.class);
+            startActivity(i);
+            return true;
+        }
+        //Test current connection
+        if (id == R.id.action_test_connection) {
+            Intent i = new Intent(MainScreenActivity.this, TestConnection.class);
             startActivity(i);
             return true;
         }
@@ -495,7 +553,6 @@ public class MainScreenActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-
     }
 
     /* This is the Bluetooth connection sub class */
@@ -508,10 +565,6 @@ public class MainScreenActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             //"Connecting...", "Please wait!!!"
-          /*  progress = ProgressDialog.show(MainScreenActivity.this,
-                    getResources().getString(R.string.MS_msg1),
-                    getResources().getString(R.string.MS_msg2));  //show a progress dialog
-                    */
             builder = new AlertDialog.Builder(MainScreenActivity.this);
             //Connecting...
             builder.setMessage(getResources().getString(R.string.MS_msg1))
@@ -531,16 +584,12 @@ public class MainScreenActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
         {
-
-            //if (myBT.getBtSocket() == null || !myBT.getConnected()) {
             if (!myBT.getConnected()) {
 
                 if (myBT.connect())
                     ConnectSuccess = true;
                 else
                     ConnectSuccess = false;
-
-
             }
             return null;
         }
@@ -549,7 +598,7 @@ public class MainScreenActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
         {
             super.onPostExecute(result);
-            //msg(myBT.lastData);
+
             if (!ConnectSuccess) {
                 //msg(myBT.lastReadResult);
                 //msg(myBT.lastData);
@@ -558,15 +607,49 @@ public class MainScreenActivity extends AppCompatActivity {
                 //finish();
             } else {
                 //Connected.
-                // msg(getResources().getString(R.string.MS_msg4));
-                //isBtConnected = true;
                 myBT.setConnected(true);
                 EnableUI();
-                //btnConnectDisconnect.setText(getResources().getString(R.string.disconnect));
-                //btnFlashFirmware.setEnabled(false);
             }
-            //progress.dismiss();
             alert.dismiss();
         }
+    }
+
+    public class FirmwareCompatibility {
+        // Create a hash map
+        public HashMap<String, String> hm;
+        FirmwareCompatibility() {
+            hm =null;
+            hm = new HashMap();
+            //init compatible versions
+            Add("TestStandSTM32", "1.1");
+            Add("TestStand", "1.1");
+        }
+        public void Add ( String altiName, String verList) {
+            hm.put(altiName,verList);
+        }
+
+        public boolean IsCompatible(String altiName,String ver) {
+            boolean compatible = false;
+            String compatFirmwareList="";
+            Set set = hm.entrySet();
+
+            // Get an iterator
+            Iterator i = set.iterator();
+            while(i.hasNext()) {
+                Map.Entry me = (Map.Entry)i.next();
+
+                if (me.getKey().equals(altiName)){
+                    compatFirmwareList = me.getValue().toString();
+                    break;
+                }
+            }
+            String firmwareVersion[] = compatFirmwareList.split(",");
+            for (int j = 0; j < firmwareVersion.length; j++ ){
+                if(firmwareVersion[j].equals(ver))
+                    compatible = true;
+            }
+            return compatible;
+        }
+
     }
 }

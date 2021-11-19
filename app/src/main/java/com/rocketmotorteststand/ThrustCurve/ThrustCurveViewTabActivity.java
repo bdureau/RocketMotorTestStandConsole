@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.rocketmotorteststand.ConsoleApplication;
+import com.rocketmotorteststand.Help.AboutActivity;
+import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -18,6 +20,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.rocketmotorteststand.ShareHandler;
 
 
 import androidx.annotation.Nullable;
@@ -31,6 +34,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -44,6 +49,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,6 +63,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     private Tab2Fragment ThrustCurvePage2 = null;
     private Button btnDismiss, butSelectCurves, butZoom;
     private static ConsoleApplication myBT;
+
 
     private static String curvesNames[] = null;
     private static String currentCurvesNames[] = null;
@@ -582,6 +589,8 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         String motorClass="";
         double thrustDuration =0;
         double averageThrust=0;
+        private AlertDialog.Builder builder = null;
+        private AlertDialog alert;
 
         public Tab2Fragment(ThrustCurveData data) {
             mythrustCurve = data;
@@ -731,14 +740,31 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             root = new File(root, "RocketMotorTestStand");
             root.mkdir();
 
+            SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
+            String date = sdf.format(System.currentTimeMillis());
+
             // select the name for your file
-            root = new File(root , ThrustCurveName +".csv");
+            root = new File(root , ThrustCurveName+ date +".csv");
 
             try {
                 FileOutputStream fout = new FileOutputStream(root);
                 fout.write(csv_data.getBytes());
 
                 fout.close();
+                //Confirmation message
+                builder = new AlertDialog.Builder(Tab2Fragment.this.getContext());
+                //Running Saving commands
+                builder.setMessage("The following file has been saved:"+ Environment.DIRECTORY_DOWNLOADS+ "\\RocketMotorTestStand\\"+ThrustCurveName +".csv")
+                        .setTitle("Info")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                alert = builder.create();
+                alert.show();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
 
@@ -807,14 +833,32 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             root = new File(root, "RocketMotorTestStand");
             root.mkdir();
 
+            SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
+            String date = sdf.format(System.currentTimeMillis());
             // select the name for your file
-            root = new File(root , ThrustCurveName +".eng");
+            root = new File(root , ThrustCurveName +date+".eng");
 
             try {
                 FileOutputStream fout = new FileOutputStream(root);
                 fout.write(motorfile_data.getBytes());
 
                 fout.close();
+                //Confirmation message
+                builder = new AlertDialog.Builder(Tab2Fragment.this.getContext());
+                //Running Saving commands
+                builder.setMessage("The following file has been saved:"+ Environment.DIRECTORY_DOWNLOADS+
+                        "\\RocketMotorTestStand\\"+ThrustCurveName +".eng" +
+                        "\nDo not forget to edit it to enter casing spec, weight and manufacturer")
+                        .setTitle("Info")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                alert = builder.create();
+                alert.show();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
 
@@ -836,5 +880,41 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_thrust_curves, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //open application settings screen
+        if (id == R.id.action_share) {
+            ShareHandler.share(ShareHandler.takeScreenshot(findViewById(android.R.id.content).getRootView()), this.getApplicationContext());
+            return true;
+        }
+        //open help screen
+        if (id == R.id.action_help) {
+            Intent i= new Intent(this, HelpActivity.class);
+            i.putExtra("help_file", "help_bluetooth");
+            startActivity(i);
+            return true;
+        }
+        //open about screen
+        if (id == R.id.action_about) {
+            Intent i= new Intent(this, AboutActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
