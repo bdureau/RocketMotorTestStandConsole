@@ -411,9 +411,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     public static class Tab1Fragment extends Fragment {
         private LineChart mChart;
         public XYSeriesCollection allThrustCurveData;
-
         int graphBackColor, fontSize, axisColor, labelColor, nbrColor;
-
         public Tab1Fragment(XYSeriesCollection data) {
             this.allThrustCurveData = data;
         }
@@ -437,18 +435,11 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         }
 
         private void drawGraph() {
-
             graphBackColor = myBT.getAppConf().ConvertColor(Integer.parseInt(myBT.getAppConf().getGraphBackColor()));
-
-
             fontSize = myBT.getAppConf().ConvertFont(Integer.parseInt(myBT.getAppConf().getFontSize()));
-
             axisColor = myBT.getAppConf().ConvertColor(Integer.parseInt(myBT.getAppConf().getGraphColor()));
-
             labelColor = Color.BLACK;
-
             nbrColor = Color.BLACK;
-
         }
 
         private void drawAllCurves(XYSeriesCollection allThrustCurveData) {
@@ -685,13 +676,8 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         private void exportToCSV(){
 
 
-            String csv_data = "time,thrust\n";/// your csv data as string;
-            /*int nbrData = thrustCurveData.getSeries(0).getItemCount();
-            for ( int i = 0; i < nbrData; i++) {
+            String csv_data = "time,thrust" + units[0]+ "\n";/// your csv data as string;
 
-                csv_data = csv_data +  String.format("%.3f ",(double)thrustCurveData.getSeries(0).getX(i) ) +"," + String.format("%.1f ",(double)thrustCurveData.getSeries(0).getY(i))+"\n";
-
-            }*/
             ThrustUtil tu = new ThrustUtil();
             double maxThrust = thrustCurveData.getSeries(0).getMaxY();
             double triggerThrust = maxThrust * (5.0 / 100.0);
@@ -725,9 +711,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                         currData = String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
                     }
 
-                    /*currData =currData.replace(",",".");
-                    if(currData.contains(","))
-                        currData = currData.replace(",",".")+";";*/
                     csv_data = csv_data + curTime+ currData+"\n";
 
 
@@ -780,7 +763,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     // call the method again
                     exportToCSV();
                 }else {
-                    throw new IllegalStateException("Failed to create csv file");
+                    throw new IllegalStateException(getString(R.string.failed_to_create_csv));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -804,7 +787,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             int curveMaxThrust = tu.searchX(thrustCurveData.getSeries(0), maxThrust);
             int curveStop = tu.searchXFrom(thrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
 
-            //ArrayList<Entry> yValues = new ArrayList<>();
             if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
                 for (int k = curveStart; k < curveStop; k++) {
 
@@ -815,18 +797,12 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                             String.format("%.1f ",(thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
                     currData =currData.replace(",",".");
                     motorfile_data = motorfile_data +  currData+"\n";
-
-
                 }
             }
 
             File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             int nbrData = thrustCurveData.getSeries(0).getItemCount();
-            /*for ( int i = 0; i < nbrData; i++) {
 
-                motorfile_data = motorfile_data +  String.format("%.3f ",(double)thrustCurveData.getSeries(0).getX(i) ) +" " + String.format("%.1f ",(double)thrustCurveData.getSeries(0).getY(i))+"\n";
-
-            }*/
             motorfile_data = motorfile_data +";\n";
 
             //if you want to create a sub-dir
@@ -846,9 +822,9 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 //Confirmation message
                 builder = new AlertDialog.Builder(Tab2Fragment.this.getContext());
                 //Running Saving commands
-                builder.setMessage("The following file has been saved:"+ Environment.DIRECTORY_DOWNLOADS+
+                builder.setMessage(getString(R.string.file_saved_msg1)+ Environment.DIRECTORY_DOWNLOADS+
                         "\\RocketMotorTestStand\\"+ThrustCurveName +".eng" +
-                        "\nDo not forget to edit it to enter casing spec, weight and manufacturer")
+                        getString(R.string.file_saved_msg2))
                         .setTitle("Info")
                         .setCancelable(false)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -874,7 +850,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     // call the method again
                     exportToEng(motorClass);
                 }else {
-                    throw new IllegalStateException("Failed to create eng file");
+                    throw new IllegalStateException(getString(R.string.failed_to_create_eng));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

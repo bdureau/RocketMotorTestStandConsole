@@ -331,4 +331,7 @@
     <string name="msg_test_connection">Cela vous permettra d\'évaluer la fiabilité de la connexion</string>
     <string name="msg_test_connection_title">Information</string>
     <string name="test_connection">Test connexion</string>
+    <string name="file_saved_msg1">Le fichier suivant a été sauvegardé:</string>
+    <string name="failed_to_create_eng">Echec de création du fichier eng</string>
+    <string name="failed_to_create_csv">Echec de création du fichier csv</string>
 </resources>

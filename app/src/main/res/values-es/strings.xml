@@ -325,4 +325,7 @@
     <string name="msg_test_connection">This will allow to test the connection reliability</string>
     <string name="msg_test_connection_title">Info</string>
     <string name="test_connection">Test connection</string>
+    <string name="file_saved_msg1">The following file has been saved:</string>
+    <string name="failed_to_create_eng">Failed to create eng file</string>
+    <string name="failed_to_create_csv">Failed to create csv file</string>
 </resources>
