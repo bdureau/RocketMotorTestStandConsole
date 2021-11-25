@@ -464,7 +464,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
         private Spinner dropdownBatteryType;
         private EditText StopRecordingTime;
-        //private EditText StartRecordingThrustLevel;
+
         private boolean ViewCreated = false;
         private TextView txtViewEEpromSize;
 
@@ -528,19 +528,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             this.StopRecordingTime.setText(String.valueOf(StopRecordingTime));
         }
 
-        /*public int getStartRecordingTime() {
-            int ret;
-            try {
-                ret = Integer.parseInt(this.StartRecordingTime.getText().toString());
-            } catch (Exception e) {
-                ret = 0;
-            }
-            return ret;
-        }*/
-
-        /*public void setStartRecordingTime(int StartRecordingTime) {
-            this.StartRecordingTime.setText(String.valueOf(StartRecordingThrustLevel));
-        }*/
 
         public int getBatteryType() {
             return (int) this.dropdownBatteryType.getSelectedItemId();
@@ -756,7 +743,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             dropdownUnits = (Spinner) view.findViewById(R.id.spinnerUnit);
             //"kg", "pounds"
             String[] items2 = new String[]{getResources().getString(R.string.unit_kg),
-                    getResources().getString(R.string.unit_pound), "Newtons"};
+                    getResources().getString(R.string.unit_pound), getResources().getString(R.string.unit_newton)};
             ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this.getActivity(),
                     android.R.layout.simple_spinner_dropdown_item, items2);
             dropdownUnits.setAdapter(adapter2);
@@ -777,13 +764,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             //Test Stand name
             testStandName = (TextView) view.findViewById(R.id.txtAltiNameValue);
 
-            /*btnCalibrate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    new Calibration().execute();
-                }
-            });*/
 
             if (ltestStandNameCfg != null) {
                 testStandName.setText(ltestStandNameCfg.getTestStandName() + " ver: " +
@@ -797,67 +778,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             ViewCreated = true;
             return view;
         }
-        // calibration
-        /*private class Calibration extends AsyncTask<Void, Void, Void>  // UI thread
-        {
-            private AlertDialog.Builder builder = null;
-            private AlertDialog alert;
-            private Boolean canceled = false;
-
-            @Override
-            protected void onPreExecute() {
-                //"Calibration in progress..."
-                //"Please wait!!!"
-                //this.getActivity()
-                builder = new AlertDialog.Builder(Tab3Fragment.this.getContext());
-
-                builder.setMessage("Calibration...")
-                        .setTitle("Calibration")
-                        .setCancelable(false)
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(final DialogInterface dialog, final int id) {
-                                myBT.setExit(true);
-                                canceled = true;
-                                dialog.cancel();
-                            }
-                        });
-                alert = builder.create();
-                alert.show();
-            }
-
-            @Override
-            protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
-            {
-
-                myBT.flush();
-                myBT.clearInput();
-                myBT.write("c"+calibrationWeight.getText()+";".toString());
-                //wait for ok and put the result back
-                String myMessage = "";
-
-                myMessage = myBT.ReadResult(3000);
-                if (myMessage.equals("OK")) {
-                    //getParentFragment().readConfig();
-                    //readConfig();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
-            {
-                super.onPostExecute(result);
-                if (!canceled) {
-                    //this.getParent().readConfig();
-
-                    CalibrationFactor.setText(String.valueOf(ltestStandNameCfg.getCalibrationFactor()));
-                    CurrentOffset.setText(String.valueOf(ltestStandNameCfg.getCurrentOffset()));
-
-                    alert.dismiss();
-                }
-
-            }
-        }*/
 
     }
 
@@ -874,10 +794,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             //"Please wait!!!"
             builder = new AlertDialog.Builder(TestStandTabConfigActivity.this);
 
-            builder.setMessage("Calibration...")
-                    .setTitle("Calibration")
+            builder.setMessage(R.string.calibration_msg)
+                    .setTitle(R.string.calibration_title)
                     .setCancelable(false)
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.cancel_calibration, new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
                             myBT.setExit(true);
                             canceled = true;
@@ -899,9 +819,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             //wait for ok and put the result back
             String myMessage = "";
 
-           /* while (!calibrationComplete) {
 
-            }*/
             myMessage = myBT.ReadResult(30000);
             if (myMessage.equals("OK")) {
                 //getParentFragment().readConfig();
@@ -915,71 +833,14 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         {
             super.onPostExecute(result);
             if (!canceled) {
-                //this.getParent().readConfig();
-                //readConfig();
-                //configPage3.CalibrationFactor.setText(String.valueOf(TestStandCfg.getCalibrationFactor()));
-                //configPage3.CurrentOffset.setText(String.valueOf(TestStandCfg.getCurrentOffset()));
+
 
                 alert.dismiss();
             }
 
         }
     }
-   /* private class RetrieveConfig extends AsyncTask<Void, Void, Void>  // UI thread
-    {
 
-        @Override
-        protected void onPreExecute() {
-            //"Retrieving Altimeter config...", "Please wait!!!"
-            progress = ProgressDialog.show(TestStandTabConfigActivity.this,
-                    getResources().getString(R.string.msg5),
-                    getResources().getString(R.string.msg6));  //show a progress dialog
-        }
-
-        @Override
-        protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
-        {
-            boolean success = false;
-            success = readConfig();
-            //second attempt
-            if (!success)
-                success = readConfig();
-            //third attempt
-            if (!success)
-                success = readConfig();
-            //fourth and last
-            if (!success)
-                success = readConfig();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
-        {
-            super.onPostExecute(result);
-
-            if (TestStandCfg != null && configPage2 != null && configPage3 != null) {
-
-                //Config Tab 2
-                if (configPage2.isViewCreated()) {
-                    configPage2.setBaudRate(TestStandCfg.getConnectionSpeed());
-                    configPage2.setTestStandResolution(TestStandCfg.getTestStandResolution());
-                    configPage2.setEEpromSize(TestStandCfg.getEepromSize());
-                    configPage2.setStopRecordingTime(TestStandCfg.getStopRecordingTime());
-                }
-
-                if (configPage3.isViewCreated()) {
-                    configPage3.setTestStandName(TestStandCfg.getTestStandName() + " ver: " +
-                            TestStandCfg.getTestStandMajorVersion() + "." + TestStandCfg.getTestStandMinorVersion());
-
-                    configPage3.setDropdownUnits(TestStandCfg.getUnits());
-
-                }
-
-            }
-            progress.dismiss();
-        }
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

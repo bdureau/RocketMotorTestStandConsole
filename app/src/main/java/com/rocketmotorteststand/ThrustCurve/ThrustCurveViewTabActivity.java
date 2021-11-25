@@ -737,10 +737,10 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 //Confirmation message
                 builder = new AlertDialog.Builder(Tab2Fragment.this.getContext());
                 //Running Saving commands
-                builder.setMessage("The following file has been saved:"+ Environment.DIRECTORY_DOWNLOADS+ "\\RocketMotorTestStand\\"+ThrustCurveName +".csv")
-                        .setTitle("Info")
+                builder.setMessage(getString(R.string.not_saved_msg)+ Environment.DIRECTORY_DOWNLOADS+ "\\RocketMotorTestStand\\"+ThrustCurveName +".csv")
+                        .setTitle(R.string.not_saved_title)
                         .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.not_saved_ok, new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog, final int id) {
                                 dialog.cancel();
                             }
@@ -881,7 +881,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         //open help screen
         if (id == R.id.action_help) {
             Intent i= new Intent(this, HelpActivity.class);
-            i.putExtra("help_file", "help_bluetooth");
+            i.putExtra("help_file", "help_curve");
             startActivity(i);
             return true;
         }

@@ -1036,7 +1036,7 @@ public class Config3DR extends AppCompatActivity {
                 }
             }
             else {
-                dialogAppend("Saving has been cancelled");
+                dialogAppend(getString(R.string.saving_cancelled_msg));
             }
             //Exit AT mode
             value = mInfo.runCommand("ATO");

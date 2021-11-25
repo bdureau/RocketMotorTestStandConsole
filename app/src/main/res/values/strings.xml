@@ -330,4 +330,15 @@
     <string name="file_saved_msg2">\nDo not forget to edit it to enter casing spec, weight and manufacturer</string>
     <string name="failed_to_create_eng">Failed to create eng file</string>
     <string name="failed_to_create_csv">Failed to create csv file</string>
+    <string name="not_saved_msg">The following file has been saved:</string>
+    <string name="not_saved_title">Info</string>
+    <string name="not_saved_ok">OK</string>
+    <string name="saving_cancelled_msg">Saving has been cancelled</string>
+    <string name="module_name_cannot_be_empty">Module name cannot be empty\n</string>
+    <string name="pin_cannot_be_empty">Module Pin cannot be empty\n</string>
+    <string name="attempting_coonecteing_to_bt_msg">Attempting connecting to the Bluetooth module</string>
+    <string name="unit_newton">Newtons</string>
+    <string name="calibration_msg">Calibration...</string>
+    <string name="calibration_title">Calibration</string>
+    <string name="cancel_calibration">Cancel</string>
 </resources>

@@ -107,11 +107,6 @@ public class TestStandConfigData {
 
 
 
-
-    //start recoding thrust
-    //public void setStartRecordingThrustLevel(int value) {startRecordingThrustLevel =value;}
-    //public int getStartRecordingThrustLevel(){return startRecordingThrustLevel;}
-
     public void setBatteryType(int value) {batteryType =value;}
     public int getBatteryType(){return batteryType;}
 
