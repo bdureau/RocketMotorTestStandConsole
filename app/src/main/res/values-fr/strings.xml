@@ -347,4 +347,5 @@
     <string name="calibration_msg">Calibration en cours...</string>
     <string name="calibration_title">Calibration</string>
     <string name="cancel_calibration">Annuller</string>
+    <string name="curve_pressure">Pressure</string>
 </resources>

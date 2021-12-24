@@ -461,8 +461,9 @@ public class ConsoleApplication extends Application {
                                         }
                                     // Value 2 contain the time
                                     // Value 3 contain the thrust
+                                    // value 4 contain the casing pressure
                                     // To do
-                                    int value2 = 0, value3 = 0;
+                                    int value2 = 0, value3 = 0,value4 = 0;
                                     if (currentSentence.length > 2)
                                         if (currentSentence[2].matches("\\d+(?:\\.\\d+)?"))
                                             value2 = Integer.valueOf(currentSentence[2]);
@@ -476,6 +477,16 @@ public class ConsoleApplication extends Application {
                                         //add the thrust
                                         MyThrustCurve.AddToThrustCurve(value2,
                                                 (long) (value3 ), thrustCurveName, 0);
+
+                                    }
+                                    if (currentSentence.length > 4) {
+                                        if (currentSentence[4].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
+                                            value4 = Integer.valueOf(currentSentence[4]);
+                                        else
+                                            value4 = 0;
+                                        //add the casing pressure
+                                        MyThrustCurve.AddToThrustCurve(value2,
+                                                (long) (value4 ), thrustCurveName, 1);
 
                                     }
 
@@ -566,6 +577,14 @@ public class ConsoleApplication extends Application {
                                             TestStandCfg.setCurrentOffset(Integer.valueOf(currentSentence[12]));
                                         else
                                             TestStandCfg.setCurrentOffset(0);
+
+                                    // value 13 contains pressure sensor type
+                                    if (currentSentence.length > 13)
+                                        if (currentSentence[13].matches("\\d+(?:\\.\\d+)?"))
+                                            TestStandCfg.setPressureSensorType(Integer.valueOf(currentSentence[13]));
+                                        else
+                                            TestStandCfg.setPressureSensorType(0);
+
                                     myMessage = myMessage + " " + "teststandconfig";
                                 } else {
                                     myMessage = myMessage + "KO" + "teststandconfig";

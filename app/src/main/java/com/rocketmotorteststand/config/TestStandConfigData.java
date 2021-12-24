@@ -26,6 +26,7 @@ public class TestStandConfigData {
     private int batteryType =0;
     private long calibrationFactor = 0;
     private long currentOffset=0;
+    private int pressureSensorType = 0;
 
     public TestStandConfigData()
     {
@@ -116,4 +117,8 @@ public class TestStandConfigData {
     //currentOffset
     public void setCurrentOffset(long value) {currentOffset =value;}
     public long getCurrentOffset(){return currentOffset;}
+
+    //pressureSensorType
+    public void setPressureSensorType(int value) {pressureSensorType =value;}
+    public int getPressureSensorType(){return pressureSensorType;}
 }

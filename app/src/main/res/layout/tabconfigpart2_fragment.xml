@@ -106,4 +106,19 @@
         android:layout_alignParentRight="true"
         android:spinnerMode="dropdown" />
 
+    <TextView
+        android:id="@+id/txtViewSensorType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/txtViewBatteryType"
+        android:text="Sensor type" />
+
+    <Spinner
+        android:id="@+id/spinnerSensorType"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtViewSensorType"
+        android:layout_alignParentRight="true"
+        android:spinnerMode="dropdown" />
 </RelativeLayout>

@@ -145,6 +145,9 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         butZoom = (Button) findViewById(R.id.butZoom);
         numberOfCurves = 1;
+        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+            numberOfCurves =2;
+        }
 
         Intent newint = getIntent();
         ThrustCurveName = newint.getStringExtra(ThrustCurveListActivity.SELECTED_THRUSTCURVE);
@@ -159,6 +162,13 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         //thrust
         thrustCurveData.addSeries(allThrustCurveData.getSeries(getResources().getString(R.string.curve_thrust)));
 
+        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+            Log.d("numberOfCurves", "Adding curve pressure" );
+            thrustCurveData.addSeries(allThrustCurveData.getSeries(getResources().getString(R.string.curve_pressure)));
+
+        }
+
+        Log.d("numberOfCurves", "testStandName:" + myBT.getTestStandConfigData().getTestStandName());
         // get a list of all the curves that have been recorded
         //int numberOfCurves = allThrustCurveData.getSeries().size();
 
@@ -167,6 +177,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         units = new String[numberOfCurves];
         for (int i = 0; i < numberOfCurves; i++) {
             curvesNames[i] = allThrustCurveData.getSeries(i).getKey().toString();
+            Log.d("numberOfCurves",allThrustCurveData.getSeries(i).getKey().toString());
         }
 
         // Read the application config
@@ -582,6 +593,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         double averageThrust=0;
         private AlertDialog.Builder builder = null;
         private AlertDialog alert;
+        boolean SavedCurvesOK = false;
 
         public Tab2Fragment(ThrustCurveData data) {
             mythrustCurve = data;
@@ -763,7 +775,8 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     // call the method again
                     exportToCSV();
                 }else {
-                    throw new IllegalStateException(getString(R.string.failed_to_create_csv));
+                    //throw new IllegalStateException(getString(R.string.failed_to_create_csv));
+                    SavedCurvesOK=false;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -850,7 +863,9 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     // call the method again
                     exportToEng(motorClass);
                 }else {
-                    throw new IllegalStateException(getString(R.string.failed_to_create_eng));
+                    //throw new IllegalStateException(getString(R.string.failed_to_create_eng));
+                    SavedCurvesOK = false;
+                    //msg()
                 }
             } catch (IOException e) {
                 e.printStackTrace();

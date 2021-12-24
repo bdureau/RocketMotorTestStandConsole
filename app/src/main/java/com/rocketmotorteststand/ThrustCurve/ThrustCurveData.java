@@ -7,6 +7,7 @@ package com.rocketmotorteststand.ThrustCurve;
  *
  **/
 import android.content.Context;
+import android.util.Log;
 
 import com.rocketmotorteststand.R;
 
@@ -154,6 +155,11 @@ public class ThrustCurveData {
         //thrust
         final XYSeries series = new XYSeries(context.getResources().getString(R.string.curve_thrust)) ;
         ret = new XYSeriesCollection (series);
+
+        if(testStandName.equals("TestStandSTM32V2")) {
+            ret.addSeries(new XYSeries(context.getResources().getString(R.string.curve_pressure)));
+            Log.d("numberOfCurves", "Adding curve pressure in data" );
+        }
 
         return ret;
     }

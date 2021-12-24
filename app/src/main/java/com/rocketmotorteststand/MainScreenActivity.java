@@ -299,7 +299,9 @@ public class MainScreenActivity extends AppCompatActivity {
 
          */
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStand") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32")) {
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")
+        ) {
             Log.d("MainScreen", "test stand name: " + myBT.getTestStandConfigData().getTestStandName());
 
 

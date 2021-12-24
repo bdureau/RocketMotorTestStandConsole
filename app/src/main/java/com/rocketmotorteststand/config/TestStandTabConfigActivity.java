@@ -269,6 +269,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             TestStandCfg.setStopRecordingTime(configPage2.getStopRecordingTime());
 
             TestStandCfg.setBatteryType(configPage2.getBatteryType());
+            TestStandCfg.setPressureSensorType(configPage2.getSensorType());
 
         }
 
@@ -326,6 +327,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getBatteryType();
         testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCalibrationFactor();
         testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCurrentOffset();
+        testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getPressureSensorType();
 
         String cfg = testStandCfgStr;
         cfg = cfg.replace("s", "");
@@ -457,12 +459,14 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         private String[] itemsTestStandResolution;
         private String[] itemsEEpromSize;
         private String[] itemsBatteryType;
+        private String[] itemsSensorType;
 
         private Spinner dropdownBaudRate;
 
         private Spinner dropdownTestStandResolution, dropdownEEpromSize;
 
         private Spinner dropdownBatteryType;
+        private Spinner dropdownSensorType;
         private EditText StopRecordingTime;
 
         private boolean ViewCreated = false;
@@ -537,6 +541,13 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             dropdownBatteryType.setSelection(BatteryType);
         }
 
+        public int getSensorType() {
+            return (int) this.dropdownSensorType.getSelectedItemId();
+        }
+
+        public void setSensorType(int SensorType) {
+            dropdownSensorType.setSelection(SensorType);
+        }
 
         @Nullable
         @Override
@@ -656,7 +667,27 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 }
             });
 
+            dropdownSensorType = (Spinner) view.findViewById(R.id.spinnerSensorType);
+            //"Unknown",
+            itemsSensorType = new String[]{getResources().getString(R.string.config_unknown),
+                    "100 PSI", "150 PSI", "200 PSI", "300 PSI", "500 PSI", "1000 PSI", "1600 PSI"};
+            ArrayAdapter<String> adapterSensorType = new ArrayAdapter<String>(this.getActivity(),
+                    android.R.layout.simple_spinner_dropdown_item, itemsSensorType);
+            dropdownSensorType.setAdapter(adapterSensorType);
 
+            // Tool tip
+            view.findViewById(R.id.txtViewBatteryType).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ViewTooltip
+                            .on(v)
+                            .color(Color.BLACK)
+                            .position(ViewTooltip.Position.TOP)
+                            //Enter battery type used to make sure that we do not discharge it too much
+                            .text(getResources().getString(R.string.txtViewBatteryType_tooltip))
+                            .show();
+                }
+            });
 
             if (lTestStandCfg != null) {
                 dropdownBaudRate.setSelection(lTestStandCfg.arrayIndex(itemsBaudRate, String.valueOf(lTestStandCfg.getConnectionSpeed())));
@@ -667,7 +698,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 StopRecordingTime.setText(String.valueOf(lTestStandCfg.getStopRecordingTime()));
 
                 dropdownBatteryType.setSelection(lTestStandCfg.getBatteryType());
-
+                dropdownSensorType.setSelection(lTestStandCfg.getPressureSensorType());
             }
             ViewCreated = true;
             return view;
