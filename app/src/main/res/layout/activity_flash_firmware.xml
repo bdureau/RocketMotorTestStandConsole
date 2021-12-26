@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/textViewTestStandModelLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/select_altimeter_model"
-        android:id="@+id/textViewTestStandModelLbl"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:text="@string/select_altimeter_model"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <RadioGroup
         android:id="@+id/question_radio_group"
@@ -21,22 +21,31 @@
         tools:layout_editor_absoluteX="88dp"
         tools:layout_editor_absoluteY="91dp">
 
-    <RadioButton
-        android:id="@+id/radioButTestStand"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test Stand"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="74dp" />
-    <RadioButton
-        android:id="@+id/radioButTestStandSTM32"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test Stand STM32"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="74dp" />
+        <RadioButton
+            android:id="@+id/radioButTestStand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test Stand"
+            tools:layout_editor_absoluteX="32dp"
+            tools:layout_editor_absoluteY="74dp" />
 
-</RadioGroup>
+        <RadioButton
+            android:id="@+id/radioButTestStandSTM32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test Stand STM32"
+            tools:layout_editor_absoluteX="32dp"
+            tools:layout_editor_absoluteY="74dp" />
+
+        <RadioButton
+            android:id="@+id/radioButTestStandSTM32V2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test Stand STM32V2"
+            tools:layout_editor_absoluteX="32dp"
+            tools:layout_editor_absoluteY="74dp" />
+
+    </RadioGroup>
 
     <Spinner
         android:id="@+id/spinnerBaud"
@@ -50,8 +59,8 @@
         android:id="@+id/btFlash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/question_radio_group"
+        android:layout_alignParentLeft="true"
         android:onClick="onClickFlash"
         android:text="@string/flash_firmware" />
 
@@ -59,8 +68,8 @@
         android:id="@+id/btRecover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/btFlash"
+        android:layout_alignParentLeft="true"
         android:onClick="onClickRecover"
         android:text="@string/recover_firmware" />
 
@@ -68,8 +77,8 @@
         android:id="@+id/btDetect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/btRecover"
+        android:layout_alignParentLeft="true"
         android:onClick="onClickDetect"
         android:text="@string/detect_firmware" />
 
@@ -99,12 +108,13 @@
                 android:layout_alignParentLeft="true" />
         </LinearLayout>
     </ScrollView>
+
     <Button
         android:id="@+id/btDismiss"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onClickDismiss"
-        android:text="@string/firmware_dismiss"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:onClick="onClickDismiss"
+        android:text="@string/firmware_dismiss" />
 </RelativeLayout>

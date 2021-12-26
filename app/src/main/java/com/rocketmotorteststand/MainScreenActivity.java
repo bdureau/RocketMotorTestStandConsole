@@ -354,7 +354,7 @@ public class MainScreenActivity extends AppCompatActivity {
         // ask for config
         boolean success = false;
         if (myBT.getConnected()) {
-            //msg("Retreiving altimeter config...");
+
             Log.d("MainScreen", "Retreiving test stand config...");
             myBT.setDataReady(false);
             myBT.flush();
@@ -623,6 +623,7 @@ public class MainScreenActivity extends AppCompatActivity {
             hm =null;
             hm = new HashMap();
             //init compatible versions
+            Add("TestStandSTM32V2", "1.2");
             Add("TestStandSTM32", "1.1");
             Add("TestStand", "1.1");
         }

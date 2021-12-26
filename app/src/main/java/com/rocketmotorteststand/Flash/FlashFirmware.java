@@ -55,7 +55,7 @@ public class FlashFirmware extends AppCompatActivity {
     boolean recorverFirmware = false;
     Boards mSelectedBoard;
     Button btFlash;
-    public RadioButton rbTestStand, rbTestStandSTM32;
+    public RadioButton rbTestStand, rbTestStandSTM32, rbTestStandSTM32V2;
     TextView tvRead;
     private AlertDialog.Builder builder = null;
     private AlertDialog alert;
@@ -64,11 +64,12 @@ public class FlashFirmware extends AppCompatActivity {
 
     private static final String ASSET_FILE_NAME_TESTSTAND = "firmwares/MotorTestStand.ino.hex";
     private static final String ASSET_FILE_NAME_TESTSTANDSTM32 = "firmwares/MotorTestStand.ino.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDSTM32V2 = "firmwares/MotorTestStandV2.ino.bin";
 
 
     private static final String ASSET_FILE_RESET_TESTSTAND = "recover_firmwares/ResetMotorTestStand.ino.hex";
-
     private static final String ASSET_FILE_RESET_TESTSTANDSTM32 = "recover_firmwares/ResetMotorTestStand.ino.bin";
+    private static final String ASSET_FILE_RESET_TESTSTANDSTM32V2 = "recover_firmwares/ResetMotorTestStand.ino.bin";
 
     private String[] itemsBaudRate;
     private Spinner dropdownBaudRate;
@@ -89,6 +90,7 @@ public class FlashFirmware extends AppCompatActivity {
         tvRead = (TextView) findViewById(R.id.tvRead);
         rbTestStand = (RadioButton) findViewById(R.id.radioButTestStand);
         rbTestStandSTM32 = (RadioButton) findViewById(R.id.radioButTestStandSTM32);
+        rbTestStandSTM32V2 = (RadioButton) findViewById(R.id.radioButTestStandSTM32V2);
         rbTestStandSTM32.setChecked(true);
 
         mPhysicaloid = new Physicaloid(this);
@@ -172,9 +174,13 @@ public class FlashFirmware extends AppCompatActivity {
         if (rbTestStandSTM32.isChecked())
             recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32;
 
+        if (rbTestStandSTM32V2.isChecked())
+            recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32;
+
 
         tvRead.setText("");
         tvRead.setText(getResources().getString(R.string.after_complete_upload));
+        //rbTestStand
         if (!rbTestStandSTM32.isChecked() ) {
             try {
                 builder = new AlertDialog.Builder(FlashFirmware.this);
@@ -198,7 +204,7 @@ public class FlashFirmware extends AppCompatActivity {
             } catch (IOException e) {
                 //Log.e(TAG, e.toString());
             }
-        } else {
+        } else  {
             recorverFirmware = true;
             new UploadSTM32Asyc().execute();
         }
@@ -219,6 +225,9 @@ public class FlashFirmware extends AppCompatActivity {
 
         if (rbTestStandSTM32.isChecked())
             firmwareFileName = ASSET_FILE_NAME_TESTSTANDSTM32;
+
+        if (rbTestStandSTM32V2.isChecked())
+            firmwareFileName = ASSET_FILE_NAME_TESTSTANDSTM32V2;
 
         tvRead.setText("");
         if (!rbTestStandSTM32.isChecked()) {
@@ -245,13 +254,13 @@ public class FlashFirmware extends AppCompatActivity {
             } catch (IOException e) {
                 //Log.e(TAG, e.toString());
             }
-        } else {
+        }
+
+        else {
             //uploadSTM32(firmwareFileName);
             recorverFirmware = false;
             new UploadSTM32Asyc().execute();
         }
-
-
     }
 
     private class DetectAsyc extends AsyncTask<Void, Void, Void>  // UI thread
@@ -292,7 +301,9 @@ public class FlashFirmware extends AppCompatActivity {
             if(version.equals("TestStandSTM32")) {
                 setRadioButton (rbTestStandSTM32,true);
             }
-
+            if(version.equals("TestStandSTM32V2")) {
+                setRadioButton (rbTestStandSTM32V2,true);
+            }
             return null;
         }
 
@@ -330,6 +341,8 @@ public class FlashFirmware extends AppCompatActivity {
             if (!recorverFirmware) {
                 if (rbTestStandSTM32.isChecked())
                     uploadSTM32(ASSET_FILE_NAME_TESTSTANDSTM32, mUploadSTM32Callback);
+                else if (rbTestStandSTM32V2.isChecked())
+                    uploadSTM32(ASSET_FILE_NAME_TESTSTANDSTM32V2, mUploadSTM32Callback);
 
             } else {
                 uploadSTM32(ASSET_FILE_RESET_TESTSTANDSTM32, mUploadSTM32Callback);
