@@ -29,7 +29,7 @@ public class TestStandStatus extends AppCompatActivity {
 
     private TextView txtViewBatteryVoltage;
     private TextView txtViewThrust, txtViewVoltage, txtViewLink, txtEEpromUsage, txtNbrOfThrustCurve;
-    private TextView txtViewEEprom, txtViewThrustCurve;
+    private TextView txtViewEEprom, txtViewThrustCurve,txtViewCurrentPressureValue;
 
 
     Handler handler = new Handler() {
@@ -118,6 +118,13 @@ public class TestStandStatus extends AppCompatActivity {
                     Log.d("TestStandStatus", (String) msg.obj);
                     break;
 
+                case 6:
+                    //Value 6 contains the current pressure
+                    String currentPressure = (String) msg.obj;
+                    txtViewCurrentPressureValue.setText(currentPressure+ " PSI");
+
+                    Log.d("TestStandStatus", (String) msg.obj);
+                    break;
             }
         }
     };
@@ -202,7 +209,7 @@ public class TestStandStatus extends AppCompatActivity {
         txtNbrOfThrustCurve = (TextView) findViewById(R.id.txtViewNbrOfThrustCurve);
         txtViewEEprom = (TextView) findViewById(R.id.txtViewEEprom);
         txtViewThrustCurve = (TextView) findViewById(R.id.txtViewThrustCurve);
-
+        txtViewCurrentPressureValue = (TextView) findViewById(R.id.txtViewCurrentPressureValue);
 
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32")) {
             txtViewVoltage.setVisibility(View.VISIBLE);
