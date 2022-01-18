@@ -98,13 +98,28 @@
         android:text="@string/teststand_status_bluetooth"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/txtViewThrustCurve"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current pressure"
+        android:id="@+id/txtViewCurrentPressure"
+        android:layout_below="@+id/txtViewLinkType"
+        android:layout_alignParentLeft="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtViewCurrentPressureValue"
+        android:text="0"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtViewLinkType"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tare"
         android:id="@+id/butTare"
-        android:layout_below="@+id/txtViewLinkType"
+        android:layout_below="@+id/txtViewCurrentPressure"
         />
 
     <Button

@@ -426,12 +426,11 @@ public class ConsoleApplication extends Application {
                                                 mHandler.obtainMessage(4, String.valueOf(currentSentence[4])).sendToTarget();
                                             else
                                                 mHandler.obtainMessage(4, String.valueOf(0)).sendToTarget();
-                                        // Value 5 contains the number of thrust curves
 
+                                        // Value 5 contains the number of thrust curves
                                         if (currentSentence.length > 5) {
                                             Log.d("TestStand console", currentSentence[5]);
                                             if (currentSentence[5].trim().matches("\\d+(?:\\.\\d+)?")) {
-
                                                 mHandler.obtainMessage(5, String.valueOf(currentSentence[5])).sendToTarget();
                                             } else
                                                 mHandler.obtainMessage(5, String.valueOf(0)).sendToTarget();
@@ -439,6 +438,13 @@ public class ConsoleApplication extends Application {
                                         else
                                             Log.d("TestStand console", "Length: " +currentSentence.length);
 
+                                        //value 6 contains the current pressure
+                                        if (currentSentence.length > 6) {
+                                            if (currentSentence[6].trim().matches("\\d+(?:\\.\\d+)?")) {
+                                                mHandler.obtainMessage(6, String.valueOf(currentSentence[6])).sendToTarget();
+                                            } else
+                                                mHandler.obtainMessage(6, String.valueOf(0)).sendToTarget();
+                                        }
                                     }
                                 }
                                 break;
