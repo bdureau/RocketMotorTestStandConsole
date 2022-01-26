@@ -289,7 +289,8 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                             public void onClick(final DialogInterface dialog, final int id) {
                                 dialog.cancel();
                                 TestStandCfg.setConnectionSpeed(configPage2.getBaudRate());
-                                sendTestStandCfg();
+                                //sendTestStandCfg();
+                                sendTestStandCfgV2();
                                 finish();
                             }
                         })
@@ -302,16 +303,19 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 final AlertDialog alert = builder.create();
                 alert.show();
             } else {
-                sendTestStandCfg();
+                //sendTestStandCfg();
+                sendTestStandCfgV2();
                 finish();
             }
         } else {
-            sendTestStandCfg();
+            //sendTestStandCfg();
+            sendTestStandCfgV2();
             finish();
         }
 
         return true;
     }
+
 
     private void sendTestStandCfg() {
         String testStandCfgStr = "";
@@ -405,6 +409,139 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
     }
 
+    private void sendTestStandCfgV2() {
+
+        if (myBT.getConnected()) {
+            myBT.setDataReady(false);
+            myBT.flush();
+            myBT.clearInput();
+            //switch off the main loop before sending the config
+            myBT.write("m0;".toString());
+            Log.d("conftab", "switch off main loop");
+            //wait for the result to come back
+            try {
+                while (myBT.getInputStream().available() <= 0) ;
+            } catch (IOException e) {
+
+            }
+            String myMessage = "";
+            myMessage = myBT.ReadResult(3000);
+            if (myMessage.equals("OK")) {
+                Log.d("conftab", "switch off main loop ok");
+            }
+        }
+       // String testStandCfgStr = "";
+
+       // testStandCfgStr = "s," +
+                //TestStandCfg.getUnits() + "," +
+        SendParam("p,1,"+ TestStandCfg.getUnits());
+                //TestStandCfg.getConnectionSpeed() + "," +
+        SendParam("p,2,"+ TestStandCfg.getConnectionSpeed());
+                //TestStandCfg.getStopRecordingTime() + "," +
+        SendParam("p,3,"+ TestStandCfg.getStopRecordingTime());
+                //TestStandCfg.getTestStandResolution() + "," +
+        SendParam("p,4,"+ TestStandCfg.getTestStandResolution());
+                //TestStandCfg.getEepromSize();
+        SendParam("p,5,"+ TestStandCfg.getEepromSize());
+
+        //testStandCfgStr = testStandCfgStr + "," + "0";//TestStandCfg.getStartRecordingThrustLevel();
+        SendParam("p,6,0");
+        //testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getBatteryType();
+        SendParam("p,7,"+ TestStandCfg.getBatteryType());
+        //testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCalibrationFactor();
+        SendParam("p,8,"+ TestStandCfg.getCalibrationFactor());
+        //testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCurrentOffset();
+        SendParam("p,9,"+ TestStandCfg.getCurrentOffset());
+        //testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getPressureSensorType();
+        SendParam("p,10,"+ TestStandCfg.getPressureSensorType());
+
+
+        if (myBT.getConnected()) {
+
+            String myMessage = "";
+
+            myBT.setDataReady(false);
+            myBT.flush();
+            myBT.clearInput();
+            //Write the config structure
+            myBT.write("q;".toString());
+            Log.d("conftab", "write config");
+
+            //wait for the result to come back
+            try {
+                while (myBT.getInputStream().available() <= 0) ;
+            } catch (IOException e) {
+
+            }
+            myMessage = "";
+            myMessage = myBT.ReadResult(3000);
+            //msg(getResources().getString(R.string.msg3));
+
+            myBT.setDataReady(false);
+            myBT.flush();
+            myBT.clearInput();
+            //switch on the main loop before sending the config
+            myBT.write("m1;".toString());
+            Log.d("conftab", "switch on main loop");
+
+            //wait for the result to come back
+            try {
+                while (myBT.getInputStream().available() <= 0) ;
+            } catch (IOException e) {
+
+            }
+            myMessage = "";
+            myMessage = myBT.ReadResult(3000);
+            //msg(getResources().getString(R.string.msg3));
+
+            myBT.flush();
+        }
+    }
+
+    private void SendParam (String altiCfgStr) {
+        String cfg = altiCfgStr;
+        cfg = cfg.replace("p", "");
+        cfg = cfg.replace(",", "");
+        Log.d("conftab", cfg.toString());
+
+        altiCfgStr = altiCfgStr + "," + generateCheckSum(cfg) + ";";
+
+
+        if (myBT.getConnected()) {
+
+            String myMessage = "";
+
+            myBT.flush();
+            myBT.clearInput();
+            myBT.setDataReady(false);
+            //msg("Sent :" + altiCfgStr.toString());
+            //send back the config
+            myBT.write(altiCfgStr.toString());
+            Log.d("conftab", altiCfgStr.toString());
+            myBT.flush();
+            //get the results
+            //wait for the result to come back
+            try {
+                while (myBT.getInputStream().available() <= 0) ;
+            } catch (IOException e) {
+
+            }
+            myMessage = "";
+            myMessage = myBT.ReadResult(3000);
+            if (myMessage.equals("OK")) {
+                //msg("Sent OK:" + altiCfgStr.toString());
+                Log.d("conftab", "config sent succesfully");
+
+            } else {
+                //  msg(myMessage);
+                Log.d("conftab", "config not sent succesfully");
+                Log.d("conftab", myMessage);
+            }
+            if (myMessage.equals("KO")) {
+                //   msg(getResources().getString(R.string.msg2));
+            }
+        }
+    }
     public static Integer generateCheckSum(String value) {
 
         byte[] data = value.getBytes();
