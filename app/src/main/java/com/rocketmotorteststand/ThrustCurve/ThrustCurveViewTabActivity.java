@@ -467,17 +467,24 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
                     ArrayList<Entry> yValues = new ArrayList<>();
 
-                    for (int k = 0; k < nbrData; k++) {
-                        if (myBT.getAppConf().getUnits().equals("0")) {
-                            //kg
-                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000));
-                        } else if (myBT.getAppConf().getUnits().equals("1")) {
-                            //pound
-                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * (float) 2.20462));
+                    if (i ==0) {
+                        for (int k = 0; k < nbrData; k++) {
+                            if (myBT.getAppConf().getUnits().equals("0")) {
+                                //kg
+                                yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000));
+                            } else if (myBT.getAppConf().getUnits().equals("1")) {
+                                //pound
+                                yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * (float) 2.20462));
+                            }
+                            if (myBT.getAppConf().getUnits().equals("2")) {
+                                //newton
+                                yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * (float) 9.80665));
+                            }
                         }
-                        if (myBT.getAppConf().getUnits().equals("2")) {
-                            //newton
-                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * (float) 9.80665));
+                    }
+                    else {
+                        for (int k = 0; k < nbrData; k++) {
+                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()));
                         }
                     }
 

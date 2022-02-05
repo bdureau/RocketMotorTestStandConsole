@@ -181,7 +181,7 @@ public class FlashFirmware extends AppCompatActivity {
         tvRead.setText("");
         tvRead.setText(getResources().getString(R.string.after_complete_upload));
         //rbTestStand
-        if (!rbTestStandSTM32.isChecked() ) {
+        if (!rbTestStandSTM32.isChecked() & !rbTestStandSTM32V2.isChecked()) {
             try {
                 builder = new AlertDialog.Builder(FlashFirmware.this);
                 //Recover firmware...
@@ -230,7 +230,7 @@ public class FlashFirmware extends AppCompatActivity {
             firmwareFileName = ASSET_FILE_NAME_TESTSTANDSTM32V2;
 
         tvRead.setText("");
-        if (!rbTestStandSTM32.isChecked()) {
+        if (!rbTestStandSTM32.isChecked() & !rbTestStandSTM32V2.isChecked() ) {
             try {
                 builder = new AlertDialog.Builder(FlashFirmware.this);
                 //Flashing firmware...
