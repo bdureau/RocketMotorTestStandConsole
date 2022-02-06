@@ -728,6 +728,7 @@ public class ConsoleApplication extends Application {
         private String applicationLanguage = "0";
         //Graph units
         private String units = "0";
+        private String unitsPressure = "0";
 
         //graph background color
         private String graphBackColor = "1";
@@ -759,13 +760,11 @@ public class ConsoleApplication extends Application {
             graphColor = "0";
             fontSize = "10";
             units = "0"; //default to kg
+            unitsPressure = "0"; //default to PSI
             baudRate = "8"; // default to 38400 baud
             connectionType = "0";
             graphicsLibType = "1"; //Default to MP android chart lib
-
             fullUSBSupport = "false";
-
-
         }
 
         public void ReadConfig() {
@@ -781,6 +780,11 @@ public class ConsoleApplication extends Application {
                 appUnit = appConfig.getString("Units", "");
                 if (!appUnit.equals(""))
                     setUnits(appUnit);
+
+                String appUnitPressure;
+                appUnitPressure = appConfig.getString("UnitsPressure", "");
+                if (!appUnitPressure.equals(""))
+                    setUnitsPressure(appUnitPressure);
 
                 //Graph color
                 String graphColor;
@@ -833,6 +837,7 @@ public class ConsoleApplication extends Application {
         public void SaveConfig() {
             edit.putString("AppLanguage", getApplicationLanguage());
             edit.putString("Units", getUnits());
+            edit.putString("UnitsPressure", getUnitsPressure());
             edit.putString("GraphColor", getGraphColor());
             edit.putString("GraphBackColor", getGraphBackColor());
             edit.putString("FontSize", getFontSize());
@@ -874,6 +879,14 @@ public class ConsoleApplication extends Application {
         //set the unit by id
         public void setUnits(String value) {
             units = value;
+        }
+
+        // get pressure units
+        public String getUnitsPressure() { return unitsPressure; }
+
+        public String getUnitsPressureValue() { return appCfgData.getUnitsPressureByNbr(Integer.parseInt(unitsPressure)); }
+        public void setUnitsPressure(String value) {
+            unitsPressure = value;
         }
 
         public String getGraphColor() {

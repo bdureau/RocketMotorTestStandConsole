@@ -127,7 +127,7 @@
     <string name="dismiss_app_config">Fermer</string>
     <string name="application_langage_config">Langue de l\'Application</string>
     <string name="graph_color_config">Couleur graphique</string>
-    <string name="application_units_config">Unités Application</string>
+    <string name="application_units_config">Unités Poussée</string>
     <string name="graph_back_color_config">Couleur fond du graph</string>
     <string name="default_config">Défaut</string>
     <string name="font_size">Taille police</string>

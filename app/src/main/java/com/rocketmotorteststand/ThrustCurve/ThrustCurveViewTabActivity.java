@@ -198,6 +198,24 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             CONVERT = 9.80665 / 1000;
         }
 
+        if (numberOfCurves > 1) {
+            if (myBT.getAppConf().getUnitsPressure().equals("0")) {
+                //PSI
+                units[1] = "(" + "PSI" + ")";
+
+
+            } else if (myBT.getAppConf().getUnits().equals("1")) {
+                //BAR
+                units[1] = "BAR";
+
+
+            } else if (myBT.getAppConf().getUnits().equals("2")) {
+                //Kpascal
+                units[1] = "Kpascal";
+
+            }
+        }
+
         if (currentCurvesNames == null) {
             //This is the first time so only display the thrust
             dataSets = new ArrayList<>();
@@ -484,7 +502,17 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     }
                     else {
                         for (int k = 0; k < nbrData; k++) {
+                            if (myBT.getAppConf().getUnitsPressure().equals("0")) {
+                            //PSI
                             yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()));
+                            } else if (myBT.getAppConf().getUnits().equals("1")) {
+                                //bar divide by 14.504
+                                yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()/(float)14.504));
+                            }
+                            if (myBT.getAppConf().getUnits().equals("2")) {
+                                //K pascal multiply by 6.895
+                                yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()*(float)6.895));
+                            }
                         }
                     }
 

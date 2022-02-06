@@ -21,6 +21,8 @@ public class AppConfigData {
     private String[] itemsColor = null;
     //"Meters", "Feet"
     private String[] itemsUnits = null;
+
+    private String[] itemsUnitsPressure = null;
     private String[] itemsFontSize = new String[]{"8","9", "10", "11", "12","13",
             "14", "15", "16", "17", "18", "19", "20"};
 
@@ -59,6 +61,11 @@ public class AppConfigData {
                 context.getResources().getString(R.string.config_unit_newtons)
         };
 
+        itemsUnitsPressure = new String[]{
+                "PSI",
+                "BAR",
+                "KPascal"
+        };
         itemsColor = new String[]{
                 context.getResources().getString(R.string.color_black), //"BLACK",
                 context.getResources().getString(R.string.color_white), //"WHITE",
@@ -93,6 +100,13 @@ public class AppConfigData {
     }
     public String getUnitsByNbr(int unitNbr) {
         return itemsUnits[unitNbr];
+    }
+
+    public String[] getItemsUnitsPressure() {
+        return itemsUnitsPressure;
+    }
+    public String getUnitsPressureByNbr(int unitPressureNbr) {
+        return itemsUnitsPressure[unitPressureNbr];
     }
 
     public String[] getItemsFontSize() {

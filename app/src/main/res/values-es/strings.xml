@@ -123,7 +123,7 @@
     <string name="dismiss_app_config">Dismiss</string>
     <string name="application_langage_config">Application langage</string>
     <string name="graph_color_config">Graph color</string>
-    <string name="application_units_config">Application Units</string>
+    <string name="application_units_config">Thrust Units</string>
     <string name="graph_back_color_config">Graph back color</string>
     <string name="default_config">Default</string>
     <string name="font_size">Font Size</string>

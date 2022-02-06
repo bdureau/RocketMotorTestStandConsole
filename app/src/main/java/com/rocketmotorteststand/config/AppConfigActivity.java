@@ -44,10 +44,9 @@ public class AppConfigActivity extends AppCompatActivity {
     Button btnDismiss, btnSave, bdtDefault;
     private ViewPager mViewPager;
     SectionsPageAdapter adapter;
-    //private TextToSpeech mTTS;
 
     private Tab1Fragment appConfigPage1 = null;
-    private Tab2Fragment appConfigPage2 = null;
+    //private Tab2Fragment appConfigPage2 = null;
 
 
     private static AppConfigData appConfigData = null;
@@ -97,71 +96,23 @@ public class AppConfigActivity extends AppCompatActivity {
             }
         });
 
-        /*mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    int result = 0;
 
-                    if (Locale.getDefault().getLanguage() == "en")
-                        result = mTTS.setLanguage(Locale.ENGLISH);
-                    else if (Locale.getDefault().getLanguage() == "fr")
-                        result = mTTS.setLanguage(Locale.FRENCH);
-                    else
-                        result = mTTS.setLanguage(Locale.ENGLISH);
-                    try {
-                        String[] itemsVoices;
-                        String items = "";
-                        for (Voice tmpVoice : mTTS.getVoices()) {
-                            if (tmpVoice.getName().startsWith(Locale.getDefault().getLanguage())) {
-                                if (items.equals(""))
-                                    items = tmpVoice.getName();
-                                else
-                                    items = items + "," + tmpVoice.getName();
-                                Log.d("Voice", tmpVoice.getName());
-                            }
-                        }
-
-                        itemsVoices = items.split(",");
-
-                        appConfigPage2.setVoices(itemsVoices);
-                        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                            Log.e("TTS", "Language not supported");
-                        } else {
-
-                        }
-                    } catch (Exception e) {
-
-                    }
-                } else {
-                    Log.e("TTS", "Init failed");
-                }
-            }
-        }, "com.google.android.tts");*/
     }
 
     private void SaveConfig() {
         myBT.getAppConf().setApplicationLanguage("" + appConfigPage1.getAppLanguage() + "");
         myBT.getAppConf().setGraphColor("" + appConfigPage1.getGraphColor() + "");
         myBT.getAppConf().setUnits("" + appConfigPage1.getAppUnit() + "");
+        myBT.getAppConf().setUnitsPressure("" + appConfigPage1.getAppUnitPressure() + "");
+
         myBT.getAppConf().setGraphBackColor("" + appConfigPage1.getGraphBackColor() + "");
         myBT.getAppConf().setFontSize("" + appConfigPage1.getFontSize() + "");
         myBT.getAppConf().setBaudRate("" + appConfigPage1.getBaudRate() + "");
         myBT.getAppConf().setConnectionType("" + appConfigPage1.getConnectionType() + "");
         myBT.getAppConf().setGraphicsLibType("" + appConfigPage1.getGraphicsLibType() + "");
-       // myBT.getAppConf().setAllowMultipleDrogueMain(appConfigPage1.getAllowMainDrogue());
+
         myBT.getAppConf().setFullUSBSupport(appConfigPage1.getFullUSBSupport());
-        //page2
-       // myBT.getAppConf().setAltitude_event(appConfigPage2.getAltitudeEvent());
-       // myBT.getAppConf().setApogee_altitude(appConfigPage2.getApogeeAltitude());
-      //  myBT.getAppConf().setBurnout_event(appConfigPage2.getBurnoutEvent());
-      //  myBT.getAppConf().setMain_altitude(appConfigPage2.getMainAltitude());
-       /* myBT.getAppConf().setDrogue_event(appConfigPage2.getDrogueEvent());
-        myBT.getAppConf().setLanding_event(appConfigPage2.getLandingEvent());
-        myBT.getAppConf().setWarning_event(appConfigPage2.getWarningEvent());
-        myBT.getAppConf().setMain_event(appConfigPage2.getMainEvent());
-        myBT.getAppConf().setLiftOff_event(appConfigPage2.getLiftOffEvent());*/
-       // myBT.getAppConf().setTelemetryVoice("" + appConfigPage2.getTelemetryVoice() + "");
+
         myBT.getAppConf().SaveConfig();
         finish();
     }
@@ -170,6 +121,7 @@ public class AppConfigActivity extends AppCompatActivity {
         myBT.getAppConf().ResetDefaultConfig();
         appConfigPage1.setAppLanguage(Integer.parseInt(myBT.getAppConf().getApplicationLanguage()));
         appConfigPage1.setAppUnit(Integer.parseInt(myBT.getAppConf().getUnits()));
+        appConfigPage1.setAppUnitPressure(Integer.parseInt(myBT.getAppConf().getUnitsPressure()));
         appConfigPage1.setGraphColor(Integer.parseInt(myBT.getAppConf().getGraphColor()));
         appConfigPage1.setGraphBackColor(Integer.parseInt(myBT.getAppConf().getGraphBackColor()));
         appConfigPage1.setFontSize(Integer.parseInt(myBT.getAppConf().getFontSize()) - 8);
@@ -177,63 +129,13 @@ public class AppConfigActivity extends AppCompatActivity {
         appConfigPage1.setConnectionType(Integer.parseInt(myBT.getAppConf().getConnectionType()));
         appConfigPage1.setGraphicsLibType(Integer.parseInt(myBT.getAppConf().getGraphicsLibType()));
 
-        /*if (myBT.getAppConf().getAllowMultipleDrogueMain().equals("true")) {
-            appConfigPage1.setAllowMainDrogue(true);
-        } else {
-            appConfigPage1.setAllowMainDrogue(false);
-        }*/
+
         if (myBT.getAppConf().getFullUSBSupport().equals("true")) {
             appConfigPage1.setFullUSBSupport(true);
         } else {
             appConfigPage1.setFullUSBSupport(false);
         }
-        //config page 2
-       /* if (myBT.getAppConf().getAltitude_event().equals("true")) {
-            appConfigPage2.setAltitudeEvent(true);
-        } else {
-            appConfigPage2.setAltitudeEvent(false);
-        }
-        if (myBT.getAppConf().getApogee_altitude().equals("true")) {
-            appConfigPage2.setApogeeAltitude(true);
-        } else {
-            appConfigPage2.setApogeeAltitude(false);
-        }
-        if (myBT.getAppConf().getBurnout_event().equals("true")) {
-            appConfigPage2.setBurnoutEvent(true);
-        } else {
-            appConfigPage2.setBurnoutEvent(false);
-        }
-        if (myBT.getAppConf().getMain_altitude().equals("true")) {
-            appConfigPage2.setMainAltitude(true);
-        } else {
-            appConfigPage2.setMainAltitude(false);
-        }
-        if (myBT.getAppConf().getDrogue_event().equals("true")) {
-            appConfigPage2.setDrogueEvent(true);
-        } else {
-            appConfigPage2.setDrogueEvent(false);
-        }
-        if (myBT.getAppConf().getLanding_event().equals("true")) {
-            appConfigPage2.setLandingEvent(true);
-        } else {
-            appConfigPage2.setLandingEvent(false);
-        }
-        if (myBT.getAppConf().getMain_event().equals("true")) {
-            appConfigPage2.setMainEvent(true);
-        } else {
-            appConfigPage2.setMainEvent(false);
-        }
-        if (myBT.getAppConf().getWarning_event().equals("true")) {
-            appConfigPage2.setWarningEvent(true);
-        } else {
-            appConfigPage2.setWarningEvent(false);
-        }
-        if (myBT.getAppConf().getLiftOff_event().equals("true")) {
-            appConfigPage2.setLiftOffEvent(true);
-        } else {
-            appConfigPage2.setLiftOffEvent(false);
-        }*/
-        //appConfigPage2.setTelemetryVoice(Integer.parseInt(myBT.getAppConf().getTelemetryVoice()));
+
 
     }
 
@@ -241,10 +143,10 @@ public class AppConfigActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         adapter = new AppConfigActivity.SectionsPageAdapter(getSupportFragmentManager());
         appConfigPage1 = new AppConfigActivity.Tab1Fragment(myBT);
-        //appConfigPage2 = new AppConfigActivity.Tab2Fragment(myBT);
+
 
         adapter.addFragment(appConfigPage1, "TAB1");
-        //adapter.addFragment(appConfigPage2, "TAB2");
+
 
         viewPager.setAdapter(adapter);
     }
@@ -281,7 +183,7 @@ public class AppConfigActivity extends AppCompatActivity {
     }
 
     public static class Tab1Fragment extends Fragment {
-        private Spinner spAppLanguage, spGraphColor, spAppUnit, spGraphBackColor, spFontSize, spBaudRate;
+        private Spinner spAppLanguage, spGraphColor, spAppUnit, spAppUnitPressure, spGraphBackColor, spFontSize, spBaudRate;
         private Spinner spConnectionType, spGraphicsLibType;
         private CheckBox  cbFullUSBSupport;
         private ConsoleApplication BT;
@@ -309,9 +211,15 @@ public class AppConfigActivity extends AppCompatActivity {
         public int getAppUnit() {
             return (int) this.spAppUnit.getSelectedItemId();
         }
+        public int getAppUnitPressure() {
+            return (int) this.spAppUnitPressure.getSelectedItemId();
+        }
 
         public void setAppUnit(int value) {
             this.spAppUnit.setSelection(value);
+        }
+        public void setAppUnitPressure(int value) {
+            this.spAppUnitPressure.setSelection(value);
         }
 
         public int getGraphBackColor() {
@@ -396,6 +304,12 @@ public class AppConfigActivity extends AppCompatActivity {
             ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsUnits());
             spAppUnit.setAdapter(adapter2);
 
+            //units Pressure
+            spAppUnitPressure = (Spinner) view.findViewById(R.id.spinnerUnitsPressure);
+
+            ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsUnitsPressure());
+            spAppUnitPressure.setAdapter(adapter3);
+
             //font size
             spFontSize = (Spinner) view.findViewById(R.id.spinnerFontSize);
 
@@ -425,6 +339,7 @@ public class AppConfigActivity extends AppCompatActivity {
 
             spAppLanguage.setSelection(Integer.parseInt(BT.getAppConf().getApplicationLanguage()));
             spAppUnit.setSelection(Integer.parseInt(BT.getAppConf().getUnits()));
+            spAppUnitPressure.setSelection(Integer.parseInt(BT.getAppConf().getUnitsPressure()));
             spGraphColor.setSelection(Integer.parseInt(BT.getAppConf().getGraphColor()));
             spGraphBackColor.setSelection(Integer.parseInt(BT.getAppConf().getGraphBackColor()));
             spFontSize.setSelection((Integer.parseInt(BT.getAppConf().getFontSize()) - 8));

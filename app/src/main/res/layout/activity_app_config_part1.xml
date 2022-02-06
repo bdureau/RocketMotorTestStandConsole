@@ -80,9 +80,26 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Pressure Units"
+        android:id="@+id/txtViewUnitsPressure"
+        android:layout_below="@+id/txtViewUnits"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp" />
+
+    <Spinner
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerUnitsPressure"
+        android:layout_alignBaseline="@+id/txtViewUnitsPressure"
+        android:layout_width="175dp"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/graph_back_color_config"
         android:id="@+id/txtViewGraphBackColor"
-        android:layout_below="@+id/txtViewUnits"
+        android:layout_below="@+id/txtViewUnitsPressure"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="18dp" />
