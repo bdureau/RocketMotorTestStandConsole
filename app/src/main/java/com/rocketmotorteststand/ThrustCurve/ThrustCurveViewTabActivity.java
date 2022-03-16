@@ -2,10 +2,13 @@ package com.rocketmotorteststand.ThrustCurve;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -24,6 +27,8 @@ import com.rocketmotorteststand.ShareHandler;
 
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -31,6 +36,8 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 
@@ -40,6 +47,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.afree.data.xy.XYSeries;
 import org.afree.data.xy.XYSeriesCollection;
@@ -52,6 +60,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -63,7 +72,11 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     private Tab2Fragment ThrustCurvePage2 = null;
     private Button btnDismiss, butSelectCurves, butZoom;
     private static ConsoleApplication myBT;
-
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static final String[] PERMISSION_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    };
 
     private static String curvesNames[] = null;
     private static String currentCurvesNames[] = null;
@@ -116,10 +129,16 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= 23) {
             int REQUEST_CODE_ASK_PERMISSIONS = 123;
-            int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            //int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int hasWriteContactsPermission = ActivityCompat.checkSelfPermission(ThrustCurveViewTabActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
             if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        REQUEST_CODE_ASK_PERMISSIONS);
+                /*requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_CODE_ASK_PERMISSIONS);*/
+                ActivityCompat.requestPermissions(
+                        ThrustCurveViewTabActivity.this,
+                        PERMISSION_STORAGE,
+                        REQUEST_EXTERNAL_STORAGE);
 
             }
         }
@@ -145,8 +164,8 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         butZoom = (Button) findViewById(R.id.butZoom);
         numberOfCurves = 1;
-        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
-            numberOfCurves =2;
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+            numberOfCurves = 2;
         }
 
         Intent newint = getIntent();
@@ -162,8 +181,8 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         //thrust
         thrustCurveData.addSeries(allThrustCurveData.getSeries(getResources().getString(R.string.curve_thrust)));
 
-        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
-            Log.d("numberOfCurves", "Adding curve pressure" );
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+            Log.d("numberOfCurves", "Adding curve pressure");
             thrustCurveData.addSeries(allThrustCurveData.getSeries(getResources().getString(R.string.curve_pressure)));
 
         }
@@ -177,7 +196,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         units = new String[numberOfCurves];
         for (int i = 0; i < numberOfCurves; i++) {
             curvesNames[i] = allThrustCurveData.getSeries(i).getKey().toString();
-            Log.d("numberOfCurves",allThrustCurveData.getSeries(i).getKey().toString());
+            Log.d("numberOfCurves", allThrustCurveData.getSeries(i).getKey().toString());
         }
 
         // Read the application config
@@ -185,7 +204,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         if (myBT.getAppConf().getUnits().equals("0")) {
             //kg
             units[0] = "(" + getResources().getString(R.string.Kg_fview) + ")";
-            CONVERT = 1.0/1000;
+            CONVERT = 1.0 / 1000;
 
         } else if (myBT.getAppConf().getUnits().equals("1")) {
             //pounds
@@ -441,6 +460,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         private LineChart mChart;
         public XYSeriesCollection allThrustCurveData;
         int graphBackColor, fontSize, axisColor, labelColor, nbrColor;
+
         public Tab1Fragment(XYSeriesCollection data) {
             this.allThrustCurveData = data;
         }
@@ -485,7 +505,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
                     ArrayList<Entry> yValues = new ArrayList<>();
 
-                    if (i ==0) {
+                    if (i == 0) {
                         for (int k = 0; k < nbrData; k++) {
                             if (myBT.getAppConf().getUnits().equals("0")) {
                                 //kg
@@ -499,19 +519,18 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                                 yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * (float) 9.80665));
                             }
                         }
-                    }
-                    else {
+                    } else {
                         for (int k = 0; k < nbrData; k++) {
                             if (myBT.getAppConf().getUnitsPressure().equals("0")) {
-                            //PSI
-                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()));
+                                //PSI
+                                yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()));
                             } else if (myBT.getAppConf().getUnits().equals("1")) {
                                 //bar divide by 14.504
-                                yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()/(float)14.504));
+                                yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue() / (float) 14.504));
                             }
                             if (myBT.getAppConf().getUnits().equals("2")) {
                                 //K pascal multiply by 6.895
-                                yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()*(float)6.895));
+                                yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue() * (float) 6.895));
                             }
                         }
                     }
@@ -621,11 +640,11 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         private TextView nbrOfSamplesValue, thrustCurveNbrValue;
         private TextView recordingDurationValue, thrustTimeValue, maxThrustValue, averageThrustValue, motorClassValue, totalImpulseValue;
-        private Button buttonExportToCsv, buttonExportToEng;
+        private Button buttonExportToCsv, buttonExportToCsvFull, buttonExportToEng;
         double totalImpulse = 0;
-        String motorClass="";
-        double thrustDuration =0;
-        double averageThrust=0;
+        String motorClass = "";
+        double thrustDuration = 0;
+        double averageThrust = 0;
         private AlertDialog.Builder builder = null;
         private AlertDialog alert;
         boolean SavedCurvesOK = false;
@@ -641,8 +660,9 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
             View view = inflater.inflate(R.layout.tabthrustcurve_info_fragment, container, false);
 
-            buttonExportToCsv= (Button) view.findViewById(R.id.butExportToCsv);
-            buttonExportToEng= (Button) view.findViewById(R.id.butExportToEng);
+            buttonExportToCsv = (Button) view.findViewById(R.id.butExportToCsv);
+            buttonExportToCsvFull = (Button) view.findViewById(R.id.butExportToCsvFull);
+            buttonExportToEng = (Button) view.findViewById(R.id.butExportToEng);
             recordingDurationValue = view.findViewById(R.id.thrustCurveDurationValue);
             thrustTimeValue = view.findViewById(R.id.thrustTimeValue);
             maxThrustValue = view.findViewById(R.id.maxThrustValue);
@@ -651,7 +671,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             nbrOfSamplesValue = view.findViewById(R.id.nbrOfSamplesValue);
             thrustCurveNbrValue = view.findViewById(R.id.thrustCurveNbrValue);
             motorClassValue = view.findViewById(R.id.motorClassValue);
-            totalImpulseValue =view.findViewById(R.id.totalImpulseValue);
+            totalImpulseValue = view.findViewById(R.id.totalImpulseValue);
 
             XYSeriesCollection thrustCurveData;
 
@@ -666,7 +686,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
             //Recording duration
             double recordingDuration = thrustCurveData.getSeries(0).getMaxX() / 1000;
-            recordingDurationValue.setText(String.format("%.3f ",recordingDuration) + " secs");
+            recordingDurationValue.setText(String.format("%.3f ", recordingDuration) + " secs");
 
 
             ThrustUtil tu = new ThrustUtil();
@@ -679,7 +699,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
                 // thrust duration
                 thrustDuration = ((double) thrustCurveData.getSeries(0).getX(curveStop) - (double) thrustCurveData.getSeries(0).getX(curveStart)) / 1000.0;
-                thrustTimeValue.setText(String.format("%.2f ",thrustDuration) + " secs");
+                thrustTimeValue.setText(String.format("%.2f ", thrustDuration) + " secs");
                 double totThurst = 0;
                 for (int i = curveStart; i < curveStop; i++) {
                     totThurst = totThurst + (double) thrustCurveData.getSeries(0).getY(i);
@@ -695,35 +715,39 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 //tot impulse
                 //double totalImpulse = 0;
                 totalImpulse = averageThrust * (9.80665 / 1000) * thrustDuration;
-                totalImpulseValue.setText(String.format("%.0f ",totalImpulse) + " Newtons");
+                totalImpulseValue.setText(String.format("%.0f ", totalImpulse) + " Newtons");
                 //motor class
-                motorClass =tu.motorClass(totalImpulse) + String.format("%.0f ", averageThrust * (9.80665 / 1000));
+                motorClass = tu.motorClass(totalImpulse) + String.format("%.0f ", averageThrust * (9.80665 / 1000));
                 motorClassValue.setText(tu.motorClass(totalImpulse) + String.format("%.0f ", averageThrust * (9.80665 / 1000)));
             }
-            buttonExportToCsv.setOnClickListener(new View.OnClickListener()
-            {
+            buttonExportToCsv.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     exportToCSV();      //export the data to a csv file
                 }
             });
 
-            buttonExportToEng.setOnClickListener(new View.OnClickListener()
-            {
+            buttonExportToCsvFull.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
+                    exportToCSVFull();      //export the data to a csv file
+                }
+            });
+
+            buttonExportToEng.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     exportToEng(motorClass);      //export the data to an eng file
                 }
             });
 
             return view;
         }
-        private void exportToCSV(){
+
+        private void exportToCSV() {
 
 
-            String csv_data = "time,thrust" + units[0]+ "\n";/// your csv data as string;
+            String csv_data = "time,thrust" + units[0] + "\n";/// your csv data as string;
 
             ThrustUtil tu = new ThrustUtil();
             double maxThrust = thrustCurveData.getSeries(0).getMaxY();
@@ -740,16 +764,16 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     //newton
                     //yValues.add(new Entry(thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue(),
                     // (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665));
-                    String curTime = String.format("%.3f ",(thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue())/1000);
-                    if(curTime.contains(","))
-                        curTime = curTime+";";
+                    String curTime = String.format("%.3f ", (thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue()) / 1000);
+                    if (curTime.contains(","))
+                        curTime = curTime + ";";
                     else
-                        curTime = curTime+",";
-                    String currData="";
+                        curTime = curTime + ",";
+                    String currData = "";
                     if (myBT.getAppConf().getUnits().equals("0")) {
                         //kg
-                        currData = String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) );
-                    }else if (myBT.getAppConf().getUnits().equals("1")) {
+                        currData = String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000));
+                    } else if (myBT.getAppConf().getUnits().equals("1")) {
                         //pound
                         currData = String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 2.20462);
                     }
@@ -758,7 +782,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                         currData = String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
                     }
 
-                    csv_data = csv_data + curTime+ currData+"\n";
+                    csv_data = csv_data + curTime + currData + "\n";
 
 
                 }
@@ -774,7 +798,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             String date = sdf.format(System.currentTimeMillis());
 
             // select the name for your file
-            root = new File(root , ThrustCurveName+ date +".csv");
+            root = new File(root, ThrustCurveName + date + ".csv");
 
             try {
                 FileOutputStream fout = new FileOutputStream(root);
@@ -784,7 +808,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 //Confirmation message
                 builder = new AlertDialog.Builder(Tab2Fragment.this.getContext());
                 //Running Saving commands
-                builder.setMessage(getString(R.string.not_saved_msg)+ Environment.DIRECTORY_DOWNLOADS+ "\\RocketMotorTestStand\\"+ThrustCurveName +".csv")
+                builder.setMessage(getString(R.string.not_saved_msg) + Environment.DIRECTORY_DOWNLOADS + "\\RocketMotorTestStand\\" + ThrustCurveName + ".csv")
                         .setTitle(R.string.not_saved_title)
                         .setCancelable(false)
                         .setPositiveButton(R.string.not_saved_ok, new DialogInterface.OnClickListener() {
@@ -806,12 +830,98 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     ex.printStackTrace();
                 }
 
-                if (bool){
+                if (bool) {
                     // call the method again
                     exportToCSV();
-                }else {
+                } else {
                     //throw new IllegalStateException(getString(R.string.failed_to_create_csv));
-                    SavedCurvesOK=false;
+                    SavedCurvesOK = false;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void exportToCSVFull() {
+
+
+            String csv_data = "time,thrust" + units[0] + "\n";/// your csv data as string;
+
+            for (int k = 0; k < thrustCurveData.getSeries(0).getItemCount(); k++) {
+
+
+                String curTime = String.format("%.3f ", (thrustCurveData.getSeries(0).getX(k).floatValue()) / 1000);
+                if (curTime.contains(","))
+                    curTime = curTime + ";";
+                else
+                    curTime = curTime + ",";
+                String currData = "";
+                if (myBT.getAppConf().getUnits().equals("0")) {
+                    //kg
+                    currData = String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000));
+                } else if (myBT.getAppConf().getUnits().equals("1")) {
+                    //pound
+                    currData = String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 2.20462);
+                }
+                if (myBT.getAppConf().getUnits().equals("2")) {
+                    //newton
+                    currData = String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
+                }
+
+                csv_data = csv_data + curTime + currData + "\n";
+
+
+            }
+
+
+            File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+            //if you want to create a sub-dir
+            root = new File(root, "RocketMotorTestStand");
+            root.mkdir();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
+            String date = sdf.format(System.currentTimeMillis());
+
+            // select the name for your file
+            root = new File(root, ThrustCurveName + "_full_" +date + ".csv");
+
+            try {
+                FileOutputStream fout = new FileOutputStream(root);
+                fout.write(csv_data.getBytes());
+
+                fout.close();
+                //Confirmation message
+                builder = new AlertDialog.Builder(Tab2Fragment.this.getContext());
+                //Running Saving commands
+                builder.setMessage(getString(R.string.not_saved_msg) + Environment.DIRECTORY_DOWNLOADS + "\\RocketMotorTestStand\\" + ThrustCurveName + ".csv")
+                        .setTitle(R.string.not_saved_title)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.not_saved_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                alert = builder.create();
+                alert.show();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+
+                boolean bool = false;
+                try {
+                    // try to create the file
+                    bool = root.createNewFile();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+                if (bool) {
+                    // call the method again
+                    exportToCSV();
+                } else {
+                    //throw new IllegalStateException(getString(R.string.failed_to_create_csv));
+                    SavedCurvesOK = false;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -823,9 +933,9 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             String motorfile_data = ";File generated by RocketMotorTestStand \n;\n";
             //K1530 54 714 0 1.287998 1.499998 TruCore
 
-            motorfile_data = motorfile_data +"\n";
-            motorfile_data = motorfile_data + motorClass + " " + "motorDiam" + " "+ "casinglength"
-                    + " " + "delay" + " " + "propellantWeight" + " " + "totalWeight" + " " +"manufacturer" + "\n";
+            motorfile_data = motorfile_data + "\n";
+            motorfile_data = motorfile_data + motorClass + " " + "motorDiam" + " " + "casinglength"
+                    + " " + "delay" + " " + "propellantWeight" + " " + "totalWeight" + " " + "manufacturer" + "\n";
 
             ThrustUtil tu = new ThrustUtil();
             double maxThrust = thrustCurveData.getSeries(0).getMaxY();
@@ -841,17 +951,17 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     //newton
                     //yValues.add(new Entry(thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue(),
                     // (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665));
-                    String currData = String.format("%.3f ",(thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue())/1000) +" " +
-                            String.format("%.1f ",(thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
-                    currData =currData.replace(",",".");
-                    motorfile_data = motorfile_data +  currData+"\n";
+                    String currData = String.format("%.3f ", (thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue()) / 1000) + " " +
+                            String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
+                    currData = currData.replace(",", ".");
+                    motorfile_data = motorfile_data + currData + "\n";
                 }
             }
 
             File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             int nbrData = thrustCurveData.getSeries(0).getItemCount();
 
-            motorfile_data = motorfile_data +";\n";
+            motorfile_data = motorfile_data + ";\n";
 
             //if you want to create a sub-dir
             root = new File(root, "RocketMotorTestStand");
@@ -860,7 +970,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
             String date = sdf.format(System.currentTimeMillis());
             // select the name for your file
-            root = new File(root , ThrustCurveName +date+".eng");
+            root = new File(root, ThrustCurveName + date + ".eng");
 
             try {
                 FileOutputStream fout = new FileOutputStream(root);
@@ -870,8 +980,8 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 //Confirmation message
                 builder = new AlertDialog.Builder(Tab2Fragment.this.getContext());
                 //Running Saving commands
-                builder.setMessage(getString(R.string.file_saved_msg1)+ Environment.DIRECTORY_DOWNLOADS+
-                        "\\RocketMotorTestStand\\"+ThrustCurveName +".eng" +
+                builder.setMessage(getString(R.string.file_saved_msg1) + Environment.DIRECTORY_DOWNLOADS +
+                        "\\RocketMotorTestStand\\" + ThrustCurveName + ".eng" +
                         getString(R.string.file_saved_msg2))
                         .setTitle("Info")
                         .setCancelable(false)
@@ -894,10 +1004,10 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     ex.printStackTrace();
                 }
 
-                if (bool){
+                if (bool) {
                     // call the method again
                     exportToEng(motorClass);
-                }else {
+                } else {
                     //throw new IllegalStateException(getString(R.string.failed_to_create_eng));
                     SavedCurvesOK = false;
                     //msg()
@@ -908,9 +1018,54 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         }
     }
 
+    private void takeScreenShot(View view) {
+        Date date = new Date();
+        CharSequence format = DateFormat.format("MM-dd-yyyy_hh:mm:ss", date);
+
+        try {
+            File mainDir = new File(
+                    this.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "FilShare");
+            if (!mainDir.exists()) {
+                boolean mkdir = mainDir.mkdir();
+            }
+
+            String path = mainDir + "/" + "TrendOceans" + "-" + format + ".jpeg";
+            view.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+            view.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(path);
+            FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            shareScreenShot(imageFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Share ScreenShot
+    private void shareScreenShot(File imageFile) {
+        Uri uri = FileProvider.getUriForFile(
+                this,
+                /*BuildConfig.APPLICATION_ID */ this.getPackageName() + "." + getLocalClassName() + ".provider",
+                imageFile);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "Download Application from Instagram");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+
+        try {
+            this.startActivity(Intent.createChooser(intent, "Share With"));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No App Available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_thrust_curves, menu);
         return true;
@@ -924,20 +1079,53 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //open application settings screen
-        if (id == R.id.action_share) {
-            ShareHandler.share(ShareHandler.takeScreenshot(findViewById(android.R.id.content).getRootView()), this.getApplicationContext());
+        /*if (id == R.id.action_share) {
+            //ShareHandler.takeScreenshot(findViewById(android.R.id.content).getRootView());
+            Intent shareIntent;
+            shareIntent = ShareHandler.share(ShareHandler.takeScreenshot(findViewById(android.R.id.content).getRootView()), this.getApplicationContext());
+            try {
+                this.getApplicationContext().startActivity(Intent.createChooser(shareIntent, "MotorTestStand has shared with you some info"));
+            } catch (android.content.ActivityNotFoundException ex) {
+
+            }
+            //ShareHandler.share(ShareHandler.takeScreenshotAnd10(findViewById(android.R.id.content).getRootView()), this.getApplicationContext());
             return true;
+        }*/
+
+        if (id == R.id.action_share) {
+            takeScreenShot(getWindow().getDecorView());
         }
+        /*if (id == R.id.action_share) {
+            Bitmap pictureFile= ShareHandler.takeScreenshot(findViewById(android.R.id.content).getRootView());
+
+            String pathofBmp=
+                    MediaStore.Images.Media.insertImage(this.getApplicationContext().getContentResolver(),
+                            pictureFile,"MotorTestStand", null);
+            Uri uri = Uri.parse(pathofBmp);
+            Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+            whatsappIntent.setType("text/plain");
+            whatsappIntent.setPackage("com.whatsapp");
+            whatsappIntent.putExtra(Intent.EXTRA_TEXT, "The text you wanted to share");
+            whatsappIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            whatsappIntent.setType("image/jpeg");
+            whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            try {
+                this.getApplicationContext().startActivity(whatsappIntent);
+            } catch (android.content.ActivityNotFoundException ex) {
+                //ToastHelper.MakeShortText("Whatsapp have not been installed.");
+            }
+        }*/
         //open help screen
         if (id == R.id.action_help) {
-            Intent i= new Intent(this, HelpActivity.class);
+            Intent i = new Intent(this, HelpActivity.class);
             i.putExtra("help_file", "help_curve");
             startActivity(i);
             return true;
         }
         //open about screen
         if (id == R.id.action_about) {
-            Intent i= new Intent(this, AboutActivity.class);
+            Intent i = new Intent(this, AboutActivity.class);
             startActivity(i);
             return true;
         }

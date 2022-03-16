@@ -180,7 +180,6 @@ public class TestStandStatus extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (recording) {
-
                     recording = false;
                     myBT.write("w0;\n".toString());
 
@@ -195,7 +194,6 @@ public class TestStandStatus extends AppCompatActivity {
                     myBT.flush();
                     btnRecording.setText("Stop");
                 }
-
             }
         });
 
@@ -211,13 +209,13 @@ public class TestStandStatus extends AppCompatActivity {
         txtViewThrustCurve = (TextView) findViewById(R.id.txtViewThrustCurve);
         txtViewCurrentPressureValue = (TextView) findViewById(R.id.txtViewCurrentPressureValue);
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32")) {
+        //if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32")) {
             txtViewVoltage.setVisibility(View.VISIBLE);
             txtViewBatteryVoltage.setVisibility(View.VISIBLE);
-        } else {
+        /*} else {
             txtViewVoltage.setVisibility(View.INVISIBLE);
             txtViewBatteryVoltage.setVisibility(View.INVISIBLE);
-        }
+        }*/
 
 
         txtViewEEprom.setVisibility(View.VISIBLE);

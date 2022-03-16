@@ -10,110 +10,122 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28"
-        tools:ignore="ScopedStorage"
-        />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- android:maxSdkVersion="28"
+     tools:ignore="ScopedStorage"
+     />-->
 
 
-    <uses-feature android:name="android.hardware.usb.host" />
-    <application
-        android:name=".ConsoleApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.RocketMotorTestStand">
+ <uses-feature android:name="android.hardware.usb.host" />
+ <application
+     android:name=".ConsoleApplication"
+     android:allowBackup="true"
+     android:icon="@mipmap/ic_launcher"
+     android:label="@string/app_name"
+     android:roundIcon="@mipmap/ic_launcher_round"
+     android:supportsRtl="true"
+     android:requestLegacyExternalStorage="true"
 
-        <activity
-            android:name=".config.Config3DR"
-            android:label="Config 3DR module"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-            </intent-filter>
+     android:theme="@style/Theme.RocketMotorTestStand">
+     <!--  android:usesCleartextTraffic="true"-->
+     <activity
+         android:name=".config.Config3DR"
+         android:label="Config 3DR module"
+         android:screenOrientation="portrait">
+         <intent-filter>
+             <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+         </intent-filter>
 
-            <meta-data
-                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-                android:resource="@xml/device_filter" />
-        </activity>
-        <activity
-            android:name=".config.ConfigBT"
-            android:label="Config bluetooth module"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-            </intent-filter>
+         <meta-data
+             android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+             android:resource="@xml/device_filter" />
+     </activity>
+     <activity
+         android:name=".config.ConfigBT"
+         android:label="Config bluetooth module"
+         android:screenOrientation="portrait">
+         <intent-filter>
+             <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+         </intent-filter>
 
-            <meta-data
-                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-                android:resource="@xml/device_filter" />
-        </activity>
-        <activity android:name=".Flash.FlashFirmware"
-            android:label="Flash firmware"
-            android:screenOrientation="portrait"/>
+         <meta-data
+             android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+             android:resource="@xml/device_filter" />
+     </activity>
+     <activity android:name=".Flash.FlashFirmware"
+         android:label="Flash firmware"
+         android:screenOrientation="portrait"/>
 
-        <activity android:name=".ThrustCurve.ThrustCurveViewTabActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".MainScreenActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+     <activity android:name=".ThrustCurve.ThrustCurveViewTabActivity"
+         android:screenOrientation="portrait"/>
+     <activity android:name=".MainScreenActivity"
+         android:label="@string/app_name"
+         android:screenOrientation="portrait">
+         <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-            </intent-filter>
+             <category android:name="android.intent.category.LAUNCHER" />
+         </intent-filter>
+         <intent-filter>
+             <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+         </intent-filter>
 
-            <meta-data
-                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-                android:resource="@xml/device_filter" />
-        </activity>
-        <activity
-            android:name=".connection.TestConnection"
-            android:label="Test connection"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".connection.SearchBluetooth"
-            android:label="@string/select_bluetooth_device"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".config.TestStandTabConfigActivity"
-            android:label="@string/teststand_config"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ThrustCurve.ThrustCurveListActivity"
-            android:label="@string/ThrustCurves_list"
-            android:screenOrientation="portrait" />
-        <activity android:name=".ThrustCurve.ThrustCurveViewActivity" />
-        <activity
-            android:name=".Help.AboutActivity"
-            android:label="@string/about_screen"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".config.AppConfigActivity"
-            android:label="@string/titre_application_pref"
-            android:screenOrientation="portrait" />
-        <activity android:name=".Help.HelpActivity" />
-        <activity
-            android:name=".ResetSettingsActivity"
-            android:label="@string/reset_settings"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".telemetry.Telemetry"
-            android:label="@string/telemetry_screen"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".telemetry.TelemetryMp"
-            android:label="@string/telemetry_screen"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".telemetry.TestStandStatus"
-            android:label="@string/status_screen"
-            android:screenOrientation="portrait" />
-    </application>
+         <meta-data
+             android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+             android:resource="@xml/device_filter" />
+     </activity>
+     <activity
+         android:name=".connection.TestConnection"
+         android:label="Test connection"
+         android:screenOrientation="portrait" />
+     <activity
+         android:name=".connection.SearchBluetooth"
+         android:label="@string/select_bluetooth_device"
+         android:screenOrientation="portrait" />
+     <activity
+         android:name=".config.TestStandTabConfigActivity"
+         android:label="@string/teststand_config"
+         android:screenOrientation="portrait" />
+     <activity
+         android:name=".ThrustCurve.ThrustCurveListActivity"
+         android:label="@string/ThrustCurves_list"
+         android:screenOrientation="portrait" />
+     <activity android:name=".ThrustCurve.ThrustCurveViewActivity" />
+     <activity
+         android:name=".Help.AboutActivity"
+         android:label="@string/about_screen"
+         android:screenOrientation="portrait" />
+     <activity
+         android:name=".config.AppConfigActivity"
+         android:label="@string/titre_application_pref"
+         android:screenOrientation="portrait" />
+     <activity android:name=".Help.HelpActivity" />
+     <activity
+         android:name=".ResetSettingsActivity"
+         android:label="@string/reset_settings"
+         android:screenOrientation="portrait" />
+     <activity
+         android:name=".telemetry.Telemetry"
+         android:label="@string/telemetry_screen"
+         android:screenOrientation="portrait" />
+     <activity
+         android:name=".telemetry.TelemetryMp"
+         android:label="@string/telemetry_screen"
+         android:screenOrientation="portrait" />
+     <activity
+         android:name=".telemetry.TestStandStatus"
+         android:label="@string/status_screen"
+         android:screenOrientation="portrait" />
+     <provider
+         android:name="androidx.core.content.FileProvider"
+         android:authorities="com.rocketmotorteststand.MainActivity.provider"
+         android:exported="false"
+         android:grantUriPermissions="true">
+         <meta-data
+             android:name="android.support.FILE_PROVIDER_PATHS"
+             android:resource="@xml/file_path" />
+     </provider>
+ </application>
 
 </manifest>

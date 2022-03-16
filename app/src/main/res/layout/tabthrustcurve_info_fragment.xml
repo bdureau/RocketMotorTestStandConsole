@@ -166,11 +166,19 @@
         android:text="@string/export_to_csv" />
 
     <Button
-        android:id="@+id/butExportToEng"
+        android:id="@+id/butExportToCsvFull"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/butExportToCsv"
+        android:text="Export to csv Full" />
+
+    <Button
+        android:id="@+id/butExportToEng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/butExportToCsvFull"
         android:text="@string/export_to_eng" />
 
 
