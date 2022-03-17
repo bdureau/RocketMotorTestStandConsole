@@ -469,15 +469,15 @@ public class ConsoleApplication extends Application {
                                     // Value 3 contain the thrust
                                     // value 4 contain the casing pressure
                                     // To do
-                                    int value2 = 0, value3 = 0,value4 = 0;
+                                    long value2 = 0, value3 = 0,value4 = 0;
                                     if (currentSentence.length > 2)
                                         if (currentSentence[2].matches("\\d+(?:\\.\\d+)?"))
-                                            value2 = Integer.valueOf(currentSentence[2]);
+                                            value2 = Long.valueOf(currentSentence[2]);
                                         else
                                             value2 = 0;
                                     if (currentSentence.length > 3) {
-                                        if (currentSentence[3].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
-                                            value3 = Integer.valueOf(currentSentence[3]);
+                                        if (currentSentence[3].matches("\\d+(?:\\.\\d+)?"))
+                                            value3 = Long.valueOf(currentSentence[3]);
                                         else
                                             value3 = 0;
                                         //add the thrust
@@ -486,8 +486,8 @@ public class ConsoleApplication extends Application {
 
                                     }
                                     if (currentSentence.length > 4) {
-                                        if (currentSentence[4].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
-                                            value4 = Integer.valueOf(currentSentence[4]);
+                                        if (currentSentence[4].matches("\\d+(?:\\.\\d+)?"))
+                                            value4 = Long.valueOf(currentSentence[4]);
                                         else
                                             value4 = 0;
                                         //add the casing pressure

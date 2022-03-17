@@ -68,11 +68,12 @@ public class TelemetryMp extends AppCompatActivity {
     LineData data;
     ArrayList<ILineDataSet> dataSets;
     //telemetry var
-    private long LiftOffTime = 0;
+    //private long LiftOffTime = 0;
     private int lastPlotTime = 0;
 
     private double CONVERT = 1;
     ArrayList<Entry> yValues;
+
     int thrustTime = 0;
 
     boolean telemetry = true;
@@ -90,34 +91,51 @@ public class TelemetryMp extends AppCompatActivity {
 
                         int thrust = (int) (Integer.parseInt((String) msg.obj) * CONVERT);
 
-                        yValues.add(new Entry(thrustTime, thrust));
+                      /*  yValues.add(new Entry(thrustTime, thrust));
 
                         //plot every seconde
                         if ((thrustTime - lastPlotTime) > 1000) {
                             lastPlotTime = thrustTime;
-
                             LineDataSet set1 = new LineDataSet(yValues, "Thrust/Time");
-
                             set1.setDrawValues(false);
                             set1.setDrawCircles(false);
                             set1.setLabel("Thrust");
-
                             dataSets.clear();
                             dataSets.add(set1);
-
                             data = new LineData(dataSets);
                             mChart.clear();
                             mChart.setData(data);
-                        }
+                        }*/
                     }
                     break;
-
 
                 case 2:
                     // Value 2 contain the sample time
                     if (((String) msg.obj).matches("\\d+(?:\\.\\d+)?")) {
                         if (Integer.parseInt((String) msg.obj) > 0) {
                             thrustTime = Integer.parseInt((String) msg.obj);
+                        }
+                    }
+                    break;
+                case 6:
+                    //Value 6 contains the current pressure
+                    String currentPressure = (String) msg.obj;
+                    if (((String) msg.obj).matches("\\d+(?:\\.\\d+)?")) {
+                        int pressure = (int) (Integer.parseInt((String) msg.obj) );
+                        yValues.add(new Entry(thrustTime, pressure));
+
+                        //plot every seconde
+                        if ((thrustTime - lastPlotTime) > 1000) {
+                            lastPlotTime = thrustTime;
+                            LineDataSet set1 = new LineDataSet(yValues, "pressure/Time");
+                            set1.setDrawValues(false);
+                            set1.setDrawCircles(false);
+                            set1.setLabel("pressure");
+                            dataSets.clear();
+                            dataSets.add(set1);
+                            data = new LineData(dataSets);
+                            mChart.clear();
+                            mChart.setData(data);
                         }
                     }
                     break;
@@ -220,7 +238,7 @@ public class TelemetryMp extends AppCompatActivity {
         lastPlotTime = 0;
         myBT.initThrustCurveData();
 
-        LiftOffTime = 0;
+        //LiftOffTime = 0;
         Runnable r = new Runnable() {
 
             @Override
@@ -244,7 +262,7 @@ public class TelemetryMp extends AppCompatActivity {
         lastPlotTime = 0;
         myBT.initThrustCurveData();
 
-        LiftOffTime = 0;
+        //LiftOffTime = 0;
         Runnable r = new Runnable() {
 
             @Override
