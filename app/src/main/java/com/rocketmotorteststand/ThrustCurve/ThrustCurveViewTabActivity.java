@@ -113,7 +113,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putStringArray("CURRENT_CURVES_NAMES_KEY", currentCurvesNames);
         outState.putBooleanArray("CHECKED_ITEMS_KEY", checkedItems);
-
     }
 
     @Override
@@ -128,7 +127,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (Build.VERSION.SDK_INT >= 23) {
-            int REQUEST_CODE_ASK_PERMISSIONS = 123;
+            //int REQUEST_CODE_ASK_PERMISSIONS = 123;
             //int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             int hasWriteContactsPermission = ActivityCompat.checkSelfPermission(ThrustCurveViewTabActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
@@ -159,10 +158,9 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
 
         btnDismiss = (Button) findViewById(R.id.butDismiss);
-
         butSelectCurves = (Button) findViewById(R.id.butSelectCurves);
-
         butZoom = (Button) findViewById(R.id.butZoom);
+
         numberOfCurves = 1;
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
             numberOfCurves = 2;
@@ -221,7 +219,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             if (myBT.getAppConf().getUnitsPressure().equals("0")) {
                 //PSI
                 units[1] = "(" + "PSI" + ")";
-
+                CONVERT = 1/10;
 
             } else if (myBT.getAppConf().getUnits().equals("1")) {
                 //BAR
@@ -505,6 +503,10 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
                     ArrayList<Entry> yValues = new ArrayList<>();
 
+                    /*for (int k = 0; k < nbrData; k++) {
+                        yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()));
+                    }*/
+                    Log.d("drawAllCurves", "i:" + i);
                     if (i == 0) {
                         for (int k = 0; k < nbrData; k++) {
                             if (myBT.getAppConf().getUnits().equals("0")) {
@@ -513,22 +515,23 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                             } else if (myBT.getAppConf().getUnits().equals("1")) {
                                 //pound
                                 yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * (float) 2.20462));
-                            }
-                            if (myBT.getAppConf().getUnits().equals("2")) {
+                            } else if (myBT.getAppConf().getUnits().equals("2")) {
                                 //newton
                                 yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * (float) 9.80665));
                             }
                         }
-                    } else {
+                    }
+
+                    if (i == 1) {
                         for (int k = 0; k < nbrData; k++) {
                             if (myBT.getAppConf().getUnitsPressure().equals("0")) {
                                 //PSI
                                 yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()));
+                                Log.d("Thrust curve List",  "val pressure:" +allThrustCurveData.getSeries(i).getY(k).floatValue());
                             } else if (myBT.getAppConf().getUnits().equals("1")) {
                                 //bar divide by 14.504
                                 yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue() / (float) 14.504));
-                            }
-                            if (myBT.getAppConf().getUnits().equals("2")) {
+                            } else if (myBT.getAppConf().getUnits().equals("2")) {
                                 //K pascal multiply by 6.895
                                 yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue() * (float) 6.895));
                             }
@@ -536,6 +539,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     }
 
                     LineDataSet set1 = new LineDataSet(yValues, "Time");
+
                     set1.setColor(colors[i]);
 
                     set1.setDrawValues(false);
