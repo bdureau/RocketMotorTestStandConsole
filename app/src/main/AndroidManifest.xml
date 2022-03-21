@@ -119,7 +119,7 @@
          android:screenOrientation="portrait" />
      <provider
          android:name="androidx.core.content.FileProvider"
-         android:authorities="com.rocketmotorteststand.MainActivity.provider"
+         android:authorities="com.rocketmotorteststand.ThrustCurve.ThrustCurveViewTabActivity.provider"
          android:exported="false"
          android:grantUriPermissions="true">
          <meta-data
