@@ -1,6 +1,7 @@
 package com.rocketmotorteststand.ThrustCurve;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -36,7 +37,7 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Environment;
-import android.provider.MediaStore;
+//import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -100,7 +101,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
 
     @Override
@@ -126,21 +126,33 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= 23) {
+        /*if (Build.VERSION.SDK_INT >= 23) {
             //int REQUEST_CODE_ASK_PERMISSIONS = 123;
             //int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             int hasWriteContactsPermission = ActivityCompat.checkSelfPermission(ThrustCurveViewTabActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {*/
                 /*requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_CODE_ASK_PERMISSIONS);*/
-                ActivityCompat.requestPermissions(
+               /* ActivityCompat.requestPermissions(
                         ThrustCurveViewTabActivity.this,
                         PERMISSION_STORAGE,
                         REQUEST_EXTERNAL_STORAGE);
 
             }
-        }
+        }*/
+
+        if (Build.VERSION.SDK_INT >= 23)
+        verifyStoragePermission(ThrustCurveViewTabActivity.this);
+        /*int permission = ActivityCompat.checkSelfPermission(ThrustCurveViewTabActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    ThrustCurveViewTabActivity.this,
+                    PERMISSION_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE);
+        }*/
+
         // recovering the instance state
         if (savedInstanceState != null) {
             currentCurvesNames = savedInstanceState.getStringArray("CURRENT_CURVES_NAMES_KEY");
@@ -303,6 +315,17 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    public static void verifyStoragePermission(Activity activity) {
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSION_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE);
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -767,13 +790,12 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
             SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
             String date = sdf.format(System.currentTimeMillis());
-            createFile(ThrustCurveName + "_" +date + ".csv",  csv_data);
+            createFile(ThrustCurveName + "_" +date + ".csv",  csv_data,"");
 
             //export pressure
             if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
                 String csv_data_pressure = "time,pressure" + units[1] + "\n";/// your csv data as string;
 
-                //ThrustUtil tu = new ThrustUtil();
                 double maxPressure = lThrustCurveData.getSeries(1).getMaxY();
                 double minPressure = lThrustCurveData.getSeries(1).getMinY();
                 double triggerPressure = (maxPressure  * (5.0 / 100.0))+minPressure;
@@ -782,9 +804,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 int curveMaxPressure = tu.searchX(lThrustCurveData.getSeries(1), maxPressure);
                 int curvePressureStop = tu.searchXFrom(lThrustCurveData.getSeries(1), curveMaxPressure, triggerPressure);
 
-                Log.d("numberOfCurves", "curvePressureStart:" + curvePressureStart);
-                Log.d("numberOfCurves", "curveMaxPressure:" + curveMaxPressure);
-                Log.d("numberOfCurves", "curvePressureStop:" + curvePressureStop);
                 if (curvePressureStart != -1 && curveMaxPressure != -1 && curvePressureStop != -1) {
                     for (int k = curvePressureStart; k < curvePressureStop; k++) {
 
@@ -806,67 +825,14 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                         }
                         csv_data_pressure = csv_data_pressure + curTime + currData + "\n";
                     }
-                    createFile(ThrustCurveName + "_pressure_" +date + ".csv",  csv_data_pressure);
+                    createFile(ThrustCurveName + "_pressure_" +date + ".csv",  csv_data_pressure, "");
                 }
             }
-            /*File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-            //if you want to create a sub-dir
-            root = new File(root, "RocketMotorTestStand");
-            root.mkdir();
-
-            SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-            String date = sdf.format(System.currentTimeMillis());
-
-            // select the name for your file
-            root = new File(root, ThrustCurveName + date + ".csv");
-
-            try {
-                FileOutputStream fout = new FileOutputStream(root);
-                fout.write(csv_data.getBytes());
-
-                fout.close();
-                //Confirmation message
-                builder = new AlertDialog.Builder(Tab2Fragment.this.getContext());
-                //Running Saving commands
-                builder.setMessage(getString(R.string.not_saved_msg) + Environment.DIRECTORY_DOWNLOADS + "\\RocketMotorTestStand\\" + ThrustCurveName + ".csv")
-                        .setTitle(R.string.not_saved_title)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.not_saved_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(final DialogInterface dialog, final int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                alert = builder.create();
-                alert.show();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-
-                boolean bool = false;
-                try {
-                    // try to create the file
-                    bool = root.createNewFile();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
-                if (bool) {
-                    // call the method again
-                    exportToCSV();
-                } else {
-                    //throw new IllegalStateException(getString(R.string.failed_to_create_csv));
-                    SavedCurvesOK = false;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
         }
 
         private void exportToCSVFull(XYSeriesCollection lThrustCurveData) {
 
             String csv_data = "time,thrust" + units[0] + "\n";/// your csv data as string;
-
 
             for (int k = 0; k < lThrustCurveData.getSeries(0).getItemCount(); k++) {
                 String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(0).getX(k).floatValue()) / 1000);
@@ -889,10 +855,9 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             }
 
 
-
             SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
             String date = sdf.format(System.currentTimeMillis());
-            createFile(ThrustCurveName + "_full_" +date + ".csv",  csv_data);
+            createFile(ThrustCurveName + "_full_" +date + ".csv",  csv_data, "");
 
             //export pressure
             if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
@@ -917,71 +882,19 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     }
                     csv_data_pressure = csv_data_pressure + curTime + currData + "\n";
                 }
-                createFile(ThrustCurveName + "_pressure_full_" +date + ".csv",  csv_data_pressure);
+                createFile(ThrustCurveName + "_pressure_full_" +date + ".csv",  csv_data_pressure,"");
             }
-            /*File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-            //if you want to create a sub-dir
-            root = new File(root, "RocketMotorTestStand");
-            root.mkdir();
-
-            SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-            String date = sdf.format(System.currentTimeMillis());
-
-            // select the name for your file
-            root = new File(root, ThrustCurveName + "_full_" +date + ".csv");
-
-            try {
-                FileOutputStream fout = new FileOutputStream(root);
-                fout.write(csv_data.getBytes());
-
-                fout.close();
-                //Confirmation message
-                builder = new AlertDialog.Builder(Tab2Fragment.this.getContext());
-                //Running Saving commands
-                builder.setMessage(getString(R.string.not_saved_msg) + Environment.DIRECTORY_DOWNLOADS + "\\RocketMotorTestStand\\" + ThrustCurveName + ".csv")
-                        .setTitle(R.string.not_saved_title)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.not_saved_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(final DialogInterface dialog, final int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                alert = builder.create();
-                alert.show();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-
-                boolean bool = false;
-                try {
-                    // try to create the file
-                    bool = root.createNewFile();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
-                if (bool) {
-                    // call the method again
-                    exportToCSV();
-                } else {
-                    //throw new IllegalStateException(getString(R.string.failed_to_create_csv));
-                    SavedCurvesOK = false;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
         }
 
-        private void createFile(String fileName, String csv_data) {
+        private void createFile(String fileName, String csv_data, String msg) {
             File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
             //if you want to create a sub-dir
             root = new File(root, "RocketMotorTestStand");
             root.mkdir();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-            String date = sdf.format(System.currentTimeMillis());
+            //SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
+            //String date = sdf.format(System.currentTimeMillis());
 
             // select the name for your file
             root = new File(root, fileName  );
@@ -994,7 +907,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 //Confirmation message
                 builder = new AlertDialog.Builder(Tab2Fragment.this.getContext());
                 //Running Saving commands
-                builder.setMessage(getString(R.string.not_saved_msg) + Environment.DIRECTORY_DOWNLOADS + "\\RocketMotorTestStand\\" + fileName )
+                builder.setMessage(getString(R.string.not_saved_msg) + Environment.DIRECTORY_DOWNLOADS + "\\RocketMotorTestStand\\" + fileName + msg)
                         .setTitle(R.string.not_saved_title)
                         .setCancelable(false)
                         .setPositiveButton(R.string.not_saved_ok, new DialogInterface.OnClickListener() {
@@ -1018,7 +931,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
                 if (bool) {
                     // call the method again
-                    createFile(fileName, csv_data);
+                    createFile(fileName, csv_data, msg);
                 } else {
                     //throw new IllegalStateException(getString(R.string.failed_to_create_csv));
                     SavedCurvesOK = false;
@@ -1027,6 +940,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
         private void exportToEng(String motorClass, XYSeriesCollection lThrustCurveData) {
 
             String motorfile_data = ";File generated by RocketMotorTestStand \n;\n";
@@ -1057,17 +971,22 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 }
             }
 
-            File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            motorfile_data = motorfile_data + ";\n";
+            SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
+            String date = sdf.format(System.currentTimeMillis());
+            createFile(ThrustCurveName + date + ".eng",  motorfile_data, getString(R.string.file_saved_msg2));
+
+        /*    File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             int nbrData = thrustCurveData.getSeries(0).getItemCount();
 
-            motorfile_data = motorfile_data + ";\n";
+
 
             //if you want to create a sub-dir
             root = new File(root, "RocketMotorTestStand");
             root.mkdir();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-            String date = sdf.format(System.currentTimeMillis());
+           // SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
+            //String date = sdf.format(System.currentTimeMillis());
             // select the name for your file
             root = new File(root, ThrustCurveName + date + ".eng");
 
@@ -1113,7 +1032,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 
@@ -1128,10 +1047,11 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 boolean mkdir = mainDir.mkdir();
             }
 
-            String path = mainDir + "/" + "TrendOceans" + "-" + format + ".jpeg";
+            String path = mainDir + "/" + "MotorCurve" + "-" + format + ".jpeg";
             view.setDrawingCacheEnabled(true);
             Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
             view.setDrawingCacheEnabled(false);
+
 
             File imageFile = new File(path);
             FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
@@ -1146,14 +1066,17 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
     //Share ScreenShot
     private void shareScreenShot(File imageFile) {
+
         Uri uri = FileProvider.getUriForFile(
-                this,
-                /*BuildConfig.APPLICATION_ID */ this.getPackageName() + "." + getLocalClassName() + ".provider",
+               this,
+                this.getPackageName() + "." + getLocalClassName() + ".provider",
                 imageFile);
+
+
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("image/*");
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, "Download Application from Instagram");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "MotorTestStand has shared with you some info");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
 
         try {
@@ -1177,44 +1100,11 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //open application settings screen
-        /*if (id == R.id.action_share) {
-            //ShareHandler.takeScreenshot(findViewById(android.R.id.content).getRootView());
-            Intent shareIntent;
-            shareIntent = ShareHandler.share(ShareHandler.takeScreenshot(findViewById(android.R.id.content).getRootView()), this.getApplicationContext());
-            try {
-                this.getApplicationContext().startActivity(Intent.createChooser(shareIntent, "MotorTestStand has shared with you some info"));
-            } catch (android.content.ActivityNotFoundException ex) {
-
-            }
-            //ShareHandler.share(ShareHandler.takeScreenshotAnd10(findViewById(android.R.id.content).getRootView()), this.getApplicationContext());
-            return true;
-        }*/
-
+        //share current screen with other app
         if (id == R.id.action_share) {
             takeScreenShot(getWindow().getDecorView());
         }
-        /*if (id == R.id.action_share) {
-            Bitmap pictureFile= ShareHandler.takeScreenshot(findViewById(android.R.id.content).getRootView());
 
-            String pathofBmp=
-                    MediaStore.Images.Media.insertImage(this.getApplicationContext().getContentResolver(),
-                            pictureFile,"MotorTestStand", null);
-            Uri uri = Uri.parse(pathofBmp);
-            Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
-            whatsappIntent.setType("text/plain");
-            whatsappIntent.setPackage("com.whatsapp");
-            whatsappIntent.putExtra(Intent.EXTRA_TEXT, "The text you wanted to share");
-            whatsappIntent.putExtra(Intent.EXTRA_STREAM, uri);
-            whatsappIntent.setType("image/jpeg");
-            whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            try {
-                this.getApplicationContext().startActivity(whatsappIntent);
-            } catch (android.content.ActivityNotFoundException ex) {
-                //ToastHelper.MakeShortText("Whatsapp have not been installed.");
-            }
-        }*/
         //open help screen
         if (id == R.id.action_help) {
             Intent i = new Intent(this, HelpActivity.class);
