@@ -27,7 +27,7 @@ public class TestStandStatus extends AppCompatActivity {
     boolean status = true;
     boolean recording = false;
 
-    private TextView txtViewBatteryVoltage;
+    private TextView txtViewBatteryVoltage, txtViewCurrentPressure;
     private TextView txtViewThrust, txtViewVoltage, txtViewLink, txtEEpromUsage, txtNbrOfThrustCurve;
     private TextView txtViewEEprom, txtViewThrustCurve,txtViewCurrentPressureValue;
 
@@ -208,6 +208,7 @@ public class TestStandStatus extends AppCompatActivity {
         txtViewEEprom = (TextView) findViewById(R.id.txtViewEEprom);
         txtViewThrustCurve = (TextView) findViewById(R.id.txtViewThrustCurve);
         txtViewCurrentPressureValue = (TextView) findViewById(R.id.txtViewCurrentPressureValue);
+        txtViewCurrentPressure = (TextView) findViewById(R.id.txtViewCurrentPressure);
 
         //if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32")) {
             txtViewVoltage.setVisibility(View.VISIBLE);
@@ -218,6 +219,13 @@ public class TestStandStatus extends AppCompatActivity {
         }*/
 
 
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+            txtViewCurrentPressureValue.setVisibility(View.VISIBLE);
+            txtViewCurrentPressure.setVisibility(View.VISIBLE);
+        }else {
+            txtViewCurrentPressureValue.setVisibility(View.INVISIBLE);
+            txtViewCurrentPressure.setVisibility(View.INVISIBLE);
+        }
         txtViewEEprom.setVisibility(View.VISIBLE);
         txtViewThrustCurve.setVisibility(View.VISIBLE);
         txtEEpromUsage.setVisibility(View.VISIBLE);

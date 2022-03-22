@@ -24,6 +24,7 @@
     <string name="EndRecordTime_tooltip">Enter the recording duration</string>
 
     <string name="txtViewBatteryType_tooltip">Enter battery type used to make sure that we do not discharge it too much</string>
+    <string name="txtViewSensorType_tooltip">Enter Sensor type used </string>
     <string name="txtTestStandUnit_tooltip">Choose the thrust units you are familiar with</string>
 
 
@@ -224,14 +225,12 @@
     <string name="select_curve">Select Curve</string>
     <string name="fv_ok">OK</string>
     <string name="fv_cancel">Cancel</string>
-    <!--<string name="telemetry_voice">Telemetry voice</string>
-    <string name="test_telemetry_voice">Test Voice</string>-->
+
 
     <!--units -->
     <!--<string name="unit_meters">meters</string>-->
     <string name="unit_time">time (ms)</string>
-    <!--<string name="unit_feet_per_secs">feet/secs</string>
-    <string name="unit_feet_per_square_secs">feet/secs²</string>-->
+
 
     <!--curves name -->
     <string name="curve_thrust">thrust</string>

@@ -624,7 +624,7 @@ public class MainScreenActivity extends AppCompatActivity {
             hm = new HashMap();
             //init compatible versions
             Add("TestStandSTM32V2", "1.2");
-            Add("TestStandSTM32", "1.1");
+            Add("TestStandSTM32", "1.2");
             Add("TestStand", "1.1");
         }
         public void Add ( String altiName, String verList) {

@@ -91,7 +91,7 @@ public class TelemetryMp extends AppCompatActivity {
 
                         int thrust = (int) (Integer.parseInt((String) msg.obj) * CONVERT);
 
-                      /*  yValues.add(new Entry(thrustTime, thrust));
+                        yValues.add(new Entry(thrustTime, thrust));
 
                         //plot every seconde
                         if ((thrustTime - lastPlotTime) > 1000) {
@@ -105,7 +105,7 @@ public class TelemetryMp extends AppCompatActivity {
                             data = new LineData(dataSets);
                             mChart.clear();
                             mChart.setData(data);
-                        }*/
+                        }
                     }
                     break;
 
@@ -120,7 +120,7 @@ public class TelemetryMp extends AppCompatActivity {
                 case 6:
                     //Value 6 contains the current pressure
                     String currentPressure = (String) msg.obj;
-                    if (((String) msg.obj).matches("\\d+(?:\\.\\d+)?")) {
+                    /*if (((String) msg.obj).matches("\\d+(?:\\.\\d+)?")) {
                         int pressure = (int) (Integer.parseInt((String) msg.obj) );
                         yValues.add(new Entry(thrustTime, pressure));
 
@@ -137,7 +137,7 @@ public class TelemetryMp extends AppCompatActivity {
                             mChart.clear();
                             mChart.setData(data);
                         }
-                    }
+                    }*/
                     break;
             }
         }

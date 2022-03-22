@@ -485,15 +485,17 @@ public class ConsoleApplication extends Application {
                                                 (long) (value3 ), thrustCurveName, 0);
 
                                     }
-                                    if (currentSentence.length > 4) {
-                                        if (currentSentence[4].matches("\\d+(?:\\.\\d+)?"))
-                                            value4 = Long.valueOf(currentSentence[4]);
-                                        else
-                                            value4 = 0;
-                                        //add the casing pressure
-                                        MyThrustCurve.AddToThrustCurve(value2,
-                                                (long) (value4 ), thrustCurveName, 1);
+                                    if(getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+                                        if (currentSentence.length > 4) {
+                                            if (currentSentence[4].matches("\\d+(?:\\.\\d+)?"))
+                                                value4 = Long.valueOf(currentSentence[4]);
+                                            else
+                                                value4 = 0;
+                                            //add the casing pressure
+                                            MyThrustCurve.AddToThrustCurve(value2,
+                                                    (long) (value4), thrustCurveName, 1);
 
+                                        }
                                     }
 
                                 }
@@ -528,7 +530,7 @@ public class ConsoleApplication extends Application {
                                     // Value 5 contains the connection speed
                                     if (currentSentence.length > 5)
                                         if (currentSentence[5].matches("\\d+(?:\\.\\d+)?"))
-                                            TestStandCfg.setConnectionSpeed(Integer.valueOf(currentSentence[5]));
+                                            TestStandCfg.setConnectionSpeed(Long.valueOf(currentSentence[5]));
                                         else
                                             TestStandCfg.setConnectionSpeed(38400);
 

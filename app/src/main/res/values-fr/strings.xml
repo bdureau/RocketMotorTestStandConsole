@@ -24,6 +24,7 @@
     <string name="EndRecordTime_tooltip">Entrer la durée d\'enregistrement</string>
 
     <string name="txtViewBatteryType_tooltip">Entrer le type de batterie utilisé pour s\'assurer de ne pas trop la décharger</string>
+    <string name="txtViewSensorType_tooltip">Entrez le type de capteur utilisé </string>
     <string name="txtTestStandUnit_tooltip">Choisiez les unités pour la poussée avec lesquelle vous etes familié</string>
 
 

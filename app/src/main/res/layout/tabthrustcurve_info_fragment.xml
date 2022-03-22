@@ -157,12 +157,30 @@
         android:layout_marginTop="18dp"
         android:text="A" />
 
+    <TextView
+        android:id="@+id/maxPressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/motorClass"
+        android:layout_marginTop="18dp"
+        android:text="Max pressure" />
+
+    <TextView
+        android:id="@+id/maxPressureValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/motorClass"
+        android:layout_marginTop="18dp"
+        android:text="N/A" />
+
     <Button
         android:id="@+id/butExportToCsv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/motorClass"
+        android:layout_below="@+id/maxPressure"
         android:text="@string/export_to_csv" />
 
     <Button

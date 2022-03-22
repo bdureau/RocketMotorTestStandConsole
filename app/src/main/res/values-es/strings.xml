@@ -25,6 +25,7 @@
     <string name="EndRecordTime_tooltip">Enter the recording duration</string>
 
     <string name="txtViewBatteryType_tooltip">Enter battery type used to make sure that we do not discharge it too much</string>
+    <string name="txtViewSensorType_tooltip">Enter Sensor type used </string>
     <string name="txtTestStandUnit_tooltip">Choose the thrust units you are familiar with</string>
 
 

@@ -317,7 +317,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     }
 
 
-    private void sendTestStandCfg() {
+    /*private void sendTestStandCfg() {
         String testStandCfgStr = "";
 
         testStandCfgStr = "s," +
@@ -407,7 +407,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             myBT.flush();
         }
 
-    }
+    }*/
 
     private void sendTestStandCfgV2() {
 
@@ -607,7 +607,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         private EditText StopRecordingTime;
 
         private boolean ViewCreated = false;
-        private TextView txtViewEEpromSize;
+        private TextView txtViewEEpromSize, txtViewSensorType;
 
         public Tab2Fragment(TestStandConfigData cfg) {
             lTestStandCfg = cfg;
@@ -804,6 +804,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 }
             });
 
+            txtViewSensorType = (TextView)  view.findViewById(R.id.txtViewSensorType);
             dropdownSensorType = (Spinner) view.findViewById(R.id.spinnerSensorType);
             //"Unknown",
             itemsSensorType = new String[]{getResources().getString(R.string.config_unknown),
@@ -813,7 +814,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             dropdownSensorType.setAdapter(adapterSensorType);
 
             // Tool tip
-            view.findViewById(R.id.txtViewBatteryType).setOnClickListener(new View.OnClickListener() {
+            view.findViewById(R.id.txtViewSensorType).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ViewTooltip
@@ -821,11 +822,18 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                             .color(Color.BLACK)
                             .position(ViewTooltip.Position.TOP)
                             //Enter battery type used to make sure that we do not discharge it too much
-                            .text(getResources().getString(R.string.txtViewBatteryType_tooltip))
+                            .text(getResources().getString(R.string.txtViewSensorType_tooltip))
                             .show();
                 }
             });
 
+            if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+                dropdownSensorType.setVisibility(View.VISIBLE);
+                txtViewSensorType.setVisibility(View.VISIBLE);
+            } else {
+                dropdownSensorType.setVisibility(View.INVISIBLE);
+                txtViewSensorType.setVisibility(View.INVISIBLE);
+            }
             if (lTestStandCfg != null) {
                 dropdownBaudRate.setSelection(lTestStandCfg.arrayIndex(itemsBaudRate, String.valueOf(lTestStandCfg.getConnectionSpeed())));
 
