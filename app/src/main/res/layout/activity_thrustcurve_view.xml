@@ -36,5 +36,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:gravity="center_vertical"
-        android:text="Map" />
+        android:text="@string/map" />
 </RelativeLayout>

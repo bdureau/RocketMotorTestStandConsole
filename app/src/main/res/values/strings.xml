@@ -245,7 +245,7 @@
 
     <string name="calibrate_tabconfig">Calibrate</string>
 
-    <string name="calibration_weight">Calibration Weight</string>
+    <string name="calibration_weight">Calibration Weight (kg)</string>
     <string name="calibration_offset">Calibration offset</string>
     <string name="calibration_factor">Calibration factor</string>
     <string name="export_to_csv">Export to CSV</string>
@@ -341,4 +341,16 @@
     <string name="calibration_title">Calibration</string>
     <string name="cancel_calibration">Cancel</string>
     <string name="curve_pressure">Pressure</string>
+    <string name="max_pressure">Max pressure</string>
+    <string name="export_to_csv_full">Export to csv Full</string>
+    <string name="sensor_type">Sensor type</string>
+    <string name="zoom">Zoom</string>
+    <string name="map">Map</string>
+    <string name="recording">Recording</string>
+    <string name="tare">Tare</string>
+    <string name="flash_firmware_but">Flash firmware</string>
+    <string name="test_stand">Test Stand</string>
+    <string name="test_stand_stm32">Test Stand STM32</string>
+    <string name="test_stand_stm32v2">Test Stand STM32V2</string>
+    <string name="pressure_units">Pressure Units</string>
 </resources>

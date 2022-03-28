@@ -205,7 +205,6 @@
         android:spinnerMode="dropdown"
         android:textAlignment="textEnd"/>
 
-
     <TextView
         android:id="@+id/textMinFreq"
         android:layout_below="@+id/textMavlink"
@@ -219,7 +218,6 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textMinFreq"
-
         android:layout_alignStart="@id/spinnerBaudRate"
         android:spinnerMode="dropdown"
         android:textAlignment="textEnd"/>
@@ -229,7 +227,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textMinFreq"
-
         android:layout_marginTop="18dp"
         android:text="@string/max_freq" />
 
@@ -238,7 +235,6 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textMaxFreq"
-
         android:layout_alignStart="@id/spinnerBaudRate"
         android:spinnerMode="dropdown"
         android:textAlignment="textEnd"/>
@@ -256,7 +252,6 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textNbrOfChannel"
-
         android:layout_alignStart="@id/spinnerBaudRate"
         android:spinnerMode="dropdown"
         android:textAlignment="textEnd"/>
@@ -278,8 +273,6 @@
         android:layout_alignStart="@id/spinnerAirSpeed"
         android:spinnerMode="dropdown"
         android:textAlignment="textEnd"/>
-
-
 
     <TextView
         android:id="@+id/textMaxWindow"

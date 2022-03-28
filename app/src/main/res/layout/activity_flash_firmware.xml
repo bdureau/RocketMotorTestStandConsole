@@ -25,7 +25,7 @@
             android:id="@+id/radioButTestStand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Test Stand"
+            android:text="@string/test_stand"
             tools:layout_editor_absoluteX="32dp"
             tools:layout_editor_absoluteY="74dp" />
 
@@ -33,7 +33,7 @@
             android:id="@+id/radioButTestStandSTM32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Test Stand STM32"
+            android:text="@string/test_stand_stm32"
             tools:layout_editor_absoluteX="32dp"
             tools:layout_editor_absoluteY="74dp" />
 
@@ -41,7 +41,7 @@
             android:id="@+id/radioButTestStandSTM32V2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Test Stand STM32V2"
+            android:text="@string/test_stand_stm32v2"
             tools:layout_editor_absoluteX="32dp"
             tools:layout_editor_absoluteY="74dp" />
 
@@ -99,12 +99,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
             <TextView
                 android:id="@+id/tvRead"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentLeft="true" />
         </LinearLayout>
     </ScrollView>

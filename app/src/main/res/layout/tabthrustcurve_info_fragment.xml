@@ -48,8 +48,6 @@
         android:layout_marginTop="18dp"
         android:text="" />
 
-
-
     <TextView
         android:id="@+id/thrustCurveDuration"
         android:layout_width="wrap_content"
@@ -164,7 +162,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/motorClass"
         android:layout_marginTop="18dp"
-        android:text="Max pressure" />
+        android:text="@string/max_pressure" />
 
     <TextView
         android:id="@+id/maxPressureValue"
@@ -189,7 +187,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/butExportToCsv"
-        android:text="Export to csv Full" />
+        android:text="@string/export_to_csv_full" />
 
     <Button
         android:id="@+id/butExportToEng"
