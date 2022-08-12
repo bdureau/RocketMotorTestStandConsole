@@ -462,11 +462,15 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         public int searchXFrom(XYSeries serie, int start, double searchVal) {
             int nbrData = serie.getItemCount();
             int pos = -1;
-            for (int i = start; i < nbrData; i++) {
-
-                if ((searchVal <= serie.getY(i - 1).doubleValue()) && (searchVal >= serie.getY(i).doubleValue())) {
-                    pos = i;
-                    break;
+            if (start != -1) {
+                for (int i = start; i < nbrData; i++) {
+                    /*Log.d("search 1", i + "");
+                    Log.d("search 1", serie.getY(i).doubleValue() + "");
+                    Log.d("search 1", serie.getY(i - 1).doubleValue() + "");*/
+                    if ((searchVal <= serie.getY(i - 1).doubleValue()) && (searchVal >= serie.getY(i).doubleValue())) {
+                        pos = i;
+                        break;
+                    }
                 }
             }
             return pos;
