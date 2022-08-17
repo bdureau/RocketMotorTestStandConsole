@@ -196,6 +196,12 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/butExportToCsvFull"
         android:text="@string/export_to_eng" />
-
+    <Button
+        android:id="@+id/butShareEng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/butExportToEng"
+        android:text="Share Eng" />
 
 </RelativeLayout>
