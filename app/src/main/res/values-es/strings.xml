@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Rocket Motor Test Stand</string>
-    <string name="version"> pre 2.0.0 candidate 4</string>
+    <string name="version">2.0.0</string>
 
     <!-- Menu -->
     <string name="help">Help</string>
@@ -49,13 +49,14 @@
     <string name="unit_pound">Pounds</string>
     <string name="unit_newtons">Newtons</string>
     <!-- Main Screen -->
-    <string name="teststand_settings">Test Stand Settings</string>
+    <string name="teststand_settings">Test Stand\nSettings</string>
 
-    <string name="read_thrustCurves">Read Thrust Curves</string>
-    <string name="reset_settings">Reset settings</string>
+    <string name="read_thrustCurves">Thrust\nCurves</string>
+    <string name="reset_settings">Reset\nsettings</string>
     <string name="disconnect">Disconnect</string>
     <string name="connect">Connect</string>
     <string name="telemetry">Telemetry</string>
+    <string name="flash">Flash</string>
 
     <!--connection screen -->
     <string name="select_device_to_use">Select Device to use</string>

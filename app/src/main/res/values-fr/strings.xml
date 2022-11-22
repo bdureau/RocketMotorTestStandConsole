@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="version"> pre 2.0.0 candidate 4</string>
+    <string name="version">2.0.0</string>
     <!-- Application title -->
     <string name="app_name">Rocket Motor Test Stand</string>
     <!-- Menu -->
@@ -51,12 +51,13 @@
     <string name="unit_newtons">Newtons</string>
 
     <!-- Main Screen -->
-    <string name="teststand_settings">Config banc de test moteur</string>
-    <string name="read_thrustCurves">chargement courbes de poussées</string>
-    <string name="reset_settings">Réinit config</string>
+    <string name="teststand_settings">Config\nbanc</string>
+    <string name="read_thrustCurves">Courbes\npoussées</string>
+    <string name="reset_settings">Réinit\nconfig</string>
     <string name="disconnect">Déconnecter</string>
     <string name="connect">Connecter</string>
     <string name="telemetry">Télémetrie</string>
+    <string name="flash">Flash</string>
 
     <!-- Reset screen -->
     <string name="dismiss_reset">Fermer</string>

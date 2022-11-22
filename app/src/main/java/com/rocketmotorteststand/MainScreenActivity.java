@@ -125,7 +125,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
         // cards
         btnTestStandSettings = (CardView) findViewById(R.id.settings_card);
-        btnReadThrustCurves = (CardView) findViewById(R.id.flights_card);
+        btnReadThrustCurves = (CardView) findViewById(R.id.thrust_curve_card);
         btnTelemetry = (CardView) findViewById(R.id.telemetry_card);
         btnStatus = (CardView) findViewById(R.id.status_card);
         btnFlashFirmware = (CardView) findViewById(R.id.flash_card);
