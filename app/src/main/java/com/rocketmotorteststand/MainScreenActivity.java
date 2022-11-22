@@ -332,11 +332,11 @@ public class MainScreenActivity extends AppCompatActivity {
     private void setEnabledCard(boolean enable, CardView card, ImageView image, TextView text) {
         card.setEnabled(enable);
         image.setImageAlpha(enable? 0xFF : 0x3F);
-        if (enable==false)
+        /*if (enable==false)
             if(AppCompatDelegate.getDefaultNightMode()== AppCompatDelegate.MODE_NIGHT_YES)
                 text.setTextColor(0xFF6C6666);
             else
-                text.setTextColor(0xFFDFD5D5);
+                text.setTextColor(0xFFDFD5D5);*/
     }
     private void EnableUI() {
 

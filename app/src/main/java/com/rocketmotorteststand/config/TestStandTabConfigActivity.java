@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,10 +33,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +68,9 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     private ProgressDialog progress;
     private AlertDialog alert;
     private boolean calibrationComplete = false;
+
+    private TextView[] dotsSlide;
+    private LinearLayout linearDots;
 
     Handler handler = new Handler() {
         @Override
@@ -130,7 +134,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
         btnUpload = (Button) findViewById(R.id.butUpload);
         btnUpload.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 //send back the config to the test Stand and exit if successful
@@ -148,9 +151,45 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         adapter.addFragment(configPage2, "TAB2");
         adapter.addFragment(configPage3, "TAB3");
 
+        linearDots=findViewById(R.id.idTestStandConfigLinearDots);
+        agregaIndicateDots(0, adapter.getCount());
         viewPager.setAdapter(adapter);
+
+        viewPager.addOnPageChangeListener(viewListener);
     }
 
+    public void agregaIndicateDots(int pos, int nbr){
+        dotsSlide =new TextView[nbr];
+        linearDots.removeAllViews();
+
+        for (int i=0; i< dotsSlide.length; i++){
+            dotsSlide[i]=new TextView(this);
+            dotsSlide[i].setText(Html.fromHtml("&#8226;"));
+            dotsSlide[i].setTextSize(35);
+            dotsSlide[i].setTextColor(getResources().getColor(R.color.colorWhiteTransparent));
+            linearDots.addView(dotsSlide[i]);
+        }
+
+        if(dotsSlide.length>0){
+            dotsSlide[pos].setTextColor(getResources().getColor(R.color.colorWhite));
+        }
+
+    }
+
+    ViewPager.OnPageChangeListener viewListener=new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+            agregaIndicateDots(i, adapter.getCount());
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+        }
+    };
 
     public boolean readConfig() {
         // ask for config
