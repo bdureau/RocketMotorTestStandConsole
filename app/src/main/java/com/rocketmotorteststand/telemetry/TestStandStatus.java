@@ -75,7 +75,7 @@ public class TestStandStatus extends AppCompatActivity {
                             txtViewVoltage.setTextColor(Color.RED);
                         }
                         else {
-                            txtViewVoltage.setTextColor(Color.BLACK);
+                            txtViewVoltage.setTextColor(txtViewThrust.getTextColors());
                         }
                     } else {
                         txtViewVoltage.setText("NA");
@@ -92,7 +92,7 @@ public class TestStandStatus extends AppCompatActivity {
                             txtEEpromUsage.setTextColor(Color.RED);
                         }
                         else {
-                            txtEEpromUsage.setTextColor(Color.BLACK);
+                            txtEEpromUsage.setTextColor(txtViewThrust.getTextColors());
                         }
                     }
 
@@ -110,7 +110,7 @@ public class TestStandStatus extends AppCompatActivity {
                         }
                         else {
                             //txtNbrOfThrustCurve.setHighlightColor(Color.BLACK);
-                            txtNbrOfThrustCurve.setTextColor(Color.BLACK);
+                            txtNbrOfThrustCurve.setTextColor(txtViewThrust.getTextColors());
                             Log.d("TestStandStatus", "BLACK");
                         }
                     }

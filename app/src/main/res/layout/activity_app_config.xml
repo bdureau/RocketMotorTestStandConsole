@@ -23,18 +23,18 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/save_config"
         android:id="@+id/butSave"
-        android:layout_gravity="start|bottom" />
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        app:icon="@drawable/save_30x30_trans" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dismiss_app_config"
         android:id="@+id/butDismiss"
-        android:layout_gravity="center|bottom" />
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        app:icon="@drawable/ok_30x30_trans" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

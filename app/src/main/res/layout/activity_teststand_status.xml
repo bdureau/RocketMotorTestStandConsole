@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -115,25 +116,25 @@
         android:layout_below="@+id/txtViewLinkType"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="69dp"
         android:layout_height="wrap_content"
-        android:text="@string/tare"
+        app:icon="@drawable/tare_39x30_trans"
         android:id="@+id/butTare"
         android:layout_below="@+id/txtViewCurrentPressure"
         />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:text="@string/dismiss_about"
+        app:icon="@drawable/ok_30x30_trans"
         android:id="@+id/butDismiss"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
          />
     <Button
         android:id="@+id/butRecording"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/recording" />
+        app:icon="@drawable/record_30x30_trans" />
 </RelativeLayout>
