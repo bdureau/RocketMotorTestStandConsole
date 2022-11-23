@@ -149,7 +149,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         }*/
 
         if (Build.VERSION.SDK_INT >= 23)
-        verifyStoragePermission(ThrustCurveViewTabActivity.this);
+            verifyStoragePermission(ThrustCurveViewTabActivity.this);
         /*int permission = ActivityCompat.checkSelfPermission(ThrustCurveViewTabActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
