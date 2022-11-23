@@ -36,9 +36,9 @@
         android:layout_gravity="center|bottom"
         app:icon="@drawable/ok_30x30_trans" />
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:text="@string/default_config"
+        app:icon="@drawable/default_30x30_trans"
         android:id="@+id/butDefault"
         android:layout_gravity="end|bottom" />
 
