@@ -10,7 +10,7 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="20dp"
+
         android:columnCount="3"
         android:rowCount="4">
 
@@ -26,11 +26,12 @@
             android:layout_gravity="fill"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            >
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -43,10 +44,12 @@
 
                 <TextView
                     android:id="@+id/text_settings"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/teststand_settings"
                     android:textAlignment="center"
+                    android:gravity="center"
+                    android:lines="2"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -62,12 +65,12 @@
             android:layout_gravity="fill"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
-
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            >
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -80,10 +83,12 @@
 
                 <TextView
                     android:id="@+id/text_curve"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/read_thrustCurves"
                     android:textAlignment="center"
+                    android:gravity="center"
+                    android:lines="2"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -100,11 +105,12 @@
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
 
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+           >
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -117,14 +123,15 @@
 
                 <TextView
                     android:id="@+id/text_telemetry"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/telemetry"
                     android:textAlignment="center"
+                    android:gravity="center"
+                    android:lines="2"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
 
 
         <androidx.cardview.widget.CardView
@@ -138,12 +145,12 @@
             android:layout_gravity="fill"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
-
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            >
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -156,10 +163,12 @@
 
                 <TextView
                     android:id="@+id/text_reset"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/reset_settings"
                     android:textAlignment="center"
+                    android:gravity="center"
+                    android:lines="2"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -176,11 +185,12 @@
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
 
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:contentPadding="3dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -193,10 +203,12 @@
 
                 <TextView
                     android:id="@+id/text_status"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Status"
+                    android:lines="2"
                     android:textAlignment="center"
+                    android:gravity="center"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -213,12 +225,12 @@
             android:layout_gravity="fill"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
-
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+           >
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -231,13 +243,16 @@
 
                 <TextView
                     android:id="@+id/text_firmware"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/flash"
                     android:textAlignment="center"
+                    android:gravity="center"
+                    android:lines="2"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/info_card"
             android:layout_width="wrap_content"
@@ -250,11 +265,12 @@
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
 
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            >
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -267,10 +283,12 @@
 
                 <TextView
                     android:id="@+id/text_info"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/about"
                     android:textAlignment="center"
+                    android:gravity="center"
+                    android:lines="2"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -287,11 +305,12 @@
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
 
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            >
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -304,10 +323,12 @@
 
                 <TextView
                     android:id="@+id/text_connect"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/connect"
                     android:textAlignment="center"
+                    android:gravity="center"
+                    android:lines="2"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
