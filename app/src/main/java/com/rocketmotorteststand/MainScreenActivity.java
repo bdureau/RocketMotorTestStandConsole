@@ -30,6 +30,7 @@ import com.rocketmotorteststand.ThrustCurve.ThrustCurveListActivity;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveViewTabActivity;
 import com.rocketmotorteststand.config.Config3DR;
 import com.rocketmotorteststand.config.ConfigBT;
+import com.rocketmotorteststand.config.ConfigLora;
 import com.rocketmotorteststand.config.TestStandConfigData;
 import com.rocketmotorteststand.config.TestStandTabConfigActivity;
 import com.rocketmotorteststand.config.AppConfigActivity;
@@ -590,6 +591,12 @@ public class MainScreenActivity extends AppCompatActivity {
         //Open the bluetooth module config
         if (id == R.id.action_modbt_settings) {
             Intent i = new Intent(MainScreenActivity.this, ConfigBT.class);
+            startActivity(i);
+            return true;
+        }
+        //Open the lora module config
+        if (id == R.id.action_modlora_settings) {
+            Intent i = new Intent(MainScreenActivity.this, ConfigLora.class);
             startActivity(i);
             return true;
         }
