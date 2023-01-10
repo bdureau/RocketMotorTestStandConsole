@@ -214,7 +214,7 @@ public class TelemetryMp extends AppCompatActivity {
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (telemetry) {
+                /*if (telemetry) {
                     telemetry = false;
                     myBT.write("h;\n".toString());
 
@@ -226,7 +226,7 @@ public class TelemetryMp extends AppCompatActivity {
                 myBT.flush();
                 myBT.clearInput();
                 myBT.write("y0;\n".toString());
-
+*/
                 finish();      //exit the activity
             }
         });
@@ -255,6 +255,23 @@ public class TelemetryMp extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (telemetry) {
+            telemetry = false;
+            myBT.write("h;\n".toString());
+
+            myBT.setExit(true);
+            myBT.clearInput();
+            myBT.flush();
+        }
+        //turn off telemetry
+        myBT.flush();
+        myBT.clearInput();
+        myBT.write("y0;\n".toString());
+
+    }
     public void onClickStartTelemetry(View view) {
 
         telemetry = true;

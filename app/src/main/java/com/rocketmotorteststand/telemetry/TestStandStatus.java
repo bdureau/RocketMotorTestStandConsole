@@ -158,7 +158,7 @@ public class TestStandStatus extends AppCompatActivity {
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (status) {
+                /*if (status) {
 
                     status = false;
                     myBT.write("h;\n".toString());
@@ -171,7 +171,7 @@ public class TestStandStatus extends AppCompatActivity {
                 //turn off telemetry
                 myBT.flush();
                 myBT.clearInput();
-                myBT.write("y0;\n".toString());
+                myBT.write("y0;\n".toString());*/
                 finish();      //exit the  activity
             }
         });
@@ -252,7 +252,24 @@ public class TestStandStatus extends AppCompatActivity {
         testStandStatus.start();
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (status) {
 
+            status = false;
+            myBT.write("h;\n".toString());
+
+            myBT.setExit(true);
+            myBT.clearInput();
+            myBT.flush();
+        }
+
+        //turn off telemetry
+        myBT.flush();
+        myBT.clearInput();
+        myBT.write("y0;\n".toString());
+    }
     @Override
     protected void onStop() {
         super.onStop();
