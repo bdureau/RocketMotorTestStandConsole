@@ -175,7 +175,7 @@ public class FlashFirmware extends AppCompatActivity {
             recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32;
 
         if (rbTestStandSTM32V2.isChecked())
-            recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32;
+            recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32V2;
 
 
         tvRead.setText("");
@@ -214,6 +214,15 @@ public class FlashFirmware extends AppCompatActivity {
         new DetectAsyc().execute();
     }
 
+    public void onClickFirmwareInfo(View v) {
+        tvRead.setText("The following firmwares are available:");
+        tvRead.append("\n");
+        tvRead.append(ASSET_FILE_NAME_TESTSTAND);
+        tvRead.append("\n");
+        tvRead.append(ASSET_FILE_NAME_TESTSTANDSTM32);
+        tvRead.append("\n");
+        tvRead.append(ASSET_FILE_NAME_TESTSTANDSTM32V2);
+    }
 
     public void onClickFlash(View v) {
         String firmwareFileName;
