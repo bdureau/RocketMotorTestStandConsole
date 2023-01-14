@@ -5,12 +5,17 @@ package com.rocketmotorteststand.connection;
  *   @author: boris.dureau@neuf.fr
  *
  **/
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +28,7 @@ import android.widget.Toast;
 
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
+import com.rocketmotorteststand.ShareHandler;
 import com.rocketmotorteststand.config.AppConfigActivity;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
@@ -68,9 +74,18 @@ public class SearchBluetooth extends AppCompatActivity {
         }
         else if(!myBluetooth.isEnabled())
         {
-            //Ask to the user turn the bluetooth on
             Intent turnBTon = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(turnBTon,1);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                startActivityForResult(turnBTon, 1);
+                return;
+            }
         }
 
         btnPaired.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +100,28 @@ public class SearchBluetooth extends AppCompatActivity {
 
     private void pairedDevicesList()
     {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            {
+                ActivityCompat.requestPermissions(SearchBluetooth.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 2);
+                return;
+            }
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            //return;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            {
+                ActivityCompat.requestPermissions(SearchBluetooth.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
+                return;
+            }
+        }
         pairedDevices = myBluetooth.getBondedDevices();
         ArrayList list = new ArrayList();
 
@@ -142,6 +179,11 @@ public class SearchBluetooth extends AppCompatActivity {
             startActivity(i);
             return true;
         }*/
+        //share screen
+        if (id == R.id.action_share) {
+            ShareHandler.takeScreenShot(findViewById(android.R.id.content).getRootView(), this);
+            return true;
+        }
         //open help screen
         if (id == R.id.action_help) {
             Intent i= new Intent(SearchBluetooth.this, HelpActivity.class);

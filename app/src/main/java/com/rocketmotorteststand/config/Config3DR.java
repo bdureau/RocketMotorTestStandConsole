@@ -28,6 +28,7 @@ import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
 
 import com.physicaloid.lib.Physicaloid;
+import com.rocketmotorteststand.ShareHandler;
 
 
 public class Config3DR extends AppCompatActivity {
@@ -1512,6 +1513,11 @@ public class Config3DR extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        //share screen
+        if (id == R.id.action_share) {
+            ShareHandler.takeScreenShot(findViewById(android.R.id.content).getRootView(), this);
+            return true;
+        }
         //open help screen
         if (id == R.id.action_help) {
             Intent i= new Intent(Config3DR.this, HelpActivity.class);
