@@ -136,7 +136,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.rocketmotorteststand.ThrustCurve.ThrustCurveViewTabActivity.provider"
+            android:authorities="com.rocketmotorteststand.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

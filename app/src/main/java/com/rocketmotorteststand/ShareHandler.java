@@ -1,6 +1,5 @@
 package com.rocketmotorteststand;
 
-
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -62,7 +61,7 @@ public class ShareHandler {
                boolean mkdir = mainDir.mkdir();
            }
 
-           String path = mainDir + "/" + "AltiMultiCurve" + "-" + format + ".jpeg";
+           String path = mainDir + "/" + "TestStandCurve" + "-" + format + ".jpeg";
            view.setDrawingCacheEnabled(true);
            Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
            view.setDrawingCacheEnabled(false);
