@@ -107,8 +107,6 @@ public class FlashFirmware extends AppCompatActivity {
         btFlash.setEnabled(true);
         if (mPhysicaloid.open()) {
             mPhysicaloid.setConfig(uartConfig);
-
-
         } else {
             //cannot open
             Toast.makeText(this, getResources().getString(R.string.msg13), Toast.LENGTH_LONG).show();

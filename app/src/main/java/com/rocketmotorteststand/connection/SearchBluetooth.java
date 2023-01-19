@@ -38,7 +38,7 @@ import java.util.Set;
 
 public class SearchBluetooth extends AppCompatActivity {
     //widgets
-    Button btnPaired;
+    Button btnPaired, btnDismiss;
     ListView devicelist;
     //Bluetooth
     private BluetoothAdapter myBluetooth = null;
@@ -52,12 +52,12 @@ public class SearchBluetooth extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //Check the local and force it if needed
         myBT = (ConsoleApplication) getApplication();
-        //getApplicationContext().getResources().updateConfiguration(myBT.getAppLocal(), null);
-        //
+
         setContentView(R.layout.activity_search_bluetooth);
 
         //Calling widgets
         btnPaired = (Button)findViewById(R.id.button);
+        btnDismiss = (Button) findViewById(R.id.butSearchBTDismiss);
         devicelist = (ListView)findViewById(R.id.listView);
 
         //if the device has bluetooth
@@ -83,6 +83,11 @@ public class SearchBluetooth extends AppCompatActivity {
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
+                    return;
+                }
                 startActivityForResult(turnBTon, 1);
                 return;
             }
@@ -96,6 +101,12 @@ public class SearchBluetooth extends AppCompatActivity {
             }
         });
 
+        btnDismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void pairedDevicesList()
