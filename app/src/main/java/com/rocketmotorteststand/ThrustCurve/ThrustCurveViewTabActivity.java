@@ -57,6 +57,7 @@ import org.afree.data.xy.XYSeriesCollection;
 import org.afree.graphics.geom.Font;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -65,6 +66,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 public class ThrustCurveViewTabActivity extends AppCompatActivity {
@@ -342,30 +345,30 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         adapter.addFragment(ThrustCurvePage1, "TAB1");
         adapter.addFragment(ThrustCurvePage2, "TAB2");
 
-        linearDots=findViewById(R.id.idThrustCurveLinearDots);
+        linearDots = findViewById(R.id.idThrustCurveLinearDots);
         agregaIndicateDots(0, adapter.getCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(viewListener);
     }
 
-    public void agregaIndicateDots(int pos, int nbr){
-        dotsSlide =new TextView[nbr];
+    public void agregaIndicateDots(int pos, int nbr) {
+        dotsSlide = new TextView[nbr];
         linearDots.removeAllViews();
 
-        for (int i=0; i< dotsSlide.length; i++){
-            dotsSlide[i]=new TextView(this);
+        for (int i = 0; i < dotsSlide.length; i++) {
+            dotsSlide[i] = new TextView(this);
             dotsSlide[i].setText(Html.fromHtml("&#8226;"));
             dotsSlide[i].setTextSize(35);
             dotsSlide[i].setTextColor(getResources().getColor(R.color.colorWhiteTransparent));
             linearDots.addView(dotsSlide[i]);
         }
 
-        if(dotsSlide.length>0){
+        if (dotsSlide.length > 0) {
             dotsSlide[pos].setTextColor(getResources().getColor(R.color.colorWhite));
         }
     }
 
-    ViewPager.OnPageChangeListener viewListener=new ViewPager.OnPageChangeListener() {
+    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int i, float v, int i1) {
         }
@@ -590,7 +593,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                             if (myBT.getAppConf().getUnitsPressure().equals("0")) {
                                 //PSI
                                 yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue()));
-                                Log.d("Thrust curve List",  "val pressure:" +allThrustCurveData.getSeries(i).getY(k).floatValue());
+                                Log.d("Thrust curve List", "val pressure:" + allThrustCurveData.getSeries(i).getY(k).floatValue());
                             } else if (myBT.getAppConf().getUnits().equals("1")) {
                                 //bar divide by 14.504
                                 yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue() / (float) 14.504));
@@ -638,8 +641,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             ThrustUtil tu = new ThrustUtil();
             double maxThrust = thrustCurveData.getSeries(0).getMaxY();
             double triggerThrust = maxThrust * (5.0 / 100.0);
-
-            //double maxPressure =
 
             int curveStart = tu.searchX(thrustCurveData.getSeries(0), triggerThrust);
             int curveMaxThrust = tu.searchX(thrustCurveData.getSeries(0), maxThrust);
@@ -697,7 +698,8 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         private TextView recordingDurationValue, thrustTimeValue, maxThrustValue, averageThrustValue;
         private TextView motorClassValue, totalImpulseValue, maxPressureValue;
         private TextView maxPressure;
-        private Button buttonExportToCsv, buttonExportToCsvFull, buttonExportToEng, buttonShareEng;
+        private Button buttonExportToCsv, buttonExportToCsvFull, buttonExportToEng, buttonShareEng,
+                butShareZip;
         double totalImpulse = 0;
         String motorClass = "";
         double thrustDuration = 0;
@@ -718,9 +720,10 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             View view = inflater.inflate(R.layout.tabthrustcurve_info_fragment, container, false);
 
             buttonExportToCsv = (Button) view.findViewById(R.id.butExportToCsv);
-            buttonShareEng  = (Button) view.findViewById(R.id.butShareEng);
+            buttonShareEng = (Button) view.findViewById(R.id.butShareEng);
             buttonExportToCsvFull = (Button) view.findViewById(R.id.butExportToCsvFull);
             buttonExportToEng = (Button) view.findViewById(R.id.butExportToEng);
+            butShareZip = (Button) view.findViewById(R.id.butShareZip);
             recordingDurationValue = view.findViewById(R.id.thrustCurveDurationValue);
             thrustTimeValue = view.findViewById(R.id.thrustTimeValue);
             maxThrustValue = view.findViewById(R.id.maxThrustValue);
@@ -730,8 +733,8 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             thrustCurveNbrValue = view.findViewById(R.id.thrustCurveNbrValue);
             motorClassValue = view.findViewById(R.id.motorClassValue);
             totalImpulseValue = view.findViewById(R.id.totalImpulseValue);
-            maxPressureValue= view.findViewById(R.id.maxPressureValue);
-            maxPressure= view.findViewById(R.id.maxPressure);
+            maxPressureValue = view.findViewById(R.id.maxPressureValue);
+            maxPressure = view.findViewById(R.id.maxPressure);
 
             if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
                 maxPressureValue.setVisibility(View.VISIBLE);
@@ -789,20 +792,20 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             }
 
             if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
-                double maxPres = lThrustCurveData.getSeries(1).getMaxY() ;
-                maxPressureValue.setText(maxPres +" PSI");
+                double maxPres = lThrustCurveData.getSeries(1).getMaxY();
+                maxPressureValue.setText(maxPres + " PSI");
             }
             buttonExportToCsv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    exportToCSV(motorClass,lThrustCurveData);      //export the data to a csv file
+                    exportToCSV(motorClass, lThrustCurveData);      //export the data to a csv file
                 }
             });
 
             buttonExportToCsvFull.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    exportToCSVFull(motorClass,lThrustCurveData);      //export the data to a csv file
+                    exportToCSVFull(motorClass, lThrustCurveData);      //export the data to a csv file
                 }
             });
 
@@ -817,6 +820,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     String currentEng = exportToEng(motorClass, lThrustCurveData, "");
+                    Log.d("File:", currentEng);
                     //File engFile = new File(currentEng);
                     File engFile = new File(Environment.getExternalStoragePublicDirectory
                             (Environment.DIRECTORY_DOWNLOADS), currentEng);
@@ -825,13 +829,58 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
                 }
             });
+            butShareZip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                    // Create a file for the zip file
+                    File zipFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "motorData.zip");
+                    ArrayList<String> fileNames = new ArrayList<>();
+                    fileNames.add(exportThrustToCSV(lThrustCurveData));
+                    if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+                        fileNames.add(exportPressureToCSV(lThrustCurveData));
+                    }
+                    fileNames.add(exportToEng(motorClass, lThrustCurveData, ""));
+                    try {
+                        // Create a zip output stream to write to the zip file
+                        FileOutputStream fos = new FileOutputStream(zipFile);
+                        ZipOutputStream zos = new ZipOutputStream(fos);
+
+                        for (String fileName : fileNames) {
+                            ZipEntry ze = new ZipEntry(fileName);
+                            // Add the zip entry to the zip output stream
+                            zos.putNextEntry(ze);
+                            // Read the file and write it to the zip output stream
+                            File filetoZip = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),  fileName);
+                            FileInputStream fis = new FileInputStream(filetoZip);
+                            byte[] buffer = new byte[1024];
+                            int len;
+                            while ((len = fis.read(buffer)) > 0) {
+                                zos.write(buffer, 0, len);
+                            }
+                            // Close the zip entry and the file input stream
+                            zos.closeEntry();
+                            fis.close();
+                        }
+                        // Close the zip output stream
+                        zos.close();
+                        fos.close();
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                        Log.d("error", "we have an issue");
+                    }
+
+                    //Toast.makeText(getContext(), currentEng, Toast.LENGTH_SHORT).show();
+                    shareFile(zipFile);
+                }
+
+            });
 
             return view;
         }
 
 
-        private void exportToCSV(String motorClass,XYSeriesCollection lThrustCurveData) {
+        private void exportToCSV(String motorClass, XYSeriesCollection lThrustCurveData) {
 
             String csv_data = "time,thrust" + units[0] + "\n";/// your csv data as string;
 
@@ -842,7 +891,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             int curveStart = tu.searchX(lThrustCurveData.getSeries(0), triggerThrust);
             int curveMaxThrust = tu.searchX(lThrustCurveData.getSeries(0), maxThrust);
             int curveStop = tu.searchXFrom(lThrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
-
+            // Export Thrust
             if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
                 for (int k = curveStart; k < curveStop; k++) {
 
@@ -868,7 +917,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
             SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
             String date = sdf.format(System.currentTimeMillis());
-            createFile( ThrustCurveName + "_" +motorClass+ "_"+date + ".csv",  csv_data,"");
+            createFile(ThrustCurveName + "_" + motorClass + "_" + date + ".csv", csv_data, "");
 
             //export pressure
             if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
@@ -876,7 +925,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
                 double maxPressure = lThrustCurveData.getSeries(1).getMaxY();
                 double minPressure = lThrustCurveData.getSeries(1).getMinY();
-                double triggerPressure = (maxPressure  * (5.0 / 100.0))+minPressure;
+                double triggerPressure = (maxPressure * (5.0 / 100.0)) + minPressure;
 
                 int curvePressureStart = tu.searchX(lThrustCurveData.getSeries(1), triggerPressure);
                 int curveMaxPressure = tu.searchX(lThrustCurveData.getSeries(1), maxPressure);
@@ -893,19 +942,108 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                         String currData = "";
                         if (myBT.getAppConf().getUnitsPressure().equals("0")) {
                             //PSI
-                            currData = String.format("%.1f ", (lThrustCurveData.getSeries(1).getY(k).floatValue() ));
+                            currData = String.format("%.1f ", (lThrustCurveData.getSeries(1).getY(k).floatValue()));
                         } else if (myBT.getAppConf().getUnitsPressure().equals("1")) {
                             //bar
-                            currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() /  (float) 14.504);
+                            currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() / (float) 14.504);
                         } else if (myBT.getAppConf().getUnitsPressure().equals("2")) {
                             //Kpascal
-                            currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue()  * (float) 6.895);
+                            currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() * (float) 6.895);
                         }
                         csv_data_pressure = csv_data_pressure + curTime + currData + "\n";
                     }
-                    createFile(ThrustCurveName + "_pressure_"  +motorClass+"_"+date + ".csv",  csv_data_pressure, "");
+                    createFile(ThrustCurveName + "_pressure_" + motorClass + "_" + date + ".csv", csv_data_pressure, "");
                 }
             }
+        }
+
+        private String exportThrustToCSV(XYSeriesCollection lThrustCurveData) {
+            SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
+            String date = sdf.format(System.currentTimeMillis());
+            String csv_data = "time,thrust" + units[0] + "\n";/// your csv data as string;
+
+            ThrustUtil tu = new ThrustUtil();
+            double maxThrust = lThrustCurveData.getSeries(0).getMaxY();
+            double triggerThrust = maxThrust * (5.0 / 100.0);
+
+            int curveStart = tu.searchX(lThrustCurveData.getSeries(0), triggerThrust);
+            int curveMaxThrust = tu.searchX(lThrustCurveData.getSeries(0), maxThrust);
+            int curveStop = tu.searchXFrom(lThrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
+            // Export Thrust
+            if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
+                for (int k = curveStart; k < curveStop; k++) {
+
+                    String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(0).getX(k).floatValue() - lThrustCurveData.getSeries(0).getX(curveStart).floatValue()) / 1000);
+                    if (curTime.contains(","))
+                        curTime = curTime + ";";
+                    else
+                        curTime = curTime + ",";
+                    String currData = "";
+                    if (myBT.getAppConf().getUnits().equals("0")) {
+                        //kg
+                        currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000));
+                    } else if (myBT.getAppConf().getUnits().equals("1")) {
+                        //pound
+                        currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 2.20462);
+                    } else if (myBT.getAppConf().getUnits().equals("2")) {
+                        //newton
+                        currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
+                    }
+                    csv_data = csv_data + curTime + currData + "\n";
+                }
+            }
+
+            //SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
+            //String date = sdf.format(System.currentTimeMillis());
+            String fileName = ThrustCurveName + "_" + motorClass + "_" + date + ".csv";
+            createFile(fileName, csv_data, "");
+            return "RocketMotorTestStand/" +fileName;
+        }
+
+        private String exportPressureToCSV(XYSeriesCollection lThrustCurveData) {
+            SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
+            String date = sdf.format(System.currentTimeMillis());
+            String fileName = "";
+            ThrustUtil tu = new ThrustUtil();
+            double maxThrust = lThrustCurveData.getSeries(0).getMaxY();
+            double triggerThrust = maxThrust * (5.0 / 100.0);
+
+            int curveStart = tu.searchX(lThrustCurveData.getSeries(0), triggerThrust);
+            String csv_data_pressure = "time,pressure" + units[1] + "\n";/// your csv data as string;
+
+            double maxPressure = lThrustCurveData.getSeries(1).getMaxY();
+            double minPressure = lThrustCurveData.getSeries(1).getMinY();
+            double triggerPressure = (maxPressure * (5.0 / 100.0)) + minPressure;
+
+            int curvePressureStart = tu.searchX(lThrustCurveData.getSeries(1), triggerPressure);
+            int curveMaxPressure = tu.searchX(lThrustCurveData.getSeries(1), maxPressure);
+            int curvePressureStop = tu.searchXFrom(lThrustCurveData.getSeries(1), curveMaxPressure, triggerPressure);
+
+            if (curvePressureStart != -1 && curveMaxPressure != -1 && curvePressureStop != -1) {
+                for (int k = curvePressureStart; k < curvePressureStop; k++) {
+
+                    String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(1).getX(k).floatValue() - lThrustCurveData.getSeries(1).getX(curveStart).floatValue()) / 1000);
+                    if (curTime.contains(","))
+                        curTime = curTime + ";";
+                    else
+                        curTime = curTime + ",";
+                    String currData = "";
+                    if (myBT.getAppConf().getUnitsPressure().equals("0")) {
+                        //PSI
+                        currData = String.format("%.1f ", (lThrustCurveData.getSeries(1).getY(k).floatValue()));
+                    } else if (myBT.getAppConf().getUnitsPressure().equals("1")) {
+                        //bar
+                        currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() / (float) 14.504);
+                    } else if (myBT.getAppConf().getUnitsPressure().equals("2")) {
+                        //Kpascal
+                        currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() * (float) 6.895);
+                    }
+                    csv_data_pressure = csv_data_pressure + curTime + currData + "\n";
+                }
+                fileName = ThrustCurveName + "_pressure_" + motorClass + "_" + date + ".csv";
+                createFile(fileName, csv_data_pressure, "");
+            }
+            return "RocketMotorTestStand/" +fileName;
         }
 
         private void exportToCSVFull(String motorClass, XYSeriesCollection lThrustCurveData) {
@@ -935,14 +1073,14 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
             SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
             String date = sdf.format(System.currentTimeMillis());
-            createFile(ThrustCurveName + "_full_" +motorClass+"_"+date + ".csv",  csv_data, "");
+            createFile(ThrustCurveName + "_full_" + motorClass + "_" + date + ".csv", csv_data, "");
 
             //export pressure
             if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
-                String csv_data_pressure = "time,pressure"+ units[1] +"\n";
+                String csv_data_pressure = "time,pressure" + units[1] + "\n";
 
                 for (int k = 0; k < lThrustCurveData.getSeries(1).getItemCount(); k++) {
-                    String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(1).getX(k).floatValue()) /1000);
+                    String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(1).getX(k).floatValue()) / 1000);
                     if (curTime.contains(","))
                         curTime = curTime + ";";
                     else
@@ -950,17 +1088,17 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     String currData = "";
                     if (myBT.getAppConf().getUnitsPressure().equals("0")) {
                         //PSI
-                        currData = String.format("%.1f ", (lThrustCurveData.getSeries(1).getY(k).floatValue() ));
+                        currData = String.format("%.1f ", (lThrustCurveData.getSeries(1).getY(k).floatValue()));
                     } else if (myBT.getAppConf().getUnitsPressure().equals("1")) {
                         //bar
-                        currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() /  (float) 14.504);
+                        currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() / (float) 14.504);
                     } else if (myBT.getAppConf().getUnitsPressure().equals("2")) {
                         //Kpascal
-                        currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue()  * (float) 6.895);
+                        currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() * (float) 6.895);
                     }
                     csv_data_pressure = csv_data_pressure + curTime + currData + "\n";
                 }
-                createFile(ThrustCurveName + "_pressure_full_" +motorClass+"_"+date + ".csv",  csv_data_pressure,"");
+                createFile(ThrustCurveName + "_pressure_full_" + motorClass + "_" + date + ".csv", csv_data_pressure, "");
             }
         }
 
@@ -975,7 +1113,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             //String date = sdf.format(System.currentTimeMillis());
 
             // select the name for your file
-            root = new File(root, fileName  );
+            root = new File(root, fileName);
 
             try {
                 FileOutputStream fout = new FileOutputStream(root);
@@ -1054,33 +1192,34 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             motorfile_data = motorfile_data + ";\n";
             SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
             String date = sdf.format(System.currentTimeMillis());
-            createFile(ThrustCurveName +"_" +motorClass+"_" +date + ".eng",  motorfile_data, msg);
-            return "/RocketMotorTestStand/" + ThrustCurveName +"_" +motorClass+"_" +date + ".eng";
+            createFile(ThrustCurveName + "_" + motorClass + "_" + date + ".eng", motorfile_data, msg);
+            return "RocketMotorTestStand/" + ThrustCurveName + "_" + motorClass + "_" + date + ".eng";
         }
 
         //Share file
         private void shareFile(File file) {
             Log.d("share", "Share 1");
             //Uri uri = Uri.fromFile(file);
-        Uri uri = FileProvider.getUriForFile(
-                getContext(),
-                getContext().getPackageName() + "." + this.getActivity().getLocalClassName() + ".provider",
-                file);
+            Uri uri = FileProvider.getUriForFile(
+                    getContext(),
+                    //getContext().getPackageName() + "." + this.getActivity().getLocalClassName() + ".provider",// Review!!!!!!
+                    getContext().getPackageName() +  ".provider",
+                    file);
             Log.d("share", "Share 2");
 
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setType("file/*");
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, "MotorTestStand has shared with you some info");
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("file/*");
+            intent.putExtra(android.content.Intent.EXTRA_TEXT, "MotorTestStand has shared with you some info");
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
             Log.d("share", "Share 3");
 
-        try {
-            this.startActivity(Intent.createChooser(intent, "Share With"));
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(getContext(), "No App Available", Toast.LENGTH_SHORT).show();
+            try {
+                this.startActivity(Intent.createChooser(intent, "Share With"));
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(getContext(), "No App Available", Toast.LENGTH_SHORT).show();
+            }
         }
-    }
 
     }
 
@@ -1116,7 +1255,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     private void shareScreenShot(File imageFile) {
 
         Uri uri = FileProvider.getUriForFile(
-               this,
+                this,
                 this.getPackageName() + "." + getLocalClassName() + ".provider",
                 imageFile);
 

@@ -305,7 +305,7 @@
     <string name="delete_last_thrust_curve">Effacer dernière courbe</string>
     <string name="telemetry_thrust">Poussée</string>
     <string name="tel_telemetry">Télémétrie</string>
-    <string name="retrieving_thrust_curve">Chargement de la courbe de pousée:</string>
+    <string name="retrieving_thrust_curve">Chargement de la courbe de poussée:</string>
     <string name="DR_module_config">Configuration module 3DR</string>
     <string name="_3dr_settings">Config module 3DR ...</string>
     <string name="bt_settings">Config module BT ...</string>
@@ -391,8 +391,8 @@
     <string name="lora_module_updating_address_msg">Updating module address</string>
     <string name="lora_module_updating_msg2">Updating serial speed, parity and air rate</string>
     <string name="lora_module_updating_msg3">updating packet , RSSI noise and transmitting power</string>
-    <string name="lora_module_updating_msg4">updating channel</string>
+    <string name="lora_module_updating_msg4">mise à jour du canal</string>
     <string name="lora_module_updating_msg5">updating RSSI Byte, trans Mode, LBT and WOR Cycle</string>
-    <string name="lora_module_updating_msg6">updating key</string>
+    <string name="lora_module_updating_msg6">mise à jour de la clé</string>
     <string name="lora_module_connecting_msg">Attempting connecting to the Lora module</string>
 </resources>

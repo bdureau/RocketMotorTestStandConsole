@@ -182,6 +182,13 @@
         android:text="@string/export_to_csv" />
 
     <Button
+        android:id="@+id/butExportToEng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/maxPressure"
+        android:text="@string/export_to_eng" />
+    <Button
         android:id="@+id/butExportToCsvFull"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -189,19 +196,20 @@
         android:layout_below="@+id/butExportToCsv"
         android:text="@string/export_to_csv_full" />
 
-    <Button
-        android:id="@+id/butExportToEng"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/butExportToCsvFull"
-        android:text="@string/export_to_eng" />
+
     <Button
         android:id="@+id/butShareEng"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/butExportToEng"
+        android:layout_below="@+id/butExportToCsvFull"
         android:text="Share Eng" />
+    <Button
+        android:id="@+id/butShareZip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/butExportToCsvFull"
+        android:text="Share Zip" />
 
 </RelativeLayout>
