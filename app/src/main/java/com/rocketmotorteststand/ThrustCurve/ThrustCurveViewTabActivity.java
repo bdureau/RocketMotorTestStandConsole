@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -1214,8 +1215,18 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             Log.d("share", "Share 3");
 
+            Intent chooser = Intent.createChooser(intent, "Share File");
+
+            List<ResolveInfo> resInfoList = getContext().getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
+
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                getContext().grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+
             try {
-                this.startActivity(Intent.createChooser(intent, "Share With"));
+                //this.startActivity(Intent.createChooser(intent, "Share With"));
+                this.startActivity(chooser);
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(getContext(), "No App Available", Toast.LENGTH_SHORT).show();
             }
