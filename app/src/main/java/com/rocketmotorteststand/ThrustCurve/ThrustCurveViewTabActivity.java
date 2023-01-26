@@ -760,7 +760,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             double recordingDuration = lThrustCurveData.getSeries(0).getMaxX() / 1000;
             recordingDurationValue.setText(String.format("%.3f ", recordingDuration) + " secs");
 
-
             ThrustUtil tu = new ThrustUtil();
             double maxThrust = lThrustCurveData.getSeries(0).getMaxY();
             double triggerThrust = maxThrust * (5.0 / 100.0);
@@ -822,12 +821,11 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     String currentEng = exportToEng(motorClass, lThrustCurveData, "");
                     Log.d("File:", currentEng);
-                    //File engFile = new File(currentEng);
+
                     File engFile = new File(Environment.getExternalStoragePublicDirectory
                             (Environment.DIRECTORY_DOWNLOADS), currentEng);
                     Toast.makeText(getContext(), currentEng, Toast.LENGTH_SHORT).show();
                     shareFile(engFile);
-
                 }
             });
             butShareZip.setOnClickListener(new View.OnClickListener() {
@@ -883,7 +881,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         private void exportToCSV(String motorClass, XYSeriesCollection lThrustCurveData) {
 
-            String csv_data = "time,thrust" + units[0] + "\n";/// your csv data as string;
+            /*String csv_data = "time,thrust" + units[0] + "\n";/// your csv data as string;
 
             ThrustUtil tu = new ThrustUtil();
             double maxThrust = lThrustCurveData.getSeries(0).getMaxY();
@@ -955,7 +953,15 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     }
                     createFile(ThrustCurveName + "_pressure_" + motorClass + "_" + date + ".csv", csv_data_pressure, "");
                 }
+            }*/
+            String fileNames="";
+            String thrustFileName = exportThrustToCSV(lThrustCurveData);
+            fileNames = thrustFileName;
+            if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+                String pressureFileName = exportPressureToCSV(lThrustCurveData);
+                fileNames = fileNames + "\n" + pressureFileName;
             }
+            Toast.makeText(getContext(), fileNames, Toast.LENGTH_SHORT).show();
         }
 
         private String exportThrustToCSV(XYSeriesCollection lThrustCurveData) {
@@ -1199,21 +1205,18 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         //Share file
         private void shareFile(File file) {
-            Log.d("share", "Share 1");
-            //Uri uri = Uri.fromFile(file);
+
             Uri uri = FileProvider.getUriForFile(
                     getContext(),
-                    //getContext().getPackageName() + "." + this.getActivity().getLocalClassName() + ".provider",// Review!!!!!!
                     getContext().getPackageName() +  ".provider",
                     file);
-            Log.d("share", "Share 2");
 
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("file/*");
             intent.putExtra(android.content.Intent.EXTRA_TEXT, "MotorTestStand has shared with you some info");
             intent.putExtra(Intent.EXTRA_STREAM, uri);
-            Log.d("share", "Share 3");
+
 
             Intent chooser = Intent.createChooser(intent, "Share File");
 
@@ -1225,7 +1228,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             }
 
             try {
-                //this.startActivity(Intent.createChooser(intent, "Share With"));
                 this.startActivity(chooser);
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(getContext(), "No App Available", Toast.LENGTH_SHORT).show();
@@ -1284,27 +1286,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         }
     }
 
-    //Share file
-    /*private void shareFile(File file) {
 
-        Uri uri = FileProvider.getUriForFile(
-                this,
-                this.getPackageName() + "." + getLocalClassName() + ".provider",
-                file);
-
-
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setType("file/*");
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, "MotorTestStand has shared with you some info");
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-
-        try {
-            this.startActivity(Intent.createChooser(intent, "Share With"));
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "No App Available", Toast.LENGTH_SHORT).show();
-        }
-    }*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
