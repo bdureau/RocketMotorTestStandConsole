@@ -21,9 +21,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -53,9 +55,12 @@ public class FlashFirmware extends AppCompatActivity {
     Physicaloid mPhysicaloid;
 
     boolean recorverFirmware = false;
+    public Spinner spinnerFirmware;
+    public ImageView imageAlti;
+
     Boards mSelectedBoard;
     Button btFlash;
-    public RadioButton rbTestStand, rbTestStandSTM32, rbTestStandSTM32V2;
+    //public RadioButton rbTestStand, rbTestStandSTM32, rbTestStandSTM32V2;
     TextView tvRead;
     private AlertDialog.Builder builder = null;
     private AlertDialog alert;
@@ -72,6 +77,7 @@ public class FlashFirmware extends AppCompatActivity {
     private static final String ASSET_FILE_RESET_TESTSTANDSTM32V2 = "recover_firmwares/ResetMotorTestStand.ino.bin";
 
     private String[] itemsBaudRate;
+    private String[] itemsFirmwares;
     private Spinner dropdownBaudRate;
 
     // fast way to call Toast
@@ -86,12 +92,26 @@ public class FlashFirmware extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flash_firmware);
 
+        spinnerFirmware = (Spinner) findViewById(R.id.spinnerFirmware);
+        itemsFirmwares = new String[]{
+                "TestStand",
+                "TestStandSTM32",
+                "TestStandSTM32V2"
+        };
+
+        ArrayAdapter<String> adapterFirmware = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, itemsFirmwares);
+        spinnerFirmware.setAdapter(adapterFirmware);
+        spinnerFirmware.setSelection(1);
+
         btFlash = (Button) findViewById(R.id.btFlash);
         tvRead = (TextView) findViewById(R.id.tvRead);
-        rbTestStand = (RadioButton) findViewById(R.id.radioButTestStand);
+        imageAlti = (ImageView) findViewById(R.id.imageAlti);
+
+        /*rbTestStand = (RadioButton) findViewById(R.id.radioButTestStand);
         rbTestStandSTM32 = (RadioButton) findViewById(R.id.radioButTestStandSTM32);
         rbTestStandSTM32V2 = (RadioButton) findViewById(R.id.radioButTestStandSTM32V2);
-        rbTestStandSTM32.setChecked(true);
+        rbTestStandSTM32.setChecked(true);*/
 
         mPhysicaloid = new Physicaloid(this);
         mBoardList = new ArrayList<Boards>();
@@ -101,7 +121,7 @@ public class FlashFirmware extends AppCompatActivity {
             }
         }
 
-        mSelectedBoard = mBoardList.get(0);
+        mSelectedBoard = mBoardList.get(1);
         uartConfig = new UartConfig(115200, UartConfig.DATA_BITS8, UartConfig.STOP_BITS1, UartConfig.PARITY_NONE, false, false);
 
         btFlash.setEnabled(true);
@@ -110,7 +130,6 @@ public class FlashFirmware extends AppCompatActivity {
         } else {
             //cannot open
             Toast.makeText(this, getResources().getString(R.string.msg13), Toast.LENGTH_LONG).show();
-            //btFlash.setEnabled(false);
         }
 
 
@@ -133,6 +152,26 @@ public class FlashFirmware extends AppCompatActivity {
         dropdownBaudRate.setAdapter(adapterBaudRate);
         dropdownBaudRate.setSelection(10);
 
+        spinnerFirmware.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStand"))
+                    imageAlti.setImageDrawable(getResources().getDrawable(R.drawable.teststand, getApplicationContext().getTheme()));
+
+                if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32"))
+                    imageAlti.setImageDrawable(getResources().getDrawable(R.drawable.teststandstm32, getApplicationContext().getTheme()));
+
+                if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2"))
+                    imageAlti.setImageDrawable(getResources().getDrawable(R.drawable.teststandstm32v2, getApplicationContext().getTheme()));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
         builder = new AlertDialog.Builder(this);
         //Running Saving commands
         builder.setMessage(R.string.flash_firmware_long_msg)
@@ -140,17 +179,11 @@ public class FlashFirmware extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(R.string.flash_firmware_ok, new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {
-
-
                         dialog.cancel();
-
                     }
                 });
-
         alert = builder.create();
         alert.show();
-
-
     }
 
 
@@ -168,18 +201,24 @@ public class FlashFirmware extends AppCompatActivity {
     public void onClickRecover(View v) {
         String recoverFileName;
         recoverFileName = ASSET_FILE_RESET_TESTSTAND;
+        if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStand"))
+            recoverFileName = ASSET_FILE_RESET_TESTSTAND;
 
-        if (rbTestStandSTM32.isChecked())
+        if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32"))
+            //if (rbTestStandSTM32.isChecked())
             recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32;
 
-        if (rbTestStandSTM32V2.isChecked())
+        if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2"))
+            //if (rbTestStandSTM32V2.isChecked())
             recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32V2;
 
 
         tvRead.setText("");
         tvRead.setText(getResources().getString(R.string.after_complete_upload));
         //rbTestStand
-        if (!rbTestStandSTM32.isChecked() & !rbTestStandSTM32V2.isChecked()) {
+        if (!itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32") &&
+                !itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2")) {
+            //if (!rbTestStandSTM32.isChecked() & !rbTestStandSTM32V2.isChecked()) {
             try {
                 builder = new AlertDialog.Builder(FlashFirmware.this);
                 //Recover firmware...
@@ -188,7 +227,6 @@ public class FlashFirmware extends AppCompatActivity {
                         .setCancelable(false)
                         .setNegativeButton(getResources().getString(R.string.firmware_cancel), new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog, final int id) {
-
                                 dialog.cancel();
                                 mPhysicaloid.cancelUpload();
                             }
@@ -202,7 +240,7 @@ public class FlashFirmware extends AppCompatActivity {
             } catch (IOException e) {
                 //Log.e(TAG, e.toString());
             }
-        } else  {
+        } else {
             recorverFirmware = true;
             new UploadSTM32Asyc().execute();
         }
@@ -227,17 +265,22 @@ public class FlashFirmware extends AppCompatActivity {
 
         firmwareFileName = ASSET_FILE_NAME_TESTSTAND;
 
-        if (rbTestStand.isChecked())
+        if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStand"))
+            //if (rbTestStand.isChecked())
             firmwareFileName = ASSET_FILE_NAME_TESTSTAND;
 
-        if (rbTestStandSTM32.isChecked())
+        if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32"))
+            //if (rbTestStandSTM32.isChecked())
             firmwareFileName = ASSET_FILE_NAME_TESTSTANDSTM32;
 
-        if (rbTestStandSTM32V2.isChecked())
+        if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32"))
+            //if (rbTestStandSTM32V2.isChecked())
             firmwareFileName = ASSET_FILE_NAME_TESTSTANDSTM32V2;
 
         tvRead.setText("");
-        if (!rbTestStandSTM32.isChecked() & !rbTestStandSTM32V2.isChecked() ) {
+        if (!itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32") &&
+                !itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2")) {
+            //if (!rbTestStandSTM32.isChecked() & !rbTestStandSTM32V2.isChecked() ) {
             try {
                 builder = new AlertDialog.Builder(FlashFirmware.this);
                 //Flashing firmware...
@@ -261,9 +304,7 @@ public class FlashFirmware extends AppCompatActivity {
             } catch (IOException e) {
                 //Log.e(TAG, e.toString());
             }
-        }
-
-        else {
+        } else {
             //uploadSTM32(firmwareFileName);
             recorverFirmware = false;
             new UploadSTM32Asyc().execute();
@@ -282,9 +323,7 @@ public class FlashFirmware extends AppCompatActivity {
                     .setCancelable(false)
                     .setNegativeButton(getResources().getString(R.string.firmware_cancel), new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
-
                             dialog.cancel();
-
                         }
                     });
             alert = builder.create();
@@ -294,22 +333,25 @@ public class FlashFirmware extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            String version="";
+            String version = "";
 
             FirmwareInfo firm = new FirmwareInfo(mPhysicaloid);
             firm.open(38400);
-            version =firm.getFirmwarVersion();
+            version = firm.getFirmwarVersion();
 
-            tvAppend(tvRead, getString(R.string.firmware_ver_detected)+ version +"\n");
+            tvAppend(tvRead, getString(R.string.firmware_ver_detected) + version + "\n");
 
-            if(version.equals("TestStand")) {
-                setRadioButton (rbTestStand,true);
+            if (version.equals("TestStand")) {
+                //setRadioButton (rbTestStand,true);
+                spinnerFirmware.setSelection(0);
             }
-            if(version.equals("TestStandSTM32")) {
-                setRadioButton (rbTestStandSTM32,true);
+            if (version.equals("TestStandSTM32")) {
+                //setRadioButton (rbTestStandSTM32,true);
+                spinnerFirmware.setSelection(1);
             }
-            if(version.equals("TestStandSTM32V2")) {
-                setRadioButton (rbTestStandSTM32V2,true);
+            if (version.equals("TestStandSTM32V2")) {
+                //setRadioButton (rbTestStandSTM32V2,true);
+                spinnerFirmware.setSelection(2);
             }
             return null;
         }
@@ -334,9 +376,7 @@ public class FlashFirmware extends AppCompatActivity {
                     .setCancelable(false)
                     .setNegativeButton(getResources().getString(R.string.firmware_cancel), new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
-
                             dialog.cancel();
-
                         }
                     });
             alert = builder.create();
@@ -346,11 +386,12 @@ public class FlashFirmware extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             if (!recorverFirmware) {
-                if (rbTestStandSTM32.isChecked())
+                if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32"))
+                    //if (rbTestStandSTM32.isChecked())
                     uploadSTM32(ASSET_FILE_NAME_TESTSTANDSTM32, mUploadSTM32Callback);
-                else if (rbTestStandSTM32V2.isChecked())
+                else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2"))
+                    //else if (rbTestStandSTM32V2.isChecked())
                     uploadSTM32(ASSET_FILE_NAME_TESTSTANDSTM32V2, mUploadSTM32Callback);
-
             } else {
                 uploadSTM32(ASSET_FILE_RESET_TESTSTANDSTM32, mUploadSTM32Callback);
             }
@@ -370,7 +411,6 @@ public class FlashFirmware extends AppCompatActivity {
 
         try {
             is = getAssets().open(fileName);
-
         } catch (IOException e) {
             //e.printStackTrace();
             tvAppend(tvRead, getString(R.string.firmware_file_not_found) + ASSET_FILE_NAME_TESTSTANDSTM32 + "\n");
@@ -482,7 +522,6 @@ public class FlashFirmware extends AppCompatActivity {
 
         @Override
         public void onUploading(int value) {
-
             dialogAppend(getResources().getString(R.string.msg12) + value + " %");
         }
 
@@ -495,7 +534,6 @@ public class FlashFirmware extends AppCompatActivity {
         public void onPreUpload() {
             //Upload : Start
             tvAppend(tvRead, getResources().getString(R.string.msg14));
-
         }
 
         public void info(String value) {
@@ -542,7 +580,7 @@ public class FlashFirmware extends AppCompatActivity {
         });
     }
 
-    private void setRadioButton (RadioButton rb, boolean state) {
+    /*private void setRadioButton (RadioButton rb, boolean state) {
         final RadioButton frb = rb;
         final boolean fstate = state;
         mHandler.post(new Runnable() {
@@ -551,7 +589,7 @@ public class FlashFirmware extends AppCompatActivity {
                 frb.setChecked(fstate);
             }
         });
-    }
+    }*/
     private void dialogAppend(CharSequence text) {
         final CharSequence ftext = text;
         mHandler.post(new Runnable() {
@@ -567,6 +605,7 @@ public class FlashFirmware extends AppCompatActivity {
 
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

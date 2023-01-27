@@ -13,46 +13,50 @@
         android:layout_alignParentTop="true"
         android:text="@string/select_altimeter_model"
         android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <RadioGroup
-        android:id="@+id/question_radio_group"
+    <TextView
+        android:id="@+id/textViewFirmware"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/textViewTestStandModelLbl"
-        tools:layout_editor_absoluteX="88dp"
-        tools:layout_editor_absoluteY="91dp">
+        android:text="Firmware:" />
 
-        <RadioButton
-            android:id="@+id/radioButTestStand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/test_stand"
-            tools:layout_editor_absoluteX="32dp"
-            tools:layout_editor_absoluteY="74dp" />
+    <Spinner
+        android:id="@+id/spinnerFirmware"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTestStandModelLbl"
+        android:layout_alignBaseline="@+id/textViewFirmware"
 
-        <RadioButton
-            android:id="@+id/radioButTestStandSTM32"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/test_stand_stm32"
-            tools:layout_editor_absoluteX="32dp"
-            tools:layout_editor_absoluteY="74dp" />
 
-        <RadioButton
-            android:id="@+id/radioButTestStandSTM32V2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/test_stand_stm32v2"
-            tools:layout_editor_absoluteX="32dp"
-            tools:layout_editor_absoluteY="74dp" />
+        android:layout_alignParentEnd="false"
+        android:layout_centerInParent="false"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-6dp"
+        android:layout_marginEnd="1dp"
+        android:spinnerMode="dropdown" />
 
-    </RadioGroup>
+    <ImageView
+        android:id="@+id/imageAlti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinnerFirmware"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/teststand" />
 
+    <TextView
+        android:id="@+id/textViewBaudRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageAlti"
+        android:text="Flash speed(Baud):" />
     <Spinner
         android:id="@+id/spinnerBaud"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/question_radio_group"
+        android:layout_below="@+id/imageAlti"
+        android:layout_alignBaseline="@+id/textViewBaudRate"
         android:layout_alignParentRight="true"
         android:spinnerMode="dropdown" />
 
@@ -60,7 +64,7 @@
         android:id="@+id/btFlash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/question_radio_group"
+        android:layout_below="@+id/textViewBaudRate"
         android:layout_alignParentLeft="true"
         android:onClick="onClickFlash"
         android:text="@string/flash_firmware" />
