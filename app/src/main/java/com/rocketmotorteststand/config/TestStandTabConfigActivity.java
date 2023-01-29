@@ -1048,8 +1048,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         {
             super.onPostExecute(result);
             if (!canceled) {
-
-
                 alert.dismiss();
             }
 
