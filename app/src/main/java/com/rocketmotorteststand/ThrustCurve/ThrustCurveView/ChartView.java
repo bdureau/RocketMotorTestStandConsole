@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.ThrustCurve;
+package com.rocketmotorteststand.ThrustCurve.ThrustCurveView;
 
 /* ===========================================================
  * AFreeChart : a free chart library for Android(tm) platform.

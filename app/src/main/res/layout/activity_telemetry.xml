@@ -48,7 +48,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/gridLayout">
 
-        <com.rocketmotorteststand.ThrustCurve.ChartView
+        <com.rocketmotorteststand.ThrustCurve.ThrustCurveView.ChartView
             android:id="@+id/telemetryChartView"
             android:layout_width="match_parent"
 

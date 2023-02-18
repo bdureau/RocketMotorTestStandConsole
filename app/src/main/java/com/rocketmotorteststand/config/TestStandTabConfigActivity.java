@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 
 import android.os.AsyncTask;
 
@@ -27,17 +26,12 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,8 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 //tooltip library
-import com.github.florent37.viewtooltip.ViewTooltip;
-
+import com.rocketmotorteststand.config.TestStandConfig.TestStandConfigTab1Fragment;
+import com.rocketmotorteststand.config.TestStandConfig.TestStandConfigTab2Fragment;
 
 
 public class TestStandTabConfigActivity extends AppCompatActivity {
@@ -60,10 +54,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     SectionsPageAdapter adapter;
-    Tab2Fragment configPage2 = null;
-    Tab3Fragment configPage3 = null;
+    private TestStandConfigTab1Fragment configPage2 = null;
+    private TestStandConfigTab2Fragment configPage3 = null;
     private Button btnDismiss, btnUpload, btnCalibrate;
-    static ConsoleApplication myBT;
+    private  ConsoleApplication myBT;
     private TestStandConfigData TestStandCfg = null;
     private ProgressDialog progress;
     private AlertDialog alert;
@@ -81,15 +75,16 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                     Log.d("Calibration", "offset: "+(String) msg.obj );
                     if (((String) msg.obj).matches("^-?[0-9]\\d+(?:\\.\\d+)?")) {
                         //progress.
-                        configPage3.CurrentOffset.setText((String) msg.obj);
-
+                        //configPage3.CurrentOffset.setText((String) msg.obj);
+                        configPage3.setCurrentOffset((String) msg.obj);
                     }
                     break;
                 case 2:
                     // Value 2 contains the calibration
                     Log.d("Calibration", "factor: "+(String) msg.obj );
                     if (((String) msg.obj).matches("^-?[0-9]\\d+(?:\\.\\d+)?")) {
-                        configPage3.CalibrationFactor.setText((String) msg.obj);
+                        //configPage3.CalibrationFactor.setText((String) msg.obj);
+                        configPage3.setCalibrationFactor((String) msg.obj);
                         alert.setMessage((String) msg.obj);
                     }
                     break;
@@ -145,8 +140,8 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         adapter = new SectionsPageAdapter(getSupportFragmentManager());
 
-        configPage2 = new Tab2Fragment(TestStandCfg);
-        configPage3 = new Tab3Fragment(TestStandCfg);
+        configPage2 = new TestStandConfigTab1Fragment(myBT,TestStandCfg);
+        configPage3 = new TestStandConfigTab2Fragment(TestStandCfg);
 
         adapter.addFragment(configPage2, "TAB2");
         adapter.addFragment(configPage3, "TAB3");
@@ -296,20 +291,13 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         long prevBaudRate = TestStandCfg.getConnectionSpeed();
 
         // check if the baud rate has changed
-
-
         if (configPage2.isViewCreated()) {
-
             // TestStandCfg.setConnectionSpeed(configPage2.getBaudRate());
-
             TestStandCfg.setTestStandResolution(configPage2.getTestStandResolution());
             TestStandCfg.setEepromSize(configPage2.getEEpromSize());
-
             TestStandCfg.setStopRecordingTime(configPage2.getStopRecordingTime());
-
             TestStandCfg.setBatteryType(configPage2.getBatteryType());
             TestStandCfg.setPressureSensorType(configPage2.getSensorType());
-
         }
 
         if (configPage3.isViewCreated()) {
@@ -336,120 +324,22 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                         .setNegativeButton(getResources().getString(R.string.No), new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog, final int id) {
                                 dialog.cancel();
-
                             }
                         });
                 final AlertDialog alert = builder.create();
                 alert.show();
             } else {
-                //sendTestStandCfg();
                 sendTestStandCfgV2();
                 finish();
             }
         } else {
-            //sendTestStandCfg();
             sendTestStandCfgV2();
             finish();
         }
-
         return true;
     }
 
-
-    /*private void sendTestStandCfg() {
-        String testStandCfgStr = "";
-
-        testStandCfgStr = "s," +
-                TestStandCfg.getUnits() + "," +
-                TestStandCfg.getConnectionSpeed() + "," +
-                TestStandCfg.getStopRecordingTime() + "," +
-                TestStandCfg.getTestStandResolution() + "," +
-                TestStandCfg.getEepromSize();
-
-        testStandCfgStr = testStandCfgStr + "," + "0";//TestStandCfg.getStartRecordingThrustLevel();
-        testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getBatteryType();
-        testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCalibrationFactor();
-        testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCurrentOffset();
-        testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getPressureSensorType();
-
-        String cfg = testStandCfgStr;
-        cfg = cfg.replace("s", "");
-        cfg = cfg.replace(",", "");
-        Log.d("conftab", cfg.toString());
-
-        testStandCfgStr = testStandCfgStr + "," + generateCheckSum(cfg) + ";";
-
-
-        if (myBT.getConnected()) {
-            myBT.setDataReady(false);
-            myBT.flush();
-            myBT.clearInput();
-            //switch off the main loop before sending the config
-            myBT.write("m0;".toString());
-            Log.d("conftab", "switch off main loop");
-            //wait for the result to come back
-            try {
-                while (myBT.getInputStream().available() <= 0) ;
-            } catch (IOException e) {
-
-            }
-            String myMessage = "";
-            myMessage = myBT.ReadResult(3000);
-            if (myMessage.equals("OK")) {
-                Log.d("conftab", "switch off main loop ok");
-            }
-            myBT.flush();
-            myBT.clearInput();
-            myBT.setDataReady(false);
-            msg("Sent :" + testStandCfgStr.toString());
-            //send back the config
-            myBT.write(testStandCfgStr.toString());
-            Log.d("conftab", testStandCfgStr.toString());
-            myBT.flush();
-            //get the results
-            //wait for the result to come back
-            try {
-                while (myBT.getInputStream().available() <= 0) ;
-            } catch (IOException e) {
-
-            }
-            myMessage = myBT.ReadResult(3000);
-            if (myMessage.equals("OK")) {
-                //msg("Sent OK:" + altiCfgStr.toString());
-                Log.d("conftab", "config sent succesfully");
-
-            } else {
-                //  msg(myMessage);
-            }
-            if (myMessage.equals("KO")) {
-                //msg(getResources().getString(R.string.msg2));
-            }
-
-
-            myBT.setDataReady(false);
-            myBT.flush();
-            myBT.clearInput();
-            //switch on the main loop before sending the config
-            myBT.write("m1;".toString());
-            Log.d("conftab", "switch on main loop");
-
-            //wait for the result to come back
-            try {
-                while (myBT.getInputStream().available() <= 0) ;
-            } catch (IOException e) {
-
-            }
-            myMessage = "";
-            myMessage = myBT.ReadResult(3000);
-            msg(getResources().getString(R.string.msg3));
-
-            myBT.flush();
-        }
-
-    }*/
-
     private void sendTestStandCfgV2() {
-
         if (myBT.getConnected()) {
             myBT.setDataReady(false);
             myBT.flush();
@@ -545,7 +435,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
         altiCfgStr = altiCfgStr + "," + generateCheckSum(cfg) + ";";
 
-
         if (myBT.getConnected()) {
 
             String myMessage = "";
@@ -627,7 +516,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         }
     }
 
-
+/*
     public static class Tab2Fragment extends Fragment {
         private static final String TAG = "Tab2Fragment";
         private TestStandConfigData lTestStandCfg = null;
@@ -996,12 +885,13 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
     }
 
+    */
     // calibration
     private class Calibration extends AsyncTask<Void, Void, Void>  // UI thread
     {
         private AlertDialog.Builder builder = null;
        // private AlertDialog alert;
-        private Boolean canceled = false;
+        private boolean canceled = false;
 
         @Override
         protected void onPreExecute() {
@@ -1030,7 +920,8 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
             myBT.flush();
             myBT.clearInput();
-            myBT.write("c"+configPage3.calibrationWeight.getText()+";".toString());
+            //myBT.write("c"+configPage3.calibrationWeight.getText()+";".toString());
+            myBT.write("c"+configPage3.getCalibrationWeight()+";".toString());
             //wait for ok and put the result back
             String myMessage = "";
 

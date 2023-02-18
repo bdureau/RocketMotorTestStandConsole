@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.config;
+package com.rocketmotorteststand.config.ConfigModules;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,6 +24,7 @@ import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
 import com.physicaloid.lib.Physicaloid;
 import com.rocketmotorteststand.ShareHandler;
+import com.rocketmotorteststand.config.AppConfigTabActivity;
 
 /**
  * @description: This allows the configuration of Lora Ebytes telemetry modules from an Android
@@ -1019,7 +1020,7 @@ public class ConfigLora extends AppCompatActivity {
         }
         //open application settings screen
         if (id == R.id.action_settings) {
-            Intent i = new Intent(ConfigLora.this, AppConfigActivity.class);
+            Intent i = new Intent(ConfigLora.this, AppConfigTabActivity.class);
             startActivity(i);
             return true;
         }

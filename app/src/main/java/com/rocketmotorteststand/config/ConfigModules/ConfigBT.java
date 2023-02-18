@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.config;
+package com.rocketmotorteststand.config.ConfigModules;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +28,7 @@ import com.rocketmotorteststand.R;
 import com.physicaloid.lib.Physicaloid;
 import com.physicaloid.lib.usb.driver.uart.UartConfig;
 import com.rocketmotorteststand.ShareHandler;
+import com.rocketmotorteststand.config.AppConfigTabActivity;
 
 
 public class ConfigBT extends AppCompatActivity {
@@ -779,7 +779,7 @@ public class ConfigBT extends AppCompatActivity {
         }
         //open application settings screen
         if (id == R.id.action_settings) {
-            Intent i = new Intent(ConfigBT.this, AppConfigActivity.class);
+            Intent i = new Intent(ConfigBT.this, AppConfigTabActivity.class);
             startActivity(i);
             return true;
         }

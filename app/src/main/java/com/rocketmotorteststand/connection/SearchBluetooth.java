@@ -29,7 +29,6 @@ import android.widget.Toast;
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
 import com.rocketmotorteststand.ShareHandler;
-import com.rocketmotorteststand.config.AppConfigActivity;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 

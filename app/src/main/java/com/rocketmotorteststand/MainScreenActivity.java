@@ -12,7 +12,6 @@ import android.hardware.usb.UsbManager;
 import android.os.AsyncTask;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 
 import android.os.Bundle;
@@ -20,20 +19,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rocketmotorteststand.Flash.FlashFirmware;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveListActivity;
-import com.rocketmotorteststand.ThrustCurve.ThrustCurveViewTabActivity;
-import com.rocketmotorteststand.config.Config3DR;
-import com.rocketmotorteststand.config.ConfigBT;
-import com.rocketmotorteststand.config.ConfigLora;
+import com.rocketmotorteststand.config.ConfigModules.Config3DR;
+import com.rocketmotorteststand.config.ConfigModules.ConfigBT;
+import com.rocketmotorteststand.config.ConfigModules.ConfigLora;
 import com.rocketmotorteststand.config.TestStandConfigData;
 import com.rocketmotorteststand.config.TestStandTabConfigActivity;
-import com.rocketmotorteststand.config.AppConfigActivity;
+import com.rocketmotorteststand.config.AppConfigTabActivity;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.connection.SearchBluetooth;
@@ -162,9 +159,9 @@ public class MainScreenActivity extends AppCompatActivity {
             setEnabledCard(false, btnFlashFirmware, image_firmware, text_firmware);
         } else {
             DisableUI();
-            //btnConnectDisconnect.setText(R.string.connect);
+
             text_connect.setText(R.string.connect);
-            //btnFlashFirmware.setEnabled(true);
+
             setEnabledCard(true, btnFlashFirmware, image_firmware, text_firmware);
         }
 
@@ -258,9 +255,7 @@ public class MainScreenActivity extends AppCompatActivity {
                     Disconnect(); //close connection
                     DisableUI();
                     // we are disconnected enable flash firmware
-                    //btnFlashFirmware.setEnabled(true);
                     setEnabledCard(true, btnFlashFirmware, image_firmware, text_firmware);
-                    //btnConnectDisconnect.setText(R.string.connect);
                     text_connect.setText(R.string.connect);
                 } else {
                     if (myBT.getConnectionType().equals("bluetooth")) {
@@ -271,9 +266,7 @@ public class MainScreenActivity extends AppCompatActivity {
                             if (myBT.getConnected()) {
                                 EnableUI();
                                 // cannot flash firmware if connected
-                                //btnFlashFirmware.setEnabled(false);
                                 setEnabledCard(false, btnFlashFirmware, image_firmware, text_firmware);
-                                //btnConnectDisconnect.setText(getResources().getString(R.string.disconnect));
                                 text_connect.setText(getResources().getString(R.string.disconnect));
                             }
                         } else {
@@ -318,15 +311,10 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
     private void DisableUI() {
-        //btnTestStandSettings.setEnabled(false);
         setEnabledCard(false, btnTestStandSettings, image_settings, text_settings);
-        //btnReadThrustCurves.setEnabled(false);
         setEnabledCard(false, btnReadThrustCurves, image_curve, text_curve);
-        //btnTelemetry.setEnabled(false);
         setEnabledCard(false, btnTelemetry, image_telemetry, text_telemetry);
-        //btnReset.setEnabled(false);
         setEnabledCard(false, btnReset, image_reset, text_reset);
-        //btnStatus.setEnabled(false);
         setEnabledCard(false, btnStatus, image_status, text_status);
         // now enable or disable the menu entries by invalidating it
         invalidateOptionsMenu();
@@ -335,11 +323,6 @@ public class MainScreenActivity extends AppCompatActivity {
     private void setEnabledCard(boolean enable, CardView card, ImageView image, TextView text) {
         card.setEnabled(enable);
         image.setImageAlpha(enable? 0xFF : 0x3F);
-        /*if (enable==false)
-            if(AppCompatDelegate.getDefaultNightMode()== AppCompatDelegate.MODE_NIGHT_YES)
-                text.setTextColor(0xFF6C6666);
-            else
-                text.setTextColor(0xFFDFD5D5);*/
     }
     private void EnableUI() {
 
@@ -370,34 +353,23 @@ public class MainScreenActivity extends AppCompatActivity {
 
             //enable it for bT or USB only if full support
             if (myBT.getAppConf().getConnectionType().equals("0") || (myBT.getAppConf().getConnectionType().equals("1") && myBT.getAppConf().getFullUSBSupport().equals("true")))
-                //btnReadThrustCurves.setEnabled(true);
                 setEnabledCard(true, btnReadThrustCurves, image_curve, text_curve);
             else
-                //btnReadThrustCurves.setEnabled(false);
                 setEnabledCard(false, btnReadThrustCurves, image_curve, text_curve);
 
-            //btnTelemetry.setEnabled(true);
             setEnabledCard(true, btnTelemetry, image_telemetry, text_telemetry);
             //enable it for bT or USB only if full support
             if (myBT.getAppConf().getConnectionType().equals("0") || (myBT.getAppConf().getConnectionType().equals("1") && myBT.getAppConf().getFullUSBSupport().equals("true"))) {
-                //btnTestStandSettings.setEnabled(true);
                 setEnabledCard(true, btnTestStandSettings, image_settings, text_settings);
-                //btnReset.setEnabled(true);
                 setEnabledCard(true, btnReset, image_reset, text_reset);
-                //btnStatus.setEnabled(true);
                 setEnabledCard(true, btnStatus, image_status, text_status);
             } else {
-                //btnTestStandSettings.setEnabled(false);
                 setEnabledCard(false, btnTestStandSettings, image_settings, text_settings);
-                //btnReset.setEnabled(false);
                 setEnabledCard(false, btnReset, image_reset, text_reset);
-                //btnStatus.setEnabled(false);
                 setEnabledCard(false, btnStatus, image_status, text_status);
             }
             msg(getResources().getString(R.string.MS_msg4));
-            //btnConnectDisconnect.setText(getResources().getString(R.string.disconnect));
             text_connect.setText(getResources().getString(R.string.disconnect));
-            //btnFlashFirmware.setEnabled(false);
             setEnabledCard(false, btnFlashFirmware, image_firmware, text_firmware);
             if(!firmCompat.IsCompatible(myBT.getTestStandConfigData().getTestStandName(),
                     myBT.getTestStandConfigData().getTestStandMajorVersion()+ "."+ myBT.getTestStandConfigData().getTestStandMinorVersion())) {
@@ -563,7 +535,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent i = new Intent(MainScreenActivity.this, AppConfigActivity.class);
+            Intent i = new Intent(MainScreenActivity.this, AppConfigTabActivity.class);
             startActivity(i);
             return true;
         }
@@ -667,7 +639,6 @@ public class MainScreenActivity extends AppCompatActivity {
         protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
         {
             if (!myBT.getConnected()) {
-
                 if (myBT.connect())
                     ConnectSuccess = true;
                 else

@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import android.util.Log;
+//import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import android.widget.ImageView;
-import android.widget.RadioButton;
+//import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +45,7 @@ import com.physicaloid.lib.usb.driver.uart.UartConfig;
 import java.io.IOException;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+//import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import static com.physicaloid.misc.Misc.toHexStr;

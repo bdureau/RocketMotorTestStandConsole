@@ -6,7 +6,6 @@ package com.rocketmotorteststand.config;
  **/
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -14,43 +13,33 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.Voice;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
 import com.rocketmotorteststand.ShareHandler;
+import com.rocketmotorteststand.config.AppConfig.AppConfigTab1Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
-public class AppConfigActivity extends AppCompatActivity {
+public class AppConfigTabActivity extends AppCompatActivity {
     Button btnDismiss, btnSave, bdtDefault;
     private ViewPager mViewPager;
     SectionsPageAdapter adapter;
 
-    private Tab1Fragment appConfigPage1 = null;
+    private AppConfigTab1Fragment appConfigPage1 = null;
     //private Tab2Fragment appConfigPage2 = null;
 
 
-    private static AppConfigData appConfigData = null;
+    private AppConfigData appConfigData = null;
 
     ConsoleApplication myBT;
 
@@ -93,11 +82,8 @@ public class AppConfigActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //restore the application default configuration
                 RestoreToDefault();
-
             }
         });
-
-
     }
 
     private void SaveConfig() {
@@ -142,8 +128,8 @@ public class AppConfigActivity extends AppCompatActivity {
 
 
     private void setupViewPager(ViewPager viewPager) {
-        adapter = new AppConfigActivity.SectionsPageAdapter(getSupportFragmentManager());
-        appConfigPage1 = new AppConfigActivity.Tab1Fragment(myBT);
+        adapter = new AppConfigTabActivity.SectionsPageAdapter(getSupportFragmentManager());
+        appConfigPage1 = new AppConfigTab1Fragment(myBT, appConfigData); //AppConfigTabActivity.Tab1Fragment(myBT);
 
 
         adapter.addFragment(appConfigPage1, "TAB1");
@@ -182,7 +168,7 @@ public class AppConfigActivity extends AppCompatActivity {
             return mFragmentList.size();
         }
     }
-
+/*
     public static class Tab1Fragment extends Fragment {
         private Spinner spAppLanguage, spGraphColor, spAppUnit, spAppUnitPressure, spGraphBackColor, spFontSize, spBaudRate;
         private Spinner spConnectionType, spGraphicsLibType;
@@ -384,7 +370,7 @@ public class AppConfigActivity extends AppCompatActivity {
             Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
         }
     }
-
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -406,14 +392,14 @@ public class AppConfigActivity extends AppCompatActivity {
         }
         //open help screen
         if (id == R.id.action_help) {
-            Intent i = new Intent(AppConfigActivity.this, HelpActivity.class);
+            Intent i = new Intent(AppConfigTabActivity.this, HelpActivity.class);
             i.putExtra("help_file", "help_config_application");
             startActivity(i);
             return true;
         }
 
         if (id == R.id.action_about) {
-            Intent i = new Intent(AppConfigActivity.this, AboutActivity.class);
+            Intent i = new Intent(AppConfigTabActivity.this, AboutActivity.class);
             startActivity(i);
             return true;
         }

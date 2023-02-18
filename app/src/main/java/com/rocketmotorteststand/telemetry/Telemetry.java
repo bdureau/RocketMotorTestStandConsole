@@ -13,15 +13,11 @@ import android.os.Message;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import android.graphics.Typeface;
 
@@ -41,7 +37,7 @@ import org.afree.graphics.geom.Font;
 import android.graphics.Color;
 
 import com.rocketmotorteststand.ConsoleApplication;
-import com.rocketmotorteststand.ThrustCurve.ChartView;
+import com.rocketmotorteststand.ThrustCurve.ThrustCurveView.ChartView;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveData;
 import com.rocketmotorteststand.R;
 

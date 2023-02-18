@@ -27,15 +27,12 @@ import android.widget.Toast;
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
 
-import org.afree.data.xy.XYSeries;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static java.lang.Math.abs;
 
 
 public class ThrustCurveListActivity extends AppCompatActivity {
@@ -54,16 +51,7 @@ public class ThrustCurveListActivity extends AppCompatActivity {
             // Get the thrust curve name
             String currentThrustCurve = ((TextView) v).getText().toString();
             Intent i;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
-                //if android ver = 8 or greater use the MPlib
-                i = new Intent(ThrustCurveListActivity.this, ThrustCurveViewTabActivity.class);
-            } else {
-                // Make an intent to start next activity.
-                if (myBT.getAppConf().getGraphicsLibType().equals("0"))
-                    i = new Intent(ThrustCurveListActivity.this, ThrustCurveViewActivity.class);
-                else
-                    i = new Intent(ThrustCurveListActivity.this, ThrustCurveViewTabActivity.class);
-            }
+            i = new Intent(ThrustCurveListActivity.this, ThrustCurveViewTabActivity.class);
             //Change the activity.
             i.putExtra(SELECTED_THRUSTCURVE, currentThrustCurve);
             startActivity(i);
@@ -76,8 +64,6 @@ public class ThrustCurveListActivity extends AppCompatActivity {
 
         //get the bluetooth Application pointer
         myBT = (ConsoleApplication) getApplication();
-        //Check the local and force it if needed
-        //getApplicationContext().getResources().updateConfiguration(myBT.getAppLocal(), null);
 
         setContentView(R.layout.activity_thrustcurve_list);
         buttonDismiss = (Button) findViewById(R.id.butDismiss);
