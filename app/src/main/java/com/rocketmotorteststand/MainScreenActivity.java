@@ -74,17 +74,20 @@ public class MainScreenActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_USB_PERMISSION)) {
-                boolean granted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
-                if (granted) {
+                boolean granted = true;
+                if(android.os.Build.VERSION.SDK_INT < 31)
+                    granted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
 
-                    if (myBT.connect(usbManager, device, Integer.parseInt(myBT.getAppConf().getBaudRateValue()))) {
+                if (granted) {
+                    if (myBT.connect(usbManager, device, 38400 /*Integer.parseInt(myBT.getAppConf().getBaudRateValue())*/)) {
                         myBT.setConnected(true);
+                        Log.d("TAG", "connected");
                         EnableUI();
-                        //btnFlashFirmware.setEnabled(false);
-                        setEnabledCard(false, btnFlashFirmware, image_firmware, text_firmware);
+
+                        //setEnabledCard(false, btnFlashFirmware, image_firmware, text_firmware);
                         myBT.setConnectionType("usb");
-                        //btnConnectDisconnect.setText(getResources().getString(R.string.disconnect));
-                        text_connect.setText(getResources().getString(R.string.disconnect));
+
+                        //text_connect.setText(getResources().getString(R.string.disconnect));
                     }
 
                 } else {
@@ -115,8 +118,8 @@ public class MainScreenActivity extends AppCompatActivity {
 
         //This will check if the firmware is compatible with the app and advice on flashing the firmware
         firmCompat = new FirmwareCompatibility();
-
         setContentView(R.layout.activity_main_screen);
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
@@ -155,13 +158,10 @@ public class MainScreenActivity extends AppCompatActivity {
 
         if (myBT.getConnected()) {
             EnableUI();
-            //btnFlashFirmware.setEnabled(false);
             setEnabledCard(false, btnFlashFirmware, image_firmware, text_firmware);
         } else {
             DisableUI();
-
             text_connect.setText(R.string.connect);
-
             setEnabledCard(true, btnFlashFirmware, image_firmware, text_firmware);
         }
 
@@ -283,7 +283,13 @@ public class MainScreenActivity extends AppCompatActivity {
                                 device = entry.getValue();
                                 int deviceVID = device.getVendorId();
 
-                                PendingIntent pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+                                //PendingIntent pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+                                PendingIntent pi;
+                                if(android.os.Build.VERSION.SDK_INT >= 31) {
+                                    pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
+                                } else {
+                                    pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+                                }
                                 usbManager.requestPermission(device, pi);
                                 keep = false;
 
@@ -400,26 +406,29 @@ public class MainScreenActivity extends AppCompatActivity {
         // ask for config
         boolean success = false;
         if (myBT.getConnected()) {
-
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
             Log.d("MainScreen", "Retreiving test stand config...");
             myBT.setDataReady(false);
             myBT.flush();
             myBT.clearInput();
             //switch off the main loop before sending the config
             myBT.write("m0;".toString());
-
+            //myBT.flush();
+            Log.d("MainScreen", "after m0");
             //wait for the result to come back
             try {
                 while (myBT.getInputStream().available() <= 0) ;
             } catch (IOException e) {
-
+                Log.d("MainScreen", "we have an issue:" + e.toString());
             }
             String myMessage = "";
             myMessage = myBT.ReadResult(3000);
+            Log.d("MainScreen", myMessage);
             if (myMessage.equals("OK")) {
                 myBT.setDataReady(false);
                 myBT.flush();
                 myBT.clearInput();
+                Log.d("MainScreen", "before Retreiving test stand config...");
                 myBT.write("b;".toString());
                 myBT.flush();
 
@@ -433,6 +442,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 myMessage = myBT.ReadResult(3000);
                 //reading the config
                 if (myMessage.equals("start teststandconfig end")) {
+                    Log.d("MainScreen", "we have  stand config...");
                     try {
                         AltiCfg = myBT.getTestStandConfigData();
                         success = true;
@@ -441,6 +451,7 @@ public class MainScreenActivity extends AppCompatActivity {
                     }
                 } else {
                     //try again
+                    Log.d("MainScreen", myMessage);
                     myBT.setDataReady(false);
                     myBT.flush();
                     myBT.clearInput();

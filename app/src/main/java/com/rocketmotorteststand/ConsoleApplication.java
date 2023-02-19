@@ -593,6 +593,12 @@ public class ConsoleApplication extends Application {
                                         else
                                             TestStandCfg.setPressureSensorType(0);
 
+                                    // value 14 contains the telemetry module type
+                                    if (currentSentence.length > 14)
+                                        if (currentSentence[14].matches("\\d+(?:\\.\\d+)?"))
+                                            TestStandCfg.setTelemetryType(Integer.valueOf(currentSentence[14]));
+                                        else
+                                            TestStandCfg.setTelemetryType(0);
                                     myMessage = myMessage + " " + "teststandconfig";
                                 } else {
                                     myMessage = myMessage + "KO" + "teststandconfig";

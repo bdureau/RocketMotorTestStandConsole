@@ -20,6 +20,7 @@ public class AppConfigTab1Fragment extends Fragment {
     private Spinner spConnectionType, spGraphicsLibType;
     private CheckBox cbFullUSBSupport;
     private ConsoleApplication BT;
+    private boolean ViewCreated = false;
     private AppConfigData appConfigData = null;
 
 
@@ -110,7 +111,9 @@ public class AppConfigTab1Fragment extends Fragment {
         cbFullUSBSupport.setChecked(value);
     }
 
-
+    public boolean isViewCreated() {
+        return ViewCreated;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -183,13 +186,18 @@ public class AppConfigTab1Fragment extends Fragment {
         spBaudRate.setSelection(Integer.parseInt(BT.getAppConf().getBaudRate()));
         spConnectionType.setSelection(Integer.parseInt(BT.getAppConf().getConnectionType()));
         spGraphicsLibType.setSelection(Integer.parseInt(BT.getAppConf().getGraphicsLibType()));
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            //if android ver = 8 or greater use the MPlib so disable the choice and for it to use MP
+            spGraphicsLibType.setSelection(1);
+            spGraphicsLibType.setEnabled(false);
+        }
 
         if (BT.getAppConf().getFullUSBSupport().equals("true")) {
             cbFullUSBSupport.setChecked(true);
         } else {
             cbFullUSBSupport.setChecked(false);
         }
-
+        ViewCreated = true;
         return view;
     }
 

@@ -34,7 +34,7 @@ public class ThrustCurveViewMpFragment extends Fragment {
     private String[] units = null;
     private String curvesNames[] = null;
     private boolean[] checkedItems = null;
-    //private String currentCurvesNames[] = null;
+
     static int colors[] = {Color.RED, Color.BLUE, Color.BLACK,
             Color.GREEN, Color.CYAN, Color.GRAY, Color.MAGENTA, Color.YELLOW, Color.RED,
             Color.BLUE, Color.BLACK,

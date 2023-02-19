@@ -16,6 +16,7 @@ import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
+import com.rocketmotorteststand.ShareHandler;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveView.ThrustCurveViewFcFragment;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveView.ThrustCurveViewInfoFragment;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveView.ThrustCurveViewMpFragment;
@@ -398,6 +399,13 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int i) {
             agregaIndicateDots(i, adapter.getCount());
+            if(i ==0) {
+                butSelectCurves.setVisibility(View.VISIBLE);
+                butZoom.setVisibility(View.VISIBLE);
+            } else {
+                butSelectCurves.setVisibility(View.INVISIBLE);
+                butZoom.setVisibility(View.INVISIBLE);
+            }
         }
 
         @Override
@@ -530,9 +538,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             int pos = -1;
             if (start != -1) {
                 for (int i = start; i < nbrData; i++) {
-                    /*Log.d("search 1", i + "");
-                    Log.d("search 1", serie.getY(i).doubleValue() + "");
-                    Log.d("search 1", serie.getY(i - 1).doubleValue() + "");*/
+
                     if ((searchVal <= serie.getY(i - 1).doubleValue()) && (searchVal >= serie.getY(i).doubleValue())) {
                         pos = i;
                         break;
@@ -544,7 +550,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
     }
 
-    private void takeScreenShot(View view) {
+    /*private void takeScreenShot(View view) {
         Date date = new Date();
         CharSequence format = DateFormat.format("MM-dd-yyyy_hh:mm:ss", date);
 
@@ -577,7 +583,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         Uri uri = FileProvider.getUriForFile(
                 this,
-                this.getPackageName() + "." + getLocalClassName() + ".provider",
+                this.getPackageName() +  ".provider",
                 imageFile);
 
 
@@ -592,7 +598,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "No App Available", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
 
     @Override
@@ -611,13 +617,10 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         //share current screen with other app
         if (id == R.id.action_share) {
-            takeScreenShot(getWindow().getDecorView());
+            //takeScreenShot(getWindow().getDecorView());
+            ShareHandler.takeScreenShot(findViewById(android.R.id.content).getRootView(), this);
         }
 
-        /*if (id == R.id.action_share) {
-            String currentEng = exportToEng(motorClass, lThrustCurveData);
-            takeScreenShot(getWindow().getDecorView());
-        }*/
         //open help screen
         if (id == R.id.action_help) {
             Intent i = new Intent(this, HelpActivity.class);

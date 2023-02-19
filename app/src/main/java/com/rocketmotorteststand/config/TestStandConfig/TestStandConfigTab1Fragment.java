@@ -26,18 +26,19 @@ public class TestStandConfigTab1Fragment extends Fragment {
     private String[] itemsEEpromSize;
     private String[] itemsBatteryType;
     private String[] itemsSensorType;
-
+    private String[] itemsTelemetryType;
     private Spinner dropdownBaudRate;
 
     private Spinner dropdownTestStandResolution, dropdownEEpromSize;
 
     private Spinner dropdownBatteryType;
     private Spinner dropdownSensorType;
+    private Spinner dropdownTelemetryType;
     private EditText StopRecordingTime;
     private ConsoleApplication myBT;
 
     private boolean ViewCreated = false;
-    private TextView txtViewEEpromSize, txtViewSensorType;
+    private TextView txtViewEEpromSize, txtViewSensorType, txtViewTelemetryType;
 
     public TestStandConfigTab1Fragment(ConsoleApplication lBT, TestStandConfigData cfg) {
         lTestStandCfg = cfg;
@@ -117,6 +118,13 @@ public class TestStandConfigTab1Fragment extends Fragment {
         dropdownSensorType.setSelection(SensorType);
     }
 
+    public int getTelemetryType() {
+        return (int) this.dropdownTelemetryType.getSelectedItemId();
+    }
+
+    public void setTelemetryType(int TelemetryType) {
+        dropdownTelemetryType.setSelection(TelemetryType);
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -258,6 +266,14 @@ public class TestStandConfigTab1Fragment extends Fragment {
             }
         });
 
+        txtViewTelemetryType = (TextView)  view.findViewById(R.id.txtViewTelemetryType);
+        dropdownTelemetryType = (Spinner) view.findViewById(R.id.spinnerTelemetryType);
+        //"Unknown",
+        itemsTelemetryType = new String[]{"Fast", "Medium", "Slow", "Very slow"};
+        ArrayAdapter<String> adapterTelemetryType = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, itemsTelemetryType);
+        dropdownTelemetryType.setAdapter(adapterTelemetryType);
+
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
             dropdownSensorType.setVisibility(View.VISIBLE);
             txtViewSensorType.setVisibility(View.VISIBLE);
@@ -275,6 +291,7 @@ public class TestStandConfigTab1Fragment extends Fragment {
 
             dropdownBatteryType.setSelection(lTestStandCfg.getBatteryType());
             dropdownSensorType.setSelection(lTestStandCfg.getPressureSensorType());
+            dropdownTelemetryType.setSelection(lTestStandCfg.getTelemetryType());
         }
         ViewCreated = true;
         return view;

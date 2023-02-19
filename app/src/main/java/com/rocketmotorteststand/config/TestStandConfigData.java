@@ -22,11 +22,11 @@ public class TestStandConfigData {
     private int eepromSize= 512;
     private int stopRecordingTime =10; //10s
 
-    //private int startRecordingThrustLevel =1;
     private int batteryType =0;
     private long calibrationFactor = 0;
     private long currentOffset=0;
     private int pressureSensorType = 0;
+    private int TelemetryType = 0;
 
     public TestStandConfigData()
     {
@@ -94,7 +94,9 @@ public class TestStandConfigData {
     public void setEepromSize(int value) {eepromSize = value;}
     public int getEepromSize() {return eepromSize;}
 
-
+    // TelemetryType
+    public void setTelemetryType(int value){TelemetryType=value;}
+    public int getTelemetryType(){return TelemetryType;}
 
     //index in an array
     public int arrayIndex (String stringArray[], String pattern) {

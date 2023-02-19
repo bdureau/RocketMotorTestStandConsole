@@ -395,4 +395,5 @@
     <string name="lora_module_updating_msg5">updating RSSI Byte, trans Mode, LBT and WOR Cycle</string>
     <string name="lora_module_updating_msg6">mise à jour de la clé</string>
     <string name="lora_module_connecting_msg">Attempting connecting to the Lora module</string>
+
 </resources>

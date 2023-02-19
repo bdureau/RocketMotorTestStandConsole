@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //tooltip library
+import com.rocketmotorteststand.ShareHandler;
 import com.rocketmotorteststand.config.TestStandConfig.TestStandConfigTab1Fragment;
 import com.rocketmotorteststand.config.TestStandConfig.TestStandConfigTab2Fragment;
 
@@ -75,7 +76,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                     Log.d("Calibration", "offset: "+(String) msg.obj );
                     if (((String) msg.obj).matches("^-?[0-9]\\d+(?:\\.\\d+)?")) {
                         //progress.
-                        //configPage3.CurrentOffset.setText((String) msg.obj);
                         configPage3.setCurrentOffset((String) msg.obj);
                     }
                     break;
@@ -83,7 +83,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                     // Value 2 contains the calibration
                     Log.d("Calibration", "factor: "+(String) msg.obj );
                     if (((String) msg.obj).matches("^-?[0-9]\\d+(?:\\.\\d+)?")) {
-                        //configPage3.CalibrationFactor.setText((String) msg.obj);
                         configPage3.setCalibrationFactor((String) msg.obj);
                         alert.setMessage((String) msg.obj);
                     }
@@ -112,6 +111,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         setupViewPager(mViewPager);
         myBT.setHandler(handler);
         btnCalibrate = (Button) findViewById(R.id.butCalibrate);
+        btnCalibrate.setVisibility(View.INVISIBLE);
         btnCalibrate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,6 +179,11 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int i) {
             agregaIndicateDots(i, adapter.getCount());
+            if(i ==0) {
+                btnCalibrate.setVisibility(View.INVISIBLE);
+            } else {
+                btnCalibrate.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override
@@ -298,6 +303,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             TestStandCfg.setStopRecordingTime(configPage2.getStopRecordingTime());
             TestStandCfg.setBatteryType(configPage2.getBatteryType());
             TestStandCfg.setPressureSensorType(configPage2.getSensorType());
+            TestStandCfg.setTelemetryType(configPage2.getTelemetryType());
         }
 
         if (configPage3.isViewCreated()) {
@@ -383,7 +389,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         SendParam("p,9,"+ TestStandCfg.getCurrentOffset());
         //testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getPressureSensorType();
         SendParam("p,10,"+ TestStandCfg.getPressureSensorType());
-
+        SendParam("p,11,"+ TestStandCfg.getTelemetryType());
 
         if (myBT.getConnected()) {
 
@@ -516,376 +522,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         }
     }
 
-/*
-    public static class Tab2Fragment extends Fragment {
-        private static final String TAG = "Tab2Fragment";
-        private TestStandConfigData lTestStandCfg = null;
-        private String[] itemsBaudRate;
-        private String[] itemsTestStandResolution;
-        private String[] itemsEEpromSize;
-        private String[] itemsBatteryType;
-        private String[] itemsSensorType;
-
-        private Spinner dropdownBaudRate;
-
-        private Spinner dropdownTestStandResolution, dropdownEEpromSize;
-
-        private Spinner dropdownBatteryType;
-        private Spinner dropdownSensorType;
-        private EditText StopRecordingTime;
-
-        private boolean ViewCreated = false;
-        private TextView txtViewEEpromSize, txtViewSensorType;
-
-        public Tab2Fragment(TestStandConfigData cfg) {
-            lTestStandCfg = cfg;
-        }
-
-        public boolean isViewCreated() {
-            return ViewCreated;
-        }
-
-
-        public int getTestStandResolution() {
-            return (int) this.dropdownTestStandResolution.getSelectedItemId();
-        }
-
-        public void setTestStandResolution(int TestStandResolution) {
-            this.dropdownTestStandResolution.setSelection(TestStandResolution);
-        }
-
-        public int getEEpromSize() {
-            int ret;
-            try {
-                ret = Integer.parseInt(itemsEEpromSize[(int) dropdownEEpromSize.getSelectedItemId()]);
-            } catch (Exception e) {
-                ret = 0;
-            }
-            return ret;
-        }
-
-        public void setEEpromSize(int EEpromSize) {
-            this.dropdownEEpromSize.setSelection(lTestStandCfg.arrayIndex(itemsEEpromSize, String.valueOf(EEpromSize)));
-        }
-
-        public long getBaudRate() {
-            int ret;
-            try {
-                ret = Integer.parseInt(itemsBaudRate[(int) this.dropdownBaudRate.getSelectedItemId()]);
-            } catch (Exception e) {
-                ret = 0;
-            }
-            return ret;
-        }
-
-        public void setBaudRate(long BaudRate) {
-            this.dropdownBaudRate.setSelection(lTestStandCfg.arrayIndex(itemsBaudRate, String.valueOf(BaudRate)));
-        }
-
-
-        public int getStopRecordingTime() {
-            int ret;
-            try {
-                ret = Integer.parseInt(this.StopRecordingTime.getText().toString());
-            } catch (Exception e) {
-                ret = 0;
-            }
-            return ret;
-        }
-
-        public void setStopRecordingTime(int StopRecordingTime) {
-            this.StopRecordingTime.setText(String.valueOf(StopRecordingTime));
-        }
-
-
-        public int getBatteryType() {
-            return (int) this.dropdownBatteryType.getSelectedItemId();
-        }
-
-        public void setBatteryType(int BatteryType) {
-            dropdownBatteryType.setSelection(BatteryType);
-        }
-
-        public int getSensorType() {
-            return (int) this.dropdownSensorType.getSelectedItemId();
-        }
-
-        public void setSensorType(int SensorType) {
-            dropdownSensorType.setSelection(SensorType);
-        }
-
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.tabconfigpart2_fragment, container, false);
-
-            //baud rate
-            dropdownBaudRate = (Spinner) view.findViewById(R.id.spinnerBaudRate);
-            itemsBaudRate = new String[]{"300",
-                    "1200",
-                    "2400",
-                    "4800",
-                    "9600",
-                    "14400",
-                    "19200",
-                    "28800",
-                    "38400",
-                    "57600",
-                    "115200",
-                    "230400"};
-            ArrayAdapter<String> adapterBaudRate = new ArrayAdapter<String>(this.getActivity(),
-                    android.R.layout.simple_spinner_dropdown_item, itemsBaudRate);
-            dropdownBaudRate.setAdapter(adapterBaudRate);
-            // Tool tip
-            view.findViewById(R.id.txtViewBaudRate).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ViewTooltip
-                            .on(v)
-                            .color(Color.BLACK)
-                            .position(ViewTooltip.Position.TOP)
-                            //Choose the test stand baud rate. Be carefull you might not be able to communicate
-                            .text(getResources().getString(R.string.txtViewBaudRate_tooltip))
-                            .show();
-                }
-            });
-
-            // test stand resolution
-            dropdownTestStandResolution = (Spinner) view.findViewById(R.id.spinnerTestStandResolution);
-            itemsTestStandResolution = new String[]{"ULTRALOWPOWER", "STANDARD", "HIGHRES", "ULTRAHIGHRES"};
-            ArrayAdapter<String> adapterTestStandResolution = new ArrayAdapter<String>(this.getActivity(),
-                    android.R.layout.simple_spinner_dropdown_item, itemsTestStandResolution);
-            dropdownTestStandResolution.setAdapter(adapterTestStandResolution);
-
-            // Tool tip
-            view.findViewById(R.id.txtViewTestStandResolution).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ViewTooltip
-                            .on(v)
-                            .color(Color.BLACK)
-                            .position(ViewTooltip.Position.TOP)
-                            //Choose the altimeter resolution. The faster you rocket goes the lower it has to be
-                            .text(getResources().getString(R.string.txtViewTestStandResolution_tooltip))
-                            .show();
-                }
-            });
-            //Test Stand external eeprom size
-            txtViewEEpromSize = (TextView) view.findViewById(R.id.txtViewEEpromSize);
-            dropdownEEpromSize = (Spinner) view.findViewById(R.id.spinnerEEpromSize);
-            itemsEEpromSize = new String[]{"32", "64", "128", "256", "512", "1024"};
-            ArrayAdapter<String> adapterEEpromSize = new ArrayAdapter<String>(this.getActivity(),
-                    android.R.layout.simple_spinner_dropdown_item, itemsEEpromSize);
-            dropdownEEpromSize.setAdapter(adapterEEpromSize);
-
-
-            // Tool tip
-            view.findViewById(R.id.txtViewEEpromSize).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ViewTooltip
-                            .on(v)
-                            .color(Color.BLACK)
-                            .position(ViewTooltip.Position.TOP)
-                            //Choose the test stand eeprom size depending on which eeprom is used
-                            .text(getResources().getString(R.string.txtViewEEpromSize_tooltip))
-                            .show();
-                }
-            });
-
-
-            // nbr of newtons to stop recording thrust
-            StopRecordingTime = (EditText) view.findViewById(R.id.editTxtStopRecordingTime);
-            // Tool tip
-            StopRecordingTime.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ViewTooltip
-                            .on(v)
-                            .color(Color.BLACK)
-                            .position(ViewTooltip.Position.TOP)
-                            //recording timeout
-                            .text(getResources().getString(R.string.EndRecordTime_tooltip))
-                            .show();
-                }
-            });
-
-            dropdownBatteryType = (Spinner) view.findViewById(R.id.spinnerBatteryType);
-            //"Unknown",
-            itemsBatteryType = new String[]{getResources().getString(R.string.config_unknown),
-                    "2S (7.4 Volts)", "9 Volts", "3S (11.1 Volts)"};
-            ArrayAdapter<String> adapterBatteryType = new ArrayAdapter<String>(this.getActivity(),
-                    android.R.layout.simple_spinner_dropdown_item, itemsBatteryType);
-            dropdownBatteryType.setAdapter(adapterBatteryType);
-
-            // Tool tip
-            view.findViewById(R.id.txtViewBatteryType).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ViewTooltip
-                            .on(v)
-                            .color(Color.BLACK)
-                            .position(ViewTooltip.Position.TOP)
-                            //Enter battery type used to make sure that we do not discharge it too much
-                            .text(getResources().getString(R.string.txtViewBatteryType_tooltip))
-                            .show();
-                }
-            });
-
-            txtViewSensorType = (TextView)  view.findViewById(R.id.txtViewSensorType);
-            dropdownSensorType = (Spinner) view.findViewById(R.id.spinnerSensorType);
-            //"Unknown",
-            itemsSensorType = new String[]{getResources().getString(R.string.config_unknown),
-                    "100 PSI", "150 PSI", "200 PSI", "300 PSI", "500 PSI", "1000 PSI", "1600 PSI"};
-            ArrayAdapter<String> adapterSensorType = new ArrayAdapter<String>(this.getActivity(),
-                    android.R.layout.simple_spinner_dropdown_item, itemsSensorType);
-            dropdownSensorType.setAdapter(adapterSensorType);
-
-            // Tool tip
-            view.findViewById(R.id.txtViewSensorType).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ViewTooltip
-                            .on(v)
-                            .color(Color.BLACK)
-                            .position(ViewTooltip.Position.TOP)
-                            //Enter battery type used to make sure that we do not discharge it too much
-                            .text(getResources().getString(R.string.txtViewSensorType_tooltip))
-                            .show();
-                }
-            });
-
-            if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
-                dropdownSensorType.setVisibility(View.VISIBLE);
-                txtViewSensorType.setVisibility(View.VISIBLE);
-            } else {
-                dropdownSensorType.setVisibility(View.INVISIBLE);
-                txtViewSensorType.setVisibility(View.INVISIBLE);
-            }
-            if (lTestStandCfg != null) {
-                dropdownBaudRate.setSelection(lTestStandCfg.arrayIndex(itemsBaudRate, String.valueOf(lTestStandCfg.getConnectionSpeed())));
-
-                dropdownTestStandResolution.setSelection(lTestStandCfg.getTestStandResolution());
-                dropdownEEpromSize.setSelection(lTestStandCfg.arrayIndex(itemsEEpromSize, String.valueOf(lTestStandCfg.getEepromSize())));
-
-                StopRecordingTime.setText(String.valueOf(lTestStandCfg.getStopRecordingTime()));
-
-                dropdownBatteryType.setSelection(lTestStandCfg.getBatteryType());
-                dropdownSensorType.setSelection(lTestStandCfg.getPressureSensorType());
-            }
-            ViewCreated = true;
-            return view;
-        }
-    }
-
-    public static class Tab3Fragment extends Fragment {
-        private static final String TAG = "Tab3Fragment";
-
-        private TextView testStandName,  CalibrationFactor, CurrentOffset;
-        private Spinner dropdownUnits;
-        private EditText calibrationWeight;
-
-
-        private TestStandConfigData ltestStandNameCfg = null;
-
-        public Tab3Fragment(TestStandConfigData cfg) {
-            ltestStandNameCfg = cfg;
-        }
-
-        private boolean ViewCreated = false;
-
-        public boolean isViewCreated() {
-            return ViewCreated;
-        }
-
-
-        public void setTestStandName(String altiName) {
-            this.testStandName.setText(altiName);
-        }
-
-        public String getTestStandName() {
-            return (String) this.testStandName.getText();
-        }
-
-        public int getDropdownUnits() {
-            return (int) this.dropdownUnits.getSelectedItemId();
-        }
-
-        public void setDropdownUnits(int Units) {
-            this.dropdownUnits.setSelection(Units);
-        }
-
-        public int getCalibrationFactor() {
-            int ret;
-            try {
-                ret = Integer.parseInt(this.CalibrationFactor.getText().toString());
-            } catch (Exception e) {
-                ret = 0;
-            }
-            return ret;
-        }
-
-        //getCurrentOffset
-        public int getCurrentOffset() {
-            int ret;
-            try {
-                ret = Integer.parseInt(this.CurrentOffset.getText().toString());
-            } catch (Exception e) {
-                ret = 0;
-            }
-            return ret;
-        }
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.tabconfigpart3_fragment, container, false);
-            CalibrationFactor = (TextView) view.findViewById(R.id.txtCalibrationFactorValue);
-            CurrentOffset = (TextView) view.findViewById(R.id.txtCalibrationOffsetValue);
-            calibrationWeight = (EditText) view.findViewById(R.id.txtCalibrationWeightValue);
-            //btnCalibrate = (Button) view.findViewById(R.id.butCalibrate);
-            //units
-            dropdownUnits = (Spinner) view.findViewById(R.id.spinnerUnit);
-            //"kg", "pounds"
-            String[] items2 = new String[]{getResources().getString(R.string.unit_kg),
-                    getResources().getString(R.string.unit_pound), getResources().getString(R.string.unit_newton)};
-            ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this.getActivity(),
-                    android.R.layout.simple_spinner_dropdown_item, items2);
-            dropdownUnits.setAdapter(adapter2);
-
-            // Tool tip
-            view.findViewById(R.id.txtTestStandUnit).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ViewTooltip
-                            .on(v)
-                            .color(Color.BLACK)
-                            .position(ViewTooltip.Position.TOP)
-                            //Choose the altitude units you are familiar with
-                            .text(getResources().getString(R.string.txtTestStandUnit_tooltip))
-                            .show();
-                }
-            });
-            //Test Stand name
-            testStandName = (TextView) view.findViewById(R.id.txtAltiNameValue);
-
-
-
-            if (ltestStandNameCfg != null) {
-                testStandName.setText(ltestStandNameCfg.getTestStandName() + " ver: " +
-                        ltestStandNameCfg.getTestStandMajorVersion() + "." + ltestStandNameCfg.getTestStandMinorVersion());
-
-                dropdownUnits.setSelection(ltestStandNameCfg.getUnits());
-                CalibrationFactor.setText(String.valueOf(ltestStandNameCfg.getCalibrationFactor()));
-                CurrentOffset.setText(String.valueOf(ltestStandNameCfg.getCurrentOffset()));
-
-            }
-            ViewCreated = true;
-            return view;
-        }
-
-    }
-
-    */
     // calibration
     private class Calibration extends AsyncTask<Void, Void, Void>  // UI thread
     {
@@ -911,7 +547,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                     });
             alert = builder.create();
             alert.show();
-
         }
 
         @Override
@@ -920,8 +555,8 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
             myBT.flush();
             myBT.clearInput();
-            //myBT.write("c"+configPage3.calibrationWeight.getText()+";".toString());
-            myBT.write("c"+configPage3.getCalibrationWeight()+";".toString());
+
+            myBT.write("c"+configPage3.getCalibrationWeight()+";");
             //wait for ok and put the result back
             String myMessage = "";
 
@@ -941,7 +576,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             if (!canceled) {
                 alert.dismiss();
             }
-
         }
     }
 
@@ -960,6 +594,11 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        //share screen
+        if (id == R.id.action_share) {
+            ShareHandler.takeScreenShot(findViewById(android.R.id.content).getRootView(), this);
+            return true;
+        }
 
         //open help screen
         if (id == R.id.action_help) {

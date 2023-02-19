@@ -495,12 +495,12 @@ public class ThrustCurveViewInfoFragment extends Fragment {
                 + " " + "delay" + " " + "propellantWeight" + " " + "totalWeight" + " " + "manufacturer" + "\n";
 
         ThrustCurveViewTabActivity.ThrustUtil tu = new ThrustCurveViewTabActivity.ThrustUtil();
-        double maxThrust = thrustCurveData.getSeries(0).getMaxY();
+        double maxThrust = lThrustCurveData.getSeries(0).getMaxY();
         double triggerThrust = maxThrust * (5.0 / 100.0);
 
-        int curveStart = tu.searchX(thrustCurveData.getSeries(0), triggerThrust);
-        int curveMaxThrust = tu.searchX(thrustCurveData.getSeries(0), maxThrust);
-        int curveStop = tu.searchXFrom(thrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
+        int curveStart = tu.searchX(lThrustCurveData.getSeries(0), triggerThrust);
+        int curveMaxThrust = tu.searchX(lThrustCurveData.getSeries(0), maxThrust);
+        int curveStop = tu.searchXFrom(lThrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
 
         if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
             for (int k = curveStart; k < curveStop; k++) {
@@ -508,8 +508,8 @@ public class ThrustCurveViewInfoFragment extends Fragment {
                 //newton
                 //yValues.add(new Entry(thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue(),
                 // (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665));
-                String currData = String.format("%.3f ", (thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue()) / 1000) + " " +
-                        String.format("%.1f ", (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
+                String currData = String.format("%.3f ", (lThrustCurveData.getSeries(0).getX(k).floatValue() - lThrustCurveData.getSeries(0).getX(curveStart).floatValue()) / 1000) + " " +
+                        String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
                 currData = currData.replace(",", ".");
                 motorfile_data = motorfile_data + currData + "\n";
             }
