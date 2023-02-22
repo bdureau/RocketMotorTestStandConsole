@@ -48,13 +48,20 @@ public class HelpActivity extends AppCompatActivity {
 
         Intent newint = getIntent();
         String FileName = newint.getStringExtra("help_file");
-        try {
-            if (Locale.getDefault().getLanguage() == "fr")
-                webView.loadUrl("file:///android_asset/help/" + FileName + "_fr.html");
-            else
+        if(myBT.getAppConf().getApplicationLanguage().equals("0")) {
+            //use phone language
+            try {
+                if (Locale.getDefault().getLanguage() == "fr")
+                    webView.loadUrl("file:///android_asset/help/" + FileName + "_fr.html");
+                else
+                    webView.loadUrl("file:///android_asset/help/" + FileName + ".html");
+            } catch (Exception e) {
+                e.printStackTrace();
                 webView.loadUrl("file:///android_asset/help/" + FileName + ".html");
-        } catch (Exception e) {
-            e.printStackTrace();
+            }
+        }
+        else {
+            //force it to English
             webView.loadUrl("file:///android_asset/help/" + FileName + ".html");
         }
 

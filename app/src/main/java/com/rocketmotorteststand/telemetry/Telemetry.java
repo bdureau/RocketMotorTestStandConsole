@@ -7,12 +7,15 @@ package com.rocketmotorteststand.telemetry;
  * @author: boris.dureau@neuf.fr
  **/
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -37,6 +40,9 @@ import org.afree.graphics.geom.Font;
 import android.graphics.Color;
 
 import com.rocketmotorteststand.ConsoleApplication;
+import com.rocketmotorteststand.Help.AboutActivity;
+import com.rocketmotorteststand.Help.HelpActivity;
+import com.rocketmotorteststand.ShareHandler;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveView.ChartView;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveData;
 import com.rocketmotorteststand.R;
@@ -350,5 +356,40 @@ public class Telemetry extends AppCompatActivity {
         long startTime = System.currentTimeMillis();
 
         myMessage = myBT.ReadResult(100000);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_application_config, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //share screen
+        if (id == R.id.action_share) {
+            ShareHandler.takeScreenShot(findViewById(android.R.id.content).getRootView(), this);
+            return true;
+        }
+
+        //open help screen
+        if (id == R.id.action_help) {
+            Intent i = new Intent(Telemetry.this, HelpActivity.class);
+            i.putExtra("help_file", "help_telemetry");
+            startActivity(i);
+            return true;
+        }
+
+        if (id == R.id.action_about) {
+            Intent i = new Intent(Telemetry.this, AboutActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

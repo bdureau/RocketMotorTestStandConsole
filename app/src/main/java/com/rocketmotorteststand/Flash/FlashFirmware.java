@@ -41,6 +41,7 @@ import com.physicaloid.lib.Physicaloid;
 
 import com.physicaloid.lib.programmer.avr.UploadErrors;
 import com.physicaloid.lib.usb.driver.uart.UartConfig;
+import com.rocketmotorteststand.ShareHandler;
 
 import java.io.IOException;
 
@@ -620,6 +621,11 @@ public class FlashFirmware extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        //share current screen with other app
+        if (id == R.id.action_share) {
+            //takeScreenShot(getWindow().getDecorView());
+            ShareHandler.takeScreenShot(findViewById(android.R.id.content).getRootView(), this);
+        }
 
         //open help screen
         if (id == R.id.action_help) {

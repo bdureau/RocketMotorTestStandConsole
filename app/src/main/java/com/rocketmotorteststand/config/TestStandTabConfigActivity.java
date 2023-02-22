@@ -116,7 +116,24 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 calibrationComplete =false;
-                new Calibration().execute();
+
+                if(configPage3.getCalibrationWeight().equals("0")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(TestStandTabConfigActivity.this);
+                    //Display info message
+                    builder.setMessage("Calibration weight must be greater than zero")
+                            .setTitle("Warning")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(final DialogInterface dialog, final int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    AlertDialog warning = builder.create();
+                    warning.show();
+                } else {
+                    new Calibration().execute();
+                }
             }
         });
         btnDismiss = (Button) findViewById(R.id.butDismiss);

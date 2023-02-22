@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -47,6 +49,8 @@ import org.afree.graphics.geom.Font;
 import android.graphics.Color;
 
 import com.rocketmotorteststand.ConsoleApplication;
+import com.rocketmotorteststand.Help.AboutActivity;
+import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -54,6 +58,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.rocketmotorteststand.ShareHandler;
+import com.rocketmotorteststand.config.TestStandTabConfigActivity;
 
 public class TelemetryMp extends AppCompatActivity {
 
@@ -337,5 +343,40 @@ public class TelemetryMp extends AppCompatActivity {
         long startTime = System.currentTimeMillis();
 
         myMessage = myBT.ReadResult(100000);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_application_config, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //share screen
+        if (id == R.id.action_share) {
+            ShareHandler.takeScreenShot(findViewById(android.R.id.content).getRootView(), this);
+            return true;
+        }
+
+        //open help screen
+        if (id == R.id.action_help) {
+            Intent i = new Intent(TelemetryMp.this, HelpActivity.class);
+            i.putExtra("help_file", "help_telemetry");
+            startActivity(i);
+            return true;
+        }
+
+        if (id == R.id.action_about) {
+            Intent i = new Intent(TelemetryMp.this, AboutActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

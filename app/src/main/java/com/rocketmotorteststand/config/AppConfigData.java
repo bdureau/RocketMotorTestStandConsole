@@ -51,9 +51,10 @@ public class AppConfigData {
         //context.getApplicationContext().getSharedPreferences()
                 //getSharedPreferences
         itemsLanguages = new String[]{
-                context.getResources().getString(R.string.phone_english),// "English",
-                context.getResources().getString(R.string.phone_french), //"French",
-                context.getResources().getString(R.string.phone_language)//"Phone language"
+                context.getResources().getString(R.string.phone_language),//"Phone language"
+                context.getResources().getString(R.string.phone_english)// "English",
+
+
         };
         itemsUnits = new String[]{
                 context.getResources().getString(R.string.config_unit_kg),
