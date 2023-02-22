@@ -15,11 +15,11 @@ import java.util.UUID;
 
 
 public class BluetoothConnection {
-    BluetoothDevice device;
+    //BluetoothDevice device;
     BluetoothAdapter myBluetooth = null;
     BluetoothSocket btSocket = null;
     private boolean isBtConnected = false;
-    private String address = null;
+    //private String address = null;
     //SPP UUID. Look for it
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
@@ -74,11 +74,9 @@ public class BluetoothConnection {
                 btSocket.close(); //close connection
             } catch (IOException e) {
 
-
             }
             setBTConnected(false);
         }
-
     }
 
     public void write (String data) {
@@ -99,5 +97,4 @@ public class BluetoothConnection {
         } catch (IOException e) {
         }
     }
-
 }

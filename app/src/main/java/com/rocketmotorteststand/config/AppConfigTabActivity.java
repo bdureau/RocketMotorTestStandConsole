@@ -92,7 +92,7 @@ public class AppConfigTabActivity extends AppCompatActivity {
         myBT.getAppConf().setUnitsPressure("" + appConfigPage1.getAppUnitPressure() + "");
 
         myBT.getAppConf().setGraphBackColor("" + appConfigPage1.getGraphBackColor() + "");
-        myBT.getAppConf().setFontSize("" + appConfigPage1.getFontSize() + "");
+        myBT.getAppConf().setFontSize("" + appConfigPage1.getFontSize()  + "");
         myBT.getAppConf().setBaudRate("" + appConfigPage1.getBaudRate() + "");
         myBT.getAppConf().setConnectionType("" + appConfigPage1.getConnectionType() + "");
         myBT.getAppConf().setGraphicsLibType("" + appConfigPage1.getGraphicsLibType() + "");
@@ -110,7 +110,7 @@ public class AppConfigTabActivity extends AppCompatActivity {
         appConfigPage1.setAppUnitPressure(Integer.parseInt(myBT.getAppConf().getUnitsPressure()));
         appConfigPage1.setGraphColor(Integer.parseInt(myBT.getAppConf().getGraphColor()));
         appConfigPage1.setGraphBackColor(Integer.parseInt(myBT.getAppConf().getGraphBackColor()));
-        appConfigPage1.setFontSize(Integer.parseInt(myBT.getAppConf().getFontSize()) - 8);
+        appConfigPage1.setFontSize(Integer.parseInt(myBT.getAppConf().getFontSize()) /*- 8*/);
         appConfigPage1.setBaudRate(Integer.parseInt(myBT.getAppConf().getBaudRate()));
         appConfigPage1.setConnectionType(Integer.parseInt(myBT.getAppConf().getConnectionType()));
         appConfigPage1.setGraphicsLibType(Integer.parseInt(myBT.getAppConf().getGraphicsLibType()));

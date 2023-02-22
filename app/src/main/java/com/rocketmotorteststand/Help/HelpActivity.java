@@ -42,9 +42,9 @@ public class HelpActivity extends AppCompatActivity {
         webSetting.setJavaScriptEnabled(true);
 
         webView.setWebViewClient(new WebViewClient());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setAllowFileAccess(true);*/
 
         Intent newint = getIntent();
         String FileName = newint.getStringExtra("help_file");

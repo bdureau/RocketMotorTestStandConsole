@@ -74,11 +74,11 @@ public class TelemetryMp extends AppCompatActivity {
     LineData data;
     ArrayList<ILineDataSet> dataSets;
     //telemetry var
-    //private long LiftOffTime = 0;
     private int lastPlotTime = 0;
 
     private double CONVERT = 1;
-    ArrayList<Entry> yValues;
+    ArrayList<Entry> yValuesThrust;
+    ArrayList<Entry> yValuesPressure;
 
     int thrustTime = 0;
 
@@ -97,20 +97,27 @@ public class TelemetryMp extends AppCompatActivity {
 
                         int thrust = (int) (Integer.parseInt((String) msg.obj) * CONVERT);
 
-                        yValues.add(new Entry(thrustTime, thrust));
+                        yValuesThrust.add(new Entry(thrustTime, thrust));
 
                         //plot every seconde
                         if ((thrustTime - lastPlotTime) > 1000) {
                             lastPlotTime = thrustTime;
-                            LineDataSet set1 = new LineDataSet(yValues, "Thrust/Time");
-                            set1.setDrawValues(false);
-                            set1.setDrawCircles(false);
-                            set1.setLabel("Thrust");
-                            dataSets.clear();
-                            dataSets.add(set1);
-                            data = new LineData(dataSets);
-                            mChart.clear();
-                            mChart.setData(data);
+                            if(myBT.getTestStandConfigData().getTestStandName().equals("TestStand") ||
+                                    myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32")) {
+                                LineDataSet set1 = new LineDataSet(yValuesThrust, "Thrust/Time");
+                                set1.setDrawValues(false);
+                                set1.setDrawCircles(false);
+                                set1.setLabel("Thrust");
+                                set1.setValueTextColor(Color.BLACK);
+                                set1.setColor(Color.RED);
+                                //set1.setValueTextSize(fontSize);
+
+                                dataSets.clear();
+                                dataSets.add(set1);
+                                data = new LineData(dataSets);
+                                mChart.clear();
+                                mChart.setData(data);
+                            }
                         }
                     }
                     break;
@@ -126,24 +133,38 @@ public class TelemetryMp extends AppCompatActivity {
                 case 6:
                     //Value 6 contains the current pressure
                     String currentPressure = (String) msg.obj;
-                    /*if (((String) msg.obj).matches("\\d+(?:\\.\\d+)?")) {
+                    if (((String) msg.obj).matches("\\d+(?:\\.\\d+)?")) {
                         int pressure = (int) (Integer.parseInt((String) msg.obj) );
-                        yValues.add(new Entry(thrustTime, pressure));
+                        yValuesPressure.add(new Entry(thrustTime, pressure));
 
                         //plot every seconde
                         if ((thrustTime - lastPlotTime) > 1000) {
                             lastPlotTime = thrustTime;
-                            LineDataSet set1 = new LineDataSet(yValues, "pressure/Time");
-                            set1.setDrawValues(false);
-                            set1.setDrawCircles(false);
-                            set1.setLabel("pressure");
-                            dataSets.clear();
-                            dataSets.add(set1);
-                            data = new LineData(dataSets);
-                            mChart.clear();
-                            mChart.setData(data);
+                            if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+                                LineDataSet set1 = new LineDataSet(yValuesThrust, "Thrust/Time");
+                                set1.setDrawValues(false);
+                                set1.setDrawCircles(false);
+                                set1.setLabel("Thrust");
+                                set1.setValueTextColor(Color.BLACK);
+                                set1.setColor(Color.RED);
+                                //set1.setValueTextSize(fontSize);
+
+                                LineDataSet set2 = new LineDataSet(yValuesPressure, "pressure/Time");
+                                set2.setDrawValues(false);
+                                set2.setDrawCircles(false);
+                                set2.setLabel("pressure");
+                                set2.setValueTextColor(Color.BLACK);
+                                set2.setColor(Color.BLUE);
+                                //set2.setValueTextSize(fontSize);
+                                dataSets.clear();
+                                dataSets.add(set1);
+                                dataSets.add(set2);
+                                data = new LineData(dataSets);
+                                mChart.clear();
+                                mChart.setData(data);
+                            }
                         }
-                    }*/
+                    }
                     break;
             }
         }
@@ -197,25 +218,35 @@ public class TelemetryMp extends AppCompatActivity {
             CONVERT = 9.80665/1000;
         }
 
-        //font
-
-        yValues = new ArrayList<>();
-        yValues.add(new Entry(0, 0));
-
-        LineDataSet set1 = new LineDataSet(yValues, getString(R.string.telemetry_thrust));
         mChart = (LineChart) findViewById(R.id.telemetryChartView);
 
         mChart.setDragEnabled(true);
         mChart.setScaleEnabled(true);
         mChart.setScaleMinima(0, 0);
         dataSets = new ArrayList<>();
+
+        yValuesThrust = new ArrayList<>();
+        yValuesThrust.add(new Entry(0, 0));
+        yValuesPressure = new ArrayList<>();
+        yValuesPressure.add(new Entry(0, 0));
+
+        LineDataSet set1 = new LineDataSet(yValuesThrust, getString(R.string.telemetry_thrust));
+        LineDataSet set2 = new LineDataSet(yValuesThrust, "Pressure");
+        set1.setValueTextColor(Color.RED);
+        set1.setValueTextSize(fontSize);
+
+        set2.setValueTextColor(Color.BLUE);
+        set2.setValueTextSize(fontSize);
+
         dataSets.add(set1);
+        dataSets.add(set2);
 
         LineData data = new LineData(dataSets);
         mChart.setData(data);
         Description desc = new Description();
         desc.setText(getString(R.string.tel_telemetry));
         mChart.setDescription(desc);
+        mChart.setBackgroundColor(graphBackColor);
         startTelemetry();
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,10 +286,8 @@ public class TelemetryMp extends AppCompatActivity {
                 }
             }
         };
-
         rocketTelemetry = new Thread(r);
         rocketTelemetry.start();
-
     }
 
     @Override
@@ -278,14 +307,11 @@ public class TelemetryMp extends AppCompatActivity {
         myBT.write("y0;\n".toString());
 
     }
-    public void onClickStartTelemetry(View view) {
-
+   /* public void onClickStartTelemetry(View view) {
         telemetry = true;
-
         lastPlotTime = 0;
         myBT.initThrustCurveData();
 
-        //LiftOffTime = 0;
         Runnable r = new Runnable() {
 
             @Override
@@ -299,11 +325,9 @@ public class TelemetryMp extends AppCompatActivity {
 
         rocketTelemetry = new Thread(r);
         rocketTelemetry.start();
+    }*/
 
-
-    }
-
-    public void onClickStopTelemetry(View view) {
+   /* public void onClickStopTelemetry(View view) {
         myBT.write("h;\n".toString());
 
         myBT.setExit(true);
@@ -314,7 +338,7 @@ public class TelemetryMp extends AppCompatActivity {
         myBT.flush();
 
     }
-
+*/
 
     @Override
     protected void onStop() {

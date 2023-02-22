@@ -589,20 +589,6 @@ public class MainScreenActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-       /* client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "MainScreen Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.altimeter.bdureau.bearconsole/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);*/
     }
 
     @Override
@@ -617,13 +603,15 @@ public class MainScreenActivity extends AppCompatActivity {
         private AlertDialog.Builder builder = null;
         private AlertDialog alert;
         private boolean ConnectSuccess = true; //if it's here, it's almost connected
+        private String dialogMsg;
 
         @Override
         protected void onPreExecute() {
+            dialogMsg = getResources().getString(R.string.MS_msg1) + "\n"+ myBT.getModuleName();
             //"Connecting...", "Please wait!!!"
             builder = new AlertDialog.Builder(MainScreenActivity.this);
             //Connecting...
-            builder.setMessage(getResources().getString(R.string.MS_msg1) + "\n"+ myBT.getModuleName())
+            builder.setMessage(dialogMsg)
                     .setTitle(getResources().getString(R.string.MS_msg2))
                     .setCancelable(false)
                     .setNegativeButton(getResources().getString(R.string.main_screen_actity), new DialogInterface.OnClickListener() {
@@ -640,11 +628,17 @@ public class MainScreenActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
         {
+
             if (!myBT.getConnected()) {
-                if (myBT.connect())
+                if (myBT.connect()) {
+                    //alert.setMessage(dialogMsg + "\n Connection success");
                     ConnectSuccess = true;
-                else
+                }
+                else {
+                    //alert.setMessage(dialogMsg + "\n Connection failed");
                     ConnectSuccess = false;
+                }
+
             }
             return null;
         }
@@ -676,8 +670,8 @@ public class MainScreenActivity extends AppCompatActivity {
             hm =null;
             hm = new HashMap();
             //init compatible versions
-            Add("TestStandSTM32V2", "1.2");
-            Add("TestStandSTM32", "1.2");
+            Add("TestStandSTM32V2", "1.3");
+            Add("TestStandSTM32", "1.3");
             Add("TestStand", "1.1");
         }
         public void Add ( String altiName, String verList) {

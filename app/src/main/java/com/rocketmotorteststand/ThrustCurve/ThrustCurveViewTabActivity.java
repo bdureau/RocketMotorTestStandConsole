@@ -213,16 +213,13 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                         (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
                     if(zoom) {
                         ThrustCurvePage1bis.zoomCurves();
-                        butZoom.setBackgroundResource(R.drawable.zoom_out_30x30_trans);
+                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_out_30x30_trans,0,0,0);
                     }
                     else {
                         ThrustCurvePage1bis.setCheckedItems(checkedItems);
                         ThrustCurvePage1bis.drawGraph();
                         ThrustCurvePage1bis.drawAllCurves(allThrustCurveData);
-                        butZoom.setBackgroundResource(R.drawable.zoom_30x30_trans);
-                        //butZoom.setText(R.drawable.zoom_30x30_trans, TextView.BufferType.NORMAL);
-                        //butZoom.setImageBitmap()
-                        //butZoom.
+                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_30x30_trans,0,0,0);
                     }
                 } else {
                     if(zoom) {

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.github.mikephil.charting.data.Entry;
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
+import com.rocketmotorteststand.ThrustCurve.ThrustCurveViewTabActivity;
 
 import org.afree.chart.AFreeChart;
 import org.afree.chart.ChartFactory;
@@ -46,13 +47,12 @@ public class ThrustCurveViewFcFragment extends Fragment {
             Color.GREEN, Color.CYAN, Color.GRAY, Color.MAGENTA, Color.YELLOW};
 
 
-
     public ThrustCurveViewFcFragment(XYSeriesCollection pAllThrustCurveData,
                                      ConsoleApplication pBT,
                                      String pCurvesNames[],
                                      boolean pCheckedItems[],
                                      String pUnits[]
-                                     ) {
+    ) {
         this.allThrustCurveData = pAllThrustCurveData;
         this.myBT = pBT;
         this.curvesNames = pCurvesNames;
@@ -70,13 +70,12 @@ public class ThrustCurveViewFcFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_thrustcurve_view_fc, container, false);
-
         chartView = (ChartView) view.findViewById(R.id.chartView1);
 
-        String myUnits="";
+        String myUnits = "";
         if (myBT.getAppConf().getUnits().equals("0"))
             //Meters
-            myUnits=getResources().getString(R.string.Kg_fview);
+            myUnits = getResources().getString(R.string.Kg_fview);
         else
             //Feet
             myUnits = getResources().getString(R.string.Pounds_fview);
@@ -107,7 +106,7 @@ public class ThrustCurveViewFcFragment extends Fragment {
         labelColor = Color.BLACK;
         nbrColor = Color.BLACK;
         //font
-        Font font = new Font("Dialog", Typeface.NORMAL,fontSize);
+        Font font = new Font("Dialog", Typeface.NORMAL, fontSize);
         mChart.getTitle().setFont(font);
         // set the background color for the chart...
         mChart.setBackgroundPaintType(new SolidColor(graphBackColor));
@@ -125,7 +124,6 @@ public class ThrustCurveViewFcFragment extends Fragment {
 
         final ValueAxis YAxis = plot.getRangeAxis();
         YAxis.setAxisLinePaintType(new SolidColor(axisColor));
-
 
         Xaxis.setTickLabelFont(font);
         Xaxis.setLabelFont(font);
@@ -152,17 +150,14 @@ public class ThrustCurveViewFcFragment extends Fragment {
             Log.d("drawAllCurves", "i:" + i);
             Log.d("drawAllCurves", "curvesNames:" + curvesNames[i]);
             if (checkedItems[i]) {
-                //thrustCurveData.addSeries(allThrustCurveData.getSeries(curvesNames[i]));
-
                 int nbrData = allThrustCurveData.getSeries(i).getItemCount();
-
                 Log.d("drawAllCurves", "i:" + i);
                 if (i == 0) {
                     XYSeries currentCurve = new XYSeries(0);
-                    float CONVERT =1;
+                    float CONVERT = 1;
                     if (myBT.getAppConf().getUnits().equals("0")) {
                         //kg
-                        CONVERT =1;
+                        CONVERT = 1;
                     } else if (myBT.getAppConf().getUnits().equals("1")) {
                         //pound
                         CONVERT = 2.20462f;
@@ -171,23 +166,23 @@ public class ThrustCurveViewFcFragment extends Fragment {
                         CONVERT = 9.80665f;
                     }
                     for (int k = 0; k < nbrData; k++) {
-                        currentCurve.add(allThrustCurveData.getSeries(i).getX(k).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000)*CONVERT);
+                        currentCurve.add(allThrustCurveData.getSeries(i).getX(k).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * CONVERT);
                     }
                     thrustCurveData.addSeries(currentCurve);
                 }
 
                 if (i == 1) {
                     XYSeries currentCurve = new XYSeries(0);
-                    float CONVERT =1;
+                    float CONVERT = 1;
                     if (myBT.getAppConf().getUnitsPressure().equals("0")) {
                         //PSI
-                        CONVERT =1;
-                    } else if (myBT.getAppConf().getUnits().equals("1")) {
+                        CONVERT = 1;
+                    } else if (myBT.getAppConf().getUnitsPressure().equals("1")) {
                         //bar divide by 14.504
-                        CONVERT=  1.0f/14.504f;
-                    } else if (myBT.getAppConf().getUnits().equals("2")) {
+                        CONVERT = 1.0f / 14.504f;
+                    } else if (myBT.getAppConf().getUnitsPressure().equals("2")) {
                         //K pascal multiply by 6.895
-                        CONVERT= (float) 6.895;
+                        CONVERT = (float) 6.895;
                     }
                     for (int k = 0; k < nbrData; k++) {
                         currentCurve.add(allThrustCurveData.getSeries(i).getX(k).floatValue(), allThrustCurveData.getSeries(i).getY(k).floatValue() * CONVERT);
@@ -200,9 +195,8 @@ public class ThrustCurveViewFcFragment extends Fragment {
     }
 
     public void zoomCurves() {
-       /* dataSets.clear();
-
-        thrustCurveData = new XYSeriesCollection();
+        XYSeriesCollection thrustCurveDataFinal = new XYSeriesCollection();
+        XYSeriesCollection thrustCurveData = new XYSeriesCollection();
         thrustCurveData.addSeries(allThrustCurveData.getSeries(0));
 
         ThrustCurveViewTabActivity.ThrustUtil tu = new ThrustCurveViewTabActivity.ThrustUtil();
@@ -213,43 +207,52 @@ public class ThrustCurveViewFcFragment extends Fragment {
         int curveMaxThrust = tu.searchX(thrustCurveData.getSeries(0), maxThrust);
         int curveStop = tu.searchXFrom(thrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
 
-        ArrayList<Entry> yValues = new ArrayList<>();
-        if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
-            for (int k = curveStart; k < curveStop; k++) {
-                if (myBT.getAppConf().getUnits().equals("0")) {
-                    //kg
-                    yValues.add(new Entry(allThrustCurveData.getSeries(0).getX(k).floatValue() - allThrustCurveData.getSeries(0).getX(curveStart).floatValue(), allThrustCurveData.getSeries(0).getY(k).floatValue() / 1000));
-                } else if (myBT.getAppConf().getUnits().equals("1")) {
-                    //pound
-                    yValues.add(new Entry(allThrustCurveData.getSeries(0).getX(k).floatValue() - allThrustCurveData.getSeries(0).getX(curveStart).floatValue(), (allThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 2.20462));
-                } else if (myBT.getAppConf().getUnits().equals("2")) {
-                    //newton
-                    yValues.add(new Entry(allThrustCurveData.getSeries(0).getX(k).floatValue() - allThrustCurveData.getSeries(0).getX(curveStart).floatValue(), (allThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665));
+        for (int i = 0; i < curvesNames.length; i++) {
+            if (checkedItems[i]) {
+                if (i == 0) {
+                    if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
+                        XYSeries currentCurve = new XYSeries(0);
+                        float CONVERT = 1;
+                        if (myBT.getAppConf().getUnits().equals("0")) {
+                            //kg
+                            CONVERT = 1;
+                        } else if (myBT.getAppConf().getUnits().equals("1")) {
+                            //pound
+                            CONVERT = 2.20462f;
+                        } else if (myBT.getAppConf().getUnits().equals("2")) {
+                            //newton
+                            CONVERT = 9.80665f;
+                        }
+
+                        for (int k = curveStart; k < curveStop; k++) {
+                            currentCurve.add(allThrustCurveData.getSeries(i).getX(k).floatValue() - allThrustCurveData.getSeries(i).getX(curveStart).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * CONVERT);
+                        }
+                        thrustCurveDataFinal.addSeries(currentCurve);
+                    }
+                }
+                if(i == 1){
+                    if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
+                        XYSeries currentCurve = new XYSeries(0);
+                        float CONVERT = 1;
+                        if (myBT.getAppConf().getUnitsPressure().equals("0")) {
+                            //PSI
+                            CONVERT = 1;
+                        } else if (myBT.getAppConf().getUnitsPressure().equals("1")) {
+                            //bar divide by 14.504
+                            CONVERT = 1.0f / 14.504f;
+                        } else if (myBT.getAppConf().getUnitsPressure().equals("2")) {
+                            //K pascal multiply by 6.895
+                            CONVERT = (float) 6.895;
+                        }
+
+                        for (int k = curveStart; k < curveStop; k++) {
+                            currentCurve.add(allThrustCurveData.getSeries(i).getX(k).floatValue() - allThrustCurveData.getSeries(i).getX(curveStart).floatValue(), (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * CONVERT);
+                        }
+                        thrustCurveDataFinal.addSeries(currentCurve);
+                    }
                 }
             }
-
-            LineDataSet set1 = new LineDataSet(yValues, getResources().getString(R.string.unit_time));
-            set1.setColor(colors[0]);
-
-            set1.setDrawValues(false);
-            set1.setDrawCircles(false);
-            set1.setLabel(curvesNames[0] + " " + units[0]);
-            set1.setValueTextColor(labelColor);
-
-            set1.setValueTextSize(fontSize);
-            dataSets.add(set1);
-
-
-            LineData data = new LineData(dataSets);
-            mChart.clear();
-            mChart.setData(data);
-            mChart.setBackgroundColor(graphBackColor);
-
-            Description desc = new Description();
-            //time (ms)
-            desc.setText(getResources().getString(R.string.unit_time));
-            mChart.setDescription(desc);
-
-        }*/
+            plot.setDataset(0, thrustCurveDataFinal);
+        }
     }
 }
