@@ -42,9 +42,5 @@ public class AboutActivity extends AppCompatActivity {
                 finish();      //exit the about activity
             }
         });
-
-
     }
-
-
 }

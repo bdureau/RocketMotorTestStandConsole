@@ -3,12 +3,9 @@ package com.rocketmotorteststand.ThrustCurve;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -21,20 +18,15 @@ import com.rocketmotorteststand.ThrustCurve.ThrustCurveView.ThrustCurveViewFcFra
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveView.ThrustCurveViewInfoFragment;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveView.ThrustCurveViewMpFragment;
 
-
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Environment;
-
 import android.text.Html;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 import android.view.Menu;
@@ -43,17 +35,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.afree.data.xy.XYSeries;
 import org.afree.data.xy.XYSeriesCollection;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 
@@ -61,7 +48,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     private ThrustCurveData mythrustCurve = null;
     private ViewPager mViewPager;
     SectionsPageAdapter adapter;
-
+    private boolean zoom = false;
     private TextView[] dotsSlide;
     private LinearLayout linearDots;
 
@@ -82,7 +69,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     private XYSeriesCollection allThrustCurveData = null;
 
     private String ThrustCurveName = null;
-
     private String[] units = null;
 
     int numberOfCurves = 0;
@@ -141,6 +127,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         btnDismiss = (Button) findViewById(R.id.butDismiss);
         butSelectCurves = (Button) findViewById(R.id.butSelectCurves);
         butZoom = (Button) findViewById(R.id.butZoom);
+        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_30x30_trans,0,0,0);
 
         numberOfCurves = 1;
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
@@ -151,24 +138,10 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         ThrustCurveName = newint.getStringExtra(ThrustCurveListActivity.SELECTED_THRUSTCURVE);
         mythrustCurve = myBT.getThrustCurveData();
         // get all the data that we have recorded for the current thrustCurve
-        //allThrustCurveData = new XYSeriesCollection();
         allThrustCurveData = mythrustCurve.GetThrustCurveData(ThrustCurveName);
 
         // by default we will display the thrust
         // but then the user will be able to change the data
-     /*   thrustCurveData = new XYSeriesCollection();
-        //thrust
-        thrustCurveData.addSeries(allThrustCurveData.getSeries(getResources().getString(R.string.curve_thrust)));
-
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
-            Log.d("numberOfCurves", "Adding curve pressure");
-            thrustCurveData.addSeries(allThrustCurveData.getSeries(getResources().getString(R.string.curve_pressure)));
-        }
-
-        Log.d("numberOfCurves", "testStandName:" + myBT.getTestStandConfigData().getTestStandName());
-        // get a list of all the curves that have been recorded
-        //int numberOfCurves = allThrustCurveData.getSeries().size();
-*/
         Log.d("numberOfCurves", "numberOfCurves:" + allThrustCurveData.getSeries().size());
         curvesNames = new String[numberOfCurves];
         units = new String[numberOfCurves];
@@ -213,7 +186,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         if (currentCurvesNames == null) {
             //This is the first time so only display the thrust
-            //dataSets = new ArrayList<>();
             currentCurvesNames = new String[curvesNames.length];
             currentCurvesNames[0] = this.getResources().getString(R.string.curve_thrust);
             checkedItems = new boolean[curvesNames.length];
@@ -233,24 +205,43 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         butZoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(zoom)
+                    zoom = false;
+                else
+                    zoom = true;
                 if ((myBT.getAppConf().getGraphicsLibType().equals("0") ) &
                         (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
-                    ThrustCurvePage1bis.zoomCurves();
+                    if(zoom) {
+                        ThrustCurvePage1bis.zoomCurves();
+                        butZoom.setBackgroundResource(R.drawable.zoom_out_30x30_trans);
+                    }
+                    else {
+                        ThrustCurvePage1bis.setCheckedItems(checkedItems);
+                        ThrustCurvePage1bis.drawGraph();
+                        ThrustCurvePage1bis.drawAllCurves(allThrustCurveData);
+                        butZoom.setBackgroundResource(R.drawable.zoom_30x30_trans);
+                        //butZoom.setText(R.drawable.zoom_30x30_trans, TextView.BufferType.NORMAL);
+                        //butZoom.setImageBitmap()
+                        //butZoom.
+                    }
                 } else {
-                    ThrustCurvePage1.zoomCurves();
-                }
+                    if(zoom) {
+                        ThrustCurvePage1.zoomCurves();
+                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_out_30x30_trans,0,0,0);
 
+                    }
+                    else {
+                        ThrustCurvePage1.setCheckedItems(checkedItems);
+                        ThrustCurvePage1.drawGraph();
+                        ThrustCurvePage1.drawAllCurves(allThrustCurveData);
+                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_30x30_trans,0,0,0);
+                    }
+                }
             }
         });
         butSelectCurves.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*int numberOfCurves = thrustCurveData.getSeries().size();
-                currentCurvesNames = new String[numberOfCurves];
-
-                for (int i = 0; i < numberOfCurves; i++) {
-                    currentCurvesNames[i] = thrustCurveData.getSeries(i).getKey().toString();
-                }*/
                 // Set up the alert builder
                 AlertDialog.Builder builder = new AlertDialog.Builder(ThrustCurveViewTabActivity.this);
                 if(curvesNames.length>0)
@@ -364,7 +355,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 myBT,
                 units,
                 ThrustCurveName);
-
 
         adapter.addFragment(ThrustCurvePage2, "TAB2");
 
@@ -547,59 +537,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             }
             return pos;
         }
-
     }
-
-    /*private void takeScreenShot(View view) {
-        Date date = new Date();
-        CharSequence format = DateFormat.format("MM-dd-yyyy_hh:mm:ss", date);
-
-        try {
-            File mainDir = new File(
-                    this.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "FilShare");
-            if (!mainDir.exists()) {
-                boolean mkdir = mainDir.mkdir();
-            }
-
-            String path = mainDir + "/" + "MotorCurve" + "-" + format + ".jpeg";
-            view.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
-            view.setDrawingCacheEnabled(false);
-
-
-            File imageFile = new File(path);
-            FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-            shareScreenShot(imageFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Share ScreenShot
-    private void shareScreenShot(File imageFile) {
-
-        Uri uri = FileProvider.getUriForFile(
-                this,
-                this.getPackageName() +  ".provider",
-                imageFile);
-
-
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setType("image/*");
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, "MotorTestStand has shared with you some info");
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-
-        try {
-            this.startActivity(Intent.createChooser(intent, "Share With"));
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "No App Available", Toast.LENGTH_SHORT).show();
-        }
-    }*/
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -617,7 +555,6 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         //share current screen with other app
         if (id == R.id.action_share) {
-            //takeScreenShot(getWindow().getDecorView());
             ShareHandler.takeScreenShot(findViewById(android.R.id.content).getRootView(), this);
         }
 

@@ -96,7 +96,6 @@ public class ThrustCurveViewMpFragment extends Fragment {
             Log.d("drawAllCurves", "i:" + i);
             Log.d("drawAllCurves", "curvesNames:" + curvesNames[i]);
             if (checkedItems[i]) {
-                //thrustCurveData.addSeries(allThrustCurveData.getSeries(curvesNames[i]));
 
                 int nbrData = allThrustCurveData.getSeries(i).getItemCount();
 
@@ -208,7 +207,6 @@ public class ThrustCurveViewMpFragment extends Fragment {
             //time (ms)
             desc.setText(getResources().getString(R.string.unit_time));
             mChart.setDescription(desc);
-
         }
     }
 }

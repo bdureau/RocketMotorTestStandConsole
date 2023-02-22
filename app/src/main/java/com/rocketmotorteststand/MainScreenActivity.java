@@ -64,11 +64,6 @@ public class MainScreenActivity extends AppCompatActivity {
     ConsoleApplication myBT;
     private TestStandConfigData AltiCfg = null;
     private FirmwareCompatibility firmCompat =null;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    //private GoogleApiClient client;
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() { //Broadcast Receiver to automatically start and stop the Serial connection.
         @Override
@@ -83,13 +78,10 @@ public class MainScreenActivity extends AppCompatActivity {
                         myBT.setConnected(true);
                         Log.d("TAG", "connected");
                         EnableUI();
-
                         //setEnabledCard(false, btnFlashFirmware, image_firmware, text_firmware);
                         myBT.setConnectionType("usb");
-
                         //text_connect.setText(getResources().getString(R.string.disconnect));
                     }
-
                 } else {
                     msg("PERM NOT GRANTED");
                 }
@@ -169,7 +161,6 @@ public class MainScreenActivity extends AppCompatActivity {
         btnTestStandSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent i = new Intent(MainScreenActivity.this, TestStandTabConfigActivity.class);
                 //Change the activity.
                 startActivity(i);
@@ -260,7 +251,6 @@ public class MainScreenActivity extends AppCompatActivity {
                 } else {
                     if (myBT.getConnectionType().equals("bluetooth")) {
                         address = myBT.getAddress();
-
                         if (address != null) {
                             new ConnectBT().execute(); //Call the class to connect
                             if (myBT.getConnected()) {
@@ -275,6 +265,7 @@ public class MainScreenActivity extends AppCompatActivity {
                             startActivity(i);
                         }
                     } else {
+                        myBT.setModuleName("USB");
                         //this is a USB connection
                         HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
                         if (!usbDevices.isEmpty()) {
@@ -632,7 +623,7 @@ public class MainScreenActivity extends AppCompatActivity {
             //"Connecting...", "Please wait!!!"
             builder = new AlertDialog.Builder(MainScreenActivity.this);
             //Connecting...
-            builder.setMessage(getResources().getString(R.string.MS_msg1))
+            builder.setMessage(getResources().getString(R.string.MS_msg1) + "\n"+ myBT.getModuleName())
                     .setTitle(getResources().getString(R.string.MS_msg2))
                     .setCancelable(false)
                     .setNegativeButton(getResources().getString(R.string.main_screen_actity), new DialogInterface.OnClickListener() {

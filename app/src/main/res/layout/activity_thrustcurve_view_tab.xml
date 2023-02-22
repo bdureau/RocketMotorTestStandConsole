@@ -56,7 +56,7 @@
         android:id="@+id/butZoom"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="start|bottom"
-        app:icon="@drawable/zoom_30x30_trans" />
+        android:layout_gravity="start|bottom"/>
+        <!--app:icon="@drawable/zoom_30x30_trans"-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
