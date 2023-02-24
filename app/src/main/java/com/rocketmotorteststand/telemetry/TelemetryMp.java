@@ -190,29 +190,29 @@ public class TelemetryMp extends AppCompatActivity {
 
 
         int graphBackColor;//= Color.WHITE;
-        graphBackColor = myBT.getAppConf().ConvertColor(Integer.parseInt(myBT.getAppConf().getGraphBackColor()));
+        graphBackColor = myBT.getAppConf().ConvertColor(myBT.getAppConf().getGraphBackColor());
 
         int fontSize;
-        fontSize = myBT.getAppConf().ConvertFont(Integer.parseInt(myBT.getAppConf().getFontSize()));
+        fontSize = myBT.getAppConf().ConvertFont(myBT.getAppConf().getFontSize());
 
         int axisColor;//=Color.BLACK;
-        axisColor = myBT.getAppConf().ConvertColor(Integer.parseInt(myBT.getAppConf().getGraphColor()));
+        axisColor = myBT.getAppConf().ConvertColor(myBT.getAppConf().getGraphColor());
 
         int labelColor = Color.BLACK;
 
         int nbrColor = Color.BLACK;
         String myUnits = "";
-        if (myBT.getAppConf().getUnits().equals("0")) {
+        if (myBT.getAppConf().getUnits()==0) {
             //kg
             myUnits = getResources().getString(R.string.Kg_fview);
             CONVERT = 1000;
         }
-        else if (myBT.getAppConf().getUnits().equals("1")) {
+        else if (myBT.getAppConf().getUnits()==1) {
             //pounds
             myUnits = getResources().getString(R.string.Pounds_fview);
             CONVERT = 2.20462/1000;
         }
-        else if (myBT.getAppConf().getUnits().equals("2")) {
+        else if (myBT.getAppConf().getUnits()==2) {
             //newtons
             myUnits = getResources().getString(R.string.config_unit_newtons);
             CONVERT = 9.80665/1000;
@@ -232,10 +232,10 @@ public class TelemetryMp extends AppCompatActivity {
 
         LineDataSet set1 = new LineDataSet(yValuesThrust, getString(R.string.telemetry_thrust));
         LineDataSet set2 = new LineDataSet(yValuesThrust, "Pressure");
-        set1.setValueTextColor(Color.RED);
+        set1.setValueTextColor(labelColor);
         set1.setValueTextSize(fontSize);
 
-        set2.setValueTextColor(Color.BLUE);
+        set2.setValueTextColor(labelColor);
         set2.setValueTextSize(fontSize);
 
         dataSets.add(set1);

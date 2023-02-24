@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.rocketmotorteststand.ConsoleApplication;
+import com.rocketmotorteststand.GlobalConfig;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
@@ -152,32 +153,32 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
         // Read the application config
         myBT.getAppConf().ReadConfig();
-        if (myBT.getAppConf().getUnits().equals("0")) {
+        if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.KG) {
             //kg
             units[0] = "(" + getResources().getString(R.string.Kg_fview) + ")";
             //CONVERT = 1.0 / 1000;
 
-        } else if (myBT.getAppConf().getUnits().equals("1")) {
+        } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.POUNDS) {
             //pounds
             units[0] = getResources().getString(R.string.Pounds_fview);
             //CONVERT = 2.20462 / 1000;
 
-        } else if (myBT.getAppConf().getUnits().equals("2")) {
+        } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.NEWTONS) {
             //newtons
             units[0] = getResources().getString(R.string.Newtons_fview);
             //CONVERT = 9.80665 / 1000;
         }
 
         if (numberOfCurves > 1) {
-            if (myBT.getAppConf().getUnitsPressure().equals("0")) {
+            if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
                 //PSI
                 units[1] = "(" + "PSI" + ")";
                 //CONVERT_PRESSURE = 1;
-            } else if (myBT.getAppConf().getUnits().equals("1")) {
+            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.BAR) {
                 //BAR
                 units[1] = "BAR";
                 //CONVERT_PRESSURE = 0.0689476;
-            } else if (myBT.getAppConf().getUnits().equals("2")) {
+            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.KPascal) {
                 //Kpascal
                 units[1] = "Kpascal";
                 //CONVERT_PRESSURE = 6.89476;
@@ -209,29 +210,33 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     zoom = false;
                 else
                     zoom = true;
-                if ((myBT.getAppConf().getGraphicsLibType().equals("0") ) &
+                if ((myBT.getAppConf().getGraphicsLibType()==0 ) &
                         (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
                     if(zoom) {
                         ThrustCurvePage1bis.zoomCurves();
-                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_out_30x30_trans,0,0,0);
+                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_out_30x30_trans,
+                                0,0,0);
                     }
                     else {
                         ThrustCurvePage1bis.setCheckedItems(checkedItems);
                         ThrustCurvePage1bis.drawGraph();
                         ThrustCurvePage1bis.drawAllCurves(allThrustCurveData);
-                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_30x30_trans,0,0,0);
+                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_30x30_trans,
+                                0,0,0);
                     }
                 } else {
                     if(zoom) {
                         ThrustCurvePage1.zoomCurves();
-                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_out_30x30_trans,0,0,0);
+                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_out_30x30_trans,
+                                0,0,0);
 
                     }
                     else {
                         ThrustCurvePage1.setCheckedItems(checkedItems);
                         ThrustCurvePage1.drawGraph();
                         ThrustCurvePage1.drawAllCurves(allThrustCurveData);
-                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_30x30_trans,0,0,0);
+                        butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_30x30_trans,
+                                0,0,0);
                     }
                 }
             }
@@ -268,7 +273,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // The user clicked OK
-                        if ((myBT.getAppConf().getGraphicsLibType().equals("0") ) &
+                        if ((myBT.getAppConf().getGraphicsLibType()==0 ) &
                                 (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
                             ThrustCurvePage1bis.setCheckedItems(checkedItems);
                         } else {
@@ -297,7 +302,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                                 k++;
                             }
                         }
-                        if ((myBT.getAppConf().getGraphicsLibType().equals("0") ) &
+                        if ((myBT.getAppConf().getGraphicsLibType()==0 ) &
                                 (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
                             ThrustCurvePage1bis.drawGraph();
                             ThrustCurvePage1bis.drawAllCurves(allThrustCurveData);
@@ -332,7 +337,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         adapter = new SectionsPageAdapter(getSupportFragmentManager());
 
-        if ((myBT.getAppConf().getGraphicsLibType().equals("0") ) &
+        if ((myBT.getAppConf().getGraphicsLibType()==0 ) &
                 (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
             ThrustCurvePage1bis = new ThrustCurveViewFcFragment(allThrustCurveData,
                     myBT,

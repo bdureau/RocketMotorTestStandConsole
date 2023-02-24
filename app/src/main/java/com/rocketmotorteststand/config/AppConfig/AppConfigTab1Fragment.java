@@ -16,7 +16,8 @@ import com.rocketmotorteststand.R;
 import com.rocketmotorteststand.config.AppConfigData;
 
 public class AppConfigTab1Fragment extends Fragment {
-    private Spinner spAppLanguage, spGraphColor, spAppUnit, spAppUnitPressure, spGraphBackColor, spFontSize, spBaudRate;
+    private Spinner spAppLanguage, spGraphColor, spAppUnit, spAppUnitPressure, spGraphBackColor,
+            spFontSize, spBaudRate;
     private Spinner spConnectionType, spGraphicsLibType;
     private CheckBox cbFullUSBSupport;
     private ConsoleApplication BT;
@@ -100,11 +101,8 @@ public class AppConfigTab1Fragment extends Fragment {
     }
 
 
-    public String getFullUSBSupport() {
-        if (cbFullUSBSupport.isChecked())
-            return "true";
-        else
-            return "false";
+    public boolean getFullUSBSupport() {
+        return (cbFullUSBSupport.isChecked());
     }
 
     public void setFullUSBSupport(boolean value) {
@@ -123,80 +121,84 @@ public class AppConfigTab1Fragment extends Fragment {
 
         //Language
         spAppLanguage = (Spinner) view.findViewById(R.id.spinnerLanguage);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsLanguages());
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsLanguages());
         spAppLanguage.setAdapter(adapter);
-        //spAppLanguage.setEnabled(false); //disable it for the moment because it is causing troubles
+
         // graph color
         spGraphColor = (Spinner) view.findViewById(R.id.spinnerGraphColor);
         // String[] itemsColor = new String[]{"Black", "White", "Yellow", "Red", "Green", "Blue"};
-
-        ArrayAdapter<String> adapterColor = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsColor());
+        ArrayAdapter<String> adapterColor = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsColor());
         spGraphColor.setAdapter(adapterColor);
         // graph back color
         spGraphBackColor = (Spinner) view.findViewById(R.id.spinnerGraphBackColor);
-        ArrayAdapter<String> adapterGraphColor = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsColor());
+        ArrayAdapter<String> adapterGraphColor = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsColor());
 
         spGraphBackColor.setAdapter(adapterGraphColor);
         //units
         spAppUnit = (Spinner) view.findViewById(R.id.spinnerUnits);
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsUnits());
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsUnits());
         spAppUnit.setAdapter(adapter2);
 
         //units Pressure
         spAppUnitPressure = (Spinner) view.findViewById(R.id.spinnerUnitsPressure);
 
-        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsUnitsPressure());
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsUnitsPressure());
         spAppUnitPressure.setAdapter(adapter3);
 
         //font size
         spFontSize = (Spinner) view.findViewById(R.id.spinnerFontSize);
 
-        ArrayAdapter<String> adapterFontSize = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsFontSize());
+        ArrayAdapter<String> adapterFontSize = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsFontSize());
         spFontSize.setAdapter(adapterFontSize);
 
         //Baud Rate
         spBaudRate = (Spinner) view.findViewById(R.id.spinnerBaudRate);
 
-        ArrayAdapter<String> adapterBaudRate = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsBaudRate());
+        ArrayAdapter<String> adapterBaudRate = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsBaudRate());
         spBaudRate.setAdapter(adapterBaudRate);
 
         //connection type
         spConnectionType = (Spinner) view.findViewById(R.id.spinnerConnectionType);
 
-        ArrayAdapter<String> adapterConnectionType = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsConnectionType());
+        ArrayAdapter<String> adapterConnectionType = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsConnectionType());
         spConnectionType.setAdapter(adapterConnectionType);
 
         //Graphics lib type
         spGraphicsLibType = (Spinner) view.findViewById(R.id.spinnerGraphicLibType);
-        ArrayAdapter<String> adapterGraphicsLibType = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsGraphicsLib());
+        ArrayAdapter<String> adapterGraphicsLibType = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, appConfigData.getItemsGraphicsLib());
         spGraphicsLibType.setAdapter(adapterGraphicsLibType);
 
 
         //Allow only telemetry via USB
         cbFullUSBSupport = (CheckBox) view.findViewById(R.id.checkBoxFullUSBSupport);
 
-        spAppLanguage.setSelection(Integer.parseInt(BT.getAppConf().getApplicationLanguage()));
-        spAppUnit.setSelection(Integer.parseInt(BT.getAppConf().getUnits()));
-        spAppUnitPressure.setSelection(Integer.parseInt(BT.getAppConf().getUnitsPressure()));
-        spGraphColor.setSelection(Integer.parseInt(BT.getAppConf().getGraphColor()));
-        spGraphBackColor.setSelection(Integer.parseInt(BT.getAppConf().getGraphBackColor()));
-        spFontSize.setSelection((Integer.parseInt(BT.getAppConf().getFontSize()) /*- 8*/));
-        spBaudRate.setSelection(Integer.parseInt(BT.getAppConf().getBaudRate()));
-        spConnectionType.setSelection(Integer.parseInt(BT.getAppConf().getConnectionType()));
-        spGraphicsLibType.setSelection(Integer.parseInt(BT.getAppConf().getGraphicsLibType()));
+        spAppLanguage.setSelection(BT.getAppConf().getApplicationLanguage());
+        spAppUnit.setSelection(BT.getAppConf().getUnits());
+        spAppUnitPressure.setSelection(BT.getAppConf().getUnitsPressure());
+        spGraphColor.setSelection(BT.getAppConf().getGraphColor());
+        spGraphBackColor.setSelection(BT.getAppConf().getGraphBackColor());
+        spFontSize.setSelection(BT.getAppConf().getFontSize());
+        spBaudRate.setSelection(BT.getAppConf().getBaudRate());
+        spConnectionType.setSelection(BT.getAppConf().getConnectionType());
+        spGraphicsLibType.setSelection(BT.getAppConf().getGraphicsLibType());
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             //if android ver = 8 or greater use the MPlib so disable the choice and for it to use MP
             spGraphicsLibType.setSelection(1);
             spGraphicsLibType.setEnabled(false);
         }
 
-        if (BT.getAppConf().getFullUSBSupport().equals("true")) {
-            cbFullUSBSupport.setChecked(true);
-        } else {
-            cbFullUSBSupport.setChecked(false);
-        }
+        cbFullUSBSupport.setChecked(BT.getAppConf().getFullUSBSupport());
+
         ViewCreated = true;
         return view;
     }

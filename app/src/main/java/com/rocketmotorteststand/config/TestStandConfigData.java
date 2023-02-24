@@ -33,7 +33,6 @@ public class TestStandConfigData {
 
     }
 
-
     public void setUnits(int value)
     {
         units = value;
@@ -43,8 +42,6 @@ public class TestStandConfigData {
     {
         return units;
     }
-
-
 
     public int getTestStandMinorVersion()
     {
@@ -63,8 +60,6 @@ public class TestStandConfigData {
         majorVersion=value;
     }
 
-
-
     public void setTestStandName(String value)
     {
         TestStandName = value;
@@ -75,12 +70,9 @@ public class TestStandConfigData {
         return TestStandName;
     }
 
-
-
     //Number of second during which we are recording
     public void setStopRecordingTime(int value) {stopRecordingTime =value;}
     public int getStopRecordingTime(){return stopRecordingTime;}
-
 
     //test stand baud rate
     public void setConnectionSpeed(long value) {connectionSpeed = value;}
@@ -107,8 +99,6 @@ public class TestStandConfigData {
         }
         return -1;
     }
-
-
 
     public void setBatteryType(int value) {batteryType =value;}
     public int getBatteryType(){return batteryType;}

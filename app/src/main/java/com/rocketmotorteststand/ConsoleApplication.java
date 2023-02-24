@@ -499,10 +499,8 @@ public class ConsoleApplication extends Application {
                                             //add the casing pressure
                                             MyThrustCurve.AddToThrustCurve(value2,
                                                     (long) (value4), thrustCurveName, 1);
-
                                         }
                                     }
-
                                 }
                                 break;
                             case "teststandconfig":
@@ -634,36 +632,40 @@ public class ConsoleApplication extends Application {
                                         NbrOfThrustCurves = (Integer.valueOf(currentSentence[1]));
                                 myMessage = myMessage + " " + "nbrOfThrustCurve";
                                 break;
+
                             case "start":
                                 // We are starting reading data
                                 setDataReady(false);
                                 myMessage = "start";
                                 break;
+
                             case "end":
                                 // We have finished reading data
                                 setDataReady(true);
                                 myMessage = myMessage + " " + "end";
                                 exit = true;
                                 break;
+
                             case "OK":
                                 setDataReady(true);
                                 commandRet = currentSentence[0];
                                 myMessage = "OK";
                                 exit = true;
                                 break;
+
                             case "KO":
                                 setDataReady(true);
                                 commandRet = currentSentence[0];
                                 break;
+
                             case "UNKNOWN":
                                 setDataReady(true);
                                 commandRet = currentSentence[0];
                                 break;
-                            default:
 
+                            default:
                                 break;
                         }
-
                     }
                 }
             }
@@ -685,19 +687,17 @@ public class ConsoleApplication extends Application {
     public Configuration getAppLocal() {
 
         Locale locale = null;
-        if (AppConf.getApplicationLanguage().equals("1")) {
+        if (AppConf.getApplicationLanguage()==1) {
             locale = Locale.FRENCH;//new Locale("fr_FR");
-        } else if (AppConf.getApplicationLanguage().equals("2")) {
+        } else if (AppConf.getApplicationLanguage()==2) {
             locale = Locale.ENGLISH;//new Locale("en_US");
         } else {
             locale = Locale.getDefault();
         }
 
-
         Configuration config = new Configuration();
         config.locale = locale;
         return config;
-
     }
 
 
@@ -728,287 +728,6 @@ public class ConsoleApplication extends Application {
 
         public boolean getTrameStatus () {
             return trameStatus;
-        }
-    }
-
-    public class GlobalConfig {
-        Context context;
-
-        SharedPreferences appConfig = null;
-        SharedPreferences.Editor edit = null;
-        AppConfigData appCfgData = null;
-        //application language
-        private String applicationLanguage = "0";
-        //Graph units
-        private String units = "0";
-        private String unitsPressure = "0";
-
-        //graph background color
-        private String graphBackColor = "1";
-        //graph color
-        private String graphColor = "0";
-        //graph font size
-        private String fontSize = "10";
-        // connection type is bluetooth
-        private String connectionType = "0";
-        // default baud rate for USB is 38400
-        private String baudRate = "8";
-        private String graphicsLibType = "0";
-
-        private String fullUSBSupport= "false";
-
-
-        public GlobalConfig(Context current) {
-            appConfig = getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
-            edit = appConfig.edit();
-            context = current;
-            appCfgData = new AppConfigData(context);
-
-        }
-
-        public void ResetDefaultConfig() {
-
-            applicationLanguage = "0"; // default to english
-            graphBackColor = "1";
-            graphColor = "0";
-            fontSize = "10";
-            units = "0"; //default to kg
-            unitsPressure = "0"; //default to PSI
-            baudRate = "8"; // default to 38400 baud
-            connectionType = "0";
-            graphicsLibType = "1"; //Default to MP android chart lib
-            fullUSBSupport = "false";
-        }
-
-        public void ReadConfig() {
-            try {
-                //Application language
-                String applicationLanguage;
-                applicationLanguage = appConfig.getString("AppLanguage", "");
-                if (!applicationLanguage.equals(""))
-                    setApplicationLanguage(applicationLanguage);
-
-                //Application Units
-                String appUnit;
-                appUnit = appConfig.getString("Units", "");
-                if (!appUnit.equals(""))
-                    setUnits(appUnit);
-
-                String appUnitPressure;
-                appUnitPressure = appConfig.getString("UnitsPressure", "");
-                if (!appUnitPressure.equals(""))
-                    setUnitsPressure(appUnitPressure);
-
-                //Graph color
-                String graphColor;
-                graphColor = appConfig.getString("GraphColor", "");
-                if (!graphColor.equals(""))
-                    setGraphColor(graphColor);
-
-                //Graph Background color
-                String graphBackColor;
-                graphBackColor = appConfig.getString("GraphBackColor", "");
-                if (!graphBackColor.equals(""))
-                    setGraphBackColor(graphBackColor);
-
-                //Font size
-                String fontSize;
-                fontSize = appConfig.getString("FontSize", "");
-                if (!fontSize.equals(""))
-                    setFontSize(fontSize);
-
-                //Baud rate
-                String baudRate;
-                baudRate = appConfig.getString("BaudRate", "");
-                if (!baudRate.equals(""))
-                    setBaudRate(baudRate);
-
-                //Connection type
-                String connectionType;
-                connectionType = appConfig.getString("ConnectionType", "");
-                if (!connectionType.equals(""))
-                    setConnectionType(connectionType);
-
-                //Graphics Lib Type
-                String graphicsLibType;
-                graphicsLibType = appConfig.getString("GraphicsLibType", "1");
-                if (!graphicsLibType.equals(""))
-                    setGraphicsLibType(graphicsLibType);
-
-
-                //enable full USB support
-                String fullUSBSupport;
-                fullUSBSupport = appConfig.getString("fullUSBSupport", "false");
-                if (!fullUSBSupport.equals(""))
-                    setFullUSBSupport(fullUSBSupport);
-
-            } catch (Exception e) {
-
-            }
-        }
-
-        public void SaveConfig() {
-            edit.putString("AppLanguage", getApplicationLanguage());
-            edit.putString("Units", getUnits());
-            edit.putString("UnitsPressure", getUnitsPressure());
-            edit.putString("GraphColor", getGraphColor());
-            edit.putString("GraphBackColor", getGraphBackColor());
-            edit.putString("FontSize", getFontSize());
-            edit.putString("BaudRate", getBaudRate());
-            edit.putString("ConnectionType", getConnectionType());
-            edit.putString("GraphicsLibType", getGraphicsLibType());
-
-            edit.putString("fullUSBSupport", getFullUSBSupport());
-
-            edit.commit();
-
-        }
-
-        public String getFontSize() {
-            return fontSize;
-        }
-
-        public void setFontSize(String value) {
-            fontSize = value;
-        }
-
-        public String getApplicationLanguage() {
-            return applicationLanguage;
-        }
-
-        public void setApplicationLanguage(String value) {
-            applicationLanguage = value;
-        }
-
-        //return the unit id
-        public String getUnits() {
-            return units;
-        }
-
-        public String getUnitsValue() {
-            return appCfgData.getUnitsByNbr(Integer.parseInt(units));
-        }
-
-        //set the unit by id
-        public void setUnits(String value) {
-            units = value;
-        }
-
-        // get pressure units
-        public String getUnitsPressure() { return unitsPressure; }
-
-        public String getUnitsPressureValue() { return appCfgData.getUnitsPressureByNbr(Integer.parseInt(unitsPressure)); }
-        public void setUnitsPressure(String value) {
-            unitsPressure = value;
-        }
-
-        public String getGraphColor() {
-            return graphColor;
-        }
-
-        public void setGraphColor(String value) {
-            graphColor = value;
-        }
-
-        public String getGraphBackColor() {
-            return graphBackColor;
-        }
-
-        public void setGraphBackColor(String value) {
-            graphBackColor = value;
-        }
-
-        //get the id of the current connection type
-        public String getConnectionType() {
-            return connectionType;
-        }
-
-        //get the name of the current connection type
-        public String getConnectionTypeValue() {
-            return appCfgData.getConnectionTypeByNbr(Integer.parseInt(connectionType));
-        }
-
-        public void setConnectionType(String value) {
-            connectionType = value;
-        }
-
-        public String getGraphicsLibType() {
-            return graphicsLibType;
-        }
-
-        public String getGraphicsLibTypeValue() {
-            return appCfgData.getGraphicsLibTypeByNbr(Integer.parseInt(graphicsLibType));
-        }
-
-        public void setGraphicsLibType(String value) {
-            graphicsLibType = value;
-        }
-
-        public String getBaudRate() {
-            return baudRate;
-        }
-
-        public String getBaudRateValue() {
-            return appCfgData.getBaudRateByNbr(Integer.parseInt(baudRate));
-        }
-
-        public void setBaudRate(String value) {
-            baudRate = value;
-        }
-
-
-        public void setFullUSBSupport(String value) {
-            fullUSBSupport = value;
-        }
-        public String getFullUSBSupport() {
-            return fullUSBSupport;
-        }
-
-        public int ConvertFont(int font) {
-            return font + 8;
-        }
-
-        public int ConvertColor(int col) {
-
-            int myColor = 0;
-
-            switch (col) {
-
-                case 0:
-                    myColor = Color.BLACK;
-                    break;
-                case 1:
-                    myColor = Color.WHITE;
-                    break;
-                case 2:
-                    myColor = Color.MAGENTA;
-                    break;
-                case 3:
-                    myColor = Color.BLUE;
-                    break;
-                case 4:
-                    myColor = Color.YELLOW;
-                    break;
-                case 5:
-                    myColor = Color.GREEN;
-                    break;
-                case 6:
-                    myColor = Color.GRAY;
-                    break;
-                case 7:
-                    myColor = Color.CYAN;
-                    break;
-                case 8:
-                    myColor = Color.DKGRAY;
-                    break;
-                case 9:
-                    myColor = Color.LTGRAY;
-                    break;
-                case 10:
-                    myColor = Color.RED;
-                    break;
-            }
-            return myColor;
         }
     }
 }

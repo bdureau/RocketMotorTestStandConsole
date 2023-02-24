@@ -282,10 +282,12 @@ public class TestStandConfigTab1Fragment extends Fragment {
             txtViewSensorType.setVisibility(View.INVISIBLE);
         }
         if (lTestStandCfg != null) {
-            dropdownBaudRate.setSelection(lTestStandCfg.arrayIndex(itemsBaudRate, String.valueOf(lTestStandCfg.getConnectionSpeed())));
+            dropdownBaudRate.setSelection(lTestStandCfg.arrayIndex(itemsBaudRate,
+                    String.valueOf(lTestStandCfg.getConnectionSpeed())));
 
             dropdownTestStandResolution.setSelection(lTestStandCfg.getTestStandResolution());
-            dropdownEEpromSize.setSelection(lTestStandCfg.arrayIndex(itemsEEpromSize, String.valueOf(lTestStandCfg.getEepromSize())));
+            dropdownEEpromSize.setSelection(lTestStandCfg.arrayIndex(itemsEEpromSize,
+                    String.valueOf(lTestStandCfg.getEepromSize())));
 
             StopRecordingTime.setText(String.valueOf(lTestStandCfg.getStopRecordingTime()));
 

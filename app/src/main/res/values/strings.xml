@@ -385,5 +385,11 @@
     <string name="lora_module_updating_msg5">updating RSSI Byte, trans Mode, LBT and WOR Cycle</string>
     <string name="lora_module_updating_msg6">updating key</string>
     <string name="lora_module_connecting_msg">Attempting connecting to the Lora module</string>
+    <string name="pressure_unit_psi">PSI</string>
+    <string name="pressure_unit_bar">BAR</string>
+    <string name="pressure_unit_kpascal">Kpascal</string>
+    <string name="calibration_weight_message">Calibration weight must be greater than zero</string>
+    <string name="calibration_weight_warning">Warning</string>
+    <string name="calibration_weight_ok">OK</string>
 
 </resources>

@@ -22,6 +22,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.rocketmotorteststand.ConsoleApplication;
+import com.rocketmotorteststand.GlobalConfig;
 import com.rocketmotorteststand.R;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveData;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveViewTabActivity;
@@ -83,34 +84,34 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         }
         // Read the application config
         myBT.getAppConf().ReadConfig();
-        if (myBT.getAppConf().getUnits().equals("0")) {
+        if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.KG) {
             //kg
             units[0] = "(" + getResources().getString(R.string.Kg_fview) + ")";
             CONVERT = 1.0 / 1000;
 
-        } else if (myBT.getAppConf().getUnits().equals("1")) {
+        } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.POUNDS) {
             //pounds
             units[0] = getResources().getString(R.string.Pounds_fview);
             CONVERT = 2.20462 / 1000;
 
-        } else if (myBT.getAppConf().getUnits().equals("2")) {
+        } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.NEWTONS) {
             //newtons
             units[0] = getResources().getString(R.string.Newtons_fview);
             CONVERT = 9.80665 / 1000;
         }
 
         if (numberOfCurves > 1) {
-            if (myBT.getAppConf().getUnitsPressure().equals("0")) {
+            if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
                 //PSI
-                units[1] = "(" + "PSI" + ")";
+                units[1] = "(" + getString(R.string.pressure_unit_psi) + ")";
                 CONVERT_PRESSURE = 1;
-            } else if (myBT.getAppConf().getUnits().equals("1")) {
+            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.BAR) {
                 //BAR
-                units[1] = "BAR";
+                units[1] = getString(R.string.pressure_unit_bar);
                 CONVERT_PRESSURE = 0.0689476;
-            } else if (myBT.getAppConf().getUnits().equals("2")) {
+            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.KPascal) {
                 //Kpascal
-                units[1] = "Kpascal";
+                units[1] = getString(R.string.pressure_unit_kpascal);
                 CONVERT_PRESSURE = 6.89476;
             }
         }
@@ -229,7 +230,8 @@ public class ThrustCurveViewInfoFragment extends Fragment {
             public void onClick(View v) {
 
                 // Create a file for the zip file
-                File zipFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "motorData.zip");
+                File zipFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                        "motorData.zip");
                 ArrayList<String> fileNames = new ArrayList<>();
                 fileNames.add(exportThrustToCSV(lThrustCurveData));
                 if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
@@ -246,7 +248,8 @@ public class ThrustCurveViewInfoFragment extends Fragment {
                         // Add the zip entry to the zip output stream
                         zos.putNextEntry(ze);
                         // Read the file and write it to the zip output stream
-                        File filetoZip = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),  fileName);
+                        File filetoZip = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                                fileName);
                         FileInputStream fis = new FileInputStream(filetoZip);
                         byte[] buffer = new byte[1024];
                         int len;
@@ -299,19 +302,20 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
             for (int k = curveStart; k < curveStop; k++) {
 
-                String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(0).getX(k).floatValue() - lThrustCurveData.getSeries(0).getX(curveStart).floatValue()) / 1000);
+                String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(0).getX(k).floatValue()
+                        - lThrustCurveData.getSeries(0).getX(curveStart).floatValue()) / 1000);
                 if (curTime.contains(","))
                     curTime = curTime + ";";
                 else
                     curTime = curTime + ",";
                 String currData = "";
-                if (myBT.getAppConf().getUnits().equals("0")) {
+                if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.KG) {
                     //kg
                     currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000));
-                } else if (myBT.getAppConf().getUnits().equals("1")) {
+                } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.POUNDS) {
                     //pound
                     currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 2.20462);
-                } else if (myBT.getAppConf().getUnits().equals("2")) {
+                } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.NEWTONS) {
                     //newton
                     currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
                 }
@@ -348,19 +352,20 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         if (curvePressureStart != -1 && curveMaxPressure != -1 && curvePressureStop != -1) {
             for (int k = curvePressureStart; k < curvePressureStop; k++) {
 
-                String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(1).getX(k).floatValue() - lThrustCurveData.getSeries(1).getX(curveStart).floatValue()) / 1000);
+                String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(1).getX(k).floatValue()
+                        - lThrustCurveData.getSeries(1).getX(curveStart).floatValue()) / 1000);
                 if (curTime.contains(","))
                     curTime = curTime + ";";
                 else
                     curTime = curTime + ",";
                 String currData = "";
-                if (myBT.getAppConf().getUnitsPressure().equals("0")) {
+                if (myBT.getAppConf().getUnitsPressure()==0) {
                     //PSI
                     currData = String.format("%.1f ", (lThrustCurveData.getSeries(1).getY(k).floatValue()));
-                } else if (myBT.getAppConf().getUnitsPressure().equals("1")) {
+                } else if (myBT.getAppConf().getUnitsPressure()==1) {
                     //bar
                     currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() / (float) 14.504);
-                } else if (myBT.getAppConf().getUnitsPressure().equals("2")) {
+                } else if (myBT.getAppConf().getUnitsPressure()==2) {
                     //Kpascal
                     currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() * (float) 6.895);
                 }
@@ -383,13 +388,13 @@ public class ThrustCurveViewInfoFragment extends Fragment {
             else
                 curTime = curTime + ",";
             String currData = "";
-            if (myBT.getAppConf().getUnits().equals("0")) {
+            if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.KG) {
                 //kg
                 currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000));
-            } else if (myBT.getAppConf().getUnits().equals("1")) {
+            } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.POUNDS) {
                 //pound
                 currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 2.20462);
-            } else if (myBT.getAppConf().getUnits().equals("2")) {
+            } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.NEWTONS) {
                 //newton
                 currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
             }
@@ -412,13 +417,13 @@ public class ThrustCurveViewInfoFragment extends Fragment {
                 else
                     curTime = curTime + ",";
                 String currData = "";
-                if (myBT.getAppConf().getUnitsPressure().equals("0")) {
+                if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
                     //PSI
                     currData = String.format("%.1f ", (lThrustCurveData.getSeries(1).getY(k).floatValue()));
-                } else if (myBT.getAppConf().getUnitsPressure().equals("1")) {
+                } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.BAR) {
                     //bar
                     currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() / (float) 14.504);
-                } else if (myBT.getAppConf().getUnitsPressure().equals("2")) {
+                } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.KPascal) {
                     //Kpascal
                     currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() * (float) 6.895);
                 }
@@ -450,7 +455,8 @@ public class ThrustCurveViewInfoFragment extends Fragment {
                 //Confirmation message
                 builder = new AlertDialog.Builder(this.getContext());
                 //Running Saving commands
-                builder.setMessage(getString(R.string.not_saved_msg) + Environment.DIRECTORY_DOWNLOADS + "\\RocketMotorTestStand\\" + fileName + msg)
+                builder.setMessage(getString(R.string.not_saved_msg) + Environment.DIRECTORY_DOWNLOADS +
+                                "\\RocketMotorTestStand\\" + fileName + msg)
                         .setTitle(R.string.not_saved_title)
                         .setCancelable(false)
                         .setPositiveButton(R.string.not_saved_ok, new DialogInterface.OnClickListener() {
@@ -504,10 +510,7 @@ public class ThrustCurveViewInfoFragment extends Fragment {
 
         if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
             for (int k = curveStart; k < curveStop; k++) {
-
                 //newton
-                //yValues.add(new Entry(thrustCurveData.getSeries(0).getX(k).floatValue() - thrustCurveData.getSeries(0).getX(curveStart).floatValue(),
-                // (thrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665));
                 String currData = String.format("%.3f ", (lThrustCurveData.getSeries(0).getX(k).floatValue() - lThrustCurveData.getSeries(0).getX(curveStart).floatValue()) / 1000) + " " +
                         String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
                 currData = currData.replace(",", ".");
@@ -535,7 +538,6 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         intent.setType("file/*");
         intent.putExtra(android.content.Intent.EXTRA_TEXT, "MotorTestStand has shared with you some info");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-
 
         Intent chooser = Intent.createChooser(intent, "Share File");
 

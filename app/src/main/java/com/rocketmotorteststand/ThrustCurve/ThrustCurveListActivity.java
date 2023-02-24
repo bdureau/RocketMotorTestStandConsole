@@ -93,7 +93,6 @@ public class ThrustCurveListActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
 
-
             builder = new AlertDialog.Builder(ThrustCurveListActivity.this);
             //Retrieving flights...
             builder.setMessage(getResources().getString(R.string.msg7))
@@ -151,7 +150,6 @@ public class ThrustCurveListActivity extends AppCompatActivity {
 
                         myBT.write("r" + j + ";".toString());
                         myBT.flush();
-
 
                         try {
                             //wait for data to arrive

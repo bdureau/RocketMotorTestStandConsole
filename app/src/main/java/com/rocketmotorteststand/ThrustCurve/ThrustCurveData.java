@@ -104,38 +104,30 @@ public class ThrustCurveData {
     }
     public void AddToThrustCurve (long X, long Y, String thrustCurveName)
     {
-
         //Find out if the flight exist
         //If it exist append the data to the flight and if not create a new flight
         XYSeriesCollection  thrustCurveData=null;
         if (!ThrustCurveExist(thrustCurveName))
         {
-
             //if the flight name does not exist let's create it first
             hm.put(thrustCurveName, createThrustCurve(thrustCurveName));
         }
-
         thrustCurveData = GetThrustCurveData(thrustCurveName);
         thrustCurveData.getSeries(0).add(X, Y);
-
     }
     public void AddToThrustCurve (long X, long Y, String thrustCurveName, int serie)
     {
-
         //Find out if the flight exist
         //If it exist append the data to the flight and if not create a new flight
         XYSeriesCollection  thrustCurveData=null;
         if (!ThrustCurveExist(thrustCurveName))
         {
-
             //if the flight name does not exist let's create it first
             hm.put(thrustCurveName, createThrustCurve(thrustCurveName));
         }
 
         thrustCurveData = GetThrustCurveData(thrustCurveName);
         thrustCurveData.getSeries(serie).add(X, Y);
-
-
     }
     //not sure that I will be using that one
     public void AddFlightData (XYSeriesCollection  thrustCurveData, String thrustCurveName)
@@ -151,7 +143,6 @@ public class ThrustCurveData {
 
     private XYSeriesCollection  createThrustCurve(final String name) {
         XYSeriesCollection ret;
-
         //thrust
         final XYSeries series = new XYSeries(context.getResources().getString(R.string.curve_thrust)) ;
         ret = new XYSeriesCollection (series);
@@ -160,8 +151,6 @@ public class ThrustCurveData {
             ret.addSeries(new XYSeries(context.getResources().getString(R.string.curve_pressure)));
             Log.d("numberOfCurves", "Adding curve pressure in data" );
         }
-
         return ret;
     }
-
 }

@@ -38,7 +38,6 @@ public class AppConfigTabActivity extends AppCompatActivity {
     private AppConfigTab1Fragment appConfigPage1 = null;
     //private Tab2Fragment appConfigPage2 = null;
 
-
     private AppConfigData appConfigData = null;
 
     ConsoleApplication myBT;
@@ -86,16 +85,16 @@ public class AppConfigTabActivity extends AppCompatActivity {
     }
 
     private void SaveConfig() {
-        myBT.getAppConf().setApplicationLanguage("" + appConfigPage1.getAppLanguage() + "");
-        myBT.getAppConf().setGraphColor("" + appConfigPage1.getGraphColor() + "");
-        myBT.getAppConf().setUnits("" + appConfigPage1.getAppUnit() + "");
-        myBT.getAppConf().setUnitsPressure("" + appConfigPage1.getAppUnitPressure() + "");
+        myBT.getAppConf().setApplicationLanguage(appConfigPage1.getAppLanguage());
+        myBT.getAppConf().setGraphColor(appConfigPage1.getGraphColor());
+        myBT.getAppConf().setUnits(appConfigPage1.getAppUnit());
+        myBT.getAppConf().setUnitsPressure(appConfigPage1.getAppUnitPressure());
 
-        myBT.getAppConf().setGraphBackColor("" + appConfigPage1.getGraphBackColor() + "");
-        myBT.getAppConf().setFontSize("" + appConfigPage1.getFontSize()  + "");
-        myBT.getAppConf().setBaudRate("" + appConfigPage1.getBaudRate() + "");
-        myBT.getAppConf().setConnectionType("" + appConfigPage1.getConnectionType() + "");
-        myBT.getAppConf().setGraphicsLibType("" + appConfigPage1.getGraphicsLibType() + "");
+        myBT.getAppConf().setGraphBackColor( appConfigPage1.getGraphBackColor());
+        myBT.getAppConf().setFontSize(appConfigPage1.getFontSize());
+        myBT.getAppConf().setBaudRate(appConfigPage1.getBaudRate());
+        myBT.getAppConf().setConnectionType(appConfigPage1.getConnectionType());
+        myBT.getAppConf().setGraphicsLibType(appConfigPage1.getGraphicsLibType());
 
         myBT.getAppConf().setFullUSBSupport(appConfigPage1.getFullUSBSupport());
 
@@ -105,24 +104,17 @@ public class AppConfigTabActivity extends AppCompatActivity {
 
     private void RestoreToDefault() {
         myBT.getAppConf().ResetDefaultConfig();
-        appConfigPage1.setAppLanguage(Integer.parseInt(myBT.getAppConf().getApplicationLanguage()));
-        appConfigPage1.setAppUnit(Integer.parseInt(myBT.getAppConf().getUnits()));
-        appConfigPage1.setAppUnitPressure(Integer.parseInt(myBT.getAppConf().getUnitsPressure()));
-        appConfigPage1.setGraphColor(Integer.parseInt(myBT.getAppConf().getGraphColor()));
-        appConfigPage1.setGraphBackColor(Integer.parseInt(myBT.getAppConf().getGraphBackColor()));
-        appConfigPage1.setFontSize(Integer.parseInt(myBT.getAppConf().getFontSize()) /*- 8*/);
-        appConfigPage1.setBaudRate(Integer.parseInt(myBT.getAppConf().getBaudRate()));
-        appConfigPage1.setConnectionType(Integer.parseInt(myBT.getAppConf().getConnectionType()));
-        appConfigPage1.setGraphicsLibType(Integer.parseInt(myBT.getAppConf().getGraphicsLibType()));
+        appConfigPage1.setAppLanguage(myBT.getAppConf().getApplicationLanguage());
+        appConfigPage1.setAppUnit(myBT.getAppConf().getUnits());
+        appConfigPage1.setAppUnitPressure(myBT.getAppConf().getUnitsPressure());
+        appConfigPage1.setGraphColor(myBT.getAppConf().getGraphColor());
+        appConfigPage1.setGraphBackColor(myBT.getAppConf().getGraphBackColor());
+        appConfigPage1.setFontSize(myBT.getAppConf().getFontSize());
+        appConfigPage1.setBaudRate(myBT.getAppConf().getBaudRate());
+        appConfigPage1.setConnectionType(myBT.getAppConf().getConnectionType());
+        appConfigPage1.setGraphicsLibType(myBT.getAppConf().getGraphicsLibType());
 
-
-        if (myBT.getAppConf().getFullUSBSupport().equals("true")) {
-            appConfigPage1.setFullUSBSupport(true);
-        } else {
-            appConfigPage1.setFullUSBSupport(false);
-        }
-
-
+        appConfigPage1.setFullUSBSupport(myBT.getAppConf().getFullUSBSupport());
     }
 
 
@@ -130,10 +122,7 @@ public class AppConfigTabActivity extends AppCompatActivity {
         adapter = new AppConfigTabActivity.SectionsPageAdapter(getSupportFragmentManager());
         appConfigPage1 = new AppConfigTab1Fragment(myBT, appConfigData);
 
-
         adapter.addFragment(appConfigPage1, "TAB1");
-
-
         viewPager.setAdapter(adapter);
     }
 

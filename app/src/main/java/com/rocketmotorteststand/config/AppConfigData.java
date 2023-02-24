@@ -15,11 +15,11 @@ public class AppConfigData {
     private Context context;
 
     // cannot initialize those that require translations
-    //"English", "French", "Phone language"
+    //"Phone language", "English"
     private String[] itemsLanguages = null;
 
     private String[] itemsColor = null;
-    //"Meters", "Feet"
+    //"kg", "pounds", "newtons"
     private String[] itemsUnits = null;
 
     private String[] itemsUnitsPressure = null;
@@ -48,13 +48,9 @@ public class AppConfigData {
     public AppConfigData(Context current)
     {
         context = current;
-        //context.getApplicationContext().getSharedPreferences()
-                //getSharedPreferences
         itemsLanguages = new String[]{
                 context.getResources().getString(R.string.phone_language),//"Phone language"
                 context.getResources().getString(R.string.phone_english)// "English",
-
-
         };
         itemsUnits = new String[]{
                 context.getResources().getString(R.string.config_unit_kg),
@@ -133,5 +129,4 @@ public class AppConfigData {
     }
     public String[] getItemsGraphicsLib() {return itemsGraphicsLib;}
     public String getGraphicsLibTypeByNbr(int graphicsLibNbr) {return itemsGraphicsLib[graphicsLibNbr];}
-
 }

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rocketmotorteststand.ConsoleApplication;
+import com.rocketmotorteststand.GlobalConfig;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
@@ -45,29 +46,37 @@ public class TestStandStatus extends AppCompatActivity {
 
                 case 1:
                     String myUnits = "";
+                    double CONVERT = 1.0;
                     //Value 1 contains the current thrust
-                    if (myBT.getAppConf().getUnits().equals("0"))
+                    if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.KG) {
                         //kg
                         myUnits = getResources().getString(R.string.Kg_fview);
-                    else if (myBT.getAppConf().getUnits().equals("1"))
+                        CONVERT = 1.0;
+                    }
+                    else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.POUNDS) {
                         //pounds
                         myUnits = getResources().getString(R.string.Pounds_fview);
-                    else if (myBT.getAppConf().getUnits().equals("2"))
+                        CONVERT = 2.20462;
+                    }
+                    else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.NEWTONS) {
                         //Newtons
                         myUnits = getResources().getString(R.string.unit_newtons);
+                        CONVERT = 9.80665;
+                    }
                     String thrust = (String) msg.obj;
                     if (thrust.matches("\\d+(?:\\.\\d+)?")) {
                         double temp;
                         temp = Double.parseDouble(thrust);
-                        if (myBT.getAppConf().getUnits().equals("0"))
+                        /*if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.KG)
                             //kg
                             thrust = String.format("%.2f", (temp / 1000));
-                        else if (myBT.getAppConf().getUnits().equals("1"))
+                        else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.POUNDS)
                             //pounds
                             thrust = String.format("%.2f", (temp / 1000) * 2.20462);
-                        else if (myBT.getAppConf().getUnits().equals("2"))
+                        else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.NEWTONS)
                             //Newtons
-                            thrust = String.format("%.2f", (temp / 1000) * 9.80665);
+                            thrust = String.format("%.2f", (temp / 1000) * 9.80665);*/
+                        thrust = String.format("%.2f", (temp / 1000) * CONVERT);
                     }
                     txtViewThrust.setText(thrust + " " + myUnits);
                     break;
@@ -94,6 +103,7 @@ public class TestStandStatus extends AppCompatActivity {
                     String eepromUsage = (String) msg.obj;
                     txtEEpromUsage.setText(eepromUsage + " %");
                     if (eepromUsage.matches("\\d+(?:\\.\\d+)?")) {
+                        // if eeprom usage is 100% put it in red to show that it is full
                         if (Integer.parseInt(eepromUsage)==100){
                             txtEEpromUsage.setTextColor(Color.RED);
                         }
@@ -109,13 +119,12 @@ public class TestStandStatus extends AppCompatActivity {
                     String nbrOfThrustCurve = (String) msg.obj;
                     txtNbrOfThrustCurve.setText(nbrOfThrustCurve);
                     if (nbrOfThrustCurve.matches("\\d+(?:\\.\\d+)?")) {
+                        // If we have the maximum of thrust curve put it in red
                         if (Integer.parseInt(nbrOfThrustCurve)==25){
-                            //txtNbrOfThrustCurve.setHighlightColor(Color.RED);
                             txtNbrOfThrustCurve.setTextColor(Color.RED);
                             Log.d("TestStandStatus", "RED");
                         }
                         else {
-                            //txtNbrOfThrustCurve.setHighlightColor(Color.BLACK);
                             txtNbrOfThrustCurve.setTextColor(txtViewThrust.getTextColors());
                             Log.d("TestStandStatus", "BLACK");
                         }
@@ -126,8 +135,31 @@ public class TestStandStatus extends AppCompatActivity {
 
                 case 6:
                     //Value 6 contains the current pressure
+                    String myPressureUnits = "";
+                    double CONVERT_PRESSURE = 1.0;
+                    //Value 1 contains the current thrust
+                    if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
+                        //PSI
+                        myPressureUnits = getString(R.string.pressure_unit_psi);
+                        CONVERT_PRESSURE = 1.0;
+                    }
+                    else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.BAR) {
+                        //BAR
+                        myPressureUnits = getString(R.string.pressure_unit_bar);
+                        CONVERT_PRESSURE = 1.0f / 14.504f;
+                    }
+                    else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.KPascal) {
+                        //Kpascal
+                        myPressureUnits = getString(R.string.pressure_unit_kpascal);
+                        CONVERT_PRESSURE = 6.895;
+                    }
                     String currentPressure = (String) msg.obj;
-                    txtViewCurrentPressureValue.setText(currentPressure+ " PSI");
+                    if (currentPressure.matches("\\d+(?:\\.\\d+)?")) {
+                        double temp;
+                        temp = Double.parseDouble(currentPressure);
+                        currentPressure = String.format("%.2f", (temp / 1000) * CONVERT_PRESSURE);
+                        txtViewCurrentPressureValue.setText(currentPressure + " " + myPressureUnits);
+                    }
 
                     Log.d("TestStandStatus", (String) msg.obj);
                     break;
@@ -206,9 +238,7 @@ public class TestStandStatus extends AppCompatActivity {
         txtViewThrust = (TextView) findViewById(R.id.txtViewThrust);
         txtViewVoltage = (TextView) findViewById(R.id.txtViewVoltage);
         txtViewLink = (TextView) findViewById(R.id.txtViewLink);
-
         txtViewBatteryVoltage = (TextView) findViewById(R.id.txtViewBatteryVoltage);
-
         txtEEpromUsage = (TextView) findViewById(R.id.txtViewEEpromUsage);
         txtNbrOfThrustCurve = (TextView) findViewById(R.id.txtViewNbrOfThrustCurve);
         txtViewEEprom = (TextView) findViewById(R.id.txtViewEEprom);
@@ -216,14 +246,8 @@ public class TestStandStatus extends AppCompatActivity {
         txtViewCurrentPressureValue = (TextView) findViewById(R.id.txtViewCurrentPressureValue);
         txtViewCurrentPressure = (TextView) findViewById(R.id.txtViewCurrentPressure);
 
-        //if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32")) {
-            txtViewVoltage.setVisibility(View.VISIBLE);
-            txtViewBatteryVoltage.setVisibility(View.VISIBLE);
-        /*} else {
-            txtViewVoltage.setVisibility(View.INVISIBLE);
-            txtViewBatteryVoltage.setVisibility(View.INVISIBLE);
-        }*/
-
+        txtViewVoltage.setVisibility(View.VISIBLE);
+        txtViewBatteryVoltage.setVisibility(View.VISIBLE);
 
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
             txtViewCurrentPressureValue.setVisibility(View.VISIBLE);

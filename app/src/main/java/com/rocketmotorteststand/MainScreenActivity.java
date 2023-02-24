@@ -210,7 +210,7 @@ public class MainScreenActivity extends AppCompatActivity {
                     //if android ver = 8 or greater use the MPlib
                     i = new Intent(MainScreenActivity.this, TelemetryMp.class);
                 } else {
-                    if (myBT.getAppConf().getGraphicsLibType().equals("0"))
+                    if (myBT.getAppConf().getGraphicsLibType()==0)
                         i = new Intent(MainScreenActivity.this, Telemetry.class);
                     else
                         i = new Intent(MainScreenActivity.this, TelemetryMp.class);
@@ -237,7 +237,7 @@ public class MainScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 myBT.getAppConf().ReadConfig();
-                if (myBT.getAppConf().getConnectionType().equals("0"))
+                if (myBT.getAppConf().getConnectionType()== GlobalConfig.ConnectionType.BT)
                     myBT.setConnectionType("bluetooth");
                 else
                     myBT.setConnectionType("usb");
@@ -277,9 +277,11 @@ public class MainScreenActivity extends AppCompatActivity {
                                 //PendingIntent pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0, new Intent(ACTION_USB_PERMISSION), 0);
                                 PendingIntent pi;
                                 if(android.os.Build.VERSION.SDK_INT >= 31) {
-                                    pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
+                                    pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0,
+                                            new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
                                 } else {
-                                    pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+                                    pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0,
+                                            new Intent(ACTION_USB_PERMISSION), 0);
                                 }
                                 usbManager.requestPermission(device, pi);
                                 keep = false;
@@ -349,14 +351,18 @@ public class MainScreenActivity extends AppCompatActivity {
 
 
             //enable it for bT or USB only if full support
-            if (myBT.getAppConf().getConnectionType().equals("0") || (myBT.getAppConf().getConnectionType().equals("1") && myBT.getAppConf().getFullUSBSupport().equals("true")))
+            if (myBT.getAppConf().getConnectionType()== GlobalConfig.ConnectionType.BT ||
+                    (myBT.getAppConf().getConnectionType()== GlobalConfig.ConnectionType.USB &&
+                            myBT.getAppConf().getFullUSBSupport()))
                 setEnabledCard(true, btnReadThrustCurves, image_curve, text_curve);
             else
                 setEnabledCard(false, btnReadThrustCurves, image_curve, text_curve);
 
             setEnabledCard(true, btnTelemetry, image_telemetry, text_telemetry);
             //enable it for bT or USB only if full support
-            if (myBT.getAppConf().getConnectionType().equals("0") || (myBT.getAppConf().getConnectionType().equals("1") && myBT.getAppConf().getFullUSBSupport().equals("true"))) {
+            if (myBT.getAppConf().getConnectionType()== GlobalConfig.ConnectionType.BT ||
+                    (myBT.getAppConf().getConnectionType()== GlobalConfig.ConnectionType.USB &&
+                            myBT.getAppConf().getFullUSBSupport())) {
                 setEnabledCard(true, btnTestStandSettings, image_settings, text_settings);
                 setEnabledCard(true, btnReset, image_reset, text_reset);
                 setEnabledCard(true, btnStatus, image_status, text_status);
@@ -501,7 +507,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
         myBT.getAppConf().ReadConfig();
         //only enable bluetooth module search if connection type is bluetooth
-        if(myBT.getAppConf().getConnectionType().equals("1")) {
+        if(myBT.getAppConf().getConnectionType()== GlobalConfig.ConnectionType.USB) {
             menu.findItem(R.id.action_bluetooth).setEnabled(false);
         }
         else {

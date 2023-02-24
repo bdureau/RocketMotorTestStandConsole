@@ -91,7 +91,7 @@ public class TestStandConfigTab2Fragment extends Fragment {
         CalibrationFactor = (TextView) view.findViewById(R.id.txtCalibrationFactorValue);
         CurrentOffset = (TextView) view.findViewById(R.id.txtCalibrationOffsetValue);
         calibrationWeight = (EditText) view.findViewById(R.id.txtCalibrationWeightValue);
-        //btnCalibrate = (Button) view.findViewById(R.id.butCalibrate);
+
         //units
         dropdownUnits = (Spinner) view.findViewById(R.id.spinnerUnit);
         //"kg", "pounds"
@@ -117,16 +117,14 @@ public class TestStandConfigTab2Fragment extends Fragment {
         //Test Stand name
         testStandName = (TextView) view.findViewById(R.id.txtAltiNameValue);
 
-
-
         if (ltestStandNameCfg != null) {
             testStandName.setText(ltestStandNameCfg.getTestStandName() + " ver: " +
-                    ltestStandNameCfg.getTestStandMajorVersion() + "." + ltestStandNameCfg.getTestStandMinorVersion());
+                    ltestStandNameCfg.getTestStandMajorVersion() + "." +
+                    ltestStandNameCfg.getTestStandMinorVersion());
 
             dropdownUnits.setSelection(ltestStandNameCfg.getUnits());
             CalibrationFactor.setText(String.valueOf(ltestStandNameCfg.getCalibrationFactor()));
             CurrentOffset.setText(String.valueOf(ltestStandNameCfg.getCurrentOffset()));
-
         }
         ViewCreated = true;
         return view;

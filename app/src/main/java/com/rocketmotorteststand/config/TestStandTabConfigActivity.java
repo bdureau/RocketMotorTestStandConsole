@@ -120,10 +120,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 if(configPage3.getCalibrationWeight().equals("0")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(TestStandTabConfigActivity.this);
                     //Display info message
-                    builder.setMessage("Calibration weight must be greater than zero")
-                            .setTitle("Warning")
+                    builder.setMessage(R.string.calibration_weight_message)
+                            .setTitle(R.string.calibration_weight_warning)
                             .setCancelable(false)
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            .setPositiveButton(R.string.calibration_weight_ok, new DialogInterface.OnClickListener() {
                                 public void onClick(final DialogInterface dialog, final int id) {
                                     dialog.cancel();
                                 }
@@ -382,34 +382,29 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 Log.d("conftab", "switch off main loop ok");
             }
         }
-       // String testStandCfgStr = "";
 
-       // testStandCfgStr = "s," +
-                //TestStandCfg.getUnits() + "," +
         SendParam("p,1,"+ TestStandCfg.getUnits());
-                //TestStandCfg.getConnectionSpeed() + "," +
+
         SendParam("p,2,"+ TestStandCfg.getConnectionSpeed());
-                //TestStandCfg.getStopRecordingTime() + "," +
+
         SendParam("p,3,"+ TestStandCfg.getStopRecordingTime());
-                //TestStandCfg.getTestStandResolution() + "," +
+
         SendParam("p,4,"+ TestStandCfg.getTestStandResolution());
-                //TestStandCfg.getEepromSize();
+
         SendParam("p,5,"+ TestStandCfg.getEepromSize());
 
-        //testStandCfgStr = testStandCfgStr + "," + "0";//TestStandCfg.getStartRecordingThrustLevel();
         SendParam("p,6,0");
-        //testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getBatteryType();
+
         SendParam("p,7,"+ TestStandCfg.getBatteryType());
-        //testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCalibrationFactor();
+
         SendParam("p,8,"+ TestStandCfg.getCalibrationFactor());
-        //testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getCurrentOffset();
+
         SendParam("p,9,"+ TestStandCfg.getCurrentOffset());
-        //testStandCfgStr = testStandCfgStr + "," + TestStandCfg.getPressureSensorType();
+
         SendParam("p,10,"+ TestStandCfg.getPressureSensorType());
         SendParam("p,11,"+ TestStandCfg.getTelemetryType());
 
         if (myBT.getConnected()) {
-
             String myMessage = "";
 
             myBT.setDataReady(false);
@@ -465,7 +460,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             myBT.flush();
             myBT.clearInput();
             myBT.setDataReady(false);
-            //msg("Sent :" + altiCfgStr.toString());
+
             //send back the config
             myBT.write(altiCfgStr.toString());
             Log.d("conftab", altiCfgStr.toString());
@@ -480,7 +475,6 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             myMessage = "";
             myMessage = myBT.ReadResult(3000);
             if (myMessage.equals("OK")) {
-                //msg("Sent OK:" + altiCfgStr.toString());
                 Log.d("conftab", "config sent succesfully");
 
             } else {
