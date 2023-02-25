@@ -255,7 +255,7 @@ public class ThrustCurveViewFcFragment extends Fragment {
                         for (int k = curveStart; k < curveStop; k++) {
                             currentCurve.add(allThrustCurveData.getSeries(i).getX(k).floatValue()
                                     - allThrustCurveData.getSeries(i).getX(curveStart).floatValue(),
-                                    (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * CONVERT);
+                                    (allThrustCurveData.getSeries(i).getY(k).floatValue() ) * CONVERT);
                         }
                         thrustCurveDataFinal.addSeries(currentCurve);
                     }
