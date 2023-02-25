@@ -19,7 +19,6 @@ import android.widget.Button;
 
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
-import com.rocketmotorteststand.telemetry.TestStandStatus;
 
 public class ResetSettingsActivity extends AppCompatActivity {
 

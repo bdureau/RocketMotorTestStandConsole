@@ -121,15 +121,11 @@
             android:label="@string/reset_settings"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".telemetry.Telemetry"
+            android:name=".telemetry.TestStandTelemetryTabActivity"
             android:label="@string/telemetry_screen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".telemetry.TelemetryMp"
-            android:label="@string/telemetry_screen"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".telemetry.TestStandStatus"
+            android:name=".telemetry.TestStandStatusTabActivity"
             android:label="@string/status_screen"
             android:screenOrientation="portrait" />
 

@@ -97,7 +97,7 @@ public class AppConfigTabActivity extends AppCompatActivity {
         myBT.getAppConf().setGraphicsLibType(appConfigPage1.getGraphicsLibType());
 
         myBT.getAppConf().setFullUSBSupport(appConfigPage1.getFullUSBSupport());
-
+        myBT.getAppConf().setManualRecording(appConfigPage1.getAllowManualRecording());
         myBT.getAppConf().SaveConfig();
         finish();
     }
@@ -115,6 +115,7 @@ public class AppConfigTabActivity extends AppCompatActivity {
         appConfigPage1.setGraphicsLibType(myBT.getAppConf().getGraphicsLibType());
 
         appConfigPage1.setFullUSBSupport(myBT.getAppConf().getFullUSBSupport());
+        appConfigPage1.setAllowManualRecording(myBT.getAppConf().getManualRecording());
     }
 
 

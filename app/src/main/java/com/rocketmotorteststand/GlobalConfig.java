@@ -36,6 +36,7 @@ public class GlobalConfig {
     private int graphicsLibType = 0;
 
     private boolean fullUSBSupport= false;
+    private boolean allowManualRecording = true;
 
 
     public GlobalConfig(Context current) {
@@ -58,69 +59,54 @@ public class GlobalConfig {
         connectionType = 0;
         graphicsLibType = 1; //Default to MP android chart lib
         fullUSBSupport = false;
+        allowManualRecording = true;
     }
 
     public void ReadConfig() {
         try {
             //Application language
-            //String applicationLanguage;
             int applicationLanguage = appConfig.getInt("AppLanguage", 0);
-            //if (!applicationLanguage.equals(""))
             setApplicationLanguage(applicationLanguage);
 
             //Application Units
-            //String appUnit;
             int appUnit = appConfig.getInt("Units", 0);
-            //if (!appUnit.equals(""))
             setUnits(appUnit);
 
-            //String appUnitPressure;
+            // appUnitPressure;
             int appUnitPressure = appConfig.getInt("UnitsPressure", 0);
-            //if (!appUnitPressure.equals(""))
             setUnitsPressure(appUnitPressure);
 
             //Graph color
-            //String graphColor;
             int graphColor = appConfig.getInt("GraphColor", 0);
-            //if (!graphColor.equals(""))
             setGraphColor(graphColor);
 
             //Graph Background color
-            //String graphBackColor;
             graphBackColor = appConfig.getInt("GraphBackColor", 0);
-            //if (!graphBackColor.equals(""))
             setGraphBackColor(graphBackColor);
 
             //Font size
-            //String fontSize;
             int fontSize = appConfig.getInt("FontSize", 0);
-            //if (!fontSize.equals(""))
             setFontSize(fontSize);
 
             //Baud rate
-            //String baudRate;
             int baudRate = appConfig.getInt("BaudRate", 0);
-            //if (!baudRate.equals(""))
             setBaudRate(baudRate);
 
             //Connection type
-            //String connectionType;
             int connectionType = appConfig.getInt("ConnectionType", 0);
-            //if (!connectionType.equals(""))
             setConnectionType(connectionType);
 
             //Graphics Lib Type
-            //String graphicsLibType;
             graphicsLibType = appConfig.getInt("GraphicsLibType", 1);
-            //if (!graphicsLibType.equals(""))
             setGraphicsLibType(graphicsLibType);
 
 
             //enable full USB support
-            //String fullUSBSupport;
             boolean fullUSBSupport = appConfig.getBoolean("fullUSBSupport", false);
-            //if (!fullUSBSupport.equals(""))
             setFullUSBSupport(fullUSBSupport);
+            //allowManualRecording
+            boolean allowManualRecording = appConfig.getBoolean("allowManualRecording", false);
+            setManualRecording(allowManualRecording);
 
         } catch (Exception e) {
 
@@ -137,9 +123,8 @@ public class GlobalConfig {
         edit.putInt("BaudRate", getBaudRate());
         edit.putInt("ConnectionType", getConnectionType());
         edit.putInt("GraphicsLibType", getGraphicsLibType());
-
         edit.putBoolean("fullUSBSupport", getFullUSBSupport());
-
+        edit.putBoolean("allowManualRecording", getManualRecording());
         edit.commit();
 
     }
@@ -242,6 +227,14 @@ public class GlobalConfig {
     }
     public boolean getFullUSBSupport() {
         return fullUSBSupport;
+    }
+
+    public void setManualRecording(boolean value) {
+        allowManualRecording = value;
+    }
+
+    public boolean getManualRecording() {
+        return allowManualRecording;
     }
 
     public int ConvertFont(int font) {

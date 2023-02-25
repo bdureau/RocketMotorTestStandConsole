@@ -434,7 +434,7 @@ public class ConsoleApplication extends Application {
 
                                         // Value 5 contains the number of thrust curves
                                         if (currentSentence.length > 5) {
-                                            Log.d("TestStand console", currentSentence[5]);
+                                            //Log.d("TestStand console", currentSentence[5]);
                                             if (currentSentence[5].trim().matches("\\d+(?:\\.\\d+)?")) {
                                                 mHandler.obtainMessage(5, String.valueOf(currentSentence[5])).sendToTarget();
                                             } else

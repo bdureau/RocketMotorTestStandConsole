@@ -35,11 +35,9 @@ import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.connection.SearchBluetooth;
 import com.rocketmotorteststand.connection.TestConnection;
-import com.rocketmotorteststand.telemetry.TestStandStatus;
-import com.rocketmotorteststand.telemetry.Telemetry;
-import com.rocketmotorteststand.telemetry.TelemetryMp;
-//import com.google.android.gms.appindexing.AppIndex;
-//import com.google.android.gms.common.api.GoogleApiClient;
+import com.rocketmotorteststand.telemetry.TestStandStatusTabActivity;
+import com.rocketmotorteststand.telemetry.TestStandTelemetryTabActivity;
+
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -48,12 +46,12 @@ import java.util.Map;
 import java.util.Set;
 
 public class MainScreenActivity extends AppCompatActivity {
-    String address = null;
-    CardView btnTestStandSettings, btnReadThrustCurves, btnConnectDisconnect, btnReset;
-    CardView btnTelemetry, btnStatus, btnFlashFirmware, btnAbout;
-    ImageView image_settings, image_curve, image_telemetry, image_reset, image_status, image_firmware,
+    private String address = null;
+    private CardView btnTestStandSettings, btnReadThrustCurves, btnConnectDisconnect, btnReset;
+    private CardView btnTelemetry, btnStatus, btnFlashFirmware, btnAbout;
+    private ImageView image_settings, image_curve, image_telemetry, image_reset, image_status, image_firmware,
             image_info, image_connect;
-    TextView text_settings, text_curve, text_telemetry, text_reset, text_status, text_firmware,
+    private TextView text_settings, text_curve, text_telemetry, text_reset, text_status, text_firmware,
             text_info, text_connect;
 
     //private ProgressDialog progress;
@@ -61,7 +59,7 @@ public class MainScreenActivity extends AppCompatActivity {
     UsbDevice device;
     public final String ACTION_USB_PERMISSION = "com.rocketmotorteststand.USB_PERMISSION";
 
-    ConsoleApplication myBT;
+    private ConsoleApplication myBT;
     private TestStandConfigData AltiCfg = null;
     private FirmwareCompatibility firmCompat =null;
 
@@ -206,15 +204,15 @@ public class MainScreenActivity extends AppCompatActivity {
                     myBT.write("y1;".toString());
                 }
                 Intent i;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+                /*if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
                     //if android ver = 8 or greater use the MPlib
                     i = new Intent(MainScreenActivity.this, TelemetryMp.class);
                 } else {
                     if (myBT.getAppConf().getGraphicsLibType()==0)
                         i = new Intent(MainScreenActivity.this, Telemetry.class);
-                    else
-                        i = new Intent(MainScreenActivity.this, TelemetryMp.class);
-                }
+                    else*/
+                        i = new Intent(MainScreenActivity.this, TestStandTelemetryTabActivity.class);
+                //}
                 startActivity(i);
             }
         });
@@ -228,7 +226,7 @@ public class MainScreenActivity extends AppCompatActivity {
                     myBT.clearInput();
                     myBT.write("y1;".toString());
                 }
-                Intent i = new Intent(MainScreenActivity.this, TestStandStatus.class);
+                Intent i = new Intent(MainScreenActivity.this, TestStandStatusTabActivity.class);
                 startActivity(i);
             }
         });
@@ -522,12 +520,15 @@ public class MainScreenActivity extends AppCompatActivity {
             menu.findItem(R.id.action_mod3dr_settings).setEnabled(false);
             // same goes for the BT module
             menu.findItem(R.id.action_modbt_settings).setEnabled(false);
+            //same goes for the Lora module
+            menu.findItem(R.id.action_modlora_settings).setEnabled(false);
             // Allow connection testing
             menu.findItem(R.id.action_test_connection).setEnabled(true);
         } else {
             // not connected so allow those
             menu.findItem(R.id.action_mod3dr_settings).setEnabled(true);
             menu.findItem(R.id.action_modbt_settings).setEnabled(true);
+            menu.findItem(R.id.action_modlora_settings).setEnabled(true);
             //cannot do connection testing until we are connected
             menu.findItem(R.id.action_test_connection).setEnabled(false);
         }

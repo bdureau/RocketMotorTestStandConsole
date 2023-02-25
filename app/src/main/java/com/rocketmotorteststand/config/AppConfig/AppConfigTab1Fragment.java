@@ -20,6 +20,7 @@ public class AppConfigTab1Fragment extends Fragment {
             spFontSize, spBaudRate;
     private Spinner spConnectionType, spGraphicsLibType;
     private CheckBox cbFullUSBSupport;
+    private CheckBox cbAllowManualRecording;
     private ConsoleApplication BT;
     private boolean ViewCreated = false;
     private AppConfigData appConfigData = null;
@@ -107,6 +108,13 @@ public class AppConfigTab1Fragment extends Fragment {
 
     public void setFullUSBSupport(boolean value) {
         cbFullUSBSupport.setChecked(value);
+    }
+    public boolean getAllowManualRecording() {
+        return cbAllowManualRecording.isChecked();
+    }
+
+    public void setAllowManualRecording(boolean value) {
+        cbAllowManualRecording.setChecked(value);
     }
 
     public boolean isViewCreated() {
@@ -198,6 +206,9 @@ public class AppConfigTab1Fragment extends Fragment {
         }
 
         cbFullUSBSupport.setChecked(BT.getAppConf().getFullUSBSupport());
+        // allow manual recording
+        cbAllowManualRecording = (CheckBox) view.findViewById(R.id.checkBoxAllowManualRecording);
+        cbAllowManualRecording.setChecked(BT.getAppConf().getManualRecording());
 
         ViewCreated = true;
         return view;
