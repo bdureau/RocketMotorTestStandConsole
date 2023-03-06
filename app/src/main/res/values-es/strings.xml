@@ -394,5 +394,17 @@
     <string name="calibration_weight_warning">Warning</string>
     <string name="calibration_weight_ok">OK</string>
     <string name="allow_manual_recording">Allow manual Recording</string>
+    <string name="current_pressure">Current pressure</string>
+    <string name="firmware">Firmware:</string>
+    <string name="flash_speed_baud">Flash speed(Baud):</string>
+    <string name="firmware_info">Firmware info</string>
+    <string name="current_pressure_telemetry">Current pressure</string>
+    <string name="current_pressure_telemetry2">Current pressure</string>
+    <string name="telemetry_type">Telemetry type</string>
+    <string name="share_eng">Share Eng</string>
+    <string name="share_zip">Share Zip</string>
+    <string name="share">Share</string>
+    <string name="lora_settings">Lora settings...</string>
+    <string name="share_thrust_curve">Share</string>
 
 </resources>

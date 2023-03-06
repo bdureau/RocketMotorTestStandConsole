@@ -69,8 +69,8 @@ public class FlashFirmware extends AppCompatActivity {
     private UartConfig uartConfig;
 
     private static final String ASSET_FILE_NAME_TESTSTAND = "firmwares/MotorTestStand.ino.hex";
-    private static final String ASSET_FILE_NAME_TESTSTANDSTM32 = "firmwares/MotorTestStand.ino.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDSTM32V2 = "firmwares/MotorTestStandV2.ino.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDSTM32 = "firmwares/MotorTestStand1.3.ino.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDSTM32V2 = "firmwares/MotorTestStand1.3V2.ino.bin";
 
 
     private static final String ASSET_FILE_RESET_TESTSTAND = "recover_firmwares/ResetMotorTestStand.ino.hex";

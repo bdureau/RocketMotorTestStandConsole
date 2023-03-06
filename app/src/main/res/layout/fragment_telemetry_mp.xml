@@ -42,7 +42,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Current pressure"
+            android:text="@string/current_pressure_telemetry2"
             android:id="@+id/textViewlblCurrentPressure"
             android:layout_row="9"
             android:layout_column="0"

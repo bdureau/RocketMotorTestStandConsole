@@ -102,7 +102,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Current pressure"
+        android:text="@string/current_pressure"
         android:id="@+id/txtViewCurrentPressure"
         android:layout_below="@+id/txtViewLinkType"
         android:layout_alignParentLeft="true"

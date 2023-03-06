@@ -167,7 +167,7 @@
     <string name="current_phase">Phase courante</string>
     <string name="thrust">Poussée</string>
     <string name="event_time">Heure Evenement</string>
-    <string name="current_thrust">Poussée en court</string>
+    <string name="current_thrust">Poussée en cours</string>
     <string name="dis">Déconnecter</string>
 
     <!-- Status -->
@@ -350,7 +350,7 @@
     <string name="calibration_title">Calibration</string>
     <string name="cancel_calibration">Annuller</string>
     <string name="curve_pressure">Pression</string>
-    <string name="max_pressure">Pressure Max</string>
+    <string name="max_pressure">Pression Max</string>
     <string name="export_to_csv_full">Export csv complet</string>
     <string name="sensor_type">Type de capteur</string>
     <string name="zoom">Zoom</string>
@@ -365,41 +365,53 @@
 
 
     <!-- Lora module-->
-    <string name="lora_configure_module_title">Configure Lora module</string>
-    <string name="lora_module_channel">Channel:</string>
+    <string name="lora_configure_module_title">Configure module Lora </string>
+    <string name="lora_module_channel">Canal:</string>
     <string name="lora_module_trans_mode">Trans mode:</string>
-    <string name="lora_module_address">Address:</string>
-    <string name="lora_module_channel_rssi">Channel RSSI</string>
+    <string name="lora_module_address">Addresse:</string>
+    <string name="lora_module_channel_rssi">Canal RSSI</string>
     <string name="lora_module_key">Key:</string>
-    <string name="lora_module_parity">Parity</string>
+    <string name="lora_module_parity">Parité</string>
     <string name="lora_module_wor_cycle">Wor Cycle</string>
     <string name="lora_module_lbt">LBT:</string>
     <string name="lora_module_air_rate">Air Rate:</string>
     <string name="lora_module_power">Power:</string>
     <string name="lora_module_packet_rssi">Packet RSSI:</string>
     <string name="lora_module_packet_size">Packet Size:</string>
-    <string name="lora_module_config_msg">This will allow you to configure Lora telemetry modules</string>
-    <string name="lora_module_config_msg_title">Lora telemetry module configuration</string>
+    <string name="lora_module_config_msg">Cela vous permettra de configurer les modules de télémetrie Lora</string>
+    <string name="lora_module_config_msg_title">configuration du module de telemetrie Lora</string>
     <string name="lora_module_config_button_ok">OK</string>
-    <string name="lora_module_loading_config_msg">Loading Lora module config</string>
-    <string name="lora_module_channel_msg">Module channel cannot be empty</string>
-    <string name="lora_module_invalid_channel">Channel is invalid</string>
-    <string name="lora_module_channel_value_msg">Channel must be between 0 and 83</string>
-    <string name="lora_module_address_empty_msg">Module address cannot be empty</string>
-    <string name="lora_module_address_range">Address must be between 0 and 65535</string>
-    <string name="lora_module_address_invalid">Address is invalid</string>
-    <string name="lora_module_updating_address_msg">Updating module address</string>
-    <string name="lora_module_updating_msg2">Updating serial speed, parity and air rate</string>
-    <string name="lora_module_updating_msg3">updating packet , RSSI noise and transmitting power</string>
+    <string name="lora_module_loading_config_msg">Chargement de la config du module Lora</string>
+    <string name="lora_module_channel_msg">Le canal du Module ne peut pas etre vide</string>
+    <string name="lora_module_invalid_channel">Canal invalide</string>
+    <string name="lora_module_channel_value_msg">Le canal doit etre etre 0 et 83</string>
+    <string name="lora_module_address_empty_msg">l\'address du Module ne peut pas etre vide</string>
+    <string name="lora_module_address_range">L\'Addresse doit etre entre 0 et 65535</string>
+    <string name="lora_module_address_invalid">Address invalide</string>
+    <string name="lora_module_updating_address_msg">Mise à jours addresse module </string>
+    <string name="lora_module_updating_msg2">mise à jour serial speed, parité et air rate</string>
+    <string name="lora_module_updating_msg3">mise à jour packet , RSSI noise et transmitting power</string>
     <string name="lora_module_updating_msg4">mise à jour du canal</string>
-    <string name="lora_module_updating_msg5">updating RSSI Byte, trans Mode, LBT and WOR Cycle</string>
+    <string name="lora_module_updating_msg5">mise à jour RSSI Byte, trans Mode, LBT et WOR Cycle</string>
     <string name="lora_module_updating_msg6">mise à jour de la clé</string>
-    <string name="lora_module_connecting_msg">Attempting connecting to the Lora module</string>
+    <string name="lora_module_connecting_msg">Tentative de connexion au module Lora</string>
     <string name="pressure_unit_psi">PSI</string>
     <string name="pressure_unit_bar">BAR</string>
     <string name="pressure_unit_kpascal">Kpascal</string>
-    <string name="calibration_weight_message">Calibration weight must be greater than zero</string>
-    <string name="calibration_weight_warning">Warning</string>
+    <string name="calibration_weight_message">Le poids pour calibrer doit etre supérieur à 0</string>
+    <string name="calibration_weight_warning">Attention</string>
     <string name="calibration_weight_ok">OK</string>
-    <string name="allow_manual_recording">Allow manual Recording</string>
+    <string name="allow_manual_recording">Autoriser l\'enregistrement manuel</string>
+    <string name="current_pressure">Pression</string>
+    <string name="firmware">Firmware:</string>
+    <string name="flash_speed_baud">Vitesse Flash(Baud):</string>
+    <string name="firmware_info">Firmware info</string>
+    <string name="current_pressure_telemetry">Pression en cours</string>
+    <string name="current_pressure_telemetry2">Pression en cours</string>
+    <string name="telemetry_type">Type Télémetrie</string>
+    <string name="share_eng">Partager Eng</string>
+    <string name="share_zip">Partager Zip</string>
+    <string name="share">Partager</string>
+    <string name="lora_settings">Config Lora...</string>
+    <string name="share_thrust_curve">Partager</string>
 </resources>

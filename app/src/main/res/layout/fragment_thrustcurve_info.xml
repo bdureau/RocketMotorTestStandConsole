@@ -203,13 +203,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/butExportToCsvFull"
-        android:text="Share Eng" />
+        android:text="@string/share_eng" />
     <Button
         android:id="@+id/butShareZip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/butExportToCsvFull"
-        android:text="Share Zip" />
+        android:text="@string/share_zip" />
 
 </RelativeLayout>
