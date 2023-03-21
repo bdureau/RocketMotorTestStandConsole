@@ -61,7 +61,7 @@ public class FlashFirmware extends AppCompatActivity {
 
     Boards mSelectedBoard;
     Button btFlash;
-    //public RadioButton rbTestStand, rbTestStandSTM32, rbTestStandSTM32V2;
+
     TextView tvRead;
     private AlertDialog.Builder builder = null;
     private AlertDialog alert;
@@ -109,11 +109,6 @@ public class FlashFirmware extends AppCompatActivity {
         tvRead = (TextView) findViewById(R.id.tvRead);
         imageAlti = (ImageView) findViewById(R.id.imageAlti);
 
-        /*rbTestStand = (RadioButton) findViewById(R.id.radioButTestStand);
-        rbTestStandSTM32 = (RadioButton) findViewById(R.id.radioButTestStandSTM32);
-        rbTestStandSTM32V2 = (RadioButton) findViewById(R.id.radioButTestStandSTM32V2);
-        rbTestStandSTM32.setChecked(true);*/
-
         mPhysicaloid = new Physicaloid(this);
         mBoardList = new ArrayList<Boards>();
         for (Boards board : Boards.values()) {
@@ -148,6 +143,7 @@ public class FlashFirmware extends AppCompatActivity {
                 "57600",
                 "115200",
                 "230400"};
+
         ArrayAdapter<String> adapterBaudRate = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, itemsBaudRate);
         dropdownBaudRate.setAdapter(adapterBaudRate);
@@ -202,15 +198,14 @@ public class FlashFirmware extends AppCompatActivity {
     public void onClickRecover(View v) {
         String recoverFileName;
         recoverFileName = ASSET_FILE_RESET_TESTSTAND;
+
         if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStand"))
             recoverFileName = ASSET_FILE_RESET_TESTSTAND;
 
         if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32"))
-            //if (rbTestStandSTM32.isChecked())
             recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32;
 
         if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2"))
-            //if (rbTestStandSTM32V2.isChecked())
             recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32V2;
 
 
@@ -219,7 +214,6 @@ public class FlashFirmware extends AppCompatActivity {
         //rbTestStand
         if (!itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32") &&
                 !itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2")) {
-            //if (!rbTestStandSTM32.isChecked() & !rbTestStandSTM32V2.isChecked()) {
             try {
                 builder = new AlertDialog.Builder(FlashFirmware.this);
                 //Recover firmware...
@@ -267,21 +261,17 @@ public class FlashFirmware extends AppCompatActivity {
         firmwareFileName = ASSET_FILE_NAME_TESTSTAND;
 
         if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStand"))
-            //if (rbTestStand.isChecked())
             firmwareFileName = ASSET_FILE_NAME_TESTSTAND;
 
         if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32"))
-            //if (rbTestStandSTM32.isChecked())
             firmwareFileName = ASSET_FILE_NAME_TESTSTANDSTM32;
 
-        if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32"))
-            //if (rbTestStandSTM32V2.isChecked())
+        if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2"))
             firmwareFileName = ASSET_FILE_NAME_TESTSTANDSTM32V2;
 
         tvRead.setText("");
         if (!itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32") &&
                 !itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2")) {
-            //if (!rbTestStandSTM32.isChecked() & !rbTestStandSTM32V2.isChecked() ) {
             try {
                 builder = new AlertDialog.Builder(FlashFirmware.this);
                 //Flashing firmware...
@@ -306,7 +296,7 @@ public class FlashFirmware extends AppCompatActivity {
                 //Log.e(TAG, e.toString());
             }
         } else {
-            //uploadSTM32(firmwareFileName);
+            tvRead.setText("Loading ESP32 firmware\n");
             recorverFirmware = false;
             new UploadSTM32Asyc().execute();
         }
@@ -388,10 +378,8 @@ public class FlashFirmware extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             if (!recorverFirmware) {
                 if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32"))
-                    //if (rbTestStandSTM32.isChecked())
                     uploadSTM32(ASSET_FILE_NAME_TESTSTANDSTM32, mUploadSTM32Callback);
                 else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2"))
-                    //else if (rbTestStandSTM32V2.isChecked())
                     uploadSTM32(ASSET_FILE_NAME_TESTSTANDSTM32V2, mUploadSTM32Callback);
             } else {
                 uploadSTM32(ASSET_FILE_RESET_TESTSTANDSTM32, mUploadSTM32Callback);

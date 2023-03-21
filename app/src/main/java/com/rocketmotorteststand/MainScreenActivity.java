@@ -169,7 +169,6 @@ public class MainScreenActivity extends AppCompatActivity {
         btnFlashFirmware.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 myBT.getAppConf().ReadConfig();
                 Intent i = new Intent(MainScreenActivity.this, FlashFirmware.class);
                 //Change the activity.
