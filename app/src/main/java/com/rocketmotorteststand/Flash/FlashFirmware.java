@@ -333,15 +333,12 @@ public class FlashFirmware extends AppCompatActivity {
             tvAppend(tvRead, getString(R.string.firmware_ver_detected) + version + "\n");
 
             if (version.equals("TestStand")) {
-                //setRadioButton (rbTestStand,true);
                 spinnerFirmware.setSelection(0);
             }
             if (version.equals("TestStandSTM32")) {
-                //setRadioButton (rbTestStandSTM32,true);
                 spinnerFirmware.setSelection(1);
             }
             if (version.equals("TestStandSTM32V2")) {
-                //setRadioButton (rbTestStandSTM32V2,true);
                 spinnerFirmware.setSelection(2);
             }
             return null;
@@ -569,16 +566,6 @@ public class FlashFirmware extends AppCompatActivity {
         });
     }
 
-    /*private void setRadioButton (RadioButton rb, boolean state) {
-        final RadioButton frb = rb;
-        final boolean fstate = state;
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                frb.setChecked(fstate);
-            }
-        });
-    }*/
     private void dialogAppend(CharSequence text) {
         final CharSequence ftext = text;
         mHandler.post(new Runnable() {
