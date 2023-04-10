@@ -22,32 +22,34 @@ import android.widget.Toast;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
-import com.physicaloid.lib.Physicaloid;
 import com.rocketmotorteststand.ShareHandler;
 import com.rocketmotorteststand.config.AppConfigTabActivity;
+import com.physicaloid.lib.Physicaloid;
+
+import java.nio.ByteBuffer;
 
 /**
- * @description: This allows the configuration of Lora Ebytes telemetry modules from an Android
+ * @description: This allows the configuration of Lora E32 Ebytes telemetry modules from an Android
  * phone or tablet using a ttl cable.
  * This is not perfect code but should work. Feel free to re-use it for your own project.
  * Make sure that you report any bugs or suggestions so that it can be improved
  * @author: boris.dureau@neuf.fr
  **/
-public class ConfigLora extends AppCompatActivity {
+public class ConfigLoraE32 extends AppCompatActivity {
     Physicaloid mPhysicaloid;
-
+    public String TAG = "ConfigLoraE32.class";
     private Button btRetrieveConfig, btSaveConfig;
 
-    private Spinner spinnerLoraBaudRate, spinnerLoraTransMode, spinnerLoraChannelRSSI,
-            spinnerLoraParity, spinnerLoraWoreCycle, spinnerLoraLBT, spinnerLoraAirRate,
-            spinnerLoraPower, spinnerLoraPacketRSSI, spinnerLoraPacketSize;
-    private String[] itemsLoraBaudRate, itemsLoraTransMode, itemsLoraChannelRSSI,
-            itemsLoraParity, itemsLoraWoreCycle, itemsLoraLBT, itemsLoraAirRate, itemsLoraPower,
-            itemsLoraPacketRSSI, itemsLoraPacketSize;
+    private Spinner spinnerLoraBaudRate, spinnerLoraIOMode, spinnerLoraFixedMode,
+            spinnerLoraParity, spinnerLoraWakeupTime, spinnerLoraFECswitch, spinnerLoraAirRate,
+            spinnerLoraPower;
+    private String[] itemsLoraBaudRate, itemsLoraIOMode, itemsLoraFixedMode,
+            itemsLoraParity, itemsLoraWakeupTime, itemsLoraFECswitch, itemsLoraAirRate, itemsLoraPower;
 
-    private StringBit[] strBLoraBaudRateVal, strBLoraTransModeVal, strBLoraChannelRSSIVal,
-            strBLoraParityVal, strBLoraWoreCycleVal, strBLoraLBTVal, strBLoraAirRateVal,
-            strBLoraPowerVal, strBLoraPacketRSSIVal, strBLoraPacketSizeVal;
+
+    private StringBit[] strBLoraBaudRateVal, strBLoraIOModeVal, strBLoraFixedModeVal,
+            strBLoraParityVal, strBLoraWakeupTimeVal, strBLoraFECswitchVal, strBLoraAirRateVal,
+            strBLoraPowerVal;
 
     private TextView textLoraModuleValue;
 
@@ -55,30 +57,27 @@ public class ConfigLora extends AppCompatActivity {
 
     private AlertDialog.Builder builder = null;
     private AlertDialog alert;
-    ConfigLora.ModuleInfo mInfo;
+    ConfigLoraE32.ModuleInfo mInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_config_lora);
+        setContentView(R.layout.activity_config_lorae32);
 
         btRetrieveConfig = (Button) findViewById(R.id.butLoraRetrieveConfig);
         btSaveConfig = (Button) findViewById(R.id.butLoraSaveConfig);
         spinnerLoraBaudRate = (Spinner) findViewById(R.id.spinnerLoraBaudRate);
-        spinnerLoraTransMode = (Spinner) findViewById(R.id.spinnerLoraTransMode);
-        spinnerLoraChannelRSSI = (Spinner) findViewById(R.id.spinnerLoraChannelRSSI);
+        spinnerLoraFixedMode = (Spinner) findViewById(R.id.spinnerLoraFixedMode);
         spinnerLoraParity = (Spinner) findViewById(R.id.spinnerLoraParity);
-        spinnerLoraWoreCycle = (Spinner) findViewById(R.id.spinnerLoraWoreCycle);
-        spinnerLoraLBT = (Spinner) findViewById(R.id.spinnerLoraLBT);
+        spinnerLoraFECswitch = (Spinner) findViewById(R.id.spinnerLoraFECswitch);
         spinnerLoraAirRate = (Spinner) findViewById(R.id.spinnerLoraAirRate);
         spinnerLoraPower = (Spinner) findViewById(R.id.spinnerLoraPower);
-        spinnerLoraPacketRSSI = (Spinner) findViewById(R.id.spinnerLoraPacketRSSI);
-        spinnerLoraPacketSize = (Spinner) findViewById(R.id.spinnerLoraPacketSize);
-
-        textLoraModuleValue = (TextView) findViewById(R.id.textLoraModuleValue);
-
+        spinnerLoraIOMode = (Spinner) findViewById(R.id.spinnerLoraIOMode);
         textLoraAddressValue = (EditText) findViewById(R.id.textLoraAddressValue);
         textLoraChannelValue = (EditText) findViewById(R.id.textLoraChannelValue);
+        spinnerLoraWakeupTime = (Spinner) findViewById(R.id.spinnerLoraWakeupTime);
+
+        textLoraModuleValue = (TextView) findViewById(R.id.textLoraModuleValue);
 
         // baud rate
         itemsLoraBaudRate = new String[]{
@@ -108,33 +107,33 @@ public class ConfigLora extends AppCompatActivity {
         adapterLoraBaudRate.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerLoraBaudRate.setAdapter(adapterLoraBaudRate);
 
-        // Trans Mode
-        itemsLoraTransMode = new String[]{
-                "Normal",
-                "Fixed"
+        // IO Mode
+        itemsLoraIOMode = new String[]{
+                "OpenDrain",
+                "PushPull"
         };
-        strBLoraTransModeVal = new StringBit[]{
-                new StringBit("Normal", 0b0),
-                new StringBit("Fixed", 0b1)
+        strBLoraIOModeVal = new StringBit[]{
+                new StringBit("OpenDrain", 0b0),
+                new StringBit("PushPull", 0b1)
         };
-        ArrayAdapter<String> adapterLoraTransModeVal = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, itemsLoraTransMode);
-        adapterLoraTransModeVal.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinnerLoraTransMode.setAdapter(adapterLoraTransModeVal);
+        ArrayAdapter<String> adapterLoraIOModeVal = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, itemsLoraIOMode);
+        adapterLoraIOModeVal.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinnerLoraIOMode.setAdapter(adapterLoraIOModeVal);
 
-        // Channel RSSI
-        itemsLoraChannelRSSI = new String[]{
+        // Fixed mode
+        itemsLoraFixedMode = new String[]{
                 "Disable",
                 "Enable"
         };
-        strBLoraChannelRSSIVal = new StringBit[]{
+        strBLoraFixedModeVal = new StringBit[]{
                 new StringBit("Disable", 0b0),
                 new StringBit("Enable", 0b1)
         };
-        ArrayAdapter<String> adapterLoraChannelRSSIVal = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, itemsLoraChannelRSSI);
-        adapterLoraChannelRSSIVal.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinnerLoraChannelRSSI.setAdapter(adapterLoraChannelRSSIVal);
+        ArrayAdapter<String> adapterLoraFixedModeVal = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, itemsLoraFixedMode);
+        adapterLoraFixedModeVal.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinnerLoraFixedMode.setAdapter(adapterLoraFixedModeVal);
 
         // Parity
         itemsLoraParity = new String[]{
@@ -153,64 +152,64 @@ public class ConfigLora extends AppCompatActivity {
         adapterLoraParityVal.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerLoraParity.setAdapter(adapterLoraParityVal);
 
-        // Wore Cycle
-        itemsLoraWoreCycle = new String[]{
+        // Wireless wake-up time
+        itemsLoraWakeupTime = new String[]{
+                "250ms",
                 "500ms",
+                "750ms",
                 "1000ms",
+                "1250ms",
                 "1500ms",
-                "2000ms",
-                "2500ms",
-                "3000ms",
-                "3500ms",
-                "4000ms"
+                "1750ms",
+                "2000ms"
         };
-        strBLoraWoreCycleVal = new StringBit[]{
-                new StringBit("500ms", 0b000),
-                new StringBit("1000ms", 0b001),
-                new StringBit("1500ms", 0b010),
-                new StringBit("2000ms", 0b011),
-                new StringBit("2500ms", 0b100),
-                new StringBit("3000ms", 0b101),
-                new StringBit("3500ms", 0b110),
-                new StringBit("4000ms", 0b111)
+        strBLoraWakeupTimeVal = new StringBit[]{
+                new StringBit("250ms", 0b000),
+                new StringBit("500ms", 0b001),
+                new StringBit("750ms", 0b010),
+                new StringBit("1000ms", 0b011),
+                new StringBit("1250ms", 0b100),
+                new StringBit("1500ms", 0b101),
+                new StringBit("1750ms", 0b110),
+                new StringBit("2000ms", 0b111)
         };
-        ArrayAdapter<String> adapterLoraWoreCycleVal = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, itemsLoraWoreCycle);
-        adapterLoraWoreCycleVal.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinnerLoraWoreCycle.setAdapter(adapterLoraWoreCycleVal);
+        ArrayAdapter<String> adapterLoraWakeupTimeVal = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, itemsLoraWakeupTime);
+        adapterLoraWakeupTimeVal.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinnerLoraWakeupTime.setAdapter(adapterLoraWakeupTimeVal);
 
-        //LBT
-        itemsLoraLBT = new String[]{
+        //FEC switch
+        itemsLoraFECswitch = new String[]{
                 "Disable",
                 "Enable"
         };
-        strBLoraLBTVal = new StringBit[]{
+        strBLoraFECswitchVal = new StringBit[]{
                 new StringBit("Disable", 0b0),
                 new StringBit("Enable", 0b1)
         };
         ArrayAdapter<String> adapterLoraLBTVal = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, itemsLoraLBT);
+                android.R.layout.simple_spinner_item, itemsLoraFECswitch);
         adapterLoraLBTVal.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinnerLoraLBT.setAdapter(adapterLoraLBTVal);
+        spinnerLoraFECswitch.setAdapter(adapterLoraLBTVal);
 
         // AirRate
         itemsLoraAirRate = new String[]{
+                "0.3Kbps",
+                "1.2Kbps",
                 "2.4Kbps",
                 "4.8Kbps",
                 "9.6Kbps",
-                "19.2Kbps",
-                "38.4Kbps",
-                "65.2Kbps"
+                "19.2Kbps"
         };
         strBLoraAirRateVal = new StringBit[]{
-                new StringBit("2.4Kbps", 0b000),
-                new StringBit("2.4Kbps", 0b001),
+                new StringBit("0.3Kbps", 0b000),
+                new StringBit("1.2Kbps", 0b001),
                 new StringBit("2.4Kbps", 0b010),
                 new StringBit("4.8Kbps", 0b011),
                 new StringBit("9.6Kbps", 0b100),
                 new StringBit("19.2Kbps", 0b101),
-                new StringBit("38.4Kbps", 0b110),
-                new StringBit("65.2Kbps", 0b111)
+                new StringBit("19.2Kbps", 0b110),
+                new StringBit("19.2Kbps", 0b111)
         };
         ArrayAdapter<String> adapterAirRateVal = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, itemsLoraAirRate);
@@ -235,41 +234,9 @@ public class ConfigLora extends AppCompatActivity {
         adapterPowerVal.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerLoraPower.setAdapter(adapterPowerVal);
 
-        // PacketRSSI
-        itemsLoraPacketRSSI = new String[]{
-                "Disable",
-                "Enable"
-        };
-        strBLoraPacketRSSIVal = new StringBit[]{
-                new StringBit("Disable", 0b0),
-                new StringBit("Enable", 0b1)
-        };
-        ArrayAdapter<String> adapterPacketRSSIVal = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, itemsLoraPacketRSSI);
-        adapterPacketRSSIVal.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinnerLoraPacketRSSI.setAdapter(adapterPacketRSSIVal);
-
-        // Packet Size
-        itemsLoraPacketSize = new String[]{
-                "200 Bytes",
-                "128 Bytes",
-                "64 Bytes",
-                "32 Bytes"
-        };
-        strBLoraPacketSizeVal = new StringBit[]{
-                new StringBit("200 Bytes", 0b00),
-                new StringBit("128 Bytes", 0b01),
-                new StringBit("64 Bytes", 0b10),
-                new StringBit("32 Bytes", 0b11)
-        };
-        ArrayAdapter<String> adapterPacketSizeVal = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, itemsLoraPacketSize);
-        adapterPacketSizeVal.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinnerLoraPacketSize.setAdapter(adapterPacketSizeVal);
-
         mPhysicaloid = new Physicaloid(this);
         mPhysicaloid.open();
-        mInfo = new ConfigLora.ModuleInfo(mPhysicaloid);
+        mInfo = new ConfigLoraE32.ModuleInfo(mPhysicaloid);
 
         DisableUI();
         btRetrieveConfig.setEnabled(true);
@@ -296,28 +263,24 @@ public class ConfigLora extends AppCompatActivity {
 
     public void EnableUI() {
         spinnerLoraBaudRate.setEnabled(true);
-        spinnerLoraTransMode.setEnabled(true);
-        spinnerLoraChannelRSSI.setEnabled(true);
+        spinnerLoraIOMode.setEnabled(true);
+        spinnerLoraFixedMode.setEnabled(true);
         spinnerLoraParity.setEnabled(true);
-        spinnerLoraWoreCycle.setEnabled(true);
-        spinnerLoraLBT.setEnabled(true);
+        spinnerLoraWakeupTime.setEnabled(true);
+        spinnerLoraFECswitch.setEnabled(true);
         spinnerLoraAirRate.setEnabled(true);
         spinnerLoraPower.setEnabled(true);
-        spinnerLoraPacketRSSI.setEnabled(true);
-        spinnerLoraPacketSize.setEnabled(true);
     }
 
     public void DisableUI() {
         spinnerLoraBaudRate.setEnabled(false);
-        spinnerLoraTransMode.setEnabled(false);
-        spinnerLoraChannelRSSI.setEnabled(false);
+        spinnerLoraIOMode.setEnabled(false);
+        spinnerLoraFixedMode.setEnabled(false);
         spinnerLoraParity.setEnabled(false);
-        spinnerLoraWoreCycle.setEnabled(false);
-        spinnerLoraLBT.setEnabled(false);
+        spinnerLoraWakeupTime.setEnabled(false);
+        spinnerLoraFECswitch.setEnabled(false);
         spinnerLoraAirRate.setEnabled(false);
         spinnerLoraPower.setEnabled(false);
-        spinnerLoraPacketRSSI.setEnabled(false);
-        spinnerLoraPacketSize.setEnabled(false);
     }
 
     public static String searchStringFromBit(StringBit[] in, int search) {
@@ -353,19 +316,31 @@ public class ConfigLora extends AppCompatActivity {
         return -1;
     }
 
+
     public void onClickDismiss(View v) {
-        //close();
         finish();
+    }
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed()");
+        finish();
+    }
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy()");
+        super.onDestroy();
+        if(mPhysicaloid.isOpened())
+            mPhysicaloid.close();
     }
 
     public void onClickRetrieveConfig(View v) {
         // go to AT mode
         Log.d("Config Lora", "retrieving config");
-        new ConfigLora.connectRetrieveAsyc().execute();
+        new ConfigLoraE32.connectRetrieveAsyc().execute();
     }
 
     public void onClickSaveConfig(View v) {
-        new ConfigLora.connectSaveAsyc().execute();
+        new ConfigLoraE32.connectSaveAsyc().execute();
     }
 
 
@@ -380,7 +355,6 @@ public class ConfigLora extends AppCompatActivity {
     }
 
     public class ModuleInfo {
-
 
         ModuleInfo(Physicaloid mPhysi) {
 
@@ -457,7 +431,6 @@ public class ConfigLora extends AppCompatActivity {
         public void close() {
             mPhysicaloid.close();
         }
-
     }
 
 
@@ -474,7 +447,7 @@ public class ConfigLora extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            builder = new AlertDialog.Builder(ConfigLora.this);
+            builder = new AlertDialog.Builder(ConfigLoraE32.this);
             //Recover firmware...
             builder.setMessage(R.string.lora_module_loading_config_msg)
                     .setTitle(getResources().getString(R.string.m3DR_retrieving_cfg))
@@ -492,92 +465,74 @@ public class ConfigLora extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             if (!cancelled) {
-                byte[] cmd = {(byte) 0xC1, 0x00, 0x08};
+                //byte[] cmd = {(byte) 0xC1, 0x00, 0x08};
+                byte[] cmd = {(byte) 0xC1, (byte)0xC1, (byte)0xC1};
                 value = mInfo.runCommand(cmd);
                 if (value[0] == (byte) 0xC1) {
                     Log.d("Lora config", "We have a good config return");
                 }
-                int module_address = (value[3] << 8) | value[4];
+                //int module_address = ((value[1] & 0xFF<< 4) | (value[2] & 0xFF));
+                byte [] bytes = {value[1] , value[2]};
+                int module_address = ByteBuffer.wrap(bytes).getShort();
                 Log.d("Lora Config", "module_address:" + module_address);
                 setLoraAddressValue(module_address + "");
 
-                //first 3 bits are the baud rate
-                int baud_rate = (value[5] & 0xFF) >> 5;
-                Log.d("Lora Config", "baud_rate:" + baud_rate);
-                String sBaud = searchStringFromBit(strBLoraBaudRateVal, baud_rate);
-                int iBaud = arrayIndex(itemsLoraBaudRate, sBaud);
-                setLoraBaudRate(iBaud);
-
-                //next 2 bits are the parity
-                int parity = ((value[5] & 0xFF) & 0b00011000) >> 3;
+                //first 2 bits are the parity
+                //int parity = ((value[5] & 0xFF) & 0b00011000) >> 3;
+                int parity = (value[3] & 0xFF)  >> 6;
                 Log.d("Lora Config", "parity:" + parity);
                 String sParity = searchStringFromBit(strBLoraParityVal, parity);
                 int iParity = arrayIndex(itemsLoraParity, sParity);
                 setLoraParity(iParity);
 
+                //next 3 bits are the baud rate
+                //int baud_rate = (value[5] & 0xFF) >> 5;
+                int baud_rate = ((value[3] & 0xFF) & 0b00111000)>> 3;
+                Log.d("Lora Config", "baud_rate:" + baud_rate);
+                String sBaud = searchStringFromBit(strBLoraBaudRateVal, baud_rate);
+                int iBaud = arrayIndex(itemsLoraBaudRate, sBaud);
+                setLoraBaudRate(iBaud);
+
                 //next 3 bits are the air data rate
-                int air_data_rate = (value[5] & 0xFF) & 0b00000111;
+                int air_data_rate = (value[3] & 0xFF) & 0b00000111;
                 Log.d("Lora Config", "air_data_rate:" + air_data_rate);
                 String sAirRate = searchStringFromBit(strBLoraAirRateVal, air_data_rate);
                 int iAirRate = arrayIndex(itemsLoraAirRate, sAirRate);
                 setLoraAirRate(iAirRate);
 
-                // next 2 are the packet
-                int packet = (value[6] & 0xFF) >> 6;
-                Log.d("Lora Config", "packet:" + packet);
-                String sPacketSize = searchStringFromBit(strBLoraPacketSizeVal, packet);
-                int iPacketSize = arrayIndex(itemsLoraPacketSize, sPacketSize);
-                setLoraPacketSize(iPacketSize);
+                // byte 5 general specifications
+                //first 3 are reserved
+                int genSpec = (value[4] & 0xFF) >> 5;
+                // next 5 are the communication channel
+                int comChannel = (value[4] & 0xFF) & 0b00011111;
+                Log.d("Lora Config", "channel:" + comChannel);
+                setLoraChannelValue(comChannel + "");
 
-                // next 1 RSSI
-                int RSSI_ambient_noise = ((value[6] & 0xFF) & 0x00100000) >> 5;
-                Log.d("Lora Config", "RSSI_ambient_noise:" + RSSI_ambient_noise);
-                String sChannelRSSI = searchStringFromBit(strBLoraChannelRSSIVal, RSSI_ambient_noise);
-                int iChannelRSSI = arrayIndex(itemsLoraChannelRSSI, sChannelRSSI);
-                setLoraChannelRSSI(iChannelRSSI);
+                //byte 6
+                //first 1 is fixed transmission enabling bit
+                Log.d("Lora Config", "byte 6:" + (value[5] & 0xFF));
+                int fixedTransEnabling = (value[5] & 0xFF)>>7;
+                Log.d("Lora Config", "fixedTransEnabling:" + fixedTransEnabling);
+                setLoraFixedMode(fixedTransEnabling);
 
-                // next 3 are reserved so let's live them
-                //next 2 are the transmitting power
-                int transmitting_power = (value[6] & 0xFF) & 0b00000011;
-                Log.d("Lora Config", "transmitting_power:" + transmitting_power);
-                String sPower = searchStringFromBit(strBLoraPowerVal, transmitting_power);
+                int ioDriveMode = ((value[5] & 0xFF)& 0b01000000) >>6;
+                Log.d("Lora Config", "ioDriveMode:" + ioDriveMode);
+                setLoraIOMode(ioDriveMode);
+
+                int wirelessWakeupTime = ((value[5] & 0xFF)& 0b00111000) >>3;
+                Log.d("Lora Config", "wirelessWakeupTime:" + wirelessWakeupTime);
+                setLoraWakeupTime(wirelessWakeupTime);
+
+                int FECswitch = ((value[5] & 0xFF)& 0b00000100) >>2;
+                Log.d("Lora Config", "FECswitch:" + FECswitch);
+                setLoraFECswitch(FECswitch);
+
+                int transmissionPower = (value[5] & 0xFF)& 0b00000011;
+                Log.d("Lora Config", "transmitting_power:" + transmissionPower);
+                String sPower = searchStringFromBit(strBLoraPowerVal, transmissionPower);
                 int iPower = arrayIndex(itemsLoraPower, sPower);
                 setLoraPower(iPower);
 
-                // value[7] frequency (0-83)
-                int channel = value[7] & 0xFF;
-                Log.d("Lora Config", "channel:" + channel);
-                setLoraChannelValue(channel + "");
-                // next 1 is RSSI byte
-                int RSSI_byte = ((value[8] & 0xFF) & 0b10000000) >> 7;
-                Log.d("Lora Config", "RSSI_byte:" + RSSI_byte);
-                String sRSSI_byte = searchStringFromBit(strBLoraPacketRSSIVal, RSSI_byte);
-                int iRSSI_byte = arrayIndex(itemsLoraPacketRSSI, sRSSI_byte);
-                setLoraPacketRSSI(iRSSI_byte);
-
-                // next 1 is transmission method
-                int transmission_method = ((value[8] & 0xFF) & 0b01000000) >> 6;
-                Log.d("Lora Config", "transmission_method:" + transmission_method);
-                String sTransMode = searchStringFromBit(strBLoraTransModeVal, transmission_method);
-                int iTransMode = arrayIndex(itemsLoraTransMode, sTransMode);
-                setLoraTransMode(iTransMode);
-
-                // next 1  is reserved
-                // next 1 is LBT
-                int LBT = ((value[8] & 0xFF) & 0b00010000) >> 4;
-                Log.d("Lora Config", "LBT:" + LBT);
-                String sLBT = searchStringFromBit(strBLoraLBTVal, LBT);
-                int iLBT = arrayIndex(itemsLoraLBT, sLBT);
-                setLoraLBT(iLBT);
-
-                // next 1  is reserved
-                // next 1 is WOR Cycle
-                int wor_cycle = (value[8] & 0xFF) & 0b00000111;
-                Log.d("Lora Config", "wor_cycle:" + wor_cycle);
-                String sWorCycle = searchStringFromBit(strBLoraWoreCycleVal, wor_cycle);
-                int iWorCycle = arrayIndex(itemsLoraWoreCycle, sWorCycle);
-                setLoraWoreCycle(iWorCycle);
-                // ignore value[7] and value[8]
             }
             if (cancelled) {
                 //dialogAppend(getResources().getString(R.string.m3DR_cancel_retrieve));
@@ -602,8 +557,8 @@ public class ConfigLora extends AppCompatActivity {
         String value = "";
         long error = 0;
 
-        String sBaudRate, sTransMode, sChannelRSSI, sParity, sWoreCycle, sLBT,
-                sAiRate, sPower, sPacketRSSI, sPacketSize, sChannel, sAddress;
+        String sBaudRate, sIOMode, sFixedMode, sParity, sWakeupTime, sFECswitch,
+                sAiRate, sPower,  sChannel, sAddress;
 
         String cancelMsg = "";
 
@@ -611,7 +566,7 @@ public class ConfigLora extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            builder = new AlertDialog.Builder(ConfigLora.this);
+            builder = new AlertDialog.Builder(ConfigLoraE32.this);
             //Running Saving commands
             builder.setMessage(getResources().getString(R.string.m3DR_run_save))
                     .setTitle(getResources().getString(R.string.m3DR_save_cfg))
@@ -626,15 +581,13 @@ public class ConfigLora extends AppCompatActivity {
                     });
 
             sBaudRate = spinnerLoraBaudRate.getSelectedItem().toString();
-            sTransMode = spinnerLoraTransMode.getSelectedItem().toString();
-            sChannelRSSI = spinnerLoraChannelRSSI.getSelectedItem().toString();
+            sIOMode = spinnerLoraIOMode.getSelectedItem().toString();
+            sFixedMode = spinnerLoraFixedMode.getSelectedItem().toString();
             sParity = spinnerLoraParity.getSelectedItem().toString();
-            sWoreCycle = spinnerLoraWoreCycle.getSelectedItem().toString();
-            sLBT = spinnerLoraLBT.getSelectedItem().toString();
+            sWakeupTime = spinnerLoraWakeupTime.getSelectedItem().toString();
+            sFECswitch = spinnerLoraFECswitch.getSelectedItem().toString();
             sAiRate = spinnerLoraAirRate.getSelectedItem().toString();
             sPower = spinnerLoraPower.getSelectedItem().toString();
-            sPacketRSSI = spinnerLoraPacketRSSI.getSelectedItem().toString();
-            sPacketSize = spinnerLoraPacketSize.getSelectedItem().toString();
             sChannel = textLoraChannelValue.getText().toString();
             sAddress = textLoraAddressValue.getText().toString();
 
@@ -678,87 +631,58 @@ public class ConfigLora extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            //first split the address in 2 bytes
+            //sAddress
+            byte addh = 0;
+            byte addl = 0;
             // change address
-            if (!cancelled) {
-                //first split the address in 2 bytes
-                //sAddress
-                byte addh = 0;
-                byte addl = 3;
-                dialogAppend(getString(R.string.lora_module_updating_address_msg));
-                byte cmd[] = {(byte) 0xC2, 0x00, 0x02, (byte) addh, (byte) addl};
-                byte[] value = mInfo.runCommand(cmd);
-                if (value[0] != (byte) 0xC1)
-                    error++;
-            }
-            //change Baud Rate, parity and air rate
-            if (!cancelled) {
-                int c;
-                //serial speed, parity and air rate
-                dialogAppend(getString(R.string.lora_module_updating_msg2));
+            //first split the address in 2 bytes
+            //sAddress
+            int iAddress = Integer.valueOf(sAddress);
+            byte [] add = new byte[] {(byte)(iAddress >> 8),  (byte)iAddress };
+            addh = add[0];
+            addl = add[1];
 
-                int iBaudeRate = searchBitFromString(strBLoraBaudRateVal, sBaudRate);
-                int iParity = searchBitFromString(strBLoraParityVal, sParity);
-                int iAiRate = searchBitFromString(strBLoraAirRateVal, sAiRate);
-                c = iBaudeRate << 5 | iParity << 3 | iAiRate;
-                byte cmd[] = {(byte) 0xC2, 0x02, 0x01, (byte) c};
-                byte[] value = mInfo.runCommand(cmd);
-                if (value[0] != (byte) 0xC1)
-                    error++;
-            }
+            Log.d(TAG,"addh:" +addh );
+            Log.d(TAG,"addl:" +addl );
+            dialogAppend(getString(R.string.lora_module_updating_address_msg));
+
+
+            //change parity,Baud Rate and air rate
+            int byte4;
+            dialogAppend(getString(R.string.lora_module_updating_msg2));
+
+            int iBaudeRate = searchBitFromString(strBLoraBaudRateVal, sBaudRate);
+            int iParity = searchBitFromString(strBLoraParityVal, sParity);
+            int iAiRate = searchBitFromString(strBLoraAirRateVal, sAiRate);
+            byte4 = iParity << 6 |iBaudeRate << 3 |  iAiRate;
+
             //updating packet , RSSI noise and transmitting power
+            int byte5;
+            dialogAppend(getString(R.string.lora_module_updating_msg4));
+            Log.d("Lora Config:", sChannel);
+            int channel = Integer.valueOf(sChannel);
+            byte5 = channel;
+
+            int byte6;
+            int iFixedMode = searchBitFromString(strBLoraFixedModeVal, sFixedMode);
+            int iIOMode = searchBitFromString(strBLoraIOModeVal, sIOMode);
+            // sWakeupTime
+            int iWakeupTime = searchBitFromString(strBLoraWakeupTimeVal, sWakeupTime);
+            //sFECswitch
+            int iFECswitch = searchBitFromString(strBLoraFECswitchVal, sFECswitch);
+            //sPower
+            int iPower = searchBitFromString(strBLoraPowerVal, sPower);
+            byte6 = iFixedMode<<7 | iIOMode <<6 | iWakeupTime <<3 | iFECswitch <<2 |iPower;
+
+           //saving
             if (!cancelled) {
-                dialogAppend(getString(R.string.lora_module_updating_msg3));
-                //sPacketSize
-                int iPacketSize = searchBitFromString(strBLoraPacketSizeVal, sPacketSize);
-                //sChannelRSSI
-                int iChannelRSSI = searchBitFromString(strBLoraPacketRSSIVal, sChannelRSSI);
-                //sPower
-                int iPower = searchBitFromString(strBLoraPowerVal, sPower);
-                int c;
-                c = iPacketSize << 6 | iChannelRSSI << 5 | iPower;
-                byte cmd[] = {(byte) 0xC2, 0x03, 0x01, (byte) c};
+                //dialogAppend(getString(R.string.lora_module_updating_msg6));
+                byte cmd[] = {(byte) 0xC0,  (byte) addh, (byte) addl, (byte)byte4, (byte)byte5, (byte)byte6};
                 byte[] value = mInfo.runCommand(cmd);
                 if (value[0] != (byte) 0xC1)
                     error++;
             }
-            //updating channel 0-83
-            if (!cancelled) {
-                dialogAppend(getString(R.string.lora_module_updating_msg4));
-                Log.d("Lora Config:", sChannel);
-                int channel = Integer.valueOf(sChannel);
-                byte cmd[] = {(byte) 0xC2, 0x04, 0x01, (byte) channel};
-                byte[] value = mInfo.runCommand(cmd);
-                if (value[0] != (byte) 0xC1)
-                    error++;
-            }
-
-            //updating RSSI Byte, trans Mode, LBT and WOR Cycle
-            if (!cancelled) {
-                dialogAppend(getString(R.string.lora_module_updating_msg5));
-                //sPacketRSSI
-                int iPacketRSSI = searchBitFromString(strBLoraPacketRSSIVal, sPacketRSSI);
-                //sTransMode
-                int iTransMode = searchBitFromString(strBLoraTransModeVal, sTransMode);
-                //sLBT
-                int iLBT = searchBitFromString(strBLoraLBTVal, sLBT);
-                // sWoreCycle
-                int iWoreCycle = searchBitFromString(strBLoraWoreCycleVal, sWoreCycle);
-                int c;
-                c = iPacketRSSI << 7 | iTransMode << 6 | iLBT << 4 | iWoreCycle;
-                byte cmd[] = {(byte) 0xC2, 0x05, 0x01, (byte) c};
-                byte[] value = mInfo.runCommand(cmd);
-                if (value[0] != (byte) 0xC1)
-                    error++;
-            }
-
-            //updating Key
-            if (!cancelled) {
-                dialogAppend(getString(R.string.lora_module_updating_msg6));
-            }
-
-            //Exit AT mode
-            //value = mInfo.runCommand("ATO");
-            //Log.d("Flight win", "ATO" + value);
 
             return null;
         }
@@ -781,7 +705,7 @@ public class ConfigLora extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            builder = new AlertDialog.Builder(ConfigLora.this);
+            builder = new AlertDialog.Builder(ConfigLoraE32.this);
             //
             builder.setMessage(R.string.lora_module_connecting_msg)
                     .setTitle(getResources().getString(R.string.m3DR_connecting))
@@ -822,7 +746,7 @@ public class ConfigLora extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            builder = new AlertDialog.Builder(ConfigLora.this);
+            builder = new AlertDialog.Builder(ConfigLoraE32.this);
             //.
             builder.setMessage(R.string.lora_module_connecting_msg)
                     .setTitle(getResources().getString(R.string.m3DR_connecting))
@@ -909,22 +833,22 @@ public class ConfigLora extends AppCompatActivity {
         });
     }
 
-    private void setLoraTransMode(int index) {
+    private void setLoraIOMode(int index) {
         final int findex = index;
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                spinnerLoraTransMode.setSelection(findex);
+                spinnerLoraIOMode.setSelection(findex);
             }
         });
     }
 
-    private void setLoraChannelRSSI(int index) {
+    private void setLoraFixedMode(int index) {
         final int findex = index;
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                spinnerLoraChannelRSSI.setSelection(findex);
+                spinnerLoraFixedMode.setSelection(findex);
             }
         });
     }
@@ -939,22 +863,22 @@ public class ConfigLora extends AppCompatActivity {
         });
     }
 
-    private void setLoraWoreCycle(int index) {
+    private void setLoraWakeupTime(int index) {
         final int findex = index;
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                spinnerLoraWoreCycle.setSelection(findex);
+                spinnerLoraWakeupTime.setSelection(findex);
             }
         });
     }
 
-    private void setLoraLBT(int index) {
+    private void setLoraFECswitch(int index) {
         final int findex = index;
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                spinnerLoraLBT.setSelection(findex);
+                spinnerLoraFECswitch.setSelection(findex);
             }
         });
     }
@@ -979,7 +903,7 @@ public class ConfigLora extends AppCompatActivity {
         });
     }
 
-    private void setLoraPacketRSSI(int index) {
+    /*private void setLoraPacketRSSI(int index) {
         final int findex = index;
         mHandler.post(new Runnable() {
             @Override
@@ -987,9 +911,9 @@ public class ConfigLora extends AppCompatActivity {
                 spinnerLoraPacketRSSI.setSelection(findex);
             }
         });
-    }
+    }*/
 
-    private void setLoraPacketSize(int index) {
+   /* private void setLoraPacketSize(int index) {
         final int findex = index;
         mHandler.post(new Runnable() {
             @Override
@@ -997,7 +921,7 @@ public class ConfigLora extends AppCompatActivity {
                 spinnerLoraPacketSize.setSelection(findex);
             }
         });
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -1018,22 +942,23 @@ public class ConfigLora extends AppCompatActivity {
             ShareHandler.takeScreenShot(findViewById(android.R.id.content).getRootView(), this);
             return true;
         }
+
         //open application settings screen
         if (id == R.id.action_settings) {
-            Intent i = new Intent(ConfigLora.this, AppConfigTabActivity.class);
+            Intent i = new Intent(ConfigLoraE32.this, AppConfigTabActivity.class);
             startActivity(i);
             return true;
         }
         //open Lora config help screen
         if (id == R.id.action_help) {
-            Intent i = new Intent(ConfigLora.this, HelpActivity.class);
+            Intent i = new Intent(ConfigLoraE32.this, HelpActivity.class);
             i.putExtra("help_file", "help_configLora");
             startActivity(i);
             return true;
         }
         //open about screen
         if (id == R.id.action_about) {
-            Intent i = new Intent(ConfigLora.this, AboutActivity.class);
+            Intent i = new Intent(ConfigLoraE32.this, AboutActivity.class);
             startActivity(i);
             return true;
         }

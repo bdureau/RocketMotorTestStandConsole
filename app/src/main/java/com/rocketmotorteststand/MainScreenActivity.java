@@ -27,7 +27,8 @@ import com.rocketmotorteststand.Flash.FlashFirmware;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveListActivity;
 import com.rocketmotorteststand.config.ConfigModules.Config3DR;
 import com.rocketmotorteststand.config.ConfigModules.ConfigBT;
-import com.rocketmotorteststand.config.ConfigModules.ConfigLora;
+import com.rocketmotorteststand.config.ConfigModules.ConfigLoraE220;
+import com.rocketmotorteststand.config.ConfigModules.ConfigLoraE32;
 import com.rocketmotorteststand.config.TestStandConfigData;
 import com.rocketmotorteststand.config.TestStandTabConfigActivity;
 import com.rocketmotorteststand.config.AppConfigTabActivity;
@@ -203,15 +204,7 @@ public class MainScreenActivity extends AppCompatActivity {
                     myBT.write("y1;".toString());
                 }
                 Intent i;
-                /*if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
-                    //if android ver = 8 or greater use the MPlib
-                    i = new Intent(MainScreenActivity.this, TelemetryMp.class);
-                } else {
-                    if (myBT.getAppConf().getGraphicsLibType()==0)
-                        i = new Intent(MainScreenActivity.this, Telemetry.class);
-                    else*/
-                        i = new Intent(MainScreenActivity.this, TestStandTelemetryTabActivity.class);
-                //}
+                i = new Intent(MainScreenActivity.this, TestStandTelemetryTabActivity.class);
                 startActivity(i);
             }
         });
@@ -578,7 +571,13 @@ public class MainScreenActivity extends AppCompatActivity {
         }
         //Open the lora module config
         if (id == R.id.action_modlora_settings) {
-            Intent i = new Intent(MainScreenActivity.this, ConfigLora.class);
+            Intent i = new Intent(MainScreenActivity.this, ConfigLoraE220.class);
+            startActivity(i);
+            return true;
+        }
+        //Open the lora module E32 config
+        if (id == R.id.action_modlorae32_settings) {
+            Intent i = new Intent(MainScreenActivity.this, ConfigLoraE32.class);
             startActivity(i);
             return true;
         }
