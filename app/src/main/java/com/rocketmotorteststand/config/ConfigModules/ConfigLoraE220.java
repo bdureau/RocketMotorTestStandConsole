@@ -696,7 +696,7 @@ public class ConfigLoraE220 extends AppCompatActivity {
                 Log.d(TAG,"addh:" +addh );
                 Log.d(TAG,"addl:" +addl );
                 dialogAppend(getString(R.string.lora_module_updating_address_msg));
-                byte cmd[] = {(byte) 0xC2, 0x00, 0x02, (byte) addh, (byte) addl};
+                byte cmd[] = {(byte) 0xC0, 0x00, 0x02, (byte) addh, (byte) addl};
                 byte[] value = mInfo.runCommand(cmd);
                 if (value[0] != (byte) 0xC1)
                     error++;
@@ -711,7 +711,7 @@ public class ConfigLoraE220 extends AppCompatActivity {
                 int iParity = searchBitFromString(strBLoraParityVal, sParity);
                 int iAiRate = searchBitFromString(strBLoraAirRateVal, sAiRate);
                 c = iBaudeRate << 5 | iParity << 3 | iAiRate;
-                byte cmd[] = {(byte) 0xC2, 0x02, 0x01, (byte) c};
+                byte cmd[] = {(byte) 0xC0, 0x02, 0x01, (byte) c};
                 byte[] value = mInfo.runCommand(cmd);
                 if (value[0] != (byte) 0xC1)
                     error++;
@@ -727,7 +727,7 @@ public class ConfigLoraE220 extends AppCompatActivity {
                 int iPower = searchBitFromString(strBLoraPowerVal, sPower);
                 int c;
                 c = iPacketSize << 6 | iChannelRSSI << 5 | iPower;
-                byte cmd[] = {(byte) 0xC2, 0x03, 0x01, (byte) c};
+                byte cmd[] = {(byte) 0xC0, 0x03, 0x01, (byte) c};
                 byte[] value = mInfo.runCommand(cmd);
                 if (value[0] != (byte) 0xC1)
                     error++;
@@ -737,7 +737,7 @@ public class ConfigLoraE220 extends AppCompatActivity {
                 dialogAppend(getString(R.string.lora_module_updating_msg4));
                 Log.d("Lora Config:", sChannel);
                 int channel = Integer.valueOf(sChannel);
-                byte cmd[] = {(byte) 0xC2, 0x04, 0x01, (byte) channel};
+                byte cmd[] = {(byte) 0xC0, 0x04, 0x01, (byte) channel};
                 byte[] value = mInfo.runCommand(cmd);
                 if (value[0] != (byte) 0xC1)
                     error++;
@@ -756,7 +756,7 @@ public class ConfigLoraE220 extends AppCompatActivity {
                 int iWoreCycle = searchBitFromString(strBLoraWoreCycleVal, sWoreCycle);
                 int c;
                 c = iPacketRSSI << 7 | iTransMode << 6 | iLBT << 4 | iWoreCycle;
-                byte cmd[] = {(byte) 0xC2, 0x05, 0x01, (byte) c};
+                byte cmd[] = {(byte) 0xC0, 0x05, 0x01, (byte) c};
                 byte[] value = mInfo.runCommand(cmd);
                 if (value[0] != (byte) 0xC1)
                     error++;
