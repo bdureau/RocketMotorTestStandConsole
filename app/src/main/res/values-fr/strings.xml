@@ -342,8 +342,8 @@
     <string name="not_saved_title">Info</string>
     <string name="not_saved_ok">OK</string>
     <string name="saving_cancelled_msg">La sauvegarde a été annulée</string>
-    <string name="module_name_cannot_be_empty">Le nom du module ne peut pas etre vide\n</string>
-    <string name="pin_cannot_be_empty">Le code Pin ne peut pas etre vide\n</string>
+    <string name="module_name_cannot_be_empty">Le nom du module ne peut pas être vide\n</string>
+    <string name="pin_cannot_be_empty">Le code Pin ne peut pas être vide\n</string>
     <string name="attempting_coonecteing_to_bt_msg">Tentative de connexion au module Bluetooth</string>
     <string name="unit_newton">Newtons</string>
     <string name="calibration_msg">Calibration en cours...</string>
@@ -376,18 +376,18 @@
     <string name="lora_module_lbt">LBT:</string>
     <string name="lora_module_air_rate">Air Rate:</string>
     <string name="lora_module_power">Power:</string>
-    <string name="lora_module_packet_rssi">Packet RSSI:</string>
-    <string name="lora_module_packet_size">Packet Size:</string>
+    <string name="lora_module_packet_rssi">Paquet RSSI:</string>
+    <string name="lora_module_packet_size">Taille Paquet:</string>
     <string name="lora_module_config_msg">Cela vous permettra de configurer les modules de télémetrie Lora</string>
-    <string name="lora_module_config_msg_title">configuration du module de telemetrie Lora</string>
+    <string name="lora_module_config_msg_title">configuration du module de télémetrie Lora</string>
     <string name="lora_module_config_button_ok">OK</string>
     <string name="lora_module_loading_config_msg">Chargement de la config du module Lora</string>
-    <string name="lora_module_channel_msg">Le canal du Module ne peut pas etre vide</string>
+    <string name="lora_module_channel_msg">Le canal du Module ne peut pas être vide</string>
     <string name="lora_module_invalid_channel">Canal invalide</string>
-    <string name="lora_module_channel_value_msg">Le canal doit etre etre 0 et 83</string>
-    <string name="lora_module_address_empty_msg">l\'address du Module ne peut pas etre vide</string>
-    <string name="lora_module_address_range">L\'Addresse doit etre entre 0 et 65535</string>
-    <string name="lora_module_address_invalid">Address invalide</string>
+    <string name="lora_module_channel_value_msg">Le canal doit être etre 0 et 83</string>
+    <string name="lora_module_address_empty_msg">l\'adress du Module ne peut pas v vide</string>
+    <string name="lora_module_address_range">L\'Adresse doit être entre 0 et 65535</string>
+    <string name="lora_module_address_invalid">Adresse invalide</string>
     <string name="lora_module_updating_address_msg">Mise à jours addresse module </string>
     <string name="lora_module_updating_msg2">mise à jour serial speed, parité et air rate</string>
     <string name="lora_module_updating_msg3">mise à jour packet , RSSI noise et transmitting power</string>
@@ -398,14 +398,14 @@
     <string name="pressure_unit_psi">PSI</string>
     <string name="pressure_unit_bar">BAR</string>
     <string name="pressure_unit_kpascal">Kpascal</string>
-    <string name="calibration_weight_message">Le poids pour calibrer doit etre supérieur à 0</string>
+    <string name="calibration_weight_message">Le poids pour calibrer doit être supérieur à 0</string>
     <string name="calibration_weight_warning">Attention</string>
     <string name="calibration_weight_ok">OK</string>
     <string name="allow_manual_recording">Autoriser l\'enregistrement manuel</string>
     <string name="current_pressure">Pression</string>
     <string name="firmware">Firmware:</string>
     <string name="flash_speed_baud">Vitesse Flash(Baud):</string>
-    <string name="firmware_info">Firmware info</string>
+    <string name="firmware_info">Info Firmware</string>
     <string name="current_pressure_telemetry">Pression en cours</string>
     <string name="current_pressure_telemetry2">Pression en cours</string>
     <string name="telemetry_type">Type Télémetrie</string>
@@ -414,4 +414,7 @@
     <string name="share">Partager</string>
     <string name="lora_settings">Config Lora...</string>
     <string name="share_thrust_curve">Partager</string>
+
+    <string name="credit_goes_to_philippe_huguenin_bergenat_n_for_all_the_testing">Merci à Philippe Huguenin-Bergenat \n pour tous les tests</string>
+
 </resources>

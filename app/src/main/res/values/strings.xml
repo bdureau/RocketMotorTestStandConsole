@@ -405,4 +405,6 @@
     <string name="lora_settings">Lora settings...</string>
     <string name="share_thrust_curve">Share</string>
 
+    <string name="credit_goes_to_philippe_huguenin_bergenat_n_for_all_the_testing">Credit goes to Philippe Huguenin-Bergenat \n for all the testing</string>
+
 </resources>
