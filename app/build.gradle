@@ -5,15 +5,18 @@ plugins {
 android {
     compileSdk 33
     buildToolsVersion "30.0.3"
-
+    aaptOptions {
+        cruncherEnabled = false
+    }
     defaultConfig {
         applicationId "com.rocketmotorteststand"
-        minSdkVersion 21
+        //minSdkVersion 21
+        minSdk 21
         targetSdk 33
-        versionCode 12
-        versionName "2.0.2"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionCode 13
+        versionName "2.0.3"
+        multiDexEnabled true
+        //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -39,8 +42,8 @@ dependencies {
     implementation files('libs/viewtooltip.aar')
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
