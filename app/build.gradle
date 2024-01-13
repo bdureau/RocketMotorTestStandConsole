@@ -4,14 +4,14 @@ plugins {
 
 android {
     compileSdk 34
-    buildToolsVersion "30.0.3"
+    //buildToolsVersion "34.0.0"
     defaultConfig {
         applicationId "com.rocketmotorteststand"
         //minSdkVersion 21
         minSdk 21
         targetSdk 34
-        versionCode 13
-        versionName "2.0.3"
+        versionCode 14
+        versionName "2.0.4"
         multiDexEnabled true
         //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

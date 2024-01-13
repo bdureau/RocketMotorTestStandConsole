@@ -265,14 +265,14 @@ public class MainScreenActivity extends AppCompatActivity {
                                 int deviceVID = device.getVendorId();
 
                                 //PendingIntent pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0, new Intent(ACTION_USB_PERMISSION), 0);
-                                PendingIntent pi;
-                                if(android.os.Build.VERSION.SDK_INT >= 31) {
+                                PendingIntent pi =null;
+                                //if(android.os.Build.VERSION.SDK_INT >= 31) {
                                     pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0,
                                             new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
-                                } else {
+                                /*} else {
                                     pi = PendingIntent.getBroadcast(MainScreenActivity.this, 0,
                                             new Intent(ACTION_USB_PERMISSION), 0);
-                                }
+                                }*/
                                 usbManager.requestPermission(device, pi);
                                 keep = false;
 
@@ -514,6 +514,7 @@ public class MainScreenActivity extends AppCompatActivity {
             menu.findItem(R.id.action_modbt_settings).setEnabled(false);
             //same goes for the Lora module
             menu.findItem(R.id.action_modlora_settings).setEnabled(false);
+            menu.findItem(R.id.action_modlorae32_settings).setEnabled(false);
             // Allow connection testing
             menu.findItem(R.id.action_test_connection).setEnabled(true);
         } else {
@@ -521,6 +522,7 @@ public class MainScreenActivity extends AppCompatActivity {
             menu.findItem(R.id.action_mod3dr_settings).setEnabled(true);
             menu.findItem(R.id.action_modbt_settings).setEnabled(true);
             menu.findItem(R.id.action_modlora_settings).setEnabled(true);
+            menu.findItem(R.id.action_modlorae32_settings).setEnabled(true);
             //cannot do connection testing until we are connected
             menu.findItem(R.id.action_test_connection).setEnabled(false);
         }
@@ -675,8 +677,8 @@ public class MainScreenActivity extends AppCompatActivity {
             hm =null;
             hm = new HashMap();
             //init compatible versions
-            Add("TestStandSTM32V2", "1.3");
-            Add("TestStandSTM32", "1.3");
+            Add("TestStandSTM32V2", "1.4");
+            Add("TestStandSTM32", "1.4");
             Add("TestStand", "1.1");
         }
         public void Add ( String altiName, String verList) {
@@ -705,6 +707,5 @@ public class MainScreenActivity extends AppCompatActivity {
             }
             return compatible;
         }
-
     }
 }

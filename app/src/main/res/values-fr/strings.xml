@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="version">2.0.0</string>
+    <string name="version">2.0.4</string>
     <!-- Application title -->
     <string name="app_name">Rocket Motor Test Stand</string>
     <!-- Menu -->
