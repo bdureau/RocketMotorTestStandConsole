@@ -134,7 +134,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(TestStandTabConfigActivity.this);
                     //Display info message
-                    builder.setMessage("Remove any weight and click ok")
+                    builder.setMessage(R.string.remove_any_weight_and_click_ok)
                             .setTitle("Info")
                             .setCancelable(false)
                             .setPositiveButton(R.string.calibration_weight_ok, new DialogInterface.OnClickListener() {
@@ -148,7 +148,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
                                     AlertDialog.Builder builder2 = new AlertDialog.Builder(TestStandTabConfigActivity.this);
                                     //Display info message
-                                    builder2.setMessage("Put your calibration weight and click OK")
+                                    builder2.setMessage(R.string.put_your_calibration_weight_and_click_ok)
                                             .setTitle("Info")
                                             .setCancelable(false)
                                             .setPositiveButton(R.string.calibration_weight_ok, new DialogInterface.OnClickListener() {
@@ -165,7 +165,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
                     AlertDialog info = builder.create();
                     info.show();
-                    //new Calibration().execute();
+
                 }
             }
         });

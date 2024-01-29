@@ -406,5 +406,7 @@
     <string name="share_thrust_curve">Share</string>
 
     <string name="credit_goes_to_philippe_huguenin_bergenat_n_for_all_the_testing">Credit goes to Philippe Huguenin-Bergenat \n for all the testing</string>
+    <string name="remove_any_weight_and_click_ok">Remove any weight and click ok</string>
+    <string name="put_your_calibration_weight_and_click_ok">Put your calibration weight and click OK</string>
 
 </resources>

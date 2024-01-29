@@ -416,5 +416,7 @@
     <string name="share_thrust_curve">Partager</string>
 
     <string name="credit_goes_to_philippe_huguenin_bergenat_n_for_all_the_testing">Merci à Philippe Huguenin-Bergenat \n pour tous les tests</string>
+    <string name="remove_any_weight_and_click_ok">Enlever tout poids du capteur et cliquer sur OK</string>
+    <string name="put_your_calibration_weight_and_click_ok">Poser votre poids de réference et cliquez sur OK</string>
 
 </resources>
