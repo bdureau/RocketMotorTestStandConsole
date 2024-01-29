@@ -132,7 +132,40 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                     AlertDialog warning = builder.create();
                     warning.show();
                 } else {
-                    new Calibration().execute();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(TestStandTabConfigActivity.this);
+                    //Display info message
+                    builder.setMessage("Remove any weight and click ok")
+                            .setTitle("Info")
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.calibration_weight_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(final DialogInterface dialog, final int id) {
+                                    dialog.cancel();
+                                    myBT.flush();
+                                    myBT.clearInput();
+                                    // tare teststand
+                                    myBT.write("j;");
+
+
+                                    AlertDialog.Builder builder2 = new AlertDialog.Builder(TestStandTabConfigActivity.this);
+                                    //Display info message
+                                    builder2.setMessage("Put your calibration weight and click OK")
+                                            .setTitle("Info")
+                                            .setCancelable(false)
+                                            .setPositiveButton(R.string.calibration_weight_ok, new DialogInterface.OnClickListener() {
+                                                public void onClick(final DialogInterface dialog, final int id) {
+                                                    dialog.cancel();
+                                                    new Calibration().execute();
+                                                }
+                                            });
+
+                                    AlertDialog info2 = builder2.create();
+                                    info2.show();
+                                }
+                            });
+
+                    AlertDialog info = builder.create();
+                    info.show();
+                    //new Calibration().execute();
                 }
             }
         });

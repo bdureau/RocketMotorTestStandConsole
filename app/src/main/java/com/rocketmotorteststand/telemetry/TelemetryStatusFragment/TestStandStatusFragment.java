@@ -17,47 +17,49 @@ import com.rocketmotorteststand.R;
 
 public class TestStandStatusFragment extends Fragment {
     private ConsoleApplication myBT;
-    private String [] units;
+    private String[] units;
     private Button btnTare;
     private boolean ViewCreated = false;
     private TextView txtViewBatteryVoltage, txtViewCurrentPressure;
     private TextView txtViewThrust, txtViewVoltage, txtViewLink, txtEEpromUsage, txtNbrOfThrustCurve;
-    private TextView txtViewEEprom, txtViewThrustCurve,txtViewCurrentPressureValue;
+    private TextView txtViewEEprom, txtViewThrustCurve, txtViewCurrentPressureValue;
 
-    public TestStandStatusFragment(ConsoleApplication pBT, String [] pUnits) {
+    public TestStandStatusFragment(ConsoleApplication pBT, String[] pUnits) {
         myBT = pBT;
         units = pUnits;
     }
 
-    public void setBatteryVoltage (String value ){
-        if(ViewCreated) {
+    public void setBatteryVoltage(String value) {
+        if (ViewCreated) {
             txtViewVoltage.setText(value + " Volts");
-            if (Double.parseDouble(value) < 7.0) {
-                txtViewVoltage.setTextColor(Color.RED);
-            } else {
-                txtViewVoltage.setTextColor(txtViewThrust.getTextColors());
-            }
+            if (value.matches("\\d+(?:\\.\\d+)?"))
+                if (Double.parseDouble(value) < 7.0) {
+                    txtViewVoltage.setTextColor(Color.RED);
+                } else {
+                    txtViewVoltage.setTextColor(txtViewThrust.getTextColors());
+                }
         }
     }
 
-    public void setThrust(String value ){
-        if(ViewCreated)
+    public void setThrust(String value) {
+        if (ViewCreated)
             txtViewThrust.setText(value);
     }
 
     public void setPressure(String value) {
-        if(ViewCreated)
+        if (ViewCreated)
             txtViewCurrentPressureValue.setText(value);
     }
 
     public void setEEpromUsage(String value) {
         if (ViewCreated) {
-            txtEEpromUsage.setText(value+ " %");
-            if (Integer.parseInt(value) >= 90) {
-                txtEEpromUsage.setTextColor(Color.RED);
-            } else {
-                txtEEpromUsage.setTextColor(txtViewThrust.getTextColors());
-            }
+            txtEEpromUsage.setText(value + " %");
+            if (value.matches("\\d+(?:\\.\\d+)?"))
+                if (Integer.parseInt(value) >= 90) {
+                    txtEEpromUsage.setTextColor(Color.RED);
+                } else {
+                    txtEEpromUsage.setTextColor(txtViewThrust.getTextColors());
+                }
         }
     }
 
@@ -65,19 +67,19 @@ public class TestStandStatusFragment extends Fragment {
         if (ViewCreated) {
             txtNbrOfThrustCurve.setText(nbrOfThrustCurve);
             // If we have the maximum of thrust curve put it in red
-            if (Integer.parseInt(nbrOfThrustCurve) >= 23) {
-                txtNbrOfThrustCurve.setTextColor(Color.RED);
-                //Log.d("TestStandStatus", "RED");
-            } else {
-                txtNbrOfThrustCurve.setTextColor(txtViewThrust.getTextColors());
-                //Log.d("TestStandStatus", "BLACK");
-            }
+            if (nbrOfThrustCurve.matches("\\d+(?:\\.\\d+)?"))
+                if (Integer.parseInt(nbrOfThrustCurve) >= 23) {
+                    txtNbrOfThrustCurve.setTextColor(Color.RED);
+                } else {
+                    txtNbrOfThrustCurve.setTextColor(txtViewThrust.getTextColors());
+                }
         }
     }
 
     public boolean isViewCreated() {
         return ViewCreated;
     }
+
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -101,7 +103,7 @@ public class TestStandStatusFragment extends Fragment {
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
             txtViewCurrentPressureValue.setVisibility(View.VISIBLE);
             txtViewCurrentPressure.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             txtViewCurrentPressureValue.setVisibility(View.INVISIBLE);
             txtViewCurrentPressure.setVisibility(View.INVISIBLE);
         }

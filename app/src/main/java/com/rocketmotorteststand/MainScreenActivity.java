@@ -241,14 +241,43 @@ public class MainScreenActivity extends AppCompatActivity {
                 } else {
                     if (myBT.getConnectionType().equals("bluetooth")) {
                         address = myBT.getAddress();
+                        AlertDialog.Builder builder = null;
+                        AlertDialog alert;
+
+                        builder = new AlertDialog.Builder(MainScreenActivity.this);
                         if (address != null) {
-                            new ConnectBT().execute(); //Call the class to connect
+                            builder.setMessage("Do you want to connect to module " + myBT.getModuleName())
+                                    .setTitle("")
+                                    .setCancelable(false)
+                                    .setPositiveButton(getResources().getString(R.string.Yes), new DialogInterface.OnClickListener() {
+                                        public void onClick(final DialogInterface dialog, final int id) {
+                                            dialog.cancel();
+                                            new ConnectBT().execute();
+                                            if (myBT.getConnected()) {
+                                                EnableUI();
+                                                // cannot flash firmware if connected
+                                                setEnabledCard(false, btnFlashFirmware, image_firmware, text_firmware);
+                                                text_connect.setText(getResources().getString(R.string.disconnect));
+                                            }
+                                        }
+                                    })
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        public void onClick(final DialogInterface dialog, final int id) {
+                                            dialog.cancel();
+                                            // choose the bluetooth device
+                                            Intent i = new Intent(MainScreenActivity.this, SearchBluetooth.class);
+                                            startActivity(i);
+                                        }
+                                    });
+                            alert = builder.create();
+                            alert.show();
+                            /*new ConnectBT().execute(); //Call the class to connect
                             if (myBT.getConnected()) {
                                 EnableUI();
                                 // cannot flash firmware if connected
                                 setEnabledCard(false, btnFlashFirmware, image_firmware, text_firmware);
                                 text_connect.setText(getResources().getString(R.string.disconnect));
-                            }
+                            }*/
                         } else {
                             // choose the bluetooth device
                             Intent i = new Intent(MainScreenActivity.this, SearchBluetooth.class);
@@ -335,7 +364,8 @@ public class MainScreenActivity extends AppCompatActivity {
          */
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStand") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")
         ) {
             Log.d("MainScreen", "test stand name: " + myBT.getTestStandConfigData().getTestStandName());
 
@@ -678,6 +708,8 @@ public class MainScreenActivity extends AppCompatActivity {
             hm = new HashMap();
             //init compatible versions
             Add("TestStandSTM32V2", "1.4");
+            Add("TestStandSTM32V2", "1.5");
+            Add("TestStandESP32", "1.5");
             Add("TestStandSTM32", "1.4");
             Add("TestStand", "1.1");
         }
