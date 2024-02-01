@@ -274,7 +274,8 @@ public class TestStandConfigTab1Fragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, itemsTelemetryType);
         dropdownTelemetryType.setAdapter(adapterTelemetryType);
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             dropdownSensorType.setVisibility(View.VISIBLE);
             txtViewSensorType.setVisibility(View.VISIBLE);
         } else {

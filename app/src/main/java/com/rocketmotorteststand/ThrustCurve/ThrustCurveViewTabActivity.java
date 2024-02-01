@@ -131,7 +131,8 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_30x30_trans,0,0,0);
 
         numberOfCurves = 1;
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             numberOfCurves = 2;
         }
 

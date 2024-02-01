@@ -490,7 +490,8 @@ public class ConsoleApplication extends Application {
                                                 (long) (value3 ), thrustCurveName, 0);
 
                                     }
-                                    if(getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+                                    if(getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")
+                                            || getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
                                         if (currentSentence.length > 4) {
                                             if (currentSentence[4].matches("\\d+(?:\\.\\d+)?"))
                                                 value4 = Long.valueOf(currentSentence[4]);

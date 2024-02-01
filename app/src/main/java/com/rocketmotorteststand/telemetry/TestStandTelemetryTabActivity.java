@@ -111,7 +111,8 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
                     break;
                 case 6:
                     //Value 6 contains the current pressure
-                    if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+                    if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
                         if (((String) msg.obj).matches("\\d+(?:\\.\\d+)?")) {
                             int pressure = (int) (Integer.parseInt((String) msg.obj) * CONVERT_PRESSURE);
                             if ((myBT.getAppConf().getGraphicsLibType() == 0) &
@@ -128,7 +129,8 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
                             //plot every seconde
                             if ((thrustTime - lastPlotTime) > 1000) {
                                 lastPlotTime = thrustTime;
-                                if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+                                if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                                        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
                                     if ((myBT.getAppConf().getGraphicsLibType() == 0) &
                                             (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
                                         telemetryPage1bis.plotThrustAndPressure(thrustSerie, pressureSerie);
@@ -199,7 +201,8 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
             CONVERT = 9.80665/1000.0;
         }
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
                 //PSI
                 units[1] = "(" + "PSI" + ")";

@@ -79,7 +79,8 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         numberOfCurves = 1;
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             numberOfCurves = 2;
         }
         // Read the application config
@@ -134,7 +135,8 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         maxPressureValue = view.findViewById(R.id.maxPressureValue);
         maxPressure = view.findViewById(R.id.maxPressure);
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             maxPressureValue.setVisibility(View.VISIBLE);
             maxPressure.setVisibility(View.VISIBLE);
         } else {
@@ -188,7 +190,8 @@ public class ThrustCurveViewInfoFragment extends Fragment {
             motorClassValue.setText(tu.motorClass(totalImpulse) + String.format("%.0f ", averageThrust * (9.80665 / 1000)));
         }
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             double maxPres = lThrustCurveData.getSeries(1).getMaxY();
             maxPressureValue.setText(maxPres + " PSI");
         }
@@ -234,7 +237,8 @@ public class ThrustCurveViewInfoFragment extends Fragment {
                         "motorData.zip");
                 ArrayList<String> fileNames = new ArrayList<>();
                 fileNames.add(exportThrustToCSV(lThrustCurveData));
-                if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+                if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
                     fileNames.add(exportPressureToCSV(lThrustCurveData));
                 }
                 fileNames.add(exportToEng(motorClass, lThrustCurveData, ""));
@@ -279,7 +283,8 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         String fileNames="";
         String thrustFileName = exportThrustToCSV(lThrustCurveData);
         fileNames = thrustFileName;
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             String pressureFileName = exportPressureToCSV(lThrustCurveData);
             fileNames = fileNames + "\n" + pressureFileName;
         }
@@ -407,7 +412,8 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         createFile(ThrustCurveName + "_full_" + motorClass + "_" + date + ".csv", csv_data, "");
 
         //export pressure
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             String csv_data_pressure = "time,pressure" + units[1] + "\n";
 
             for (int k = 0; k < lThrustCurveData.getSeries(1).getItemCount(); k++) {

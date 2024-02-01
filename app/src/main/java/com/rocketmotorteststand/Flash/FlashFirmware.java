@@ -43,6 +43,7 @@ import com.physicaloid.lib.programmer.avr.UploadErrors;
 import com.physicaloid.lib.usb.driver.uart.UartConfig;
 import com.rocketmotorteststand.ShareHandler;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import java.io.InputStream;
@@ -57,7 +58,7 @@ public class FlashFirmware extends AppCompatActivity {
 
     boolean recorverFirmware = false;
     public Spinner spinnerFirmware;
-    public ImageView imageAlti;
+    public ImageView imageTestStand;
 
     Boards mSelectedBoard;
     Button btFlash;
@@ -76,6 +77,17 @@ public class FlashFirmware extends AppCompatActivity {
     private static final String ASSET_FILE_RESET_TESTSTAND = "recover_firmwares/ResetMotorTestStand.ino.hex";
     private static final String ASSET_FILE_RESET_TESTSTANDSTM32 = "recover_firmwares/ResetMotorTestStand.ino.bin";
     private static final String ASSET_FILE_RESET_TESTSTANDSTM32V2 = "recover_firmwares/ResetMotorTestStand.ino.bin";
+
+    // ESP32
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE1 = "firmwares/ESP32/boot_app0.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE2 = "firmwares/ESP32/MotorTestStand1.5.ino.bootloader.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE3 = "firmwares/ESP32/MotorTestStand1.5.ino.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE4 = "firmwares/ESP32/MotorTestStand1.5.ino.partitions.bin";
+
+    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE1 = "firmwares/ESP32/boot_app0.bin";
+    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE2 = "firmwares/ESP32/MotorTestStandReset.ino.bootloader.bin";
+    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE3 = "firmwares/ESP32/MotorTestStandReset.ino.bin";
+    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE4 = "firmwares/ESP32/MotorTestStandReset.ino.partitions.bin";
 
     private String[] itemsBaudRate;
     private String[] itemsFirmwares;
@@ -97,7 +109,8 @@ public class FlashFirmware extends AppCompatActivity {
         itemsFirmwares = new String[]{
                 "TestStand",
                 "TestStandSTM32",
-                "TestStandSTM32V2"
+                "TestStandSTM32V2",
+                "TestStandESP32"
         };
 
         ArrayAdapter<String> adapterFirmware = new ArrayAdapter<String>(this,
@@ -107,7 +120,7 @@ public class FlashFirmware extends AppCompatActivity {
 
         btFlash = (Button) findViewById(R.id.btFlash);
         tvRead = (TextView) findViewById(R.id.tvRead);
-        imageAlti = (ImageView) findViewById(R.id.imageAlti);
+        imageTestStand = (ImageView) findViewById(R.id.imageAlti);
 
         mPhysicaloid = new Physicaloid(this);
         mBoardList = new ArrayList<Boards>();
@@ -153,13 +166,16 @@ public class FlashFirmware extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStand"))
-                    imageAlti.setImageDrawable(getResources().getDrawable(R.drawable.teststand, getApplicationContext().getTheme()));
+                    imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststand, getApplicationContext().getTheme()));
 
                 if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32"))
-                    imageAlti.setImageDrawable(getResources().getDrawable(R.drawable.teststandstm32, getApplicationContext().getTheme()));
+                    imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandstm32, getApplicationContext().getTheme()));
 
                 if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2"))
-                    imageAlti.setImageDrawable(getResources().getDrawable(R.drawable.teststandstm32v2, getApplicationContext().getTheme()));
+                    imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandstm32v2, getApplicationContext().getTheme()));
+
+                if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32"))
+                    imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandstm32v2, getApplicationContext().getTheme()));
             }
 
             @Override
@@ -209,6 +225,7 @@ public class FlashFirmware extends AppCompatActivity {
             recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32V2;
 
 
+
         tvRead.setText("");
         tvRead.setText(getResources().getString(R.string.after_complete_upload));
         //rbTestStand
@@ -235,7 +252,11 @@ public class FlashFirmware extends AppCompatActivity {
             } catch (IOException e) {
                 //Log.e(TAG, e.toString());
             }
-        } else {
+        } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32")) {
+            recorverFirmware = true;
+            new UploadESP32Asyc().execute();
+        }
+        else {
             recorverFirmware = true;
             new UploadSTM32Asyc().execute();
         }
@@ -253,6 +274,8 @@ public class FlashFirmware extends AppCompatActivity {
         tvRead.append(ASSET_FILE_NAME_TESTSTANDSTM32);
         tvRead.append("\n");
         tvRead.append(ASSET_FILE_NAME_TESTSTANDSTM32V2);
+        tvRead.append("\n");
+        tvRead.append(ASSET_FILE_NAME_TESTSTANDESP32_FILE3);
     }
 
     public void onClickFlash(View v) {
@@ -295,8 +318,13 @@ public class FlashFirmware extends AppCompatActivity {
             } catch (IOException e) {
                 //Log.e(TAG, e.toString());
             }
-        } else {
+        } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("AltiESP32")) {
             tvRead.setText("Loading ESP32 firmware\n");
+            recorverFirmware = false;
+            new UploadESP32Asyc().execute();
+        }
+        else {
+            tvRead.setText("Loading STM32 firmware\n");
             recorverFirmware = false;
             new UploadSTM32Asyc().execute();
         }
@@ -459,7 +487,171 @@ public class FlashFirmware extends AppCompatActivity {
         cmd.releaseChip();
     }
 
+    private byte[] readFile(InputStream inputStream) {
+        ByteArrayOutputStream byteArrayOutputStream = null;
 
+        int i;
+        try {
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            i = inputStream.read();
+            while (i != -1) {
+                byteArrayOutputStream.write(i);
+                i = inputStream.read();
+            }
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return byteArrayOutputStream.toByteArray();
+    }
+    private class UploadESP32Asyc extends AsyncTask<Void, Void, Void>  // UI thread
+    {
+
+        @Override
+        protected void onPreExecute() {
+            builder = new AlertDialog.Builder(FlashFirmware.this);
+            //Flashing firmware...
+            builder.setMessage(getResources().getString(R.string.msg10))
+                    .setTitle(getResources().getString(R.string.msg11))
+                    .setCancelable(false)
+                    .setNegativeButton(getResources().getString(R.string.firmware_cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            dialog.cancel();
+                        }
+                    });
+            alert = builder.create();
+            alert.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            String firmwareFileName[] = new String[4];
+            if (!recorverFirmware) {
+                if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("AltiESP32")) {
+                    firmwareFileName[0] = ASSET_FILE_NAME_TESTSTANDESP32_FILE1;
+                    firmwareFileName[1] = ASSET_FILE_NAME_TESTSTANDESP32_FILE2;
+                    firmwareFileName[2] = ASSET_FILE_NAME_TESTSTANDESP32_FILE3;
+                    firmwareFileName[3] = ASSET_FILE_NAME_TESTSTANDESP32_FILE4;
+                }
+
+                uploadESP32(firmwareFileName, mUploadSTM32Callback);
+            } else {
+
+                firmwareFileName[0] = ASSET_FILE_RESET_TESTSTANDESP32_FILE1;
+                firmwareFileName[1] = ASSET_FILE_RESET_TESTSTANDESP32_FILE2;
+                firmwareFileName[2] = ASSET_FILE_RESET_TESTSTANDESP32_FILE3;
+                firmwareFileName[3] = ASSET_FILE_RESET_TESTSTANDESP32_FILE4;
+
+                uploadESP32(firmwareFileName, mUploadSTM32Callback);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
+        {
+            alert.dismiss();
+        }
+    }
+
+    public void uploadESP32(String fileName[], UploadSTM32CallBack UpCallback) {
+        boolean failed = false;
+        InputStream file1 = null;
+        InputStream file2 = null;
+        InputStream file3 = null;
+        InputStream file4 = null;
+        CommandInterfaceESP32 cmd;
+
+
+        cmd = new CommandInterfaceESP32(UpCallback, mPhysicaloid);
+
+        try {
+            file1 = getAssets().open(fileName[0]);
+
+        } catch (IOException e) {
+            //e.printStackTrace();
+            tvAppend(tvRead, "file not found: " + ASSET_FILE_NAME_TESTSTANDESP32_FILE1 + "\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+            tvAppend(tvRead, "gethexfile : " + ASSET_FILE_NAME_TESTSTANDESP32_FILE1 + "\n");
+        }
+
+        try {
+            file2 = getAssets().open(fileName[1]);
+
+        } catch (IOException e) {
+            //e.printStackTrace();
+            tvAppend(tvRead, "file not found: " + ASSET_FILE_NAME_TESTSTANDESP32_FILE2 + "\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+            tvAppend(tvRead, "gethexfile : " + ASSET_FILE_NAME_TESTSTANDESP32_FILE2 + "\n");
+        }
+        try {
+            file3 = getAssets().open(fileName[2]);
+
+        } catch (IOException e) {
+            //e.printStackTrace();
+            tvAppend(tvRead, "file not found: " + ASSET_FILE_NAME_TESTSTANDESP32_FILE3 + "\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+            tvAppend(tvRead, "gethexfile : " + ASSET_FILE_NAME_TESTSTANDESP32_FILE3 + "\n");
+        }
+
+        try {
+            file4 = getAssets().open(fileName[3]);
+
+        } catch (IOException e) {
+            //e.printStackTrace();
+            tvAppend(tvRead, "file not found: " + ASSET_FILE_NAME_TESTSTANDESP32_FILE4 + "\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+            tvAppend(tvRead, "gethexfile : " + ASSET_FILE_NAME_TESTSTANDESP32_FILE4 + "\n");
+        }
+
+        dialogAppend("Starting ...");
+
+
+        boolean ret = cmd.initChip();
+        if (ret)
+            dialogAppend(getString(R.string.chip_has_not_been_init) + ret);
+        else {
+            dialogAppend("Chip has not been initiated:" + ret);
+            failed = true;
+        }
+        int bootversion = 0;
+        if (!failed) {
+            // let's detect the chip, not really required but I just want to make sure that
+            // it is
+            // an ESP32 because this is what the program is for
+            int chip = cmd.detectChip();
+            if (chip == cmd.ESP32)
+                tvAppend(tvRead, "Chip is ESP32\n");
+
+            // now that we have initialized the chip we can change the baud rate to 921600
+            // first we tell the chip the new baud rate
+            dialogAppend("Changing baudrate to 921600");
+            cmd.changeBaudeRate();
+            cmd.init();
+
+            // Those are the files you want to flush
+            dialogAppend("Flashing file 1 0xe000");
+            cmd.flashData(readFile(file1), 0xe000, 0);
+            dialogAppend("Flashing file 2 0x1000");
+            cmd.flashData(readFile(file2), 0x1000, 0);
+
+            dialogAppend("Flashing file 3 0x10000");
+            cmd.flashData(readFile(file3), 0x10000, 0);
+            dialogAppend("Flashing file 4 0x8000");
+            cmd.flashData(readFile(file4), 0x8000, 0);
+
+            // we have finish flashing lets reset the board so that the program can start
+            cmd.reset();
+
+            dialogAppend("done ");
+            tvAppend(tvRead, "done");
+        }
+    }
     Physicaloid.UploadCallBack mUploadCallback = new Physicaloid.UploadCallBack() {
 
         @Override

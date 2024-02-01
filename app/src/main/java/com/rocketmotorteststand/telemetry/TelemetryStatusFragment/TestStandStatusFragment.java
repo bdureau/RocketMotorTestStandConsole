@@ -100,7 +100,8 @@ public class TestStandStatusFragment extends Fragment {
         txtViewVoltage.setVisibility(View.VISIBLE);
         txtViewBatteryVoltage.setVisibility(View.VISIBLE);
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             txtViewCurrentPressureValue.setVisibility(View.VISIBLE);
             txtViewCurrentPressure.setVisibility(View.VISIBLE);
         } else {

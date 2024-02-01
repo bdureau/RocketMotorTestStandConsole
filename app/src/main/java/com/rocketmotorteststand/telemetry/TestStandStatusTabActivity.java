@@ -97,7 +97,8 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
                 case 6:
                     //Value 6 contains the current pressure
                     String currentPressure = (String) msg.obj;
-                    if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+                    if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
                         if (currentPressure.matches("\\d+(?:\\.\\d+)?")) {
                             double temp;
                             temp = Double.parseDouble(currentPressure);
@@ -162,7 +163,8 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
             CONVERT = 9.80665/1000.0;
         }
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")) {
             if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
                 //PSI
                 units[1] = "(" + "PSI" + ")";
