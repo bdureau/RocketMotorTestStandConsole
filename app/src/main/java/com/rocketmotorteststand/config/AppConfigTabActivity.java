@@ -36,7 +36,6 @@ public class AppConfigTabActivity extends AppCompatActivity {
     SectionsPageAdapter adapter;
 
     private AppConfigTab1Fragment appConfigPage1 = null;
-    //private Tab2Fragment appConfigPage2 = null;
 
     private AppConfigData appConfigData = null;
 

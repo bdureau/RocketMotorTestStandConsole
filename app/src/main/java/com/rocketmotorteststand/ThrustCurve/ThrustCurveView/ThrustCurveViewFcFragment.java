@@ -157,10 +157,10 @@ public class ThrustCurveViewFcFragment extends Fragment {
                 Log.d("drawAllCurves", "i:" + i);
                 if (i == 0) {
                     XYSeries currentCurve = new XYSeries(0);
-                    float CONVERT = 1;
+                    float CONVERT = 1.0f;
                     if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.KG) {
                         //kg
-                        CONVERT = 1;
+                        CONVERT = 1.0f;
                     } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.POUNDS) {
                         //pound
                         CONVERT = 2.20462f;
@@ -177,10 +177,10 @@ public class ThrustCurveViewFcFragment extends Fragment {
 
                 if (i == 1) {
                     XYSeries currentCurve = new XYSeries(0);
-                    float CONVERT = 1;
+                    float CONVERT = 1.0f;
                     if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
                         //PSI
-                        CONVERT = 1;
+                        CONVERT = 1.0f;
                     } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.BAR) {
                         //bar divide by 14.504
                         CONVERT = 1.0f / 14.504f;
@@ -217,10 +217,10 @@ public class ThrustCurveViewFcFragment extends Fragment {
                 if (i == 0) {
                     if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
                         XYSeries currentCurve = new XYSeries(0);
-                        float CONVERT = 1;
+                        float CONVERT = 1.0f;
                         if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.KG) {
                             //kg
-                            CONVERT = 1;
+                            CONVERT = 1.0f;
                         } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.POUNDS) {
                             //pound
                             CONVERT = 2.20462f;
@@ -240,10 +240,10 @@ public class ThrustCurveViewFcFragment extends Fragment {
                 if(i == 1){
                     if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
                         XYSeries currentCurve = new XYSeries(0);
-                        float CONVERT = 1;
+                        float CONVERT = 1.0f;
                         if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
                             //PSI
-                            CONVERT = 1;
+                            CONVERT = 1.0f;
                         } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.BAR) {
                             //bar divide by 14.504
                             CONVERT = 1.0f / 14.504f;

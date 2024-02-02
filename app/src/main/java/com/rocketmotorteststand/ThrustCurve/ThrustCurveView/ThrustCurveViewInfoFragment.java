@@ -105,7 +105,7 @@ public class ThrustCurveViewInfoFragment extends Fragment {
             if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
                 //PSI
                 units[1] = "(" + getString(R.string.pressure_unit_psi) + ")";
-                CONVERT_PRESSURE = 1;
+                CONVERT_PRESSURE = 1.0;
             } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.BAR) {
                 //BAR
                 units[1] = getString(R.string.pressure_unit_bar);

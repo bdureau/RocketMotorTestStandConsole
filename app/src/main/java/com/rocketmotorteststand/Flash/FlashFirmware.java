@@ -175,7 +175,7 @@ public class FlashFirmware extends AppCompatActivity {
                     imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandstm32v2, getApplicationContext().getTheme()));
 
                 if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32"))
-                    imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandstm32v2, getApplicationContext().getTheme()));
+                    imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandesp32, getApplicationContext().getTheme()));
             }
 
             @Override
@@ -293,8 +293,7 @@ public class FlashFirmware extends AppCompatActivity {
             firmwareFileName = ASSET_FILE_NAME_TESTSTANDSTM32V2;
 
         tvRead.setText("");
-        if (!itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32") &&
-                !itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2")) {
+        if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStand")) {
             try {
                 builder = new AlertDialog.Builder(FlashFirmware.this);
                 //Flashing firmware...
@@ -303,7 +302,6 @@ public class FlashFirmware extends AppCompatActivity {
                         .setCancelable(false)
                         .setNegativeButton(getResources().getString(R.string.firmware_cancel), new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog, final int id) {
-
                                 dialog.cancel();
                                 mPhysicaloid.cancelUpload();
                             }
@@ -318,12 +316,13 @@ public class FlashFirmware extends AppCompatActivity {
             } catch (IOException e) {
                 //Log.e(TAG, e.toString());
             }
-        } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("AltiESP32")) {
+        } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32")) {
             tvRead.setText("Loading ESP32 firmware\n");
             recorverFirmware = false;
             new UploadESP32Asyc().execute();
         }
-        else {
+        else if(itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32") ||
+                    itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2")){
             tvRead.setText("Loading STM32 firmware\n");
             recorverFirmware = false;
             new UploadSTM32Asyc().execute();
@@ -528,7 +527,7 @@ public class FlashFirmware extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             String firmwareFileName[] = new String[4];
             if (!recorverFirmware) {
-                if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("AltiESP32")) {
+                if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32")) {
                     firmwareFileName[0] = ASSET_FILE_NAME_TESTSTANDESP32_FILE1;
                     firmwareFileName[1] = ASSET_FILE_NAME_TESTSTANDESP32_FILE2;
                     firmwareFileName[2] = ASSET_FILE_NAME_TESTSTANDESP32_FILE3;
@@ -537,7 +536,6 @@ public class FlashFirmware extends AppCompatActivity {
 
                 uploadESP32(firmwareFileName, mUploadSTM32Callback);
             } else {
-
                 firmwareFileName[0] = ASSET_FILE_RESET_TESTSTANDESP32_FILE1;
                 firmwareFileName[1] = ASSET_FILE_RESET_TESTSTANDESP32_FILE2;
                 firmwareFileName[2] = ASSET_FILE_RESET_TESTSTANDESP32_FILE3;

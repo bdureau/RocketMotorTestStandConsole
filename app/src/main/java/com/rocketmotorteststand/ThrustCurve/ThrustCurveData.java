@@ -39,7 +39,6 @@ public class ThrustCurveData {
     public String getThrustCurveName(int ThrustCurveNumber)
     {
         String thrustCurveName = null;
-
         return thrustCurveName;
     }
 
@@ -64,7 +63,6 @@ public class ThrustCurveData {
     {
         hm =null;
         hm = new HashMap();
-
     }
 
     public XYSeriesCollection  GetThrustCurveData(String thrustCurveName)
