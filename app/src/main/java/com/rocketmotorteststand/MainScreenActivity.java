@@ -82,10 +82,10 @@ public class MainScreenActivity extends AppCompatActivity {
                         //text_connect.setText(getResources().getString(R.string.disconnect));
                     }
                 } else {
-                    msg("PERM NOT GRANTED");
+                    msg(getString(R.string.perm_not_granted));
                 }
             } else if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
-                msg("I can connect via usb");
+                msg(getString(R.string.connection_via_usb_ok));
             } else if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
                 if (myBT.getConnectionType().equals("usb"))
                     if (myBT.getConnected()) {
@@ -246,7 +246,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
                         builder = new AlertDialog.Builder(MainScreenActivity.this);
                         if (address != null) {
-                            builder.setMessage("Do you want to connect to module " + myBT.getModuleName())
+                            builder.setMessage(getString(R.string.do_you_want_to_connect_to_module) + myBT.getModuleName())
                                     .setTitle("")
                                     .setCancelable(false)
                                     .setPositiveButton(getResources().getString(R.string.Yes), new DialogInterface.OnClickListener() {
@@ -271,13 +271,7 @@ public class MainScreenActivity extends AppCompatActivity {
                                     });
                             alert = builder.create();
                             alert.show();
-                            /*new ConnectBT().execute(); //Call the class to connect
-                            if (myBT.getConnected()) {
-                                EnableUI();
-                                // cannot flash firmware if connected
-                                setEnabledCard(false, btnFlashFirmware, image_firmware, text_firmware);
-                                text_connect.setText(getResources().getString(R.string.disconnect));
-                            }*/
+
                         } else {
                             // choose the bluetooth device
                             Intent i = new Intent(MainScreenActivity.this, SearchBluetooth.class);
@@ -424,7 +418,7 @@ public class MainScreenActivity extends AppCompatActivity {
         boolean success = false;
         if (myBT.getConnected()) {
             try { Thread.sleep(1000); } catch (InterruptedException e) {}
-            Log.d("MainScreen", "Retreiving test stand config...");
+            Log.d("MainScreen", "Retrieving test stand config...");
             myBT.setDataReady(false);
             myBT.flush();
             myBT.clearInput();

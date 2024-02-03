@@ -267,7 +267,7 @@ public class FlashFirmware extends AppCompatActivity {
     }
 
     public void onClickFirmwareInfo(View v) {
-        tvRead.setText("The following firmwares are available:");
+        tvRead.setText(R.string.the_following_firmwares_are_available);
         tvRead.append("\n");
         tvRead.append(ASSET_FILE_NAME_TESTSTAND);
         tvRead.append("\n");
@@ -317,13 +317,13 @@ public class FlashFirmware extends AppCompatActivity {
                 //Log.e(TAG, e.toString());
             }
         } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32")) {
-            tvRead.setText("Loading ESP32 firmware\n");
+            tvRead.setText(R.string.loading_esp32_firmware);
             recorverFirmware = false;
             new UploadESP32Asyc().execute();
         }
         else if(itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32") ||
                     itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2")){
-            tvRead.setText("Loading STM32 firmware\n");
+            tvRead.setText(R.string.loading_stm32_firmware);
             recorverFirmware = false;
             new UploadSTM32Asyc().execute();
         }
@@ -569,7 +569,7 @@ public class FlashFirmware extends AppCompatActivity {
 
         } catch (IOException e) {
             //e.printStackTrace();
-            tvAppend(tvRead, "file not found: " + ASSET_FILE_NAME_TESTSTANDESP32_FILE1 + "\n");
+            tvAppend(tvRead, getString(R.string.file_not_found) + ASSET_FILE_NAME_TESTSTANDESP32_FILE1 + "\n");
         } catch (Exception e) {
             e.printStackTrace();
             tvAppend(tvRead, "gethexfile : " + ASSET_FILE_NAME_TESTSTANDESP32_FILE1 + "\n");
@@ -580,7 +580,7 @@ public class FlashFirmware extends AppCompatActivity {
 
         } catch (IOException e) {
             //e.printStackTrace();
-            tvAppend(tvRead, "file not found: " + ASSET_FILE_NAME_TESTSTANDESP32_FILE2 + "\n");
+            tvAppend(tvRead, getString(R.string.file_not_found) + ASSET_FILE_NAME_TESTSTANDESP32_FILE2 + "\n");
         } catch (Exception e) {
             e.printStackTrace();
             tvAppend(tvRead, "gethexfile : " + ASSET_FILE_NAME_TESTSTANDESP32_FILE2 + "\n");
@@ -590,7 +590,7 @@ public class FlashFirmware extends AppCompatActivity {
 
         } catch (IOException e) {
             //e.printStackTrace();
-            tvAppend(tvRead, "file not found: " + ASSET_FILE_NAME_TESTSTANDESP32_FILE3 + "\n");
+            tvAppend(tvRead, getString(R.string.file_not_found) + ASSET_FILE_NAME_TESTSTANDESP32_FILE3 + "\n");
         } catch (Exception e) {
             e.printStackTrace();
             tvAppend(tvRead, "gethexfile : " + ASSET_FILE_NAME_TESTSTANDESP32_FILE3 + "\n");
@@ -601,20 +601,20 @@ public class FlashFirmware extends AppCompatActivity {
 
         } catch (IOException e) {
             //e.printStackTrace();
-            tvAppend(tvRead, "file not found: " + ASSET_FILE_NAME_TESTSTANDESP32_FILE4 + "\n");
+            tvAppend(tvRead, getString(R.string.file_not_found) + ASSET_FILE_NAME_TESTSTANDESP32_FILE4 + "\n");
         } catch (Exception e) {
             e.printStackTrace();
             tvAppend(tvRead, "gethexfile : " + ASSET_FILE_NAME_TESTSTANDESP32_FILE4 + "\n");
         }
 
-        dialogAppend("Starting ...");
+        dialogAppend(getString(R.string.starting));
 
 
         boolean ret = cmd.initChip();
         if (ret)
             dialogAppend(getString(R.string.chip_has_not_been_init) + ret);
         else {
-            dialogAppend("Chip has not been initiated:" + ret);
+            dialogAppend(getString(R.string.chip_has_not_been_initiated) + ret);
             failed = true;
         }
         int bootversion = 0;
@@ -624,30 +624,30 @@ public class FlashFirmware extends AppCompatActivity {
             // an ESP32 because this is what the program is for
             int chip = cmd.detectChip();
             if (chip == cmd.ESP32)
-                tvAppend(tvRead, "Chip is ESP32\n");
+                tvAppend(tvRead, getString(R.string.chip_is_esp32));
 
             // now that we have initialized the chip we can change the baud rate to 921600
             // first we tell the chip the new baud rate
-            dialogAppend("Changing baudrate to 921600");
+            dialogAppend(getString(R.string.changing_baudrate_to_921600));
             cmd.changeBaudeRate();
             cmd.init();
 
             // Those are the files you want to flush
-            dialogAppend("Flashing file 1 0xe000");
+            dialogAppend(getString(R.string.flashing_file_1_0xe000));
             cmd.flashData(readFile(file1), 0xe000, 0);
-            dialogAppend("Flashing file 2 0x1000");
+            dialogAppend(getString(R.string.flashing_file_2_0x1000));
             cmd.flashData(readFile(file2), 0x1000, 0);
 
-            dialogAppend("Flashing file 3 0x10000");
+            dialogAppend(getString(R.string.flashing_file_3_0x10000));
             cmd.flashData(readFile(file3), 0x10000, 0);
-            dialogAppend("Flashing file 4 0x8000");
+            dialogAppend(getString(R.string.flashing_file_4_0x8000));
             cmd.flashData(readFile(file4), 0x8000, 0);
 
             // we have finish flashing lets reset the board so that the program can start
             cmd.reset();
 
-            dialogAppend("done ");
-            tvAppend(tvRead, "done");
+            dialogAppend(getString(R.string.done));
+            tvAppend(tvRead, getString(R.string.done));
         }
     }
     Physicaloid.UploadCallBack mUploadCallback = new Physicaloid.UploadCallBack() {

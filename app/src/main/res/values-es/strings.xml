@@ -411,4 +411,20 @@
     <string name="remove_any_weight_and_click_ok">Remove any weight and click ok</string>
     <string name="put_your_calibration_weight_and_click_ok">Put your calibration weight and click OK</string>
     <string name="chip_has_not_been_init">Chip has been initiated:</string>
+    <string name="the_following_firmwares_are_available">The following firmwares are available:</string>
+    <string name="loading_stm32_firmware">Loading STM32 firmware\n</string>
+    <string name="loading_esp32_firmware">Loading ESP32 firmware\n</string>
+    <string name="file_not_found">"file not found: "</string>
+    <string name="starting">Starting ...</string>
+    <string name="chip_has_not_been_initiated">Chip has not been initiated:</string>
+    <string name="changing_baudrate_to_921600">Changing baudrate to 921600</string>
+    <string name="flashing_file_1_0xe000">Flashing file 1 0xe000</string>
+    <string name="flashing_file_2_0x1000">Flashing file 2 0x1000</string>
+    <string name="flashing_file_3_0x10000">Flashing file 3 0x10000</string>
+    <string name="flashing_file_4_0x8000">Flashing file 4 0x8000</string>
+    <string name="chip_is_esp32">Chip is ESP32\n</string>
+    <string name="done">"done "</string>
+    <string name="perm_not_granted">PERM NOT GRANTED</string>
+    <string name="connection_via_usb_ok">Connection via usb OK</string>
+    <string name="do_you_want_to_connect_to_module">"Do you want to connect to module "</string>
 </resources>

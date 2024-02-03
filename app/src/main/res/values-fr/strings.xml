@@ -368,7 +368,7 @@
     <string name="lora_configure_module_title">Configure module Lora </string>
     <string name="lora_module_channel">Canal:</string>
     <string name="lora_module_trans_mode">Trans mode:</string>
-    <string name="lora_module_address">Addresse:</string>
+    <string name="lora_module_address">Adresse:</string>
     <string name="lora_module_channel_rssi">Canal RSSI</string>
     <string name="lora_module_key">Key:</string>
     <string name="lora_module_parity">Parité</string>
@@ -385,10 +385,10 @@
     <string name="lora_module_channel_msg">Le canal du Module ne peut pas être vide</string>
     <string name="lora_module_invalid_channel">Canal invalide</string>
     <string name="lora_module_channel_value_msg">Le canal doit être etre 0 et 83</string>
-    <string name="lora_module_address_empty_msg">l\'adress du Module ne peut pas v vide</string>
-    <string name="lora_module_address_range">L\'Adresse doit être entre 0 et 65535</string>
+    <string name="lora_module_address_empty_msg">l\'adresse du Module ne peut pas être vide</string>
+    <string name="lora_module_address_range">L\'adresse doit être entre 0 et 65535</string>
     <string name="lora_module_address_invalid">Adresse invalide</string>
-    <string name="lora_module_updating_address_msg">Mise à jours addresse module </string>
+    <string name="lora_module_updating_address_msg">Mise à jours adresse module </string>
     <string name="lora_module_updating_msg2">mise à jour serial speed, parité et air rate</string>
     <string name="lora_module_updating_msg3">mise à jour packet , RSSI noise et transmitting power</string>
     <string name="lora_module_updating_msg4">mise à jour du canal</string>
@@ -418,5 +418,21 @@
     <string name="credit_goes_to_philippe_huguenin_bergenat_n_for_all_the_testing">Merci à Philippe Huguenin-Bergenat \n pour tous les tests</string>
     <string name="remove_any_weight_and_click_ok">Enlever tout poids du capteur et cliquer sur OK</string>
     <string name="put_your_calibration_weight_and_click_ok">Poser votre poids de réference et cliquez sur OK</string>
-    <string name="chip_has_not_been_init">Chip has been initiated:</string>
+    <string name="chip_has_not_been_init">Le microcontroleur n\'a pas été initialisé:</string>
+    <string name="the_following_firmwares_are_available">Les firmwares ci-dessous sont disponibles:</string>
+    <string name="loading_stm32_firmware">Chargement du firmware STM32\n</string>
+    <string name="loading_esp32_firmware">Chargement du firmware ESP32\n</string>
+    <string name="file_not_found">"fichier non trouvé: "</string>
+    <string name="starting">Démarage ...</string>
+    <string name="chip_has_not_been_initiated">Le microcotroleur n\'a pas été initialisé:</string>
+    <string name="changing_baudrate_to_921600">Changement du baudrate à 921600</string>
+    <string name="flashing_file_1_0xe000">Flash du fichier 1 0xe000</string>
+    <string name="flashing_file_2_0x1000">Flash du fichier 2 0x1000</string>
+    <string name="flashing_file_3_0x10000">Flash du fichier 3 0x10000</string>
+    <string name="flashing_file_4_0x8000">Flash du fichier 4 0x8000</string>
+    <string name="chip_is_esp32">Le microcotroleur est un ESP32\n</string>
+    <string name="done">"términé "</string>
+    <string name="perm_not_granted">La permission n\'a pas été accordée</string>
+    <string name="connection_via_usb_ok">Connexion via usb OK</string>
+    <string name="do_you_want_to_connect_to_module">"Voulez vous vous connecter au module "</string>
 </resources>
