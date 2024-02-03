@@ -1,4 +1,4 @@
-# RocketMotorTestStandConsole
+# RocketMotorTestStandConsole (Android front end)
 
 This is the Android front end for my Rocket motor simple test stand
 
