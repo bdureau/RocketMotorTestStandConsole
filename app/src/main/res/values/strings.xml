@@ -425,4 +425,5 @@
     <string name="perm_not_granted">PERM NOT GRANTED</string>
     <string name="connection_via_usb_ok">Connection via usb OK</string>
     <string name="do_you_want_to_connect_to_module">"Do you want to connect to module "</string>
+    <string name="no">No</string>
 </resources>

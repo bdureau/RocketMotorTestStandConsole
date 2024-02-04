@@ -261,7 +261,7 @@ public class MainScreenActivity extends AppCompatActivity {
                                             }
                                         }
                                     })
-                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                         public void onClick(final DialogInterface dialog, final int id) {
                                             dialog.cancel();
                                             // choose the bluetooth device

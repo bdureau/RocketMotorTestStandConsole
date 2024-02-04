@@ -390,7 +390,7 @@
     <string name="lora_module_address_invalid">Adresse invalide</string>
     <string name="lora_module_updating_address_msg">Mise à jours adresse module </string>
     <string name="lora_module_updating_msg2">mise à jour serial speed, parité et air rate</string>
-    <string name="lora_module_updating_msg3">mise à jour packet , RSSI noise et transmitting power</string>
+    <string name="lora_module_updating_msg3">mise à jour packet , RSSI noise et puissance de transmission</string>
     <string name="lora_module_updating_msg4">mise à jour du canal</string>
     <string name="lora_module_updating_msg5">mise à jour RSSI Byte, trans Mode, LBT et WOR Cycle</string>
     <string name="lora_module_updating_msg6">mise à jour de la clé</string>
@@ -435,4 +435,5 @@
     <string name="perm_not_granted">La permission n\'a pas été accordée</string>
     <string name="connection_via_usb_ok">Connexion via usb OK</string>
     <string name="do_you_want_to_connect_to_module">"Voulez vous vous connecter au module "</string>
+    <string name="no">Non</string>
 </resources>
