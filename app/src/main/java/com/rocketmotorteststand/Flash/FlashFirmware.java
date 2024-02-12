@@ -91,10 +91,10 @@ public class FlashFirmware extends AppCompatActivity {
     private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE3 = "firmwares/ESP32/MotorTestStand1.6V3.ino.bin";
     private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE4 = "firmwares/ESP32/MotorTestStand1.6V3.ino.partitions.bin";
 
-    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE1 = "firmwares/ESP32/boot_app0.bin";
-    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE2 = "firmwares/ESP32/MotorTestStandReset.ino.bootloader.bin";
-    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE3 = "firmwares/ESP32/MotorTestStandReset.ino.bin";
-    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE4 = "firmwares/ESP32/MotorTestStandReset.ino.partitions.bin";
+    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE1 = "recover_firmwares/ESP32/boot_app0.bin";
+    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE2 = "recover_firmwares/ESP32/MotorTestStandReset.ino.bootloader.bin";
+    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE3 = "recover_firmwares/ESP32/MotorTestStandReset.ino.bin";
+    private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE4 = "recover_firmwares/ESP32/MotorTestStandReset.ino.partitions.bin";
 
     private String[] itemsBaudRate;
     private String[] itemsFirmwares;

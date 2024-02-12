@@ -449,12 +449,15 @@ public class ConsoleApplication extends Application {
                                             } else
                                                 mHandler.obtainMessage(6, String.valueOf(0)).sendToTarget();
                                         }
-                                        //value 7 contains the current pressure from the second sensor
-                                        if (currentSentence.length > 7) {
-                                            if (currentSentence[7].trim().matches("\\d+(?:\\.\\d+)?")) {
-                                                mHandler.obtainMessage(7, String.valueOf(currentSentence[7])).sendToTarget();
-                                            } else
-                                                mHandler.obtainMessage(7, String.valueOf(0)).sendToTarget();
+                                        if (getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                                                getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+                                            //value 7 contains the current pressure from the second sensor
+                                            if (currentSentence.length > 7) {
+                                                if (currentSentence[7].trim().matches("\\d+(?:\\.\\d+)?")) {
+                                                    mHandler.obtainMessage(7, String.valueOf(currentSentence[7])).sendToTarget();
+                                                } else
+                                                    mHandler.obtainMessage(7, String.valueOf(0)).sendToTarget();
+                                            }
                                         }
                                     }
                                 }

@@ -156,9 +156,9 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
                             int pressure2 = (int) (Integer.parseInt((String) msg.obj) * CONVERT_PRESSURE);
                             if ((myBT.getAppConf().getGraphicsLibType() == 0) &
                                     (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
-                                telemetryPage1bis.setCurrentPressure2(" " + pressure2 + " " + units[1]);
+                                telemetryPage1bis.setCurrentPressure2(" " + pressure2 + " " + units[2]);
                             } else {
-                                telemetryPage1.setCurrentPressure2(" " + pressure2 + " " + units[1]);
+                                telemetryPage1.setCurrentPressure2(" " + pressure2 + " " + units[2]);
                             }
                             // for MpChart
                             yValuesPressure2.add(new Entry(thrustTime, pressure2));
@@ -221,8 +221,14 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStand") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32"))
             units = new String[1];
-        else
+        else if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ) {
             units = new String[2];
+        } else if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            units = new String[3];
+        }
+
 
         if (myBT.getAppConf().getUnits()==GlobalConfig.ThrustUnits.KG) {
             //kg
@@ -259,8 +265,25 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
             }
         }
 
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
+                //PSI
+                units[2] = "(" + "PSI" + ")";
+                CONVERT_PRESSURE = 1.0;
+            } else if (myBT.getAppConf().getUnits() == GlobalConfig.PressureUnits.BAR) {
+                //BAR
+                units[2] = "BAR";
+                CONVERT_PRESSURE = 0.0689476;
+            } else if (myBT.getAppConf().getUnits() == GlobalConfig.PressureUnits.KPascal) {
+                //Kpascal
+                units[2] = "Kpascal";
+                CONVERT_PRESSURE = 6.89476;
+            }
+        }
         yValuesThrust = new ArrayList<>();
         yValuesPressure = new ArrayList<>();
+        yValuesPressure2 = new ArrayList<>();
         //for afreeChart
         thrustSerie = new XYSeries("thrust");
         pressureSerie = new XYSeries("pressure");
