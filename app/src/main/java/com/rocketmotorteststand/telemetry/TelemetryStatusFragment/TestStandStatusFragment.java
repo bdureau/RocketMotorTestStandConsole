@@ -20,9 +20,9 @@ public class TestStandStatusFragment extends Fragment {
     private String[] units;
     private Button btnTare;
     private boolean ViewCreated = false;
-    private TextView txtViewBatteryVoltage, txtViewCurrentPressure;
+    private TextView txtViewBatteryVoltage, txtViewCurrentPressure, txtViewCurrentPressure2;
     private TextView txtViewThrust, txtViewVoltage, txtViewLink, txtEEpromUsage, txtNbrOfThrustCurve;
-    private TextView txtViewEEprom, txtViewThrustCurve, txtViewCurrentPressureValue;
+    private TextView txtViewEEprom, txtViewThrustCurve, txtViewCurrentPressureValue, txtViewCurrentPressureValue2;
 
     public TestStandStatusFragment(ConsoleApplication pBT, String[] pUnits) {
         myBT = pBT;
@@ -49,6 +49,11 @@ public class TestStandStatusFragment extends Fragment {
     public void setPressure(String value) {
         if (ViewCreated)
             txtViewCurrentPressureValue.setText(value);
+    }
+
+    public void setPressure2(String value) {
+        if (ViewCreated)
+            txtViewCurrentPressureValue2.setText(value);
     }
 
     public void setEEpromUsage(String value) {
@@ -95,12 +100,16 @@ public class TestStandStatusFragment extends Fragment {
         txtViewThrustCurve = (TextView) view.findViewById(R.id.txtViewThrustCurve);
         txtViewCurrentPressureValue = (TextView) view.findViewById(R.id.txtViewCurrentPressureValue);
         txtViewCurrentPressure = (TextView) view.findViewById(R.id.txtViewCurrentPressure);
+        txtViewCurrentPressureValue2 = (TextView) view.findViewById(R.id.txtViewCurrentPressureValue2);
+        txtViewCurrentPressure2 = (TextView) view.findViewById(R.id.txtViewCurrentPressure2);
         btnTare = (Button) view.findViewById(R.id.butTare);
 
         txtViewVoltage.setVisibility(View.VISIBLE);
         txtViewBatteryVoltage.setVisibility(View.VISIBLE);
 
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             txtViewCurrentPressureValue.setVisibility(View.VISIBLE);
             txtViewCurrentPressure.setVisibility(View.VISIBLE);
@@ -108,6 +117,16 @@ public class TestStandStatusFragment extends Fragment {
             txtViewCurrentPressureValue.setVisibility(View.INVISIBLE);
             txtViewCurrentPressure.setVisibility(View.INVISIBLE);
         }
+
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            txtViewCurrentPressureValue2.setVisibility(View.VISIBLE);
+            txtViewCurrentPressure2.setVisibility(View.VISIBLE);
+        } else {
+            txtViewCurrentPressureValue2.setVisibility(View.INVISIBLE);
+            txtViewCurrentPressure2.setVisibility(View.INVISIBLE);
+        }
+
         txtViewEEprom.setVisibility(View.VISIBLE);
         txtViewThrustCurve.setVisibility(View.VISIBLE);
         txtEEpromUsage.setVisibility(View.VISIBLE);

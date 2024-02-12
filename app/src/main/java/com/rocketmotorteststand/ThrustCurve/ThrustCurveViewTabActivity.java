@@ -135,6 +135,10 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             numberOfCurves = 2;
         }
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            numberOfCurves = 3;
+        }
 
         Intent newint = getIntent();
         ThrustCurveName = newint.getStringExtra(ThrustCurveListActivity.SELECTED_THRUSTCURVE);
@@ -183,6 +187,19 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
                 //Kpascal
                 units[1] = "Kpascal";
                 //CONVERT_PRESSURE = 6.89476;
+            }
+        }
+
+        if (numberOfCurves > 2) {
+            if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
+                //PSI
+                units[2] = "(" + "PSI" + ")";
+            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.BAR) {
+                //BAR
+                units[2] = "BAR";
+            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.KPascal) {
+                //Kpascal
+                units[2] = "Kpascal";
             }
         }
 

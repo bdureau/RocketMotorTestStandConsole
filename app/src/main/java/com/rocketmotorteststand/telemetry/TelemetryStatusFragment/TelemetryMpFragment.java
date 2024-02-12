@@ -24,12 +24,13 @@ import java.util.ArrayList;
 public class TelemetryMpFragment extends Fragment {
     private ConsoleApplication myBT;
     private boolean ViewCreated = false;
-    private TextView txtCurrentThrust, txtCurrentPressure;
+    private TextView txtCurrentThrust, txtCurrentPressure, txtCurrentPressure2;
     private LineChart mChart;
     LineData data;
     private double CONVERT = 1;
     ArrayList<Entry> yValuesThrust;
     ArrayList<Entry> yValuesPressure;
+    ArrayList<Entry> yValuesPressure2;
     ArrayList<ILineDataSet> dataSets;
     int graphBackColor ;
     int fontSize;
@@ -45,6 +46,10 @@ public class TelemetryMpFragment extends Fragment {
     public void setCurrentPressure(String value) {
         if(ViewCreated)
             txtCurrentPressure.setText(value);
+    }
+    public void setCurrentPressure2(String value) {
+        if(ViewCreated)
+            txtCurrentPressure2.setText(value);
     }
     public TelemetryMpFragment(ConsoleApplication pBT, String [] pUnits) {
         myBT = pBT;
@@ -62,6 +67,7 @@ public class TelemetryMpFragment extends Fragment {
 
         txtCurrentThrust = (TextView) view.findViewById(R.id.textViewCurrentThrust);
         txtCurrentPressure = (TextView) view.findViewById(R.id.textViewCurrentPressure);
+        txtCurrentPressure2 = (TextView) view.findViewById(R.id.textViewCurrentPressure2);
 
         graphBackColor = myBT.getAppConf().ConvertColor(myBT.getAppConf().getGraphBackColor());
         fontSize = myBT.getAppConf().ConvertFont(myBT.getAppConf().getFontSize());
@@ -80,17 +86,24 @@ public class TelemetryMpFragment extends Fragment {
         yValuesThrust.add(new Entry(0, 0));
         yValuesPressure = new ArrayList<>();
         yValuesPressure.add(new Entry(0, 0));
+        yValuesPressure2 = new ArrayList<>();
+        yValuesPressure2.add(new Entry(0, 0));
 
         LineDataSet set1 = new LineDataSet(yValuesThrust, getString(R.string.telemetry_thrust));
         LineDataSet set2 = new LineDataSet(yValuesThrust, "Pressure");
+        LineDataSet set3 = new LineDataSet(yValuesThrust, "Pressure2");
         set1.setValueTextColor(labelColor);
         set1.setValueTextSize(fontSize);
 
         set2.setValueTextColor(labelColor);
         set2.setValueTextSize(fontSize);
 
+        set3.setValueTextColor(labelColor);
+        set3.setValueTextSize(fontSize);
+
         dataSets.add(set1);
         dataSets.add(set2);
+        dataSets.add(set3);
 
         LineData data = new LineData(dataSets);
         mChart.setData(data);

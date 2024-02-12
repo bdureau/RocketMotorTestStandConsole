@@ -98,12 +98,28 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
                     //Value 6 contains the current pressure
                     String currentPressure = (String) msg.obj;
                     if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
                             myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
                         if (currentPressure.matches("\\d+(?:\\.\\d+)?")) {
                             double temp;
                             temp = Double.parseDouble(currentPressure);
                             currentPressure = String.format("%.2f", (temp) * CONVERT_PRESSURE);
                             statusPage1.setPressure(currentPressure + " " + units[1]);
+                        }
+                    }
+                    //Log.d("TestStandStatus", (String) msg.obj);
+                    break;
+                case 7:
+                    //Value 7 contains the current pressure from the second sensor
+                    String currentPressure2 = (String) msg.obj;
+                    if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+                        if (currentPressure2.matches("\\d+(?:\\.\\d+)?")) {
+                            double temp;
+                            temp = Double.parseDouble(currentPressure2);
+                            currentPressure2 = String.format("%.2f", (temp) * CONVERT_PRESSURE);
+                            statusPage1.setPressure2(currentPressure2 + " " + units[1]);
                         }
                     }
                     //Log.d("TestStandStatus", (String) msg.obj);
@@ -164,7 +180,9 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
         }
 
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
             if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
                 //PSI
                 units[1] = "(" + "PSI" + ")";

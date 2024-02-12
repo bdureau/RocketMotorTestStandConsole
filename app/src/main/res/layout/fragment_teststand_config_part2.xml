@@ -138,4 +138,20 @@
         android:layout_alignBaseline="@+id/txtViewTelemetryType"
         android:layout_alignParentRight="true"
         android:spinnerMode="dropdown" />
+
+    <TextView
+        android:id="@+id/txtViewSensorType2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/txtViewTelemetryType"
+        android:text="@string/sensor_type" />
+
+    <Spinner
+        android:id="@+id/spinnerSensorType2"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtViewSensorType2"
+        android:layout_alignParentRight="true"
+        android:spinnerMode="dropdown" />
 </RelativeLayout>

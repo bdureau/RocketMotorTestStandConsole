@@ -44,7 +44,7 @@ public class ConsoleApplication extends Application {
     public long lastReceived = 0;
     public String commandRet = "";
 
-   // private double FEET_IN_METER = 1;
+    // private double FEET_IN_METER = 1;
     private boolean exit = false;
     private GlobalConfig AppConf = null;
     private String address, moduleName;
@@ -93,6 +93,7 @@ public class ConsoleApplication extends Application {
     public void setAddress(String bTAddress) {
         address = bTAddress;
     }
+
     public String getAddress() {
         return address;
     }
@@ -162,13 +163,13 @@ public class ConsoleApplication extends Application {
     }
 
     public void setNbrOfThrustCurves(int value) {
-        NbrOfThrustCurves=value;
+        NbrOfThrustCurves = value;
     }
 
     // connect to the bluetooth adapter
     public boolean connect() {
         boolean state = false;
-       //appendLog("connect:");
+        //appendLog("connect:");
         if (myTypeOfConnection.equals("bluetooth")) {
             state = BTCon.connect(address);
             setConnectionType("bluetooth");
@@ -288,7 +289,6 @@ public class ConsoleApplication extends Application {
     public void initThrustCurveData() {
         MyThrustCurve = new ThrustCurveData(this, TestStandCfg.getTestStandName());
     }
-
 
 
     public void setExit(boolean b) {
@@ -439,9 +439,8 @@ public class ConsoleApplication extends Application {
                                                 mHandler.obtainMessage(5, String.valueOf(currentSentence[5])).sendToTarget();
                                             } else
                                                 mHandler.obtainMessage(5, String.valueOf(0)).sendToTarget();
-                                        }
-                                        else
-                                            Log.d("TestStand console", "Length: " +currentSentence.length);
+                                        } else
+                                            Log.d("TestStand console", "Length: " + currentSentence.length);
 
                                         //value 6 contains the current pressure
                                         if (currentSentence.length > 6) {
@@ -449,6 +448,13 @@ public class ConsoleApplication extends Application {
                                                 mHandler.obtainMessage(6, String.valueOf(currentSentence[6])).sendToTarget();
                                             } else
                                                 mHandler.obtainMessage(6, String.valueOf(0)).sendToTarget();
+                                        }
+                                        //value 7 contains the current pressure from the second sensor
+                                        if (currentSentence.length > 7) {
+                                            if (currentSentence[7].trim().matches("\\d+(?:\\.\\d+)?")) {
+                                                mHandler.obtainMessage(7, String.valueOf(currentSentence[7])).sendToTarget();
+                                            } else
+                                                mHandler.obtainMessage(7, String.valueOf(0)).sendToTarget();
                                         }
                                     }
                                 }
@@ -465,7 +471,7 @@ public class ConsoleApplication extends Application {
                                             currentThrustCurveNbr = Integer.valueOf(currentSentence[1]) + 1;
                                             if (currentThrustCurveNbr < 10)
                                                 //thrust curve
-                                                thrustCurveName = getResources().getString(R.string.thrustcurve_name) + " "+ "0" + currentThrustCurveNbr;
+                                                thrustCurveName = getResources().getString(R.string.thrustcurve_name) + " " + "0" + currentThrustCurveNbr;
                                             else
                                                 //thrust curve
                                                 thrustCurveName = getResources().getString(R.string.thrustcurve_name) + " " + currentThrustCurveNbr;
@@ -474,7 +480,7 @@ public class ConsoleApplication extends Application {
                                     // Value 3 contain the thrust
                                     // value 4 contain the casing pressure
                                     // To do
-                                    long value2 = 0, value3 = 0,value4 = 0;
+                                    long value2 = 0, value3 = 0, value4 = 0, value5;
                                     if (currentSentence.length > 2)
                                         if (currentSentence[2].matches("\\d+(?:\\.\\d+)?"))
                                             value2 = Long.valueOf(currentSentence[2]);
@@ -487,11 +493,13 @@ public class ConsoleApplication extends Application {
                                             value3 = 0;
                                         //add the thrust
                                         MyThrustCurve.AddToThrustCurve(value2,
-                                                (long) (value3 ), thrustCurveName, 0);
+                                                (long) (value3), thrustCurveName, 0);
 
                                     }
-                                    if(getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2")
-                                            || getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
+                                    if (getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                                            getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                                            getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
+                                            getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
                                         if (currentSentence.length > 4) {
                                             if (currentSentence[4].matches("\\d+(?:\\.\\d+)?"))
                                                 value4 = Long.valueOf(currentSentence[4]);
@@ -500,6 +508,18 @@ public class ConsoleApplication extends Application {
                                             //add the casing pressure
                                             MyThrustCurve.AddToThrustCurve(value2,
                                                     (long) (value4), thrustCurveName, 1);
+                                        }
+                                    }
+                                    if (getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                                            getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+                                        if (currentSentence.length > 5) {
+                                            if (currentSentence[5].matches("\\d+(?:\\.\\d+)?"))
+                                                value5 = Long.valueOf(currentSentence[5]);
+                                            else
+                                                value5 = 0;
+                                            //add the casing pressure
+                                            MyThrustCurve.AddToThrustCurve(value2,
+                                                    (long) (value5), thrustCurveName, 2);
                                         }
                                     }
                                 }
@@ -540,15 +560,15 @@ public class ConsoleApplication extends Application {
 
                                     // Value 6 contains start recording thrust level
                                     if (currentSentence.length > 6)
-                                        if (currentSentence[6].matches("\\d+(?:\\.\\d+)?")){
+                                        if (currentSentence[6].matches("\\d+(?:\\.\\d+)?")) {
 
                                         }
-                                            //TestStandCfg.setStartRecordingThrustLevel(Integer.valueOf(currentSentence[6]));
+                                        //TestStandCfg.setStartRecordingThrustLevel(Integer.valueOf(currentSentence[6]));
                                         else {
 
                                         }
-                                            //if you cannot read it, set it to 1 N
-                                            //TestStandCfg.setStartRecordingThrustLevel(1);
+                                    //if you cannot read it, set it to 1 N
+                                    //TestStandCfg.setStartRecordingThrustLevel(1);
 
                                     // Value 7 contains the stop recording time
                                     if (currentSentence.length > 7)
@@ -603,6 +623,16 @@ public class ConsoleApplication extends Application {
                                             TestStandCfg.setTelemetryType(Integer.valueOf(currentSentence[14]));
                                         else
                                             TestStandCfg.setTelemetryType(0);
+
+                                    // value 15 contains pressure sensor type
+                                    if (currentSentence[2].equals("TestStandSTM32V3") ||
+                                            currentSentence[2].equals("TestStandESP32V3")
+                                    )
+                                        if (currentSentence.length > 15)
+                                            if (currentSentence[15].matches("\\d+(?:\\.\\d+)?"))
+                                                TestStandCfg.setPressureSensorType2(Integer.valueOf(currentSentence[15]));
+                                            else
+                                                TestStandCfg.setPressureSensorType2(0);
                                     myMessage = myMessage + " " + "teststandconfig";
                                 } else {
                                     myMessage = myMessage + "KO" + "teststandconfig";
@@ -614,8 +644,7 @@ public class ConsoleApplication extends Application {
                                     chk = Long.valueOf(currentSentence[currentSentence.length - 1]);
                                 if (calculateSentenceCHK(currentSentence) == chk) {
                                     testTrame.setTrameStatus(true);
-                                } else
-                                {
+                                } else {
                                     testTrame.setTrameStatus(false);
                                 }
                                 if (currentSentence.length > 1)
@@ -626,7 +655,7 @@ public class ConsoleApplication extends Application {
                                 break;
 
                             case "nbrOfThrustCurve":
-                                NbrOfThrustCurves =0;
+                                NbrOfThrustCurves = 0;
                                 // Value 1 contains the number of Thrust curve
                                 if (currentSentence.length > 1)
                                     if (currentSentence[1].matches("\\d+(?:\\.\\d+)?"))
@@ -688,9 +717,9 @@ public class ConsoleApplication extends Application {
     public Configuration getAppLocal() {
 
         Locale locale = null;
-        if (AppConf.getApplicationLanguage()==1) {
+        if (AppConf.getApplicationLanguage() == 1) {
             locale = Locale.FRENCH;//new Locale("fr_FR");
-        } else if (AppConf.getApplicationLanguage()==2) {
+        } else if (AppConf.getApplicationLanguage() == 2) {
             locale = Locale.ENGLISH;//new Locale("en_US");
         } else {
             locale = Locale.getDefault();
@@ -715,7 +744,7 @@ public class ConsoleApplication extends Application {
         private String currentTrame = "";
         private boolean trameStatus = false;
 
-        public void setCurrentTrame (String trame) {
+        public void setCurrentTrame(String trame) {
             currentTrame = trame;
         }
 
@@ -723,11 +752,11 @@ public class ConsoleApplication extends Application {
             return currentTrame;
         }
 
-        public void setTrameStatus (boolean val) {
+        public void setTrameStatus(boolean val) {
             trameStatus = val;
         }
 
-        public boolean getTrameStatus () {
+        public boolean getTrameStatus() {
             return trameStatus;
         }
     }

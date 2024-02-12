@@ -194,6 +194,25 @@ public class ThrustCurveViewFcFragment extends Fragment {
                     }
                     thrustCurveData.addSeries(currentCurve);
                 }
+                if (i == 2) {
+                    XYSeries currentCurve = new XYSeries(0);
+                    float CONVERT = 1.0f;
+                    if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
+                        //PSI
+                        CONVERT = 1.0f;
+                    } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.BAR) {
+                        //bar divide by 14.504
+                        CONVERT = 1.0f / 14.504f;
+                    } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.KPascal) {
+                        //K pascal multiply by 6.895
+                        CONVERT = (float) 6.895;
+                    }
+                    for (int k = 0; k < nbrData; k++) {
+                        currentCurve.add(allThrustCurveData.getSeries(i).getX(k).floatValue(),
+                                allThrustCurveData.getSeries(i).getY(k).floatValue() * CONVERT);
+                    }
+                    thrustCurveData.addSeries(currentCurve);
+                }
                 plot.setDataset(0, thrustCurveData);
             }
         }
@@ -255,6 +274,30 @@ public class ThrustCurveViewFcFragment extends Fragment {
                         for (int k = curveStart; k < curveStop; k++) {
                             currentCurve.add(allThrustCurveData.getSeries(i).getX(k).floatValue()
                                     - allThrustCurveData.getSeries(i).getX(curveStart).floatValue(),
+                                    (allThrustCurveData.getSeries(i).getY(k).floatValue() ) * CONVERT);
+                        }
+                        thrustCurveDataFinal.addSeries(currentCurve);
+                    }
+                }
+
+                if(i == 2){
+                    if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
+                        XYSeries currentCurve = new XYSeries(0);
+                        float CONVERT = 1.0f;
+                        if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
+                            //PSI
+                            CONVERT = 1.0f;
+                        } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.BAR) {
+                            //bar divide by 14.504
+                            CONVERT = 1.0f / 14.504f;
+                        } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.KPascal) {
+                            //K pascal multiply by 6.895
+                            CONVERT = (float) 6.895;
+                        }
+
+                        for (int k = curveStart; k < curveStop; k++) {
+                            currentCurve.add(allThrustCurveData.getSeries(i).getX(k).floatValue()
+                                            - allThrustCurveData.getSeries(i).getX(curveStart).floatValue(),
                                     (allThrustCurveData.getSeries(i).getY(k).floatValue() ) * CONVERT);
                         }
                         thrustCurveDataFinal.addSeries(currentCurve);

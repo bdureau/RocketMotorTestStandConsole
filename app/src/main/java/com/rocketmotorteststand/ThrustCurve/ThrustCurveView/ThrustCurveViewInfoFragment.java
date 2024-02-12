@@ -47,8 +47,8 @@ public class ThrustCurveViewInfoFragment extends Fragment {
     private String ThrustCurveName = null;
     private TextView nbrOfSamplesValue, thrustCurveNbrValue;
     private TextView recordingDurationValue, thrustTimeValue, maxThrustValue, averageThrustValue;
-    private TextView motorClassValue, totalImpulseValue, maxPressureValue;
-    private TextView maxPressure;
+    private TextView motorClassValue, totalImpulseValue, maxPressureValue, maxPressureValue2;
+    private TextView maxPressure, maxPressure2;
     private Button buttonExportToCsv, buttonExportToCsvFull, buttonExportToEng, buttonShareEng,
             butShareZip;
     double totalImpulse = 0;
@@ -83,6 +83,10 @@ public class ThrustCurveViewInfoFragment extends Fragment {
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
             numberOfCurves = 2;
         }
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            numberOfCurves = 3;
+        }
         // Read the application config
         myBT.getAppConf().ReadConfig();
         if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.KG) {
@@ -116,6 +120,21 @@ public class ThrustCurveViewInfoFragment extends Fragment {
                 CONVERT_PRESSURE = 6.89476;
             }
         }
+        if (numberOfCurves > 2) {
+            if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
+                //PSI
+                units[2] = "(" + getString(R.string.pressure_unit_psi) + ")";
+                CONVERT_PRESSURE = 1.0;
+            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.BAR) {
+                //BAR
+                units[2] = getString(R.string.pressure_unit_bar);
+                CONVERT_PRESSURE = 0.0689476;
+            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.KPascal) {
+                //Kpascal
+                units[2] = getString(R.string.pressure_unit_kpascal);
+                CONVERT_PRESSURE = 6.89476;
+            }
+        }
         View view = inflater.inflate(R.layout.fragment_thrustcurve_info, container, false);
 
         buttonExportToCsv = (Button) view.findViewById(R.id.butExportToCsv);
@@ -134,14 +153,27 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         totalImpulseValue = view.findViewById(R.id.totalImpulseValue);
         maxPressureValue = view.findViewById(R.id.maxPressureValue);
         maxPressure = view.findViewById(R.id.maxPressure);
+        maxPressureValue2 = view.findViewById(R.id.maxPressureValue2);
+        maxPressure2 = view.findViewById(R.id.maxPressure2);
 
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
+        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
             maxPressureValue.setVisibility(View.VISIBLE);
             maxPressure.setVisibility(View.VISIBLE);
         } else {
             maxPressureValue.setVisibility(View.INVISIBLE);
             maxPressure.setVisibility(View.INVISIBLE);
+        }
+
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            maxPressureValue2.setVisibility(View.VISIBLE);
+            maxPressure2.setVisibility(View.VISIBLE);
+        } else {
+            maxPressureValue2.setVisibility(View.INVISIBLE);
+            maxPressure2.setVisibility(View.INVISIBLE);
         }
 
         XYSeriesCollection lThrustCurveData;
@@ -191,10 +223,19 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         }
 
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
             double maxPres = lThrustCurveData.getSeries(1).getMaxY();
             maxPressureValue.setText(maxPres + " PSI");
         }
+
+        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            double maxPres2 = lThrustCurveData.getSeries(2).getMaxY();
+            maxPressureValue2.setText(maxPres2 + " PSI");
+        }
+
         buttonExportToCsv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

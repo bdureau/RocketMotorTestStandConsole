@@ -52,9 +52,11 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
     private String[] units = null;
     private ArrayList<Entry> yValuesThrust;
     private ArrayList<Entry> yValuesPressure;
+    private ArrayList<Entry> yValuesPressure2;
 
     private XYSeries thrustSerie =null; //for afreeChart
     private XYSeries pressureSerie =null; //for afreeChart
+    private XYSeries pressureSerie2 =null; //for afreeChart
     private int thrustTime = 0;
     private boolean telemetry = true;
 
@@ -112,7 +114,9 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
                 case 6:
                     //Value 6 contains the current pressure
                     if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
+                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
+                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
                         if (((String) msg.obj).matches("\\d+(?:\\.\\d+)?")) {
                             int pressure = (int) (Integer.parseInt((String) msg.obj) * CONVERT_PRESSURE);
                             if ((myBT.getAppConf().getGraphicsLibType() == 0) &
@@ -130,12 +134,47 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
                             if ((thrustTime - lastPlotTime) > 1000) {
                                 lastPlotTime = thrustTime;
                                 if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                                        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
+                                        myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                                        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
+                                        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
                                     if ((myBT.getAppConf().getGraphicsLibType() == 0) &
                                             (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
                                         telemetryPage1bis.plotThrustAndPressure(thrustSerie, pressureSerie);
                                     } else {
                                         telemetryPage1.plotThrustAndPressure(yValuesThrust, yValuesPressure);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 7:
+                    //Value 7 contains the current pressure
+                    if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+                        if (((String) msg.obj).matches("\\d+(?:\\.\\d+)?")) {
+                            int pressure2 = (int) (Integer.parseInt((String) msg.obj) * CONVERT_PRESSURE);
+                            if ((myBT.getAppConf().getGraphicsLibType() == 0) &
+                                    (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
+                                telemetryPage1bis.setCurrentPressure2(" " + pressure2 + " " + units[1]);
+                            } else {
+                                telemetryPage1.setCurrentPressure2(" " + pressure2 + " " + units[1]);
+                            }
+                            // for MpChart
+                            yValuesPressure2.add(new Entry(thrustTime, pressure2));
+                            // for afreeChart
+                            pressureSerie2.add(thrustTime, pressure2);
+
+                            //plot every seconde
+                            if ((thrustTime - lastPlotTime) > 1000) {
+                                lastPlotTime = thrustTime;
+                                if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                                        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+                                    if ((myBT.getAppConf().getGraphicsLibType() == 0) &
+                                            (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
+                                        telemetryPage1bis.plotThrustAndPressure(thrustSerie, pressureSerie2);
+                                    } else {
+                                        telemetryPage1.plotThrustAndPressure(yValuesThrust, yValuesPressure2);
                                     }
                                 }
                             }
@@ -202,7 +241,9 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
         }
 
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
             if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
                 //PSI
                 units[1] = "(" + "PSI" + ")";
@@ -223,6 +264,7 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
         //for afreeChart
         thrustSerie = new XYSeries("thrust");
         pressureSerie = new XYSeries("pressure");
+        pressureSerie2 = new XYSeries("pressure2");
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
@@ -320,9 +362,6 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
 
         lastPlotTime = 0;
         myBT.initThrustCurveData();
-
-
-        //myThrustCurve = myBT.getThrustCurveData(); //for afreeChart
 
         Runnable r = new Runnable() {
 

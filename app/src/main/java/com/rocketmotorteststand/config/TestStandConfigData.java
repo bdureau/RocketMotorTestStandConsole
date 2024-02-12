@@ -26,6 +26,7 @@ public class TestStandConfigData {
     private long calibrationFactor = 0;
     private long currentOffset=0;
     private int pressureSensorType = 0;
+    private int pressureSensorType2 = 0;
     private int TelemetryType = 0;
 
     public TestStandConfigData()
@@ -113,4 +114,7 @@ public class TestStandConfigData {
     //pressureSensorType
     public void setPressureSensorType(int value) {pressureSensorType =value;}
     public int getPressureSensorType(){return pressureSensorType;}
+
+    public void setPressureSensorType2(int value) {pressureSensorType2 =value;}
+    public int getPressureSensorType2(){return pressureSensorType2;}
 }

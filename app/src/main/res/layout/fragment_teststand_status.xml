@@ -114,13 +114,27 @@
         android:text="0"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/txtViewLinkType"/>
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/current_pressure"
+        android:id="@+id/txtViewCurrentPressure2"
+        android:layout_below="@+id/txtViewCurrentPressure"
+        android:layout_alignParentLeft="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtViewCurrentPressureValue2"
+        android:text="0"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtViewCurrentPressure"/>
     <Button
         android:layout_width="69dp"
         android:layout_height="wrap_content"
         app:icon="@drawable/tare_39x30_trans"
         android:id="@+id/butTare"
-        android:layout_below="@+id/txtViewCurrentPressure"
+        android:layout_below="@+id/txtViewCurrentPressure2"
         />
 
 </RelativeLayout>

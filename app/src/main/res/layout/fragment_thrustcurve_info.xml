@@ -173,6 +173,24 @@
         android:layout_marginTop="18dp"
         android:text="N/A" />
 
+    <TextView
+        android:id="@+id/maxPressure2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/maxPressure"
+        android:layout_marginTop="18dp"
+        android:text="@string/max_pressure" />
+
+    <TextView
+        android:id="@+id/maxPressureValue2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/maxPressure"
+        android:layout_marginTop="18dp"
+        android:text="N/A" />
+
     <Button
         android:id="@+id/butExportToCsv"
         android:layout_width="wrap_content"

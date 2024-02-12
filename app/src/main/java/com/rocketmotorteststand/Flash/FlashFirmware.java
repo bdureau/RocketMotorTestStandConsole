@@ -72,17 +72,24 @@ public class FlashFirmware extends AppCompatActivity {
     private static final String ASSET_FILE_NAME_TESTSTAND = "firmwares/MotorTestStand.ino.hex";
     private static final String ASSET_FILE_NAME_TESTSTANDSTM32 = "firmwares/MotorTestStand1.5.ino.bin";
     private static final String ASSET_FILE_NAME_TESTSTANDSTM32V2 = "firmwares/MotorTestStand1.5V2.ino.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDSTM32V3 = "firmwares/MotorTestStand1.6V3.ino.bin";
 
 
     private static final String ASSET_FILE_RESET_TESTSTAND = "recover_firmwares/ResetMotorTestStand.ino.hex";
     private static final String ASSET_FILE_RESET_TESTSTANDSTM32 = "recover_firmwares/ResetMotorTestStand.ino.bin";
     private static final String ASSET_FILE_RESET_TESTSTANDSTM32V2 = "recover_firmwares/ResetMotorTestStand.ino.bin";
+    private static final String ASSET_FILE_RESET_TESTSTANDSTM32V3 = "recover_firmwares/ResetMotorTestStand.ino.bin";
 
     // ESP32
     private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE1 = "firmwares/ESP32/boot_app0.bin";
     private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE2 = "firmwares/ESP32/MotorTestStand1.5.ino.bootloader.bin";
     private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE3 = "firmwares/ESP32/MotorTestStand1.5.ino.bin";
     private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE4 = "firmwares/ESP32/MotorTestStand1.5.ino.partitions.bin";
+
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE1 = "firmwares/ESP32/boot_app0.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE2 = "firmwares/ESP32/MotorTestStand1.6V3.ino.bootloader.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE3 = "firmwares/ESP32/MotorTestStand1.6V3.ino.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE4 = "firmwares/ESP32/MotorTestStand1.6V3.ino.partitions.bin";
 
     private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE1 = "firmwares/ESP32/boot_app0.bin";
     private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE2 = "firmwares/ESP32/MotorTestStandReset.ino.bootloader.bin";
@@ -110,7 +117,9 @@ public class FlashFirmware extends AppCompatActivity {
                 "TestStand",
                 "TestStandSTM32",
                 "TestStandSTM32V2",
-                "TestStandESP32"
+                "TestStandSTM32V3",
+                "TestStandESP32",
+                "TestStandESP32V3"
         };
 
         ArrayAdapter<String> adapterFirmware = new ArrayAdapter<String>(this,
@@ -173,8 +182,12 @@ public class FlashFirmware extends AppCompatActivity {
 
                 if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2"))
                     imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandstm32v2, getApplicationContext().getTheme()));
+                if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V3"))
+                    imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandstm32v2, getApplicationContext().getTheme()));
 
                 if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32"))
+                    imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandesp32, getApplicationContext().getTheme()));
+                if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V3"))
                     imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandesp32, getApplicationContext().getTheme()));
             }
 
@@ -223,6 +236,8 @@ public class FlashFirmware extends AppCompatActivity {
 
         if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2"))
             recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32V2;
+        if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V3"))
+            recoverFileName = ASSET_FILE_RESET_TESTSTANDSTM32V2;
 
 
 
@@ -230,7 +245,8 @@ public class FlashFirmware extends AppCompatActivity {
         tvRead.setText(getResources().getString(R.string.after_complete_upload));
         //rbTestStand
         if (!itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32") &&
-                !itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2")) {
+                !itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2") &&
+                !itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V3")) {
             try {
                 builder = new AlertDialog.Builder(FlashFirmware.this);
                 //Recover firmware...
@@ -252,7 +268,8 @@ public class FlashFirmware extends AppCompatActivity {
             } catch (IOException e) {
                 //Log.e(TAG, e.toString());
             }
-        } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32")) {
+        } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32") ||
+                itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V3")) {
             recorverFirmware = true;
             new UploadESP32Asyc().execute();
         }
@@ -292,6 +309,9 @@ public class FlashFirmware extends AppCompatActivity {
         if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2"))
             firmwareFileName = ASSET_FILE_NAME_TESTSTANDSTM32V2;
 
+        if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V3"))
+            firmwareFileName = ASSET_FILE_NAME_TESTSTANDSTM32V3;
+
         tvRead.setText("");
         if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStand")) {
             try {
@@ -316,13 +336,15 @@ public class FlashFirmware extends AppCompatActivity {
             } catch (IOException e) {
                 //Log.e(TAG, e.toString());
             }
-        } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32")) {
+        } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32") ||
+                itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V3")) {
             tvRead.setText(R.string.loading_esp32_firmware);
             recorverFirmware = false;
             new UploadESP32Asyc().execute();
         }
         else if(itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32") ||
-                    itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2")){
+                itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2") ||
+                itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V3")){
             tvRead.setText(R.string.loading_stm32_firmware);
             recorverFirmware = false;
             new UploadSTM32Asyc().execute();
@@ -368,6 +390,9 @@ public class FlashFirmware extends AppCompatActivity {
             if (version.equals("TestStandSTM32V2")) {
                 spinnerFirmware.setSelection(2);
             }
+            if (version.equals("TestStandSTM32V3")) {
+                spinnerFirmware.setSelection(3);
+            }
             return null;
         }
 
@@ -405,6 +430,8 @@ public class FlashFirmware extends AppCompatActivity {
                     uploadSTM32(ASSET_FILE_NAME_TESTSTANDSTM32, mUploadSTM32Callback);
                 else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V2"))
                     uploadSTM32(ASSET_FILE_NAME_TESTSTANDSTM32V2, mUploadSTM32Callback);
+                else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandSTM32V3"))
+                    uploadSTM32(ASSET_FILE_NAME_TESTSTANDSTM32V3, mUploadSTM32Callback);
             } else {
                 uploadSTM32(ASSET_FILE_RESET_TESTSTANDSTM32, mUploadSTM32Callback);
             }
@@ -532,6 +559,11 @@ public class FlashFirmware extends AppCompatActivity {
                     firmwareFileName[1] = ASSET_FILE_NAME_TESTSTANDESP32_FILE2;
                     firmwareFileName[2] = ASSET_FILE_NAME_TESTSTANDESP32_FILE3;
                     firmwareFileName[3] = ASSET_FILE_NAME_TESTSTANDESP32_FILE4;
+                } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V3")) {
+                    firmwareFileName[0] = ASSET_FILE_NAME_TESTSTANDESP32V3_FILE1;
+                    firmwareFileName[1] = ASSET_FILE_NAME_TESTSTANDESP32V3_FILE2;
+                    firmwareFileName[2] = ASSET_FILE_NAME_TESTSTANDESP32V3_FILE3;
+                    firmwareFileName[3] = ASSET_FILE_NAME_TESTSTANDESP32V3_FILE4;
                 }
 
                 uploadESP32(firmwareFileName, mUploadSTM32Callback);

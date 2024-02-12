@@ -359,7 +359,9 @@ public class MainScreenActivity extends AppCompatActivity {
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStand") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")
         ) {
             Log.d("MainScreen", "test stand name: " + myBT.getTestStandConfigData().getTestStandName());
 
@@ -703,7 +705,9 @@ public class MainScreenActivity extends AppCompatActivity {
             //init compatible versions
             Add("TestStandSTM32V2", "1.4");
             Add("TestStandSTM32V2", "1.5");
+            Add("TestStandSTM32V3", "1.6");
             Add("TestStandESP32", "1.5");
+            Add("TestStandESP32V3", "1.6");
             Add("TestStandSTM32", "1.4");
             Add("TestStand", "1.1");
         }

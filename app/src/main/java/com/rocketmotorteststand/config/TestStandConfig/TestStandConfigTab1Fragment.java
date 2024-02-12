@@ -32,13 +32,13 @@ public class TestStandConfigTab1Fragment extends Fragment {
     private Spinner dropdownTestStandResolution, dropdownEEpromSize;
 
     private Spinner dropdownBatteryType;
-    private Spinner dropdownSensorType;
+    private Spinner dropdownSensorType, dropdownSensorType2;
     private Spinner dropdownTelemetryType;
     private EditText StopRecordingTime;
     private ConsoleApplication myBT;
 
     private boolean ViewCreated = false;
-    private TextView txtViewEEpromSize, txtViewSensorType, txtViewTelemetryType;
+    private TextView txtViewEEpromSize, txtViewSensorType, txtViewTelemetryType, txtViewSensorType2;
 
     public TestStandConfigTab1Fragment(ConsoleApplication lBT, TestStandConfigData cfg) {
         lTestStandCfg = cfg;
@@ -117,7 +117,12 @@ public class TestStandConfigTab1Fragment extends Fragment {
     public void setSensorType(int SensorType) {
         dropdownSensorType.setSelection(SensorType);
     }
-
+    public int getSensorType2() {
+        return (int) this.dropdownSensorType2.getSelectedItemId();
+    }
+    public void setSensorType2(int SensorType) {
+        dropdownSensorType2.setSelection(SensorType);
+    }
     public int getTelemetryType() {
         return (int) this.dropdownTelemetryType.getSelectedItemId();
     }
@@ -266,6 +271,24 @@ public class TestStandConfigTab1Fragment extends Fragment {
             }
         });
 
+        //second pressure sensor if available
+        txtViewSensorType2 = (TextView)  view.findViewById(R.id.txtViewSensorType2);
+        dropdownSensorType2 = (Spinner) view.findViewById(R.id.spinnerSensorType2);
+        dropdownSensorType2.setAdapter(adapterSensorType);
+        // Tool tip
+        view.findViewById(R.id.txtViewSensorType2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewTooltip
+                        .on(v)
+                        .color(Color.BLACK)
+                        .position(ViewTooltip.Position.TOP)
+                        //Enter battery type used to make sure that we do not discharge it too much
+                        .text(getResources().getString(R.string.txtViewSensorType_tooltip))
+                        .show();
+            }
+        });
+
         txtViewTelemetryType = (TextView)  view.findViewById(R.id.txtViewTelemetryType);
         dropdownTelemetryType = (Spinner) view.findViewById(R.id.spinnerTelemetryType);
         //"Unknown",
@@ -275,12 +298,22 @@ public class TestStandConfigTab1Fragment extends Fragment {
         dropdownTelemetryType.setAdapter(adapterTelemetryType);
 
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
             dropdownSensorType.setVisibility(View.VISIBLE);
             txtViewSensorType.setVisibility(View.VISIBLE);
         } else {
             dropdownSensorType.setVisibility(View.INVISIBLE);
             txtViewSensorType.setVisibility(View.INVISIBLE);
+        }
+        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")){
+            dropdownSensorType2.setVisibility(View.VISIBLE);
+            txtViewSensorType2.setVisibility(View.VISIBLE);
+        } else {
+            dropdownSensorType2.setVisibility(View.INVISIBLE);
+            txtViewSensorType2.setVisibility(View.INVISIBLE);
         }
         if (lTestStandCfg != null) {
             dropdownBaudRate.setSelection(lTestStandCfg.arrayIndex(itemsBaudRate,
@@ -294,6 +327,7 @@ public class TestStandConfigTab1Fragment extends Fragment {
 
             dropdownBatteryType.setSelection(lTestStandCfg.getBatteryType());
             dropdownSensorType.setSelection(lTestStandCfg.getPressureSensorType());
+            dropdownSensorType2.setSelection(lTestStandCfg.getPressureSensorType2());
             dropdownTelemetryType.setSelection(lTestStandCfg.getTelemetryType());
         }
         ViewCreated = true;

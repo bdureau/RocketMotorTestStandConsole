@@ -132,6 +132,24 @@ public class ThrustCurveViewMpFragment extends Fragment {
                                 allThrustCurveData.getSeries(i).getY(k).floatValue() * CONVERT_PRESSURE));
                     }
                 }
+                //second pressure
+                if (i == 2) {
+                    float CONVERT_PRESSURE = 1.0f;
+                    if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
+                        //PSI
+                        CONVERT_PRESSURE = 1.0f;
+                    } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.BAR) {
+                        //bar divide by 14.504
+                        CONVERT_PRESSURE =  1.0f/14.504f;
+                    } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.KPascal) {
+                        //K pascal multiply by 6.895
+                        CONVERT_PRESSURE = (float) 6.895;
+                    }
+                    for (int k = 0; k < nbrData; k++) {
+                        yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(),
+                                allThrustCurveData.getSeries(i).getY(k).floatValue() * CONVERT_PRESSURE));
+                    }
+                }
 
                 LineDataSet set1 = new LineDataSet(yValues, "Time");
                 set1.setColor(colors[i]);
@@ -195,6 +213,27 @@ public class ThrustCurveViewMpFragment extends Fragment {
                     }
                 }
                 if (i == 1) {
+                    if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
+                        float CONVERT_PRESSURE = 1.0f;
+                        if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
+                            //PSI
+                            CONVERT_PRESSURE = 1.0f;
+                        } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.BAR) {
+                            //bar divide by 14.504
+                            CONVERT_PRESSURE = 1.0f / 14.504f;
+                        } else if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.KPascal) {
+                            //K pascal multiply by 6.895
+                            CONVERT_PRESSURE = (float) 6.895;
+                        }
+                        for (int k = curveStart; k < curveStop; k++) {
+                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue()
+                                    - allThrustCurveData.getSeries(i).getX(curveStart).floatValue(),
+                                    (allThrustCurveData.getSeries(i).getY(k).floatValue() ) * CONVERT_PRESSURE));
+                        }
+                    }
+                }
+
+                if (i == 2) {
                     if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
                         float CONVERT_PRESSURE = 1.0f;
                         if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {

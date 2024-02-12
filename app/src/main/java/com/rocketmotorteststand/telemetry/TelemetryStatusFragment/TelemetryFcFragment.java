@@ -31,7 +31,7 @@ import org.afree.graphics.geom.Font;
 
 public class TelemetryFcFragment extends Fragment {
     private ConsoleApplication myBT;
-    private TextView txtCurrentThrust, txtCurrentPressure;
+    private TextView txtCurrentThrust, txtCurrentPressure, txtCurrentPressure2;
     private boolean ViewCreated = false;
 
     private String [] units;
@@ -46,6 +46,10 @@ public class TelemetryFcFragment extends Fragment {
     public void setCurrentPressure(String value) {
         if(ViewCreated)
             txtCurrentPressure.setText(value);
+    }
+    public void setCurrentPressure2(String value) {
+        if(ViewCreated)
+            txtCurrentPressure2.setText(value);
     }
     public TelemetryFcFragment(ConsoleApplication pBT, String [] pUnits) {
         myBT = pBT;
@@ -63,6 +67,7 @@ public class TelemetryFcFragment extends Fragment {
 
         txtCurrentThrust = (TextView) view.findViewById(R.id.textViewCurrentThrust);
         txtCurrentPressure = (TextView) view.findViewById(R.id.textViewCurrentPressure);
+        txtCurrentPressure2 = (TextView) view.findViewById(R.id.textViewCurrentPressure2);
 
         int graphBackColor = myBT.getAppConf().ConvertColor(myBT.getAppConf().getGraphBackColor());
 
