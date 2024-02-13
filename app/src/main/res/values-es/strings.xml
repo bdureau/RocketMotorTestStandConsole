@@ -343,9 +343,9 @@
     <string name="calibration_title">Calibration</string>
     <string name="cancel_calibration">Cancel</string>
     <string name="curve_pressure">Pressure</string>
-    <string name="max_pressure">Max pressure</string>
+    <string name="max_pressure">Max pressure CH1</string>
     <string name="export_to_csv_full">Export to csv Full</string>
-    <string name="sensor_type">Sensor type</string>
+    <string name="sensor_type">CH1 Sensor type</string>
     <string name="zoom">Zoom</string>
     <string name="map">Map</string>
     <string name="recording">Recording</string>
@@ -394,7 +394,7 @@
     <string name="calibration_weight_warning">Warning</string>
     <string name="calibration_weight_ok">OK</string>
     <string name="allow_manual_recording">Allow manual Recording</string>
-    <string name="current_pressure">Current pressure</string>
+    <string name="current_pressure_ch1">Current pressure CH1:</string>
     <string name="firmware">Firmware:</string>
     <string name="flash_speed_baud">Flash speed(Baud):</string>
     <string name="firmware_info">Firmware info</string>
@@ -428,4 +428,10 @@
     <string name="connection_via_usb_ok">Connection via usb OK</string>
     <string name="do_you_want_to_connect_to_module">"Do you want to connect to module "</string>
     <string name="no">No</string>
+    <string name="pressure_ch1">Pressure (CH1):</string>
+    <string name="pressure_ch2">Pressure (CH2):</string>
+    <string name="ch2_sensor_type">CH2 Sensor type</string>
+    <string name="current_pressure_ch2">Current pressure CH2:</string>
+    <string name="curve_pressure_ch2">Pressure CH2</string>
+    <string name="max_pressure_ch2">Max pressure CH2</string>
 </resources>

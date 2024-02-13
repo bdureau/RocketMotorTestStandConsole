@@ -151,7 +151,7 @@ public class ThrustCurveData {
             Log.d("numberOfCurves", "Adding curve pressure in data" );
         }
         if(testStandName.equals("TestStandSTM32V3") || testStandName.equals("TestStandESP32V3")) {
-            ret.addSeries(new XYSeries("pressure2"));
+            ret.addSeries(new XYSeries(context.getString(R.string.curve_pressure_ch2)));
             Log.d("numberOfCurves", "Adding curve pressure2 in data" );
         }
         return ret;

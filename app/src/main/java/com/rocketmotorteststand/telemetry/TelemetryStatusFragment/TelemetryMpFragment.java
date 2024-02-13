@@ -90,8 +90,8 @@ public class TelemetryMpFragment extends Fragment {
         yValuesPressure2.add(new Entry(0, 0));
 
         LineDataSet set1 = new LineDataSet(yValuesThrust, getString(R.string.telemetry_thrust));
-        LineDataSet set2 = new LineDataSet(yValuesThrust, "Pressure");
-        LineDataSet set3 = new LineDataSet(yValuesThrust, "Pressure2");
+        LineDataSet set2 = new LineDataSet(yValuesThrust, getString(R.string.curve_pressure));
+        LineDataSet set3 = new LineDataSet(yValuesThrust, getString(R.string.curve_pressure_ch2));
         set1.setValueTextColor(labelColor);
         set1.setValueTextSize(fontSize);
 
@@ -152,9 +152,23 @@ public class TelemetryMpFragment extends Fragment {
         set2.setValueTextColor(Color.BLACK);
         set2.setColor(Color.BLUE);
         //set2.setValueTextSize(fontSize);
+        LineDataSet set3 =null;
+        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+          myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            set3 = new LineDataSet(yValuesPressure, "pressure (" + units[2] +")/Time");
+            set3.setDrawValues(false);
+            set3.setDrawCircles(false);
+            set3.setLabel("pressure");
+            set3.setValueTextColor(Color.BLACK);
+            set3.setColor(Color.GREEN);
+        }
         dataSets.clear();
         dataSets.add(set1);
         dataSets.add(set2);
+        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            dataSets.add(set3);
+        }
         data = new LineData(dataSets);
         mChart.clear();
         mChart.setData(data);

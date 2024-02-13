@@ -180,7 +180,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/maxPressure"
         android:layout_marginTop="18dp"
-        android:text="@string/max_pressure" />
+        android:text="@string/max_pressure_ch2" />
 
     <TextView
         android:id="@+id/maxPressureValue2"
@@ -196,7 +196,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/maxPressure"
+        android:layout_below="@+id/maxPressure2"
         android:text="@string/export_to_csv" />
 
     <Button
@@ -204,7 +204,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/maxPressure"
+        android:layout_below="@+id/maxPressure2"
         android:text="@string/export_to_eng" />
     <Button
         android:id="@+id/butExportToCsvFull"

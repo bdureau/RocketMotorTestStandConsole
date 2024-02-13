@@ -354,6 +354,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             TestStandCfg.setBatteryType(configPage2.getBatteryType());
             TestStandCfg.setPressureSensorType(configPage2.getSensorType());
             TestStandCfg.setTelemetryType(configPage2.getTelemetryType());
+            TestStandCfg.setPressureSensorType2(configPage2.getSensorType2());
         }
 
         if (configPage3.isViewCreated()) {
@@ -436,6 +437,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
         SendParam("p,10,"+ TestStandCfg.getPressureSensorType());
         SendParam("p,11,"+ TestStandCfg.getTelemetryType());
+        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            SendParam("p,12," + TestStandCfg.getPressureSensorType2());
+        }
 
         if (myBT.getConnected()) {
             String myMessage = "";

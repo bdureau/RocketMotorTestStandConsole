@@ -349,10 +349,10 @@
     <string name="calibration_msg">Calibration en cours...</string>
     <string name="calibration_title">Calibration</string>
     <string name="cancel_calibration">Annuller</string>
-    <string name="curve_pressure">Pression</string>
-    <string name="max_pressure">Pression Max</string>
+    <string name="curve_pressure">Pression Canal1</string>
+    <string name="max_pressure">Pression Max Canal1</string>
     <string name="export_to_csv_full">Export csv complet</string>
-    <string name="sensor_type">Type de capteur</string>
+    <string name="sensor_type">Type de capteur canal1</string>
     <string name="zoom">Zoom</string>
     <string name="map">Carte</string>
     <string name="recording">Enregistrement</string>
@@ -402,7 +402,7 @@
     <string name="calibration_weight_warning">Attention</string>
     <string name="calibration_weight_ok">OK</string>
     <string name="allow_manual_recording">Autoriser l\'enregistrement manuel</string>
-    <string name="current_pressure">Pression</string>
+    <string name="current_pressure_ch1">Pression Canal1:</string>
     <string name="firmware">Firmware:</string>
     <string name="flash_speed_baud">Vitesse Flash(Baud):</string>
     <string name="firmware_info">Info Firmware</string>
@@ -436,4 +436,10 @@
     <string name="connection_via_usb_ok">Connexion via usb OK</string>
     <string name="do_you_want_to_connect_to_module">"Voulez vous vous connecter au module "</string>
     <string name="no">Non</string>
+    <string name="pressure_ch1">Pression (Canal1):</string>
+    <string name="pressure_ch2">Pression (Canal2):</string>
+    <string name="ch2_sensor_type">Type de capteur canal2</string>
+    <string name="current_pressure_ch2">Pression Canal2:</string>
+    <string name="curve_pressure_ch2">Pression Canal2</string>
+    <string name="max_pressure_ch2">Pression Max Canal2</string>
 </resources>

@@ -145,7 +145,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:layout_below="@+id/txtViewTelemetryType"
-        android:text="@string/sensor_type" />
+        android:text="@string/ch2_sensor_type" />
 
     <Spinner
         android:id="@+id/spinnerSensorType2"

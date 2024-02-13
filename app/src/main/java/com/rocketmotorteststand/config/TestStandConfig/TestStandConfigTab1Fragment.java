@@ -28,12 +28,9 @@ public class TestStandConfigTab1Fragment extends Fragment {
     private String[] itemsSensorType;
     private String[] itemsTelemetryType;
     private Spinner dropdownBaudRate;
-
     private Spinner dropdownTestStandResolution, dropdownEEpromSize;
-
-    private Spinner dropdownBatteryType;
     private Spinner dropdownSensorType, dropdownSensorType2;
-    private Spinner dropdownTelemetryType;
+    private Spinner dropdownTelemetryType,dropdownBatteryType;
     private EditText StopRecordingTime;
     private ConsoleApplication myBT;
 
@@ -274,7 +271,9 @@ public class TestStandConfigTab1Fragment extends Fragment {
         //second pressure sensor if available
         txtViewSensorType2 = (TextView)  view.findViewById(R.id.txtViewSensorType2);
         dropdownSensorType2 = (Spinner) view.findViewById(R.id.spinnerSensorType2);
-        dropdownSensorType2.setAdapter(adapterSensorType);
+        ArrayAdapter<String> adapterSensorType2 = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, itemsSensorType);
+        dropdownSensorType2.setAdapter(adapterSensorType2);
         // Tool tip
         view.findViewById(R.id.txtViewSensorType2).setOnClickListener(new View.OnClickListener() {
             @Override
