@@ -434,4 +434,7 @@
     <string name="current_pressure_ch2">Current pressure CH2:</string>
     <string name="curve_pressure_ch2">Pressure CH2</string>
     <string name="max_pressure_ch2">Max pressure CH2</string>
+    <string name="telemetry_thrust_time">Thrust/Time</string>
+    <string name="telemetry_pressure">Pressure</string>
+    <string name="telemetry_time">Time</string>
 </resources>

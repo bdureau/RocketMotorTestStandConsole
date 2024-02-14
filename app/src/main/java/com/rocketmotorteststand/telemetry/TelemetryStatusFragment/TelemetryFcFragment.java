@@ -31,7 +31,7 @@ import org.afree.graphics.geom.Font;
 
 public class TelemetryFcFragment extends Fragment {
     private ConsoleApplication myBT;
-    private TextView txtCurrentThrust, txtCurrentPressure, txtCurrentPressure2;
+    private TextView txtCurrentThrust, txtCurrentPressure, txtCurrentPressure2, textViewlblCurrentPressure2;
     private boolean ViewCreated = false;
 
     private String [] units;
@@ -69,6 +69,14 @@ public class TelemetryFcFragment extends Fragment {
         txtCurrentPressure = (TextView) view.findViewById(R.id.textViewCurrentPressure);
         txtCurrentPressure2 = (TextView) view.findViewById(R.id.textViewCurrentPressure2);
 
+        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            txtCurrentPressure2.setVisibility(View.VISIBLE);
+            textViewlblCurrentPressure2.setVisibility(View.VISIBLE);
+        } else {
+            txtCurrentPressure2.setVisibility(View.INVISIBLE);
+            textViewlblCurrentPressure2.setVisibility(View.INVISIBLE);
+        }
         int graphBackColor = myBT.getAppConf().ConvertColor(myBT.getAppConf().getGraphBackColor());
 
         int fontSize = myBT.getAppConf().ConvertFont(myBT.getAppConf().getFontSize());
@@ -92,7 +100,7 @@ public class TelemetryFcFragment extends Fragment {
 
         } else {
             title = "Thrust and pressure / time";
-            yLabel = getResources().getString(R.string.Thrust) + " (" + units[0] + ") " + "Pressure" + " (" + units[1] + ") ";
+            yLabel = getResources().getString(R.string.Thrust) + " (" + units[0] + ") " + getString(R.string.telemetry_pressure) + " (" + units[1] + ") ";
         }
 
         AFreeChart chart = ChartFactory.createXYLineChart(
@@ -157,10 +165,14 @@ public class TelemetryFcFragment extends Fragment {
         plot.setDataset(0, thrustCurveData);
     }
 
-    public void plotThrustAndPressure(XYSeries curveThrustData, XYSeries curvePressureData) {
+    public void plotThrustAndPressure(XYSeries curveThrustData, XYSeries curvePressureData, XYSeries curvePressureData2) {
         XYSeriesCollection thrustCurveData = new XYSeriesCollection();
         thrustCurveData.addSeries(curveThrustData);
         thrustCurveData.addSeries(curvePressureData);
+        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            thrustCurveData.addSeries(curvePressureData2);
+        }
         plot.setDataset(0, thrustCurveData);
     }
 }

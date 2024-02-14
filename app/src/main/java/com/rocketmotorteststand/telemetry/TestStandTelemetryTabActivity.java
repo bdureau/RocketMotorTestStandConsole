@@ -139,9 +139,9 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
                                         myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
                                     if ((myBT.getAppConf().getGraphicsLibType() == 0) &
                                             (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
-                                        telemetryPage1bis.plotThrustAndPressure(thrustSerie, pressureSerie);
+                                        telemetryPage1bis.plotThrustAndPressure(thrustSerie, pressureSerie, pressureSerie2);
                                     } else {
-                                        telemetryPage1.plotThrustAndPressure(yValuesThrust, yValuesPressure);
+                                        telemetryPage1.plotThrustAndPressure(yValuesThrust, yValuesPressure, yValuesPressure2);
                                     }
                                 }
                             }
@@ -172,9 +172,9 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
                                         myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
                                     if ((myBT.getAppConf().getGraphicsLibType() == 0) &
                                             (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O)) {
-                                        telemetryPage1bis.plotThrustAndPressure(thrustSerie, pressureSerie2);
+                                        telemetryPage1bis.plotThrustAndPressure(thrustSerie, pressureSerie,pressureSerie2);
                                     } else {
-                                        telemetryPage1.plotThrustAndPressure(yValuesThrust, yValuesPressure2);
+                                        telemetryPage1.plotThrustAndPressure(yValuesThrust, yValuesPressure, yValuesPressure2);
                                     }
                                 }
                             }

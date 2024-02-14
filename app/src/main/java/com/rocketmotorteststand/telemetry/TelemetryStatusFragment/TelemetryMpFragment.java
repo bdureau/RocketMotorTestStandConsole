@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class TelemetryMpFragment extends Fragment {
     private ConsoleApplication myBT;
     private boolean ViewCreated = false;
-    private TextView txtCurrentThrust, txtCurrentPressure, txtCurrentPressure2;
+    private TextView txtCurrentThrust, txtCurrentPressure, txtCurrentPressure2, textViewlblCurrentPressure2;
     private LineChart mChart;
     LineData data;
     private double CONVERT = 1;
@@ -68,6 +68,16 @@ public class TelemetryMpFragment extends Fragment {
         txtCurrentThrust = (TextView) view.findViewById(R.id.textViewCurrentThrust);
         txtCurrentPressure = (TextView) view.findViewById(R.id.textViewCurrentPressure);
         txtCurrentPressure2 = (TextView) view.findViewById(R.id.textViewCurrentPressure2);
+        textViewlblCurrentPressure2 = (TextView) view.findViewById(R.id.textViewlblCurrentPressure2);
+
+        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            txtCurrentPressure2.setVisibility(View.VISIBLE);
+            textViewlblCurrentPressure2.setVisibility(View.VISIBLE);
+        } else {
+            txtCurrentPressure2.setVisibility(View.INVISIBLE);
+            textViewlblCurrentPressure2.setVisibility(View.INVISIBLE);
+        }
 
         graphBackColor = myBT.getAppConf().ConvertColor(myBT.getAppConf().getGraphBackColor());
         fontSize = myBT.getAppConf().ConvertFont(myBT.getAppConf().getFontSize());
@@ -86,24 +96,32 @@ public class TelemetryMpFragment extends Fragment {
         yValuesThrust.add(new Entry(0, 0));
         yValuesPressure = new ArrayList<>();
         yValuesPressure.add(new Entry(0, 0));
+
         yValuesPressure2 = new ArrayList<>();
         yValuesPressure2.add(new Entry(0, 0));
 
         LineDataSet set1 = new LineDataSet(yValuesThrust, getString(R.string.telemetry_thrust));
         LineDataSet set2 = new LineDataSet(yValuesThrust, getString(R.string.curve_pressure));
-        LineDataSet set3 = new LineDataSet(yValuesThrust, getString(R.string.curve_pressure_ch2));
+
+
+
         set1.setValueTextColor(labelColor);
         set1.setValueTextSize(fontSize);
 
         set2.setValueTextColor(labelColor);
         set2.setValueTextSize(fontSize);
 
-        set3.setValueTextColor(labelColor);
-        set3.setValueTextSize(fontSize);
+
 
         dataSets.add(set1);
         dataSets.add(set2);
-        dataSets.add(set3);
+        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            LineDataSet set3 = new LineDataSet(yValuesThrust, getString(R.string.curve_pressure_ch2));
+            set3.setValueTextColor(labelColor);
+            set3.setValueTextSize(fontSize);
+            dataSets.add(set3);
+        }
 
         LineData data = new LineData(dataSets);
         mChart.setData(data);
@@ -118,7 +136,7 @@ public class TelemetryMpFragment extends Fragment {
 
 
     public void plotThrust(ArrayList<Entry> yValuesThrust) {
-        LineDataSet set1 = new LineDataSet(yValuesThrust, "Thrust/Time");
+        LineDataSet set1 = new LineDataSet(yValuesThrust, getString(R.string.telemetry_thrust_time));
         set1.setDrawValues(false);
         set1.setDrawCircles(false);
         set1.setLabel("Thrust");
@@ -136,29 +154,29 @@ public class TelemetryMpFragment extends Fragment {
         this.mChart.setData(this.data);
     }
 
-    public void plotThrustAndPressure(ArrayList<Entry> yValuesThrust,ArrayList<Entry> yValuesPressure ) {
-        LineDataSet set1 = new LineDataSet(yValuesThrust, "Thrust (" + units[0] +")/Time");
+    public void plotThrustAndPressure(ArrayList<Entry> yValuesThrust,ArrayList<Entry> yValuesPressure, ArrayList<Entry> yValuesPressure2  ) {
+        LineDataSet set1 = new LineDataSet(yValuesThrust, getResources().getString(R.string.Thrust)  +" (" + units[0] +")/" + getString(R.string.telemetry_time));
         set1.setDrawValues(false);
         set1.setDrawCircles(false);
-        set1.setLabel("Thrust");
+        set1.setLabel(getResources().getString(R.string.Thrust));
         set1.setValueTextColor(Color.BLACK);
         set1.setColor(Color.RED);
         //set1.setValueTextSize(fontSize);
 
-        LineDataSet set2 = new LineDataSet(yValuesPressure, "pressure (" + units[1] +")/Time");
+        LineDataSet set2 = new LineDataSet(yValuesPressure, getString(R.string.telemetry_pressure) +" (" + units[1] +")/" +getString(R.string.telemetry_time));
         set2.setDrawValues(false);
         set2.setDrawCircles(false);
-        set2.setLabel("pressure");
+        set2.setLabel(getString(R.string.telemetry_pressure));
         set2.setValueTextColor(Color.BLACK);
         set2.setColor(Color.BLUE);
         //set2.setValueTextSize(fontSize);
         LineDataSet set3 =null;
         if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
           myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-            set3 = new LineDataSet(yValuesPressure, "pressure (" + units[2] +")/Time");
+            set3 = new LineDataSet(yValuesPressure2, getString(R.string.telemetry_pressure) + " (" + units[2] +")/" +getString(R.string.telemetry_time));
             set3.setDrawValues(false);
             set3.setDrawCircles(false);
-            set3.setLabel("pressure");
+            set3.setLabel(getString(R.string.telemetry_pressure));
             set3.setValueTextColor(Color.BLACK);
             set3.setColor(Color.GREEN);
         }
