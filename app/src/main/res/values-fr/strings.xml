@@ -442,7 +442,7 @@
     <string name="current_pressure_ch2">Pression Canal2:</string>
     <string name="curve_pressure_ch2">Pression Canal2</string>
     <string name="max_pressure_ch2">Pression Max Canal2</string>
-    <string name="telemetry_thrust_time">Thrust/Time</string>
-    <string name="telemetry_pressure">Pressure</string>
-    <string name="telemetry_time">Time</string>
+    <string name="telemetry_thrust_time">Poussée/Temps</string>
+    <string name="telemetry_pressure">Pression</string>
+    <string name="telemetry_time">Temps</string>
 </resources>

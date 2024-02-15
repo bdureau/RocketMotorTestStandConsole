@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -115,7 +116,13 @@ public class MainScreenActivity extends AppCompatActivity {
         filter.addAction(ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-        registerReceiver(broadcastReceiver, filter);
+        //registerReceiver(broadcastReceiver, filter);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            registerReceiver(broadcastReceiver, filter, RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(broadcastReceiver, filter);
+        }
 
         // cards
         btnTestStandSettings = (CardView) findViewById(R.id.settings_card);
@@ -246,7 +253,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
                         builder = new AlertDialog.Builder(MainScreenActivity.this);
                         if (address != null) {
-                            builder.setMessage(getString(R.string.do_you_want_to_connect_to_module) + myBT.getModuleName())
+                            builder.setMessage(getString(R.string.do_you_want_to_connect_to_module) + myBT.getModuleName()+ "?")
                                     .setTitle("")
                                     .setCancelable(false)
                                     .setPositiveButton(getResources().getString(R.string.Yes), new DialogInterface.OnClickListener() {
