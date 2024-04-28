@@ -151,6 +151,24 @@ public class ThrustCurveViewMpFragment extends Fragment {
                     }
                 }
 
+                if (i == 3) {
+                    float CONVERT =1.0f;
+                    if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.KG) {
+                        //kg
+                        CONVERT =1.0f;
+                    } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.POUNDS) {
+                        //pound
+                        CONVERT =(float) 2.20462;
+                    } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.NEWTONS) {
+                        //newton
+                        CONVERT =(float) 9.80665;
+                    }
+                    for (int k = 0; k < nbrData; k++) {
+                        yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue(),
+                                (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * CONVERT));
+                    }
+                }
+
                 LineDataSet set1 = new LineDataSet(yValues, "Time");
                 set1.setColor(colors[i]);
 
@@ -254,6 +272,26 @@ public class ThrustCurveViewMpFragment extends Fragment {
                     }
                 }
 
+                if (i == 3) {
+                    if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
+                        float CONVERT = 1;
+                        if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.KG) {
+                            //kg
+                            CONVERT = 1;
+                        } else if (myBT.getAppConf().getUnits()==GlobalConfig.ThrustUnits.POUNDS) {
+                            //pound
+                            CONVERT = 2.20462f;
+                        } else if (myBT.getAppConf().getUnits()==GlobalConfig.ThrustUnits.NEWTONS) {
+                            //newton
+                            CONVERT = 9.80665f;
+                        }
+                        for (int k = curveStart; k < curveStop; k++) {
+                            yValues.add(new Entry(allThrustCurveData.getSeries(i).getX(k).floatValue()
+                                    - allThrustCurveData.getSeries(i).getX(curveStart).floatValue(),
+                                    (allThrustCurveData.getSeries(i).getY(k).floatValue() / 1000) * CONVERT));
+                        }
+                    }
+                }
                 LineDataSet set1 = new LineDataSet(yValues, getResources().getString(R.string.unit_time));
                 set1.setColor(colors[i]);
 

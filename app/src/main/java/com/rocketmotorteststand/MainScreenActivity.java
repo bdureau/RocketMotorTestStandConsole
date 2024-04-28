@@ -710,12 +710,12 @@ public class MainScreenActivity extends AppCompatActivity {
             hm =null;
             hm = new HashMap();
             //init compatible versions
-            Add("TestStandSTM32V2", "1.4");
+            Add("TestStandSTM32", "1.7");
             Add("TestStandSTM32V2", "1.5");
-            Add("TestStandSTM32V3", "1.6");
-            Add("TestStandESP32", "1.5");
-            Add("TestStandESP32V3", "1.6");
-            Add("TestStandSTM32", "1.4");
+            Add("TestStandSTM32V2", "1.6");
+            Add("TestStandSTM32V3", "1.7");
+            Add("TestStandESP32", "1.7");
+            Add("TestStandESP32V3", "1.7");
             Add("TestStand", "1.1");
         }
         public void Add ( String altiName, String verList) {

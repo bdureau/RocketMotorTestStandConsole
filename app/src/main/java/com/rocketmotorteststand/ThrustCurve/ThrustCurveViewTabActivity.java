@@ -137,7 +137,7 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         }
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-            numberOfCurves = 3;
+            numberOfCurves = 4;
         }
 
         Intent newint = getIntent();

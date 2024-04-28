@@ -606,6 +606,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             myBT.clearInput();
 
             myBT.write("c"+configPage3.getCalibrationWeight()+";");
+            Log.d("conftab", "c"+configPage3.getCalibrationWeight()+";");
             //wait for ok and put the result back
             String myMessage = "";
 

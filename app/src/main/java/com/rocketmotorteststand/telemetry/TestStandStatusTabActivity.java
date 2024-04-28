@@ -61,7 +61,7 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
                     if (thrust.matches("\\d+(?:\\.\\d+)?")) {
                         double temp;
                         temp = Double.parseDouble(thrust);
-                        thrust = String.format("%.2f", (temp ) * CONVERT);
+                        thrust = String.format("%.4f", (temp ) * CONVERT);
                     }
                     statusPage1.setThrust(thrust + " " + units[0]);
                     break;
@@ -180,7 +180,7 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
         }
 
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
             if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {

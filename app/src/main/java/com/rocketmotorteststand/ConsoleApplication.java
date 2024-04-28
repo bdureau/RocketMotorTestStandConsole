@@ -483,7 +483,7 @@ public class ConsoleApplication extends Application {
                                     // Value 3 contain the thrust
                                     // value 4 contain the casing pressure
                                     // To do
-                                    long value2 = 0, value3 = 0, value4 = 0, value5;
+                                    long value2 = 0, value3 = 0, value4 = 0, value5=0, value6=0;
                                     if (currentSentence.length > 2)
                                         if (currentSentence[2].matches("\\d+(?:\\.\\d+)?"))
                                             value2 = Long.valueOf(currentSentence[2]);
@@ -523,6 +523,15 @@ public class ConsoleApplication extends Application {
                                             //add the casing pressure
                                             MyThrustCurve.AddToThrustCurve(value2,
                                                     (long) (value5), thrustCurveName, 2);
+                                        }
+                                        if (currentSentence.length > 6) {
+                                            if (currentSentence[6].matches("\\d+(?:\\.\\d+)?"))
+                                                value6 = Long.valueOf(currentSentence[6]);
+                                            else
+                                                value6 = 0;
+                                            //add the filtered thrust
+                                            MyThrustCurve.AddToThrustCurve(value2,
+                                                    (long) (value6), thrustCurveName, 3);
                                         }
                                     }
                                 }
