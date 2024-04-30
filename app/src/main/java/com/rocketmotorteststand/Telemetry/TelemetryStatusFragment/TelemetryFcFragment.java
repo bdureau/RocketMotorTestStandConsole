@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.telemetry.TelemetryStatusFragment;
+package com.rocketmotorteststand.Telemetry.TelemetryStatusFragment;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
-import com.rocketmotorteststand.ThrustCurve.ThrustCurveData;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveView.ChartView;
 
 import org.afree.chart.AFreeChart;

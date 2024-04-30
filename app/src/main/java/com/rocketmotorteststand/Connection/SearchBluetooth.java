@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.connection;
+package com.rocketmotorteststand.Connection;
 /**
  *   @description:  This is to select the bluetooth module.
  *

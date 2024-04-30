@@ -26,19 +26,19 @@ import android.widget.Toast;
 
 import com.rocketmotorteststand.Flash.FlashFirmware;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveListActivity;
-import com.rocketmotorteststand.config.ConfigModules.Config3DR;
-import com.rocketmotorteststand.config.ConfigModules.ConfigBT;
-import com.rocketmotorteststand.config.ConfigModules.ConfigLoraE220;
-import com.rocketmotorteststand.config.ConfigModules.ConfigLoraE32;
-import com.rocketmotorteststand.config.TestStandConfigData;
-import com.rocketmotorteststand.config.TestStandTabConfigActivity;
-import com.rocketmotorteststand.config.AppConfigTabActivity;
+import com.rocketmotorteststand.Config.ConfigModules.Config3DR;
+import com.rocketmotorteststand.Config.ConfigModules.ConfigBT;
+import com.rocketmotorteststand.Config.ConfigModules.ConfigLoraE220;
+import com.rocketmotorteststand.Config.ConfigModules.ConfigLoraE32;
+import com.rocketmotorteststand.Config.TestStandConfigData;
+import com.rocketmotorteststand.Config.TestStandTabConfigActivity;
+import com.rocketmotorteststand.Config.AppConfigTabActivity;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
-import com.rocketmotorteststand.connection.SearchBluetooth;
-import com.rocketmotorteststand.connection.TestConnection;
-import com.rocketmotorteststand.telemetry.TestStandStatusTabActivity;
-import com.rocketmotorteststand.telemetry.TestStandTelemetryTabActivity;
+import com.rocketmotorteststand.Connection.SearchBluetooth;
+import com.rocketmotorteststand.Connection.TestConnection;
+import com.rocketmotorteststand.Telemetry.TestStandStatusTabActivity;
+import com.rocketmotorteststand.Telemetry.TestStandTelemetryTabActivity;
 
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.telemetry;
+package com.rocketmotorteststand.Telemetry;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,8 +29,8 @@ import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
 import com.rocketmotorteststand.ShareHandler;
-import com.rocketmotorteststand.telemetry.TelemetryStatusFragment.TelemetryFcFragment;
-import com.rocketmotorteststand.telemetry.TelemetryStatusFragment.TelemetryMpFragment;
+import com.rocketmotorteststand.Telemetry.TelemetryStatusFragment.TelemetryFcFragment;
+import com.rocketmotorteststand.Telemetry.TelemetryStatusFragment.TelemetryMpFragment;
 import org.afree.data.xy.XYSeries;
 import java.io.IOException;
 import java.util.ArrayList;

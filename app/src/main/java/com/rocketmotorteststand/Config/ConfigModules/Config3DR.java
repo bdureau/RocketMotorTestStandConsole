@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.config.ConfigModules;
+package com.rocketmotorteststand.Config.ConfigModules;
 
 
 import androidx.appcompat.app.AppCompatActivity;

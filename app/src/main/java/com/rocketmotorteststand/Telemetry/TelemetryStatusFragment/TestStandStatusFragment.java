@@ -1,8 +1,7 @@
-package com.rocketmotorteststand.telemetry.TelemetryStatusFragment;
+package com.rocketmotorteststand.Telemetry.TelemetryStatusFragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

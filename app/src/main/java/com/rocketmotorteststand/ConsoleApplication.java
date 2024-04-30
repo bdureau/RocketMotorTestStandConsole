@@ -6,20 +6,16 @@ package com.rocketmotorteststand;
 
 import android.app.Application;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Handler;
 import android.util.Log;
 
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveData;
-import com.rocketmotorteststand.config.TestStandConfigData;
-import com.rocketmotorteststand.config.AppConfigData;
-import com.rocketmotorteststand.connection.BluetoothConnection;
-import com.rocketmotorteststand.connection.UsbConnection;
+import com.rocketmotorteststand.Config.TestStandConfigData;
+import com.rocketmotorteststand.Connection.BluetoothConnection;
+import com.rocketmotorteststand.Connection.UsbConnection;
 
 import java.io.IOException;
 import java.io.InputStream;

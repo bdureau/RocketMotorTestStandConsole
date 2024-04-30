@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.telemetry.TelemetryStatusFragment;
+package com.rocketmotorteststand.Telemetry.TelemetryStatusFragment;
 
 import android.graphics.Color;
 import android.os.Bundle;

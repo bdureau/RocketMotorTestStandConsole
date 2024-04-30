@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.config.AppConfig;
+package com.rocketmotorteststand.Config.AppConfig;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
-import com.rocketmotorteststand.config.AppConfigData;
+import com.rocketmotorteststand.Config.AppConfigData;
 
 public class AppConfigTab1Fragment extends Fragment {
     private Spinner spAppLanguage, spGraphColor, spAppUnit, spAppUnitPressure, spGraphBackColor,

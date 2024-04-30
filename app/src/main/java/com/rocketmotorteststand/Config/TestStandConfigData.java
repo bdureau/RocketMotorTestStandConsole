@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.config;
+package com.rocketmotorteststand.Config;
 
 /**
  *

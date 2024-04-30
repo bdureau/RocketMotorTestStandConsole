@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.config.AppConfig;
+package com.rocketmotorteststand.Config.AppConfig;
 
 import android.os.Build;
 import android.os.Bundle;

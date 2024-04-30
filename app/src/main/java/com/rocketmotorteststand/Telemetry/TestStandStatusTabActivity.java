@@ -1,7 +1,5 @@
-package com.rocketmotorteststand.telemetry;
+package com.rocketmotorteststand.Telemetry;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,10 +27,9 @@ import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
 import com.rocketmotorteststand.ShareHandler;
-import com.rocketmotorteststand.telemetry.TelemetryStatusFragment.TestStandStatusFragment;
+import com.rocketmotorteststand.Telemetry.TelemetryStatusFragment.TestStandStatusFragment;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
