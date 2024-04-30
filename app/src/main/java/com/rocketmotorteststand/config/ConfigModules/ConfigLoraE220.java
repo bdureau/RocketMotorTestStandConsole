@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.Config.ConfigModules;
+package com.rocketmotorteststand.config.ConfigModules;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,7 +24,7 @@ import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
 import com.physicaloid.lib.Physicaloid;
 import com.rocketmotorteststand.ShareHandler;
-import com.rocketmotorteststand.Config.AppConfigTabActivity;
+import com.rocketmotorteststand.config.AppConfigTabActivity;
 
 import java.nio.ByteBuffer;
 

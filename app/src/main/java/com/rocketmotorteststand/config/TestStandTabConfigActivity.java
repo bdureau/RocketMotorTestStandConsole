@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.Config;
+package com.rocketmotorteststand.config;
 /**
  * @description: Retrieve test stand configuration and show it in tabs
  * The user can then load it back to the test stand
@@ -46,8 +46,8 @@ import java.util.List;
 
 //tooltip library
 import com.rocketmotorteststand.ShareHandler;
-import com.rocketmotorteststand.Config.TestStandConfig.TestStandConfigTab1Fragment;
-import com.rocketmotorteststand.Config.TestStandConfig.TestStandConfigTab2Fragment;
+import com.rocketmotorteststand.config.TestStandConfig.TestStandConfigTab1Fragment;
+import com.rocketmotorteststand.config.TestStandConfig.TestStandConfigTab2Fragment;
 
 
 public class TestStandTabConfigActivity extends AppCompatActivity {

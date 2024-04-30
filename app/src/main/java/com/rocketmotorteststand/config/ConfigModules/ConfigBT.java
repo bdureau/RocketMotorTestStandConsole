@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.Config.ConfigModules;
+package com.rocketmotorteststand.config.ConfigModules;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,7 +28,7 @@ import com.rocketmotorteststand.R;
 import com.physicaloid.lib.Physicaloid;
 import com.physicaloid.lib.usb.driver.uart.UartConfig;
 import com.rocketmotorteststand.ShareHandler;
-import com.rocketmotorteststand.Config.AppConfigTabActivity;
+import com.rocketmotorteststand.config.AppConfigTabActivity;
 
 
 public class ConfigBT extends AppCompatActivity {

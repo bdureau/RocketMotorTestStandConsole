@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.Config.TestStandConfig;
+package com.rocketmotorteststand.config.TestStandConfig;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.github.florent37.viewtooltip.ViewTooltip;
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
-import com.rocketmotorteststand.Config.TestStandConfigData;
+import com.rocketmotorteststand.config.TestStandConfigData;
 
 public class TestStandConfigTab1Fragment extends Fragment {
     private static final String TAG = "Tab2Fragment";

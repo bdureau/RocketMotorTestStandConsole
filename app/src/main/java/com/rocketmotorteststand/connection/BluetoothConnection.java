@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.Connection;
+package com.rocketmotorteststand.connection;
 /**
  *
  *   @description: This class has all the methods to deal with your bluetooth connection

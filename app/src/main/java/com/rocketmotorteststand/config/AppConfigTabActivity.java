@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.Config;
+package com.rocketmotorteststand.config;
 /**
  * @description: In this activity you should be able to choose the application languages and looks and feel.
  * Still a lot to do but it is a good start
@@ -24,7 +24,7 @@ import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
 import com.rocketmotorteststand.ShareHandler;
-import com.rocketmotorteststand.Config.AppConfig.AppConfigTab1Fragment;
+import com.rocketmotorteststand.config.AppConfig.AppConfigTab1Fragment;
 
 import java.util.ArrayList;
 import java.util.List;

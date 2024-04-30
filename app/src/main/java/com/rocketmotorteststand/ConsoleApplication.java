@@ -13,9 +13,9 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveData;
-import com.rocketmotorteststand.Config.TestStandConfigData;
-import com.rocketmotorteststand.Connection.BluetoothConnection;
-import com.rocketmotorteststand.Connection.UsbConnection;
+import com.rocketmotorteststand.config.TestStandConfigData;
+import com.rocketmotorteststand.connection.BluetoothConnection;
+import com.rocketmotorteststand.connection.UsbConnection;
 
 import java.io.IOException;
 import java.io.InputStream;

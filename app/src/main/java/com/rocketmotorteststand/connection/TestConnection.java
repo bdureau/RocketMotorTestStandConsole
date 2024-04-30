@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.Connection;
+package com.rocketmotorteststand.connection;
 
 import androidx.appcompat.app.AppCompatActivity;
 

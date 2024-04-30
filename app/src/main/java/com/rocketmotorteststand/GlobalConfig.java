@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
-import com.rocketmotorteststand.Config.AppConfigData;
+import com.rocketmotorteststand.config.AppConfigData;
 
 public class GlobalConfig {
     Context context;

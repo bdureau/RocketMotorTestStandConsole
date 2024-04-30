@@ -1,4 +1,4 @@
-package com.rocketmotorteststand.Connection;
+package com.rocketmotorteststand.connection;
 /**
  *
  *   @description: This is the USB connection class. Not that the input stream has been overwritten
