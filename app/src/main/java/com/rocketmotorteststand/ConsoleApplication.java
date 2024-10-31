@@ -40,11 +40,10 @@ public class ConsoleApplication extends Application {
     public long lastReceived = 0;
     public String commandRet = "";
 
-    // private double FEET_IN_METER = 1;
     private boolean exit = false;
     private GlobalConfig AppConf = null;
     private String address, moduleName;
-    private String myTypeOfConnection = "bluetooth";// "USB";//"bluetooth";
+    private String myTypeOfConnection = "bluetooth";
 
     private BluetoothConnection BTCon = null;
     private UsbConnection UsbCon = null;
@@ -641,6 +640,15 @@ public class ConsoleApplication extends Application {
                                                 TestStandCfg.setPressureSensorType2(Integer.valueOf(currentSentence[15]));
                                             else
                                                 TestStandCfg.setPressureSensorType2(0);
+                                    if (currentSentence[2].equals("TestStandESP32"))
+                                        if (currentSentence.length > 15)
+                                            TestStandCfg.setBluetoothName(currentSentence[15]);
+
+                                    if (currentSentence[2].equals("TestStandESP32V3"))
+                                        if (currentSentence.length > 16)
+                                            TestStandCfg.setBluetoothName(currentSentence[16]);
+
+
                                     myMessage = myMessage + " " + "teststandconfig";
                                 } else {
                                     myMessage = myMessage + "KO" + "teststandconfig";

@@ -58,7 +58,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     private TestStandConfigTab1Fragment configPage2 = null;
     private TestStandConfigTab2Fragment configPage3 = null;
     private Button btnDismiss, btnUpload, btnCalibrate;
-    private  ConsoleApplication myBT;
+    private ConsoleApplication myBT;
     private TestStandConfigData TestStandCfg = null;
     private ProgressDialog progress;
     private AlertDialog alert;
@@ -355,12 +355,14 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             TestStandCfg.setPressureSensorType(configPage2.getSensorType());
             TestStandCfg.setTelemetryType(configPage2.getTelemetryType());
             TestStandCfg.setPressureSensorType2(configPage2.getSensorType2());
+
         }
 
         if (configPage3.isViewCreated()) {
             TestStandCfg.setUnits(configPage3.getDropdownUnits());
             TestStandCfg.setCalibrationFactor(configPage3.getCalibrationFactor());
             TestStandCfg.setCurrentOffset(configPage3.getCurrentOffset());
+            TestStandCfg.setBluetoothName(configPage3.getBluetoothName());
         }
 
         if (configPage2.isViewCreated()) {
@@ -440,6 +442,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
         if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
             SendParam("p,12," + TestStandCfg.getPressureSensorType2());
+        }
+        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+            SendParam("z,"+TestStandCfg.getBluetoothName());
         }
 
         if (myBT.getConnected()) {

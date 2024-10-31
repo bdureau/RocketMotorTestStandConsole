@@ -49,6 +49,7 @@ import java.util.Set;
 
 public class MainScreenActivity extends AppCompatActivity {
     private String address = null;
+    public String TAG = "MainScreenActivity";
     private CardView btnTestStandSettings, btnReadThrustCurves, btnConnectDisconnect, btnReset;
     private CardView btnTelemetry, btnStatus, btnFlashFirmware, btnAbout;
     private ImageView image_settings, image_curve, image_telemetry, image_reset, image_status, image_firmware,
@@ -707,15 +708,15 @@ public class MainScreenActivity extends AppCompatActivity {
         // Create a hash map
         public HashMap<String, String> hm;
         FirmwareCompatibility() {
-            hm =null;
+            hm = null;
             hm = new HashMap();
             //init compatible versions
             Add("TestStandSTM32", "1.7");
-            Add("TestStandSTM32V2", "1.5");
-            Add("TestStandSTM32V2", "1.6");
+            //Add("TestStandSTM32V2", "1.5");
+            Add("TestStandSTM32V2", "1.5,1.6");
             Add("TestStandSTM32V3", "1.7");
-            Add("TestStandESP32", "1.7");
-            Add("TestStandESP32V3", "1.7");
+            Add("TestStandESP32", "1.7,1.8");
+            Add("TestStandESP32V3", "1.7,1.8");
             Add("TestStand", "1.1");
         }
         public void Add ( String altiName, String verList) {
@@ -723,6 +724,38 @@ public class MainScreenActivity extends AppCompatActivity {
         }
 
         public boolean IsCompatible(String altiName,String ver) {
+            boolean compatible = false;
+            String compatFirmwareList="";
+
+            Log.d(TAG, "Check compatibility");
+
+            Set set = hm.entrySet();
+
+            // Get an iterator
+            Iterator i = set.iterator();
+            while(i.hasNext()) {
+                Map.Entry me = (Map.Entry)i.next();
+
+                Log.d(TAG,"key:" + me.getKey().toString());
+                if (me.getKey().equals(altiName)){
+                    Log.d(TAG,"name:" +altiName);
+                    compatFirmwareList = me.getValue().toString();
+                    Log.d(TAG,"version:" +me.getValue().toString());
+                    break;
+
+                }
+            }
+            String firmwareVersion[] = compatFirmwareList.split(",");
+            for (int j = 0; j < firmwareVersion.length; j++ ){
+                if(firmwareVersion[j].equals(ver)) {
+                    compatible = true;
+                    Log.d(TAG,"compatible");
+                }
+            }
+
+            return compatible;
+        }
+        /*public boolean IsCompatible(String altiName,String ver) {
             boolean compatible = false;
             String compatFirmwareList="";
             Set set = hm.entrySet();
@@ -743,6 +776,6 @@ public class MainScreenActivity extends AppCompatActivity {
                     compatible = true;
             }
             return compatible;
-        }
+        }*/
     }
 }

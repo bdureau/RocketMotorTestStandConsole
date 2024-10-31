@@ -4,10 +4,8 @@ plugins {
 
 android {
     compileSdk 35
-//buildToolsVersion "34.0.0"
     defaultConfig {
         applicationId "com.rocketmotorteststand"
-        //minSdkVersion 21
         minSdk 21
         targetSdk 34
         versionCode 17

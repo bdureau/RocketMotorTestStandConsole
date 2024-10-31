@@ -28,6 +28,7 @@ public class TestStandConfigData {
     private int pressureSensorType = 0;
     private int pressureSensorType2 = 0;
     private int TelemetryType = 0;
+    private String bluetoothName;
 
     public TestStandConfigData()
     {
@@ -117,4 +118,8 @@ public class TestStandConfigData {
 
     public void setPressureSensorType2(int value) {pressureSensorType2 =value;}
     public int getPressureSensorType2(){return pressureSensorType2;}
+
+    //bluetoothName
+    public void setBluetoothName(String value) { bluetoothName = value;}
+    public String getBluetoothName() {return bluetoothName;}
 }

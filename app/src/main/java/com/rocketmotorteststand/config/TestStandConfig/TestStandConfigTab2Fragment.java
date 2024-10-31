@@ -2,6 +2,7 @@ package com.rocketmotorteststand.config.TestStandConfig;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +21,9 @@ import com.rocketmotorteststand.config.TestStandConfigData;
 public class TestStandConfigTab2Fragment extends Fragment {
     private static final String TAG = "Tab3Fragment";
 
-    private TextView testStandName,  CalibrationFactor, CurrentOffset;
+    private TextView testStandName,  CalibrationFactor, CurrentOffset, txtBluetoothName;
     private Spinner dropdownUnits;
-    private EditText calibrationWeight;
+    private EditText calibrationWeight, bluetoothName;
 
 
     private TestStandConfigData ltestStandNameCfg = null;
@@ -84,6 +85,9 @@ public class TestStandConfigTab2Fragment extends Fragment {
     public String getCalibrationWeight() {
         return this.calibrationWeight.getText().toString();
     }
+
+    public String getBluetoothName() { return this.bluetoothName.getText().toString();}
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -125,6 +129,22 @@ public class TestStandConfigTab2Fragment extends Fragment {
             dropdownUnits.setSelection(ltestStandNameCfg.getUnits());
             CalibrationFactor.setText(String.valueOf(ltestStandNameCfg.getCalibrationFactor()));
             CurrentOffset.setText(String.valueOf(ltestStandNameCfg.getCurrentOffset()));
+        }
+
+        //bluetoothName
+        //testand name
+        txtBluetoothName = (TextView) view.findViewById(R.id.txtBluetoothName);
+        bluetoothName = (EditText) view.findViewById(R.id.editBluetoothName);
+        bluetoothName.setText(ltestStandNameCfg.getBluetoothName());
+        if ((ltestStandNameCfg.getTestStandName().equals("TestStandESP32") ||
+                ltestStandNameCfg.getTestStandName().equals("TestStandESP32V3")  &&
+                (ltestStandNameCfg.getTestStandMajorVersion() >= 1 && ltestStandNameCfg.getTestStandMinorVersion() > 7))) {
+            Log.d( TAG, "Version greater  than 1.7");
+            txtBluetoothName.setVisibility(View.VISIBLE);
+            bluetoothName.setVisibility(View.VISIBLE);
+        } else {
+            txtBluetoothName.setVisibility(View.INVISIBLE);
+            bluetoothName.setVisibility(View.INVISIBLE);
         }
         ViewCreated = true;
         return view;

@@ -82,14 +82,14 @@ public class FlashFirmware extends AppCompatActivity {
 
     // ESP32
     private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE1 = "firmwares/ESP32/boot_app0.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE2 = "firmwares/ESP32/MotorTestStand1.7.ino.bootloader.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE3 = "firmwares/ESP32/MotorTestStand1.7.ino.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE4 = "firmwares/ESP32/MotorTestStand1.7.ino.partitions.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE2 = "firmwares/ESP32/MotorTestStand1.8.ino.bootloader.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE3 = "firmwares/ESP32/MotorTestStand1.8.ino.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE4 = "firmwares/ESP32/MotorTestStand1.8.ino.partitions.bin";
 
     private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE1 = "firmwares/ESP32/boot_app0.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE2 = "firmwares/ESP32/MotorTestStand1.7V3.ino.bootloader.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE3 = "firmwares/ESP32/MotorTestStand1.7V3.ino.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE4 = "firmwares/ESP32/MotorTestStand1.7V3.ino.partitions.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE2 = "firmwares/ESP32/MotorTestStand1.8V3.ino.bootloader.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE3 = "firmwares/ESP32/MotorTestStand1.8V3.ino.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE4 = "firmwares/ESP32/MotorTestStand1.8V3.ino.partitions.bin";
 
     private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE1 = "recover_firmwares/ESP32/boot_app0.bin";
     private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE2 = "recover_firmwares/ESP32/MotorTestStandReset.ino.bootloader.bin";
