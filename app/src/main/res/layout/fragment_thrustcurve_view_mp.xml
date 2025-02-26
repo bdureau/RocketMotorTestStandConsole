@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ThrustCurve.ThrustCurveView.ThrustCurveViewActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".ThrustCurve.ThrustCurveView.ThrustCurveViewMpFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
