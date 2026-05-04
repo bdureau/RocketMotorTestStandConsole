@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdk 36
+    compileSdk 37
     defaultConfig {
         applicationId "com.rocketmotorteststand"
         minSdk 21
-        targetSdk 36
-        versionCode 19
-        versionName '2.0.9'
+        targetSdk 37
+        versionCode 20
+        versionName '2.0.20'
         multiDexEnabled true
         //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -20,12 +20,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        buildConfig true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
     namespace 'com.rocketmotorteststand'
     buildToolsVersion '36.0.0 rc4'
+    compileSdkMinor 0
 }
 
 dependencies {

@@ -224,7 +224,7 @@ public class ConsoleApplication extends Application {
 
         String myMessage = "";
         long timeOut = 10000;
-        long startTime = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
         long diffTime = 0;
         //get the results
         //wait for the result to come back
