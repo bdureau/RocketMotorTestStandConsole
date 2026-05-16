@@ -9,6 +9,7 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -213,7 +214,7 @@ public class TestStandTelemetryTabActivity extends AppCompatActivity {
         myBT.setHandler(handler);
 
         setContentView(R.layout.activity_teststand_tab_telemetry);
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //prevent the phone screen to switch off when in telemetry
         dismissButton = (Button) findViewById(R.id.butDismiss);
 
 
