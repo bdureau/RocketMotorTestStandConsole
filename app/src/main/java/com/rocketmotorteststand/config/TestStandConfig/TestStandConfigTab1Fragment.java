@@ -299,7 +299,8 @@ public class TestStandConfigTab1Fragment extends Fragment {
         if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V4")) {
             dropdownSensorType.setVisibility(View.VISIBLE);
             txtViewSensorType.setVisibility(View.VISIBLE);
         } else {
@@ -307,7 +308,8 @@ public class TestStandConfigTab1Fragment extends Fragment {
             txtViewSensorType.setVisibility(View.INVISIBLE);
         }
         if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")){
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V4")){
             dropdownSensorType2.setVisibility(View.VISIBLE);
             txtViewSensorType2.setVisibility(View.VISIBLE);
         } else {

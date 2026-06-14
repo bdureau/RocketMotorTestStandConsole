@@ -179,6 +179,7 @@ public class ThrustCurveListActivity extends AppCompatActivity {
 
                 myThrustCurve = myBT.getThrustCurveData();
                 thrustCurveNames = myThrustCurve.getAllThrustCurveNames2();
+                //Log.d("Thrust curve List", "thrustCurveNames:"+ thrustCurveNames.get(0));
                 if (canceled) {
                     //order the names in the collection
                     Collections.sort(thrustCurveNames);

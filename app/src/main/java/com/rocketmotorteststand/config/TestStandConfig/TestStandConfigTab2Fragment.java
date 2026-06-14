@@ -137,7 +137,8 @@ public class TestStandConfigTab2Fragment extends Fragment {
         bluetoothName = (EditText) view.findViewById(R.id.editBluetoothName);
         bluetoothName.setText(ltestStandNameCfg.getBluetoothName());
         if ((ltestStandNameCfg.getTestStandName().equals("TestStandESP32") ||
-                ltestStandNameCfg.getTestStandName().equals("TestStandESP32V3")  &&
+                ltestStandNameCfg.getTestStandName().equals("TestStandESP32V3") ||
+                ltestStandNameCfg.getTestStandName().equals("TestStandESP32V4")  &&
                 (ltestStandNameCfg.getTestStandMajorVersion() >= 1 && ltestStandNameCfg.getTestStandMinorVersion() > 7))) {
             Log.d( TAG, "Version greater  than 1.7");
             txtBluetoothName.setVisibility(View.VISIBLE);

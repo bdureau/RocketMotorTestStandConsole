@@ -369,6 +369,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
+                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V4") ||
                 myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")
         ) {
             Log.d("MainScreen", "test stand name: " + myBT.getTestStandConfigData().getTestStandName());
@@ -711,12 +712,13 @@ public class MainScreenActivity extends AppCompatActivity {
             hm = null;
             hm = new HashMap();
             //init compatible versions
-            Add("TestStandSTM32", "1.7");
+            Add("TestStandSTM32", "1.7,1.8,1.9");
             //Add("TestStandSTM32V2", "1.5");
-            Add("TestStandSTM32V2", "1.5,1.6");
-            Add("TestStandSTM32V3", "1.7");
-            Add("TestStandESP32", "1.7,1.8");
-            Add("TestStandESP32V3", "1.7,1.8");
+            Add("TestStandSTM32V2", "1.5,1.6,1.7,1.8,1.9");
+            Add("TestStandSTM32V3", "1.7,1.8,1.9");
+            Add("TestStandESP32", "1.7,1.8,1.9");
+            Add("TestStandESP32V3", "1.7,1.8,1.9");
+            Add("TestStandESP32V4", "1.9");
             Add("TestStand", "1.1");
         }
         public void Add ( String altiName, String verList) {

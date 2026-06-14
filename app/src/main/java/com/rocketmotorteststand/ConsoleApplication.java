@@ -445,7 +445,8 @@ public class ConsoleApplication extends Application {
                                                 mHandler.obtainMessage(6, String.valueOf(0)).sendToTarget();
                                         }
                                         if (getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                                                getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+                                                getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
+                                                getTestStandConfigData().getTestStandName().equals("TestStandESP32V4")) {
                                             //value 7 contains the current pressure from the second sensor
                                             if (currentSentence.length > 7) {
                                                 if (currentSentence[7].trim().matches("\\d+(?:\\.\\d+)?")) {
@@ -462,6 +463,7 @@ public class ConsoleApplication extends Application {
                                 if (currentSentence[currentSentence.length - 1].matches("^-?[0-9]\\d+(?:\\.\\d+)?"))
                                     chk = Long.valueOf(currentSentence[currentSentence.length - 1]);
                                 String thrustCurveName = "Thrust CurveXX";
+                                Log.d("TestStand console", "chk:"+chk);
                                 if (calculateSentenceCHK(currentSentence) == chk) {
                                     // Value 1 contain the thrust curve number
                                     if (currentSentence.length > 1)
@@ -473,6 +475,7 @@ public class ConsoleApplication extends Application {
                                             else
                                                 //thrust curve
                                                 thrustCurveName = getResources().getString(R.string.thrustcurve_name) + " " + currentThrustCurveNbr;
+                                            Log.d("TestStand console", "thrustCurveName:"+thrustCurveName);
                                         }
                                     // Value 2 contain the time
                                     // Value 3 contain the thrust
@@ -497,7 +500,8 @@ public class ConsoleApplication extends Application {
                                     if (getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
                                             getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
                                             getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
-                                            getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+                                            getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
+                                            getTestStandConfigData().getTestStandName().equals("TestStandESP32V4")) {
                                         if (currentSentence.length > 4) {
                                             if (currentSentence[4].matches("\\d+(?:\\.\\d+)?"))
                                                 value4 = Long.valueOf(currentSentence[4]);
@@ -509,7 +513,8 @@ public class ConsoleApplication extends Application {
                                         }
                                     }
                                     if (getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                                            getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+                                            getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
+                                            getTestStandConfigData().getTestStandName().equals("TestStandESP32V4")) {
                                         if (currentSentence.length > 5) {
                                             if (currentSentence[5].matches("\\d+(?:\\.\\d+)?"))
                                                 value5 = Long.valueOf(currentSentence[5]);
@@ -633,7 +638,8 @@ public class ConsoleApplication extends Application {
 
                                     // value 15 contains pressure sensor type
                                     if (currentSentence[2].equals("TestStandSTM32V3") ||
-                                            currentSentence[2].equals("TestStandESP32V3")
+                                            currentSentence[2].equals("TestStandESP32V3") ||
+                                            currentSentence[2].equals("TestStandESP32V4")
                                     )
                                         if (currentSentence.length > 15)
                                             if (currentSentence[15].matches("\\d+(?:\\.\\d+)?"))
@@ -644,7 +650,9 @@ public class ConsoleApplication extends Application {
                                         if (currentSentence.length > 15)
                                             TestStandCfg.setBluetoothName(currentSentence[15]);
 
-                                    if (currentSentence[2].equals("TestStandESP32V3"))
+                                    if (currentSentence[2].equals("TestStandESP32V3") ||
+                                        currentSentence[2].equals("TestStandESP32V4")
+                                    )
                                         if (currentSentence.length > 16)
                                             TestStandCfg.setBluetoothName(currentSentence[16]);
 
