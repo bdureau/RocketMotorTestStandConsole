@@ -82,15 +82,19 @@ public class FlashFirmware extends AppCompatActivity {
 
     // ESP32
     private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE1 = "firmwares/ESP32/boot_app0.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE2 = "firmwares/ESP32/MotorTestStand1.8.ino.bootloader.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE3 = "firmwares/ESP32/MotorTestStand1.8.ino.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE4 = "firmwares/ESP32/MotorTestStand1.8.ino.partitions.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE2 = "firmwares/ESP32/MotorTestStand1.9.ino.bootloader.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE3 = "firmwares/ESP32/MotorTestStand1.9.ino.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32_FILE4 = "firmwares/ESP32/MotorTestStand1.9.ino.partitions.bin";
 
     private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE1 = "firmwares/ESP32/boot_app0.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE2 = "firmwares/ESP32/MotorTestStand1.8V3.ino.bootloader.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE3 = "firmwares/ESP32/MotorTestStand1.8V3.ino.bin";
-    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE4 = "firmwares/ESP32/MotorTestStand1.8V3.ino.partitions.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE2 = "firmwares/ESP32/MotorTestStand1.9V3.ino.bootloader.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE3 = "firmwares/ESP32/MotorTestStand1.9V3.ino.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V3_FILE4 = "firmwares/ESP32/MotorTestStand1.9V3.ino.partitions.bin";
 
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V4_FILE1 = "firmwares/ESP32/boot_app0.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V4_FILE2 = "firmwares/ESP32/MotorTestStand1.9V4.ino.bootloader.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V4_FILE3 = "firmwares/ESP32/MotorTestStand1.9V4.ino.bin";
+    private static final String ASSET_FILE_NAME_TESTSTANDESP32V4_FILE4 = "firmwares/ESP32/MotorTestStand1.9V4.ino.partitions.bin";
     private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE1 = "recover_firmwares/ESP32/boot_app0.bin";
     private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE2 = "recover_firmwares/ESP32/MotorTestStandReset.ino.bootloader.bin";
     private static final String ASSET_FILE_RESET_TESTSTANDESP32_FILE3 = "recover_firmwares/ESP32/MotorTestStandReset.ino.bin";
@@ -119,7 +123,8 @@ public class FlashFirmware extends AppCompatActivity {
                 "TestStandSTM32V2",
                 "TestStandSTM32V3",
                 "TestStandESP32",
-                "TestStandESP32V3"
+                "TestStandESP32V3",
+                "TestStandESP32V4"
         };
 
         ArrayAdapter<String> adapterFirmware = new ArrayAdapter<String>(this,
@@ -188,6 +193,8 @@ public class FlashFirmware extends AppCompatActivity {
                 if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32"))
                     imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandesp32, getApplicationContext().getTheme()));
                 if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V3"))
+                    imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandesp32, getApplicationContext().getTheme()));
+                if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V4"))
                     imageTestStand.setImageDrawable(getResources().getDrawable(R.drawable.teststandesp32, getApplicationContext().getTheme()));
             }
 
@@ -269,7 +276,8 @@ public class FlashFirmware extends AppCompatActivity {
                 //Log.e(TAG, e.toString());
             }
         } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32") ||
-                itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V3")) {
+                itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V3") ||
+                itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V4")) {
             recorverFirmware = true;
             new UploadESP32Asyc().execute();
         }
@@ -337,7 +345,8 @@ public class FlashFirmware extends AppCompatActivity {
                 //Log.e(TAG, e.toString());
             }
         } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32") ||
-                itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V3")) {
+                itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V3") ||
+                itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V4")) {
             tvRead.setText(R.string.loading_esp32_firmware);
             recorverFirmware = false;
             new UploadESP32Asyc().execute();
@@ -564,6 +573,11 @@ public class FlashFirmware extends AppCompatActivity {
                     firmwareFileName[1] = ASSET_FILE_NAME_TESTSTANDESP32V3_FILE2;
                     firmwareFileName[2] = ASSET_FILE_NAME_TESTSTANDESP32V3_FILE3;
                     firmwareFileName[3] = ASSET_FILE_NAME_TESTSTANDESP32V3_FILE4;
+                } else if (itemsFirmwares[(int) spinnerFirmware.getSelectedItemId()].equals("TestStandESP32V4")) {
+                    firmwareFileName[0] = ASSET_FILE_NAME_TESTSTANDESP32V4_FILE1;
+                    firmwareFileName[1] = ASSET_FILE_NAME_TESTSTANDESP32V4_FILE2;
+                    firmwareFileName[2] = ASSET_FILE_NAME_TESTSTANDESP32V4_FILE3;
+                    firmwareFileName[3] = ASSET_FILE_NAME_TESTSTANDESP32V4_FILE4;
                 }
 
                 uploadESP32(firmwareFileName, mUploadSTM32Callback);
