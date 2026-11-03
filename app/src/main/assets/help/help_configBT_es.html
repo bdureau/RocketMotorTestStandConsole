@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .step-item { margin-bottom: 12px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Configuración del módulo Bluetooth</h1>
+
+<p>Para conectar su altímetro a su teléfono mediante Bluetooth, primero necesitará configurar el módulo para que funcione a la misma velocidad que la placa de su altímetro.</p>
+
+<p>Esta pantalla le ayudará a configurar módulos compatibles como <strong>HC-05, HC-06, etc.</strong></p>
+
+<p><img src="file:///android_asset/help/images/bluetooth_module.jpg" alt="Módulo Bluetooth"/></p>
+
+<h2>Material necesario</h2>
+<ul>
+    <li>Un cable adaptador USB a serie TTL.<br/>
+        <img src="file:///android_asset/help/images/ttl_cable-small.jpg" alt="Cable TTL"/>
+    </li>
+    <li>Un adaptador USB (USB-C o Micro-USB según su dispositivo Android).<br/>
+        <img src="file:///android_asset/help/images/usb_adpter-small.jpg" alt="Adaptador USB"/>
+    </li>
+    <li>Un adaptador JST y cables de conexión JST.</li>
+</ul>
+
+<h2>Alineación de la velocidad en baudios</h2>
+<p>Tenga en cuenta que estos módulos suelen venir preconfigurados a <strong>9600 baudios</strong>. Sin embargo, su placa altímetro funciona por defecto a <strong>38400 baudios</strong>, por lo que deberá asegurarse de conectarse a la velocidad correcta.</p>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; PRECAUCIÓN</div>
+    <div>Asegúrese de no desconectar el módulo ni el cable mientras realiza las siguientes operaciones.</div>
+</div>
+
+<h2>Procedimiento de configuración</h2>
+<ol>
+    <li class="step-item">
+        <strong>Conexión física:</strong> Conecte el módulo a su dispositivo Android utilizando el cable TTL y el adaptador USB OTG.
+    </li>
+    <li class="step-item">
+        <strong>Selección del módulo:</strong> Seleccione el tipo de módulo Bluetooth que tiene. Si no sabe cuál es, elija el predeterminado o cualquier otro modelo compatible. Si ninguno funciona, envíe fotos y referencias del módulo al soporte.
+    </li>
+    <li class="step-item">
+        <strong>Recuperar configuración:</strong> Pulse en <strong>[Recuperar cfg]</strong>. La aplicación intentará conectarse inicialmente a 38400 baudios. Si falla, vuelva a intentarlo: probará varias velocidades hasta conectarse y cargar los parámetros actuales.
+    </li>
+    <li class="step-item">
+        <strong>Guardar configuración:</strong> Cambie los parámetros deseados como el nombre del módulo, PIN o velocidad. Asegúrese de haber seleccionado una velocidad compatible con su placa (habitualmente 38400 baudios) y pulse en <strong>[Guardar cfg]</strong>. Si ocurre algún error, el guardado se cancelará de forma segura.
+    </li>
+</ol>
+
+<div class="info-box">
+    <strong>Nota:</strong> Deberá repetir estos mismos pasos para cada módulo Bluetooth que desee configurar.
+</div>
+
+</body>
+</html>

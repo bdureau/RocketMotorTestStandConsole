@@ -1,49 +1,109 @@
-<h1>Flash firmware</h1>
-<p>First you need to select the firmware. The firmware depend on the Test Stand that you want to flash</p>
-<p>Then decide if you want to directly flash your firmware or use a recovery firmware first</p>
-<p>Use a recovery firmware if the config is wrong and the Test Stand can no longer connect.</p>
-<p>After using a recover firmware you will need to flash the firmware.</p>
-<p>Note that flashing the wrong firmware will result in a Test Stand not working at all or not working as expected</p>
-<p>In order to be able to flash your Test Stand you will need a USB cable and an adapter to plug it to your phone.</p>
-<p></p>
-<p>The following Test Stand can be flashed, please make sure that your carefully look at the pictures to identify your Test Stand</p>
-<p><strong>ATMega328 Test Stand</strong> (Large version)</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        h3 { font-size: 1.05em; color: #37474F; margin-top: 14px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .hardware-item { margin-bottom: 12px; }
+        .step-item { margin-bottom: 10px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
 
-<p><strong>STM32 Test Stand V1</strong></p>
-<p><img  src="file:///android_asset/help/images/testStandV1-small.jpg"/></p>
-<p><strong>STM32 Test Stand V2</strong></p>
-<p><img  src="file:///android_asset/help/images/testStandV2-small-1.jpg"/></p>
-<p><strong>ESP32 Test Stand</strong></p>
-<p><img  src="file:///android_asset/help/images/testStandESP32-small.jpg"/></p>
-<p></p>
-<p>Alternatively you can attempt to detect the firmware.</p>
-<p>At the time of writing, 3 types of Test Stand exists, the ATMega328 based Test Stand, the STM32 based Test Stand and ESP32 based TestStand. </p>
-<p><strong>Flashing ATMega328 based Test Stand </strong></p>
-<p>- Plug the cable</p>
-<p>- Select the correct firmware or detect it. </p>
-<p>- Press and release the reset button on the Test Stand and press the [flash firmware] button</p>
-<p><img  src="file:///android_asset/help/images/alti-reset.jpg"/></p>
-<p></p>
-<p><strong>Flashing STM32 based Test Stand </strong></p>
-<p>- Plug the cable</p>
-<p>- Select the correct firmware or detect it</p>
-<p>- Move the boot0 jumper to the right</p>
-<p><img  src="file:///android_asset/help/images/stm32-prog2-small.jpg"/></p>
-<p>- Press the reset button </p>
-<p>- Press the [flash firmware] button</p>
-<p>- Move the boot0 jumper back to the left</p>
-<p><img  src="file:///android_asset/help/images/stm32-prog1-small.jpg"/></p>
-<p>&nbsp;</p>
-<p><strong>Flashing ESP32 based Test Stand </strong></p>
-<p>- Plug the cable</p>
-<p>- Select the correct firmware or detect it</p>
-<p>- Press and maintain the top switch </p>
-<p><img  src="file:///android_asset/help/images/testStandESP32-top-switch.jpg"/></p>
-<p>- Press the briefly the bottom switch while maintaining the top one</p>
-<p><img  src="file:///android_asset/help/images/testStandESP32-bottom-switch.jpg"/></p>
-<p>- Then release the top switch</p>
-<p>- Press the [flash firmware] button</p>
+<h1>Flash Firmware</h1>
 
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p>First, you need to select the firmware. The firmware depends on the specific Test Stand board you want to flash.</p>
+<p>Then decide if you want to directly flash the operational firmware or use a recovery firmware first.</p>
+
+<div class="info-box">
+    <strong>Recovery Firmware:</strong> Use a recovery firmware if the board configuration is corrupted and the Test Stand can no longer connect. After loading a recovery firmware, you will need to re-flash the operational firmware.
+</div>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; CAUTION</div>
+    <div>Flashing the wrong firmware will result in a Test Stand not working at all or not behaving as expected.</div>
+</div>
+
+<h2>Required Hardware</h2>
+<p>To flash your Test Stand, you will need a USB-TTL cable and an OTG adapter (USB-C or Micro-USB) to connect it to your Android device.</p>
+
+<h2>Supported Test Stands</h2>
+<p>Please examine the pictures below carefully to identify your Test Stand board:</p>
+
+<div class="hardware-item">
+    <p>&bull; <strong>ATMega328 Test Stand</strong> (Large version)</p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>STM32 Test Stand V1</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="STM32 Test Stand V1"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>STM32 Test Stand V2</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="STM32 Test Stand V2"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>ESP32 Test Stand</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandESP32-small.jpg" alt="ESP32 Test Stand"/></p>
+</div>
+
+<h2>Flashing Instructions by Board Architecture</h2>
+<p>Alternatively, you can attempt to automatically detect the connected firmware.</p>
+
+<h3>1. ATMega328 Based Test Stand</h3>
+<ul>
+    <li>Connect the USB cable.</li>
+    <li>Select the correct firmware or auto-detect it.</li>
+    <li>Press and release the <strong>reset</strong> button on the Test Stand, then tap the <strong>[Flash Firmware]</strong> button.</li>
+</ul>
+<p><img src="file:///android_asset/help/images/alti-reset.jpg" alt="ATMega328 Reset Button"/></p>
+
+<h3>2. STM32 Based Test Stand</h3>
+<ul>
+    <li>Connect the USB cable.</li>
+    <li>Select the correct firmware or auto-detect it.</li>
+    <li>Move the <strong>BOOT0</strong> jumper to the right (programming position):</li>
+</ul>
+<p><img src="file:///android_asset/help/images/stm32-prog2-small.jpg" alt="STM32 BOOT0 Right"/></p>
+<ul>
+    <li>Press the <strong>reset</strong> button on the board.</li>
+    <li>Tap the <strong>[Flash Firmware]</strong> button.</li>
+    <li>Once loading is complete, move the <strong>BOOT0</strong> jumper back to the left (normal run position):</li>
+</ul>
+<p><img src="file:///android_asset/help/images/stm32-prog1-small.jpg" alt="STM32 BOOT0 Left"/></p>
+<ul>
+    <li>Press the <strong>reset</strong> button to restart the Test Stand in normal mode.</li>
+</ul>
+
+<h3>3. ESP32 Based Test Stand</h3>
+<ul>
+    <li>Connect the USB cable.</li>
+    <li>Select the correct firmware or auto-detect it.</li>
+    <li>Press and hold the top switch:</li>
+</ul>
+<p><img src="file:///android_asset/help/images/testStandESP32-top-switch.jpg" alt="ESP32 Top Switch"/></p>
+<ul>
+    <li>Press and release the bottom switch while continuing to hold the top switch:</li>
+</ul>
+<p><img src="file:///android_asset/help/images/testStandESP32-bottom-switch.jpg" alt="ESP32 Bottom Switch"/></p>
+<ul>
+    <li>Release the top switch.</li>
+    <li>Tap the <strong>[Flash Firmware]</strong> button.</li>
+</ul>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; IMPORTANT NOTE</div>
+    <div>Never disconnect the cable during flashing. Doing so will corrupt the firmware and require re-flashing from scratch.</div>
+</div>
+
+</body>
+</html>

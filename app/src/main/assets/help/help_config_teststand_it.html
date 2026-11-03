@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .param-item { margin-bottom: 12px; }
+        .param-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Configurazione del Banco di Prova</h1>
+
+<p>La configurazione del banco di prova è suddivisa in 2 schermate. Aprendo queste schermate, l'applicazione si connette alla scheda e legge la configurazione salvata nella memoria interna.</p>
+
+<div class="info-box">
+    <strong>Stato connessione:</strong> Verificare che il banco di prova sia acceso e connesso tramite Bluetooth o USB prima di modificare i parametri.
+</div>
+
+<h2>Configurazione del Banco di Prova (Pagina 1)</h2>
+<div class="param-item">
+    <p><strong>Baud Rate:</strong> Permette di modificare la velocità di comunicazione seriale (richiede il riavvio della scheda).</p>
+</div>
+<div class="param-item">
+    <p><strong>Risoluzione del banco di prova:</strong> Frequenza di campionamento e risoluzione di misura (numero di campioni al secondo).</p>
+</div>
+<div class="param-item">
+    <p><strong>Dimensione EEPROM:</strong> Capacità della memoria EEPROM installata a bordo della scheda.</p>
+</div>
+<div class="param-item">
+    <p><strong>Durata di registrazione:</strong> Tempo massimo di acquisizione della curva di spinta espresso in secondi.</p>
+</div>
+<div class="param-item">
+    <p><strong>Tipo di batteria:</strong> Definisce la composizione della batteria per attivare gli avvisi di bassa tensione.</p>
+</div>
+
+<h2>Configurazione del Banco di Prova (Pagina 2)</h2>
+<ul>
+    <li><strong>Informazioni firmware:</strong> Visualizza la versione del firmware installato e il modello hardware della scheda.</li>
+    <li><strong>Unità del banco di prova:</strong> Consente di scegliere le unità di misura (metriche o imperiali).</li>
+    <li><strong>Calibrazione del sensore:</strong> Consente di calibrare la cella di carico/sensore di forza applicando un peso noto certificato.</li>
+</ul>
+
+</body>
+</html>

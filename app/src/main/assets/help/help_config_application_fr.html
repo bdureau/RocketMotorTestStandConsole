@@ -1,21 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .setting-item { margin-bottom: 12px; }
+        .setting-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
 <h1>Paramétrage de l'application Test Stand</h1>
-<p>La configuration est sur 1 écran</p>
-<p><strong>Générale</strong></p>
-<p>- Langue de l'application(non utilisé pour le moment car la langue de l'application est la langue du téléphone)</p>
-<p>- Couleur du graphique</p>
-<p>- Unité de l'application</p>
-<p>- Couleur de fond du graphique (attention à ce que cela ne soit pas la même que la couleur du graphique!!!) </p>
-<p>- Taille de la police</p>
-<p>- Baud rate (Ceci est pour le câble USB, cela doit être identique au baud rate du banc de test) </p>
-<p>- Le type de connexion qui peut être bluetooth ou USB si vous voulez faire de la télémétrie longue distance ou lire les données avec un câble) </p>
-<p>- Bibliothèque graphique (permet de choisir entre 2 bibliothèques graphique; attention pour les versions 8 et suivantes d'Android votre téléphone crashera si vous n'utilisez pas la bibliothèque MPAndroid chart) </p>
-<p>- Support USB complet
-    Activez le uniquement si vous utilisez un câble USB. Si vous utilisez un module de télémétrie
-    longue distance ne l'activez pas pour éviter de corrompre la configuration de votre banc de test </p>
-<p> </p>
-<p> </p>
-<p>Lorsque vous avez terminé cliquer sur le bouton sauvegarder. Vous pouvez également quitter la config sans sauvegarder ou réinitialiser la config par défaut.</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+
+<p>L'ensemble des paramètres de configuration est regroupé sur un seul écran.</p>
+
+<h2>Paramètres Généraux</h2>
+<div class="setting-item">
+    <p><strong>Langue de l'application :</strong> Affiche la langue courante (non modifiable pour le moment, car elle suit automatiquement la langue du téléphone).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Couleur du graphique :</strong> Définit la teinte du tracé des courbes de poussée moteur.</p>
+</div>
+<div class="setting-item">
+    <p><strong>Unités de l'application :</strong> Permet de basculer entre le système métrique (Newtons, grammes) et le système impérial (livres-force, onces).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Couleur de fond du graphique :</strong> Définit la couleur d'arrière-plan de la zone graphique. <em>Veillez à ce qu'elle contraste nettement avec la couleur de la courbe !</em></p>
+</div>
+<div class="setting-item">
+    <p><strong>Taille de la police :</strong> Ajuste la lisibilité des textes et relevés sur le graphique et dans la console.</p>
+</div>
+<div class="setting-item">
+    <p><strong>Vitesse en bauds (Baud rate) :</strong> Vitesse de transmission via le câble USB (doit impérativement être identique au débit du banc de test, généralement 38400 bauds).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Type de connexion :</strong> Sélectionne le protocole de liaison, soit <strong>Bluetooth</strong> (courte portée), soit <strong>USB</strong> (câble direct ou liaisons radio longue distance).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Bibliothèque graphique :</strong> Permet de choisir entre deux moteurs d'affichage. <em>Attention : à partir d'Android 8.0, vous devez impérativement utiliser la bibliothèque <strong>MPAndroidChart</strong> pour éviter tout blocage ou plantage de l'application.</em></p>
+</div>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; ATTENTION CONFIGURATION USB</div>
+    <div><strong>Support USB complet :</strong> À activer <strong>uniquement</strong> en cas de connexion directe par câble USB. <strong>Laissez désactivé</strong> si vous utilisez un module de télémétrie longue distance (LoRa ou 3DR) afin d'éviter toute corruption de la mémoire du banc d'essai.</div>
+</div>
+
+<h2>Sauvegarde des modifications</h2>
+<p>Lorsque vous avez terminé, cliquez sur le bouton <strong>[Sauvegarder]</strong>. Vous pouvez également quitter la configuration sans enregistrer ou restaurer les réglages par défaut.</p>
+
+</body>
+</html>

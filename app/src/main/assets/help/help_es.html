@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        h3 { font-size: 1.05em; color: #37474F; margin-top: 14px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .btn-entry { margin-bottom: 14px; }
+        .btn-entry strong { color: #0277BD; }
+        .hardware-item { margin-bottom: 12px; }
+        img { vertical-align: middle; margin: 4px 6px 4px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Archivo de ayuda para Banco de Pruebas de Motores</h1>
+
+<p>Esta es una guía rápida para utilizar su aplicación Test Stand en Android. La consola es una herramienta muy práctica para registrar curvas de empuje y reconfigurar su banco de pruebas en el campo de lanzamiento.</p>
+
+<h2>Configuración inicial y emparejamiento Bluetooth</h2>
+<ol>
+    <li><strong>Compatibilidad del firmware:</strong> Asegúrese de que la placa de su banco de pruebas sea compatible (es decir, que tenga cargado el firmware correcto).</li>
+    <li><strong>Conexión del módulo:</strong> Compruebe que el módulo Bluetooth esté conectado correctamente a la placa del banco de pruebas.</li>
+    <li><strong>Emparejamiento en el sistema:</strong> Vaya a los ajustes de su dispositivo Android, entre en la configuración Bluetooth y busque el módulo HC-05, HC-06 u otro modelo. Introduzca el código PIN de vinculación (por defecto es <strong>1234</strong>).</li>
+</ol>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; PRECAUCIÓN</div>
+    <div>Se recomienda asignar un nombre claro a cada dispositivo Bluetooth emparejado en su teléfono para asegurarse de configurar el banco de pruebas correcto.</div>
+</div>
+
+<ol start="4">
+    <li><strong>Encendido:</strong> Encienda el banco de pruebas y espere a que deje de emitir pitidos.</li>
+    <li><strong>Conexión:</strong> Inicie la aplicación en Android, pulse en «Mostrar dispositivos vinculados» y seleccione el dispositivo HC-05 o HC-06. La aplicación intentará conectarse.</li>
+</ol>
+
+<p>Cuando aparezca el mensaje «Conectado», podrá utilizar la aplicación para configurar el banco de pruebas o leer las curvas de empuje almacenadas. Si no logra conectarse, verifique que la placa esté encendida y que haya seleccionado el módulo correcto.</p>
+
+<h2>Uso de la aplicación Test Stand</h2>
+
+<h3>Botones de la pantalla principal</h3>
+
+<div class="btn-entry">
+    <p><strong>[Ajustes del Banco de Pruebas]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor settings75x91.png" alt="Ajustes del Banco de Pruebas"/>
+        Lee la configuración actual del banco de pruebas y permite modificar sus parámetros.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Leer Curvas de Empuje]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Thrust Curves75x87.png" alt="Leer Curvas de Empuje"/>
+        Descarga todas las curvas de empuje registradas en memoria y las representa gráficamente.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Telemetría]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Telemetry75x91.png" alt="Telemetría"/>
+        Accede a la visualización de la telemetría en tiempo real del banco de pruebas.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Restablecer Ajustes]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor reset settings75x90.png" alt="Restablecer Ajustes"/>
+        Restaura los valores de fábrica de la configuración y permite borrar todas las curvas de empuje almacenadas.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Estado]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Status75x90.png" alt="Estado"/>
+        Abre la pantalla de diagnóstico para consultar el estado de los sensores, el voltaje de la batería y la calibración.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Actualizar Firmware]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor flash75x85.png" alt="Actualizar Firmware"/>
+        Permite flashear el firmware de la placa directamente mediante un cable USB.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Conectar / Desconectar]</strong></p>
+    <p>
+        <img src="file:///android_asset/help/images/Motor connect75x87.png" alt="Conectar"/>
+        <img src="file:///android_asset/help/images/Motor disconnect75x86.png" alt="Desconectar"/>
+    </p>
+    <p>Establece o finaliza la comunicación con el banco de pruebas.</p>
+</div>
+
+<h3>Menú de la pantalla principal</h3>
+<p>Desde el menú de opciones puede acceder a este archivo de ayuda, abrir la pantalla «Acerca de» con detalles de la versión y personalizar la apariencia visual de la aplicación.</p>
+
+<h3>Bancos de prueba compatibles</h3>
+<p>Esta aplicación es compatible con las siguientes placas de control:</p>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Banco de pruebas con ATmega328</strong></p>
+</div>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Banco de pruebas con STM32 (Versión 1)</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="Banco de pruebas V1"/></p>
+</div>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Banco de pruebas con STM32 (Versión 2)</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="Banco de pruebas V2"/></p>
+</div>
+
+</body>
+</html>

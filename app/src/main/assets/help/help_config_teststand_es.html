@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .param-item { margin-bottom: 12px; }
+        .param-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Configuración del Banco de Pruebas</h1>
+
+<p>La configuración del banco de pruebas está dividida en 2 pantallas. Al acceder a ellas, la aplicación se conecta a la placa y recupera la configuración almacenada en su memoria interna.</p>
+
+<div class="info-box">
+    <strong>Estado de conexión:</strong> Compruebe que el banco de pruebas esté encendido y vinculado mediante Bluetooth o USB antes de cambiar los parámetros.
+</div>
+
+<h2>Configuración del Banco de Pruebas (Página 1)</h2>
+<div class="param-item">
+    <p><strong>Velocidad en baudios (Baud Rate):</strong> Permite modificar la velocidad de comunicación serie (requiere reiniciar la placa).</p>
+</div>
+<div class="param-item">
+    <p><strong>Resolución del banco de pruebas:</strong> Tasa de muestreo y precisión (número de lecturas por segundo).</p>
+</div>
+<div class="param-item">
+    <p><strong>Tamaño de EEPROM:</strong> Capacidad de almacenamiento disponible en la memoria interna de la placa.</p>
+</div>
+<div class="param-item">
+    <p><strong>Duración de grabación:</strong> Tiempo máximo de registro de la curva de empuje en segundos.</p>
+</div>
+<div class="param-item">
+    <p><strong>Tipo de batería:</strong> Define el tipo de batería utilizado para generar avisos ante caídas de tensión.</p>
+</div>
+
+<h2>Configuración del Banco de Pruebas (Página 2)</h2>
+<ul>
+    <li><strong>Información de firmware:</strong> Lee y muestra la versión del firmware y el modelo de placa detectado.</li>
+    <li><strong>Unidades del banco de pruebas:</strong> Permite seleccionar las unidades de medida (sistema métrico o imperial).</li>
+    <li><strong>Calibración del sensor:</strong> Permite calibrar la célula de carga mediante una masa patrón de peso conocido.</li>
+</ul>
+
+</body>
+</html>

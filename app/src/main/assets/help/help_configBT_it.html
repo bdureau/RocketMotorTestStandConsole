@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .step-item { margin-bottom: 12px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Configurazione del modulo Bluetooth</h1>
+
+<p>Affinché il modulo Bluetooth possa connettere l'altimetro al tuo telefono, dovrai prima configurarlo in modo che operi alla stessa velocità di comunicazione della scheda altimetro.</p>
+
+<p>Questa schermata consente di configurare moduli standard compatibili come <strong>HC-05, HC-06, ecc.</strong></p>
+
+<p><img src="file:///android_asset/help/images/bluetooth_module.jpg" alt="Modulo Bluetooth"/></p>
+
+<h2>Hardware necessario</h2>
+<ul>
+    <li>Un cavo adattatore seriale da USB a TTL.<br/>
+        <img src="file:///android_asset/help/images/ttl_cable-small.jpg" alt="Cavo TTL"/>
+    </li>
+    <li>Un adattatore USB (USB-C o Micro-USB a seconda del dispositivo Android).<br/>
+        <img src="file:///android_asset/help/images/usb_adpter-small.jpg" alt="Adattatore USB"/>
+    </li>
+    <li>Un adattatore JST e cavetti di connessione JST.</li>
+</ul>
+
+<h2>Allineamento della velocità seriale (Baud Rate)</h2>
+<p>Si noti che questi moduli sono generalmente preimpostati di fabbrica a <strong>9600 baud</strong>. La scheda dell'altimetro comunica invece per impostazione predefinita a <strong>38400 baud</strong>. È quindi essenziale sincronizzare questa velocità.</p>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; ATTENZIONE</div>
+    <div>Assicurarsi di non scollegare il modulo né il cavo durante l'esecuzione dei seguenti passaggi.</div>
+</div>
+
+<h2>Procedura di configurazione</h2>
+<ol>
+    <li class="step-item">
+        <strong>Connessione hardware:</strong> Collega il modulo al dispositivo Android mediante il cavo TTL e l'adattatore USB OTG.
+    </li>
+    <li class="step-item">
+        <strong>Selezione del modulo:</strong> Seleziona il modello del tuo modulo Bluetooth. Se non sei sicuro, scegli quello predefinito o un profilo compatibile. Se nessuno risponde, invia foto e codice del componente al supporto.
+    </li>
+    <li class="step-item">
+        <strong>Lettura configurazione:</strong> Tocca <strong>[Recupera cfg]</strong>. L'applicazione tenterà prima la connessione alla velocità di 38400 baud. In caso di mancata risposta, riprova: testerà le varie velocità standard fino a stabilire il collegamento e caricare i parametri.
+    </li>
+    <li class="step-item">
+        <strong>Salvataggio configurazione:</strong> Modifica le impostazioni desiderate (nome modulo, PIN, velocità). Assicurati di impostare una velocità compatibile con la tua scheda (solitamente 38400 baud) e tocca <strong>[Salva cfg]</strong>. In caso di errore durante la scrittura, la procedura verrà interrotta automaticamente.
+    </li>
+</ol>
+
+<div class="info-box">
+    <strong>Nota:</strong> Ripeti questi passaggi singolarmente per ogni modulo Bluetooth che desideri configurare.
+</div>
+
+</body>
+</html>

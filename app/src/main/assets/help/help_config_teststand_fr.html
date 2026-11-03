@@ -1,25 +1,53 @@
-<h1>Configuration du banc de test</h1>
-<p>La configuration du banc de test est répartie sur 2 écrans.
-    Lorsque vous ouvrez chaque écran vous êtes connecté au banc de test et consultez la configuration stockée dans la mémoire du banc de test</p>
-<p><strong>Configuration du banc de test</strong></p>
-<p>- Baud Rate
-    Permet de changer la vitesse de communication du banc de test(reboot nécessaire)</p>
-<p>- Res banc de test
-    La résolution du banc de test</p>
-<p>- Capacité EEprom
-    Permet de changer la taille de l'EEprom sur la carte</p>
-<p>- Durée d'enregistrement
-    Permet de définir la durée max d'enregistrement</p>
-<p>- Type de batterie
-Cela permet pour certain banc de test de prévenir lorsque la tension de la batterie chute</p>
-<p> </p>
-<p> </p>
-<p><strong>Configuration du banc de test (page 2)</strong></p>
-<p>Donne des informations concernant la version du banc de test</p>
-<p>Permet de choisir les unités du banc de test</p>
-<p>Permet la calibration du banc de test</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .param-item { margin-bottom: 12px; }
+        .param-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
 
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<h1>Configuration du banc de test</h1>
+
+<p>La configuration du banc de test est répartie sur 2 écrans. Lorsque vous ouvrez chaque écran, vous êtes connecté au banc de test et consultez la configuration stockée dans sa mémoire embarquée.</p>
+
+<div class="info-box">
+    <strong>État de la liaison :</strong> Assurez-vous que le banc de test est sous tension et appairé en Bluetooth ou USB avant de modifier les réglages.
+</div>
+
+<h2>Configuration du banc de test (Page 1)</h2>
+<div class="param-item">
+    <p><strong>Baud Rate :</strong> Permet de changer la vitesse de communication du banc de test (redémarrage de la carte nécessaire).</p>
+</div>
+<div class="param-item">
+    <p><strong>Résolution du banc de test :</strong> Fréquence d'échantillonnage et précision des mesures (nombre de mesures par seconde).</p>
+</div>
+<div class="param-item">
+    <p><strong>Capacité EEPROM :</strong> Permet de définir la taille de la mémoire EEPROM disponible sur la carte.</p>
+</div>
+<div class="param-item">
+    <p><strong>Durée d'enregistrement :</strong> Permet de définir la durée maximale d'enregistrement d'une courbe en secondes.</p>
+</div>
+<div class="param-item">
+    <p><strong>Type de batterie :</strong> Définit le type d'accumulateur utilisé pour avertir lorsque la tension d'alimentation chute.</p>
+</div>
+
+<h2>Configuration du banc de test (Page 2)</h2>
+<ul>
+    <li><strong>Informations du firmware :</strong> Récupère et affiche la version du logiciel embarqué et le type de matériel.</li>
+    <li><strong>Unités du banc de test :</strong> Permet de choisir les unités de mesure (métriques ou impériales).</li>
+    <li><strong>Calibration du capteur :</strong> Permet d'étalonner la jauge de contrainte / capteur d'effort à l'aide d'une masse connue.</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        h3 { font-size: 1.05em; color: #37474F; margin-top: 14px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .hardware-item { margin-bottom: 12px; }
+        .step-item { margin-bottom: 10px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Firmware Flashen</h1>
+
+<p>Allereerst dient u de juiste firmware te selecteren. De firmware is afhankelijk van het specifieke model teststand dat u wilt flashen.</p>
+<p>Bepaal vervolgens of u direct de operationele firmware wilt installeren of eerst herstelfirmware (recovery) wilt gebruiken.</p>
+
+<div class="info-box">
+    <strong>Herstelfirmware:</strong> Gebruik herstelfirmware wanneer de configuratie corrupt is geraakt en de teststand niet meer kan verbinden. Na het laden van de herstelfirmware moet de operationele firmware opnieuw worden geïnstalleerd.
+</div>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; WAARSCHUWING</div>
+    <div>Het installeren van een onjuiste firmware zorgt ervoor dat de teststand helemaal niet meer functioneert of onvoorspelbaar gedrag vertoont.</div>
+</div>
+
+<h2>Benodigde hardware</h2>
+<p>Om uw teststand te kunnen flashen heeft u een USB-TTL-kabel en een OTG-adapter (USB-C of Micro-USB) nodig om verbinding te maken met uw Android-apparaat.</p>
+
+<h2>Ondersteunde teststands</h2>
+<p>Bekijk de onderstaande afbeeldingen zorgvuldig om uw printplaat te identificeren:</p>
+
+<div class="hardware-item">
+    <p>&bull; <strong>ATMega328 Teststand</strong> (grote versie)</p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>STM32 Teststand V1</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="STM32 Teststand V1"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>STM32 Teststand V2</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="STM32 Teststand V2"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>ESP32 Teststand</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandESP32-small.jpg" alt="ESP32 Teststand"/></p>
+</div>
+
+<h2>Programmeerinstructies per microcontroller</h2>
+<p>Als alternatief kunt u proberen de aangesloten firmware automatisch te laten detecteren.</p>
+
+<h3>1. Teststands op basis van ATmega328</h3>
+<ul>
+    <li>Sluit de USB-kabel aan.</li>
+    <li>Selecteer de juiste firmware of gebruik automatische detectie.</li>
+    <li>Druk kort op de <strong>reset</strong>-knop van de teststand en tik op de knop <strong>[Flash Firmware]</strong>.</li>
+</ul>
+<p><img src="file:///android_asset/help/images/alti-reset.jpg" alt="Resetknop ATmega328"/></p>
+
+<h3>2. Teststands op basis van STM32</h3>
+<ul>
+    <li>Sluit de USB-kabel aan.</li>
+    <li>Selecteer de juiste firmware of start automatische detectie.</li>
+    <li>Plaats de <strong>BOOT0</strong> jumper naar rechts (programmeerstand):</li>
+</ul>
+<p><img src="file:///android_asset/help/images/stm32-prog2-small.jpg" alt="STM32 BOOT0 naar rechts"/></p>
+<ul>
+    <li>Druk op de <strong>reset</strong>-knop op de printplaat.</li>
+    <li>Tik op de knop <strong>[Flash Firmware]</strong>.</li>
+    <li>Zet na afloop van het programmeren de <strong>BOOT0</strong> jumper weer terug naar links (normale werkstand):</li>
+</ul>
+<p><img src="file:///android_asset/help/images/stm32-prog1-small.jpg" alt="STM32 BOOT0 naar links"/></p>
+<ul>
+    <li>Druk op de <strong>reset</strong>-knop om de teststand in normale modus te herstarten.</li>
+</ul>
+
+<h3>3. Teststands op basis van ESP32</h3>
+<ul>
+    <li>Sluit de USB-kabel aan.</li>
+    <li>Selecteer de juiste firmware of gebruik automatische detectie.</li>
+    <li>Houd de bovenste schakelaar ingedrukt:</li>
+</ul>
+<p><img src="file:///android_asset/help/images/testStandESP32-top-switch.jpg" alt="Bovenste schakelaar ESP32"/></p>
+<ul>
+    <li>Druk kort op de onderste schakelaar en laat deze los terwijl u de bovenste ingedrukt houdt:</li>
+</ul>
+<p><img src="file:///android_asset/help/images/testStandESP32-bottom-switch.jpg" alt="Onderste schakelaar ESP32"/></p>
+<ul>
+    <li>Laat ten slotte de bovenste schakelaar los.</li>
+    <li>Tik op de knop <strong>[Flash Firmware]</strong>.</li>
+</ul>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; BELANGRIJKE OPMERKING</div>
+    <div>Koppel de kabel nooit los tijdens het flashen om beschadiging van het interne geheugen te voorkomen.</div>
+</div>
+
+</body>
+</html>

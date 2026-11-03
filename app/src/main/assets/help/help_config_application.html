@@ -1,20 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .setting-item { margin-bottom: 12px; }
+        .setting-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
 <h1>Configure Test Stand Application</h1>
-<p>The configuration is in 1 screen</p>
-<p><strong>General</strong></p>
-<p>- Application langage (not used for now because the application langage will be the phone language)</p>
-<p>- Graph color</p>
-<p>- Application Units </p>
-<p>- Graph background color (make sure that it is different from the graph color!!!) </p>
-<p>- font size </p>
-<p>- Baud rate (this is for the USB cable, it has to be the same as the altimeter baud rate) </p>
-<p>- Connection type can be bluetooth or USB if you want to do long distance telemetry) </p>
-<p>- Graphics library (allow to choose between 2 lib type, be carefull that on Android 8 and above you will crash your phone if you do not use the MPAndroid chart lib) </p>
-<p>- Full USB support
-Only enable it if you use USB with a cable. If using longue range telemetry do not use it to avoid corrupting your TestStand configs</p>
-<p> </p>
-<p> </p>
-<p>Whenever you are done click on the save button. You can also exit the config without saving or restore it to the default one.</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+
+<p>The configuration settings are grouped into a single accessible screen.</p>
+
+<h2>General Settings</h2>
+<div class="setting-item">
+    <p><strong>Application Language:</strong> Displays current language setting (currently follows the Android system language automatically).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Graph Color:</strong> Defines the stroke color used to plot motor thrust curves.</p>
+</div>
+<div class="setting-item">
+    <p><strong>Application Units:</strong> Toggles measurement units between Metric (Newtons, grams) and Imperial (lbf, ounces).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Graph Background Color:</strong> Sets the background color of the chart view. <em>Ensure it contrasts sufficiently with the plot curve color!</em></p>
+</div>
+<div class="setting-item">
+    <p><strong>Font Size:</strong> Adjusts text size across graphs and console displays for optimal readability.</p>
+</div>
+<div class="setting-item">
+    <p><strong>Baud Rate:</strong> Sets the serial communication speed for direct USB OTG cable connections (must match the test stand board speed, typically 38400 baud).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Connection Type:</strong> Selects between <strong>Bluetooth</strong> (short-range) and <strong>USB</strong> (direct OTG cable or long-range 3DR / LoRa radio modems).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Graphics Library:</strong> Allows switching between rendering engines. <em>Note: On Android 8.0 and above, you must select the <strong>MPAndroidChart</strong> library to prevent application crashes.</em></p>
+</div>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; USB CONFIGURATION WARNING</div>
+    <div><strong>Full USB Support:</strong> Enable this option <strong>only</strong> when connected directly via a USB cable. <strong>Keep disabled</strong> when using wireless long-range telemetry modules (LoRa / 3DR) to prevent EEPROM configuration corruption.</div>
+</div>
+
+<h2>Saving Changes</h2>
+<p>Whenever you are done, click on <strong>[Save]</strong> to apply and store your new parameters. You can also exit without saving or restore factory default settings via the menu options.</p>
+
+</body>
+</html>

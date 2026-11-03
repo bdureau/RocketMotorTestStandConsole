@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .step-item { margin-bottom: 12px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Configuratie van de Bluetooth-module</h1>
+
+<p>Om uw hoogtemeter via Bluetooth met uw telefoon te verbinden, moet de module worden ingesteld op dezelfde communicatiesnelheid als de hoogtemeterprintplaat.</p>
+
+<p>Met dit scherm kunt u compatibele modules configureren, zoals de <strong>HC-05, HC-06, enz.</strong></p>
+
+<p><img src="file:///android_asset/help/images/bluetooth_module.jpg" alt="Bluetooth-module"/></p>
+
+<h2>Benodigde hardware</h2>
+<ul>
+    <li>Een USB-naar-seriële TTL-adapterkabel.<br/>
+        <img src="file:///android_asset/help/images/ttl_cable-small.jpg" alt="TTL-kabel"/>
+    </li>
+    <li>Een USB-adapter (USB-C of Micro-USB, afhankelijk van uw Android-apparaat).<br/>
+        <img src="file:///android_asset/help/images/usb_adpter-small.jpg" alt="USB-adapter"/>
+    </li>
+    <li>Een JST-adapter en bijbehorende JST-kabels.</li>
+</ul>
+
+<h2>Baudrate-compatibiliteit</h2>
+<p>De meeste van deze modules zijn standaard ingesteld op <strong>9600 baud</strong>. De printplaat van uw hoogtemeter werkt standaard echter op <strong>38400 baud</strong>; zorg er daarom voor dat u de juiste snelheid instelt.</p>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; WAARSCHUWING</div>
+    <div>Koppel de module of de kabel niet los tijdens het uitvoeren van de onderstaande configuratiestappen.</div>
+</div>
+
+<h2>Configuratieprocedure</h2>
+<ol>
+    <li class="step-item">
+        <strong>Aansluiten:</strong> Sluit de module aan op uw Android-apparaat met de TTL-kabel en de USB OTG-adapter.
+    </li>
+    <li class="step-item">
+        <strong>Module selecteren:</strong> Selecteer het type Bluetooth-module dat u heeft. Als u het niet zeker weet, kiest u de standaardoptie of een compatibel profiel. Als geen enkel profiel werkt, neem dan contact op met de ondersteuning met foto's en referenties van de module.
+    </li>
+    <li class="step-item">
+        <strong>Configuratie inlezen:</strong> Tik op <strong>[Retrieve cfg]</strong>. De app probeert verbinding te maken op 38400 baud. Als dit mislukt, probeert u het opnieuw: er worden verschillende snelheden getest tot er verbinding is en de huidige instellingen worden geladen.
+    </li>
+    <li class="step-item">
+        <strong>Configuratie opslaan:</strong> Pas de gewenste parameters aan (modulenaam, pincode, snelheid). Zorg ervoor dat u een snelheid kiest die werkt met uw printplaat (meestal 38400 baud) en tik op <strong>[Save cfg]</strong>. Als er een fout optreedt, wordt het opslaan afgebroken.
+    </li>
+</ol>
+
+<div class="info-box">
+    <strong>Opmerking:</strong> Herhaal deze stappen afzonderlijk voor elke Bluetooth-module die u wilt configureren.
+</div>
+
+</body>
+</html>

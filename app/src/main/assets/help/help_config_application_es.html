@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .setting-item { margin-bottom: 12px; }
+        .setting-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Configuración de la aplicación Test Stand</h1>
+
+<p>Todos los parámetros de configuración se encuentran organizados en una única pantalla.</p>
+
+<h2>Parámetros Generales</h2>
+<div class="setting-item">
+    <p><strong>Idioma de la aplicación:</strong> Muestra el idioma activo (por ahora no seleccionable, ya que sigue automáticamente el idioma del teléfono).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Color del gráfico:</strong> Ajusta el color del trazo de las curvas de empuje del motor.</p>
+</div>
+<div class="setting-item">
+    <p><strong>Unidades de la aplicación:</strong> Alterna entre el sistema métrico (Newtons, gramos) e imperial (libras-fuerza, onzas).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Color de fondo del gráfico:</strong> Configura el color de fondo de la gráfica. <em>¡Asegúrese de que contraste notablemente con el color de la curva!</em></p>
+</div>
+<div class="setting-item">
+    <p><strong>Tamaño de fuente:</strong> Ajusta el tamaño del texto para una lectura óptima en gráficos y pantallas.</p>
+</div>
+<div class="setting-item">
+    <p><strong>Velocidad en baudios (Baud rate):</strong> Configuración para conexión por cable USB (debe coincidir con la velocidad de la placa del banco de pruebas, habitualmente 38400 baudios).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Tipo de conexión:</strong> Permite seleccionar entre <strong>Bluetooth</strong> (corta distancia) o <strong>USB</strong> (cable directo o radioenlaces de larga distancia).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Biblioteca de gráficos:</strong> Permite alternar entre dos motores de renderizado. <em>Atención: en dispositivos con Android 8 o superior, debe utilizar obligatoriamente la biblioteca <strong>MPAndroidChart</strong> para evitar cierres inesperados.</em></p>
+</div>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; ADVERTENCIA DE CONFIGURACIÓN USB</div>
+    <div><strong>Soporte USB completo:</strong> Habilítelo <strong>únicamente</strong> si se conecta mediante cable directo USB. <strong>Manténgalo desactivado</strong> si utiliza módulos de radio de largo alcance (LoRa o 3DR) para evitar corromper la configuración de su banco de pruebas.</div>
+</div>
+
+<h2>Guardar cambios</h2>
+<p>Cuando haya finalizado, pulse en <strong>[Guardar]</strong> para aplicar las modificaciones. También puede salir sin guardar o restablecer los valores de fábrica predeterminados.</p>
+
+</body>
+</html>

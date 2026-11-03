@@ -1,25 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .param-item { margin-bottom: 12px; }
+        .param-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
 <h1>Configure Test Stand</h1>
-<p>The Test Stand configuration is splitted in 2 differents screens.
-    When opening these screens you are connected to the Test Stand and retrieving the Test Stand configuration stored on the board memory</p>
-<p> </p>
-<p><strong>Test Stand config</strong></p>
-<p>- Baud Rate
-    Allow to change the Test Stand communication speed (reboot required)</p>
-<p>- Test Stand Res
-    The Test Stand resolution (number of measures per seconds</p>
-<p>- EEprom size
-    Allow you to change the on board memory size</p>
-<p>- Recording duration
-    Recording time in second</p>
-<p>- Battery type
-Define the battery type used, the is used by some Test Stand to warn on battery low voltage</p>
-<p> </p>
-<p> </p>
-<p><strong>Test Stand config (page 2)</strong></p>
-<p>Retrieve the Test Stand firmware info</p>
-<p>Allow to choose the Test Stand units</p>
-<p>Allow calibration of the sensor with a know weight</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+
+<p>The Test Stand configuration is split across 2 different screens. When opening these screens, the application connects to the Test Stand board and retrieves the configuration stored in onboard memory.</p>
+
+<div class="info-box">
+    <strong>Connection Status:</strong> Ensure the Test Stand board is powered on and connected via Bluetooth or USB before updating parameters.
+</div>
+
+<h2>Test Stand Configuration (Page 1)</h2>
+<div class="param-item">
+    <p><strong>Baud Rate:</strong> Allows changing the Test Stand serial communication speed (reboot required).</p>
+</div>
+<div class="param-item">
+    <p><strong>Test Stand Resolution:</strong> Sampling rate and measurement resolution (number of samples per second).</p>
+</div>
+<div class="param-item">
+    <p><strong>EEPROM Size:</strong> Defines onboard flash/memory storage capacity.</p>
+</div>
+<div class="param-item">
+    <p><strong>Recording Duration:</strong> Maximum recording duration in seconds for motor thrust curves.</p>
+</div>
+<div class="param-item">
+    <p><strong>Battery Type:</strong> Defines the battery chemistry used, enabling low voltage warning alerts on supported boards.</p>
+</div>
+
+<h2>Test Stand Configuration (Page 2)</h2>
+<ul>
+    <li><strong>Firmware Info:</strong> Retrieves and displays the Test Stand firmware version and hardware model.</li>
+    <li><strong>Test Stand Units:</strong> Allows selecting measurement units (Metric or Imperial).</li>
+    <li><strong>Sensor Calibration:</strong> Allows calibration of the load cell / thrust sensor using a certified known weight.</li>
+</ul>
+
+</body>
+</html>

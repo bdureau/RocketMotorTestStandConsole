@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        h3 { font-size: 1.05em; color: #37474F; margin-top: 14px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .hardware-item { margin-bottom: 12px; }
+        .step-item { margin-bottom: 10px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Flashear Firmware</h1>
+
+<p>En primer lugar, debe seleccionar el firmware. El firmware depende de la placa del banco de pruebas que desee actualizar.</p>
+<p>Luego decida si desea flashear directamente el firmware operativo o utilizar un firmware de recuperación previamente.</p>
+
+<div class="info-box">
+    <strong>Firmware de recuperación:</strong> Utilice un firmware de recuperación si la configuración está dañada y el banco de pruebas ya no puede conectarse. Después de cargarlo, deberá flashear de nuevo el firmware operativo.
+</div>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; PRECAUCIÓN</div>
+    <div>Flashear un firmware erróneo provocará que el banco de pruebas no funcione en absoluto o se comporte de manera impredecible.</div>
+</div>
+
+<h2>Material necesario</h2>
+<p>Para flashear su banco de pruebas necesitará un cable conversor USB-TTL y un adaptador OTG (USB-C o Micro-USB) para conectarlo a su teléfono o tableta Android.</p>
+
+<h2>Bancos de prueba compatibles</h2>
+<p>Observe con atención las imágenes siguientes para identificar su modelo:</p>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Banco de pruebas ATmega328</strong> (versión grande)</p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>Banco de pruebas STM32 V1</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="Banco de pruebas STM32 V1"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>Banco de pruebas STM32 V2</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="Banco de pruebas STM32 V2"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>Banco de pruebas ESP32</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandESP32-small.jpg" alt="Banco de pruebas ESP32"/></p>
+</div>
+
+<h2>Instrucciones según el microcontrolador</h2>
+<p>Como alternativa, puede intentar realizar una detección automática del firmware.</p>
+
+<h3>1. Bancos de prueba basados en ATmega328</h3>
+<ul>
+    <li>Conecte el cable USB.</li>
+    <li>Seleccione el firmware correcto o utilice la detección automática.</li>
+    <li>Presione y suelte el botón de <strong>reset</strong> en el banco de pruebas y pulse el botón <strong>[Flash Firmware]</strong>.</li>
+</ul>
+<p><img src="file:///android_asset/help/images/alti-reset.jpg" alt="Botón Reset ATmega328"/></p>
+
+<h3>2. Bancos de prueba basados en STM32</h3>
+<ul>
+    <li>Conecte el cable USB.</li>
+    <li>Seleccione el firmware correcto o utilice la detección automática.</li>
+    <li>Mueva el puente <strong>BOOT0</strong> hacia la derecha (modo programación):</li>
+</ul>
+<p><img src="file:///android_asset/help/images/stm32-prog2-small.jpg" alt="Jumper STM32 BOOT0 Derecha"/></p>
+<ul>
+    <li>Presione el botón de <strong>reset</strong> en la placa.</li>
+    <li>Pulse el botón <strong>[Flash Firmware]</strong>.</li>
+    <li>Una vez completada la carga, regrese el puente <strong>BOOT0</strong> hacia la izquierda (modo normal):</li>
+</ul>
+<p><img src="file:///android_asset/help/images/stm32-prog1-small.jpg" alt="Jumper STM32 BOOT0 Izquierda"/></p>
+<ul>
+    <li>Presione el botón de <strong>reset</strong> para reiniciar el banco de pruebas.</li>
+</ul>
+
+<h3>3. Bancos de prueba basados en ESP32</h3>
+<ul>
+    <li>Conecte el cable USB.</li>
+    <li>Seleccione el firmware correcto o utilice la detección automática.</li>
+    <li>Mantenga presionado el interruptor superior:</li>
+</ul>
+<p><img src="file:///android_asset/help/images/testStandESP32-top-switch.jpg" alt="Interruptor superior ESP32"/></p>
+<ul>
+    <li>Presione y suelte brevemente el interruptor inferior manteniendo pulsado el superior:</li>
+</ul>
+<p><img src="file:///android_asset/help/images/testStandESP32-bottom-switch.jpg" alt="Interruptor inferior ESP32"/></p>
+<ul>
+    <li>Suelte finalmente el interruptor superior.</li>
+    <li>Pulse el botón <strong>[Flash Firmware]</strong>.</li>
+</ul>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; NOTA IMPORTANTE</div>
+    <div>Nunca desconecte el cable durante el proceso de flasheo para evitar corromper la memoria.</div>
+</div>
+
+</body>
+</html>

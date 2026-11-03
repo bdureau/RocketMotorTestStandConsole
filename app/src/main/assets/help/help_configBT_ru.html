@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .step-item { margin-bottom: 12px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Настройка модуля Bluetooth</h1>
+
+<p>Чтобы модуль Bluetooth мог соединить высотомер со смартфоном, необходимо настроить его на ту же скорость передачи данных, что и плата высотомера.</p>
+
+<p>Этот экран позволяет настроить совместимые модули, такие как <strong>HC-05, HC-06 и др.</strong></p>
+
+<p><img src="file:///android_asset/help/images/bluetooth_module.jpg" alt="Модуль Bluetooth"/></p>
+
+<h2>Необходимое оборудование</h2>
+<ul>
+    <li>Кабель-адаптер USB-TTL.<br/>
+        <img src="file:///android_asset/help/images/ttl_cable-small.jpg" alt="Кабель TTL"/>
+    </li>
+    <li>Адаптер USB (USB-C или Micro-USB в зависимости от устройства Android).<br/>
+        <img src="file:///android_asset/help/images/usb_adpter-small.jpg" alt="Адаптер USB"/>
+    </li>
+    <li>Адаптер JST и соединительные провода JST.</li>
+</ul>
+
+<h2>Согласование скорости передачи (Baud Rate)</h2>
+<p>Большинство модулей поставляются с заводской настройкой на <strong>9600 бод</strong>. Однако плата высотомера по умолчанию работает на скорости <strong>38400 бод</strong>, поэтому необходимо убедиться в согласовании скорости.</p>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; ВНИМАНИЕ</div>
+    <div>Категорически запрещается отключать модуль и кабель во время выполнения описанных ниже настроек.</div>
+</div>
+
+<h2>Порядок настройки</h2>
+<ol>
+    <li class="step-item">
+        <strong>Подключение:</strong> Подключите модуль к устройству Android с помощью кабеля TTL и адаптера USB OTG.
+    </li>
+    <li class="step-item">
+        <strong>Выбор модели:</strong> Выберите модель вашего Bluetooth-модуля. Если вы не уверены, выберите вариант по умолчанию или совместимый профиль. Если ни один не отвечает, отправьте фото и маркировку модуля в службу поддержки.
+    </li>
+    <li class="step-item">
+        <strong>Считывание конфигурации:</strong> Нажмите <strong>[Считать cfg]</strong>. Приложение попытается подключиться на стандартной скорости 38400 бод. В случае неудачи повторите попытку: будут перебираться различные скорости до успешной связи и загрузки параметров.
+    </li>
+    <li class="step-item">
+        <strong>Сохранение конфигурации:</strong> Измените необходимые параметры (имя модуля, PIN-код, скорость). Убедитесь, что выбрана скорость, совместимая с вашей платой (обычно 38400 бод), и нажмите <strong>[Сохранить cfg]</strong>. При ошибке процесс записи будет отменен.
+    </li>
+</ol>
+
+<div class="info-box">
+    <strong>Примечание:</strong> Повторите эту процедуру отдельно для каждого модуля Bluetooth, который необходимо настроить.
+</div>
+
+</body>
+</html>

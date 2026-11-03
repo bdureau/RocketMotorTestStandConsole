@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .param-item { margin-bottom: 12px; }
+        .param-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Настройка испытательного стенда</h1>
+
+<p>Параметры испытательного стенда распределены по двум экранам. При их открытии приложение считывает конфигурацию, сохраненную в энергонезависимой памяти платы.</p>
+
+<div class="info-box">
+    <strong>Статус подключения:</strong> Перед изменением настроек убедитесь, что стенд включен и соединен по Bluetooth или USB.
+</div>
+
+<h2>Конфигурация стенда (Страница 1)</h2>
+<div class="param-item">
+    <p><strong>Скорость (Baud Rate):</strong> Скорость последовательного порта стенда (требуется перезагрузка платы).</p>
+</div>
+<div class="param-item">
+    <p><strong>Разрешение стенда:</strong> Частота опроса и дискретизация датчика (число измерений в секунду).</p>
+</div>
+<div class="param-item">
+    <p><strong>Объем EEPROM:</strong> Размер доступной энергонезависимой памяти на плате.</p>
+</div>
+<div class="param-item">
+    <p><strong>Время записи:</strong> Максимальная продолжительность записи графика тяги в секундах.</p>
+</div>
+<div class="param-item">
+    <p><strong>Тип батареи:</strong> Выбор типа аккумулятора для предупреждения о критическом падении напряжения.</p>
+</div>
+
+<h2>Конфигурация стенда (Страница 2)</h2>
+<ul>
+    <li><strong>Информация о прошивке:</strong> Считывание и отображение версии микропрограммы и аппаратной ревизии платы.</li>
+    <li><strong>Единицы измерения:</strong> Выбор единиц (метрические или имперские).</li>
+    <li><strong>Калибровка датчика:</strong> Калибровка тензодатчика с использованием контрольного груза известной массы.</li>
+</ul>
+
+</body>
+</html>

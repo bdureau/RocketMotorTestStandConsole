@@ -1,48 +1,109 @@
-<h1>Flashage du firmware</h1>
-<p>Vous devez en premier lieu choisir le firmware &agrave; flasher. Le firmware d&eacute;pend du la carte du banc &agrave; flasher</p>
-<p>Ensuite décidez si vous voulez directement flasher la carte du banc de test moteur ou utiliser un firmware de récupération avant.</p>
-<p>Utilisez un firmware de récupération si la configuration du banc test moteur n'est pas bonne et que celui ci ne peut plus se connecter.</p>
-<p>Après avoir chargé un firmware de récupération vous devez flasher à nouveau votre banc de test.</p>
-<p>Flasher votre bancs de test avec le mauvais firmare aura pour consequence d'avoir un banc de test qui ne fonctionne pas du tout ou qui ne fonctionne pas correctement</p>
-<p>De maniére à pouvoir flasher votre banc de test vous aurez besoin d'un cable USB et d'un adaptateur pour le brancher sur votre telephone ou tablette.</p>
-<p></p>
-<p>Les bancs de test ci-dessous peuvent etre flashés, regardez attentivement les photos de manière à identifier votre banc</p>
-<p><strong>Banc de test AtMega328</strong> (grand modèle)</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        h3 { font-size: 1.05em; color: #37474F; margin-top: 14px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .hardware-item { margin-bottom: 12px; }
+        .step-item { margin-bottom: 10px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
 
-<p><strong>Banc de test STM32 V1</strong></p>
-<p><img  src="file:///android_asset/help/images/testStandV1-small.jpg"/></p>
-<p><strong>Banc de test STM32 V2</strong></p>
-<p><img  src="file:///android_asset/help/images/testStandV2-small-1.jpg"/></p>
-<p><strong>ESP32 Test Stand</strong></p>
-<p><img  src="file:///android_asset/help/images/testStandESP32-small.jpg"/></p>
-<p></p>
-<p>Sinon vous pouvez tenter une detection du firmware.</p>
-<p>A ce jour, 3 familles de banc de test existent, les bancs de test à base d'ATMega328, les bancs de test à base de STM32 et les banc de test à base d'ESP32. </p>
-<p><strong>Flashage des bancs de test à base d'ATMega328</strong></p>
-<p>- Branchez le cable</p>
-<p>- Choisir le firmware approprié ou detectez le. </p>
-<p>- Appuyez et relacher le bouton reset du bancs de test et appuyez sur le bouton [flash firmware]</p>
-<p><img  src="file:///android_asset/help/images/alti-reset.jpg"/></p>
-<p></p>
-<p><strong>Flashage des bancs de test à base de STM32</strong></p>
-<p>- Branchez le cable</p>
-<p>- Choisissez le firmware approprié ou detectez le</p>
-<p>- Déplacez le cavalier boot0 à droite</p>
-<p><img  src="file:///android_asset/help/images/stm32-prog2-small.jpg"/></p>
-<p>- Appuyez sur le bouton reset du banc de test </p>
-<p>- Appuyez sur le bouton[flash firmware]</p>
-<p>- Remettre le cavalier boot0 à gauche</p>
-<p><img  src="file:///android_asset/help/images/stm32-prog1-small.jpg"/></p>
-<p>&nbsp;</p>
-<p><strong>Flashage des bancs de test à base d'ESP32</strong></p>
-<p>- Branchez le cable</p>
-<p>- Choisissez le firmware approprié ou detectez le</p>
-<p>- Appuyer et maintenez le bouton du haut </p>
-<p><img  src="file:///android_asset/help/images/testStandESP32-top-switch.jpg"/></p>
-<p>- Appuyer briévement sur le bouton du bas tout en maintenant le bouton du haut appuyé</p>
-<p><img  src="file:///android_asset/help/images/testStandESP32-bottom-switch.jpg"/></p>
-<p>- Relacher le bouton du bas</p>
-<p>- Appuyez sur le bouton[flash firmware]</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<h1>Flashage du Firmware</h1>
+
+<p>Vous devez en premier lieu choisir le firmware à flasher. Le firmware dépend de la carte du banc d'essai à mettre à jour.</p>
+<p>Décidez ensuite si vous souhaitez directement flasher la carte ou utiliser un firmware de récupération au préalable.</p>
+
+<div class="info-box">
+    <strong>Firmware de récupération :</strong> Utilisez un firmware de récupération si la configuration du banc de test est corrompue et que celui-ci ne parvient plus à se connecter. Après avoir chargé un firmware de récupération, vous devrez reflasher le firmware opérationnel.
+</div>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; ATTENTION</div>
+    <div>Flasher votre banc d'essai avec un mauvais firmware aura pour conséquence un dysfonctionnement total ou un comportement imprévisible.</div>
+</div>
+
+<h2>Matériel requis</h2>
+<p>Pour pouvoir flasher votre banc de test, vous aurez besoin d'un câble USB-TTL et d'un adaptateur OTG (USB-C ou Micro-USB) pour le relier à votre téléphone ou tablette.</p>
+
+<h2>Bancs de test pris en charge</h2>
+<p>Regardez attentivement les photos ci-dessous pour identifier précisément votre modèle :</p>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Banc de test ATmega328</strong> (grand modèle)</p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>Banc de test STM32 V1</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="Banc de test STM32 V1"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>Banc de test STM32 V2</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="Banc de test STM32 V2"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>Banc de test ESP32</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandESP32-small.jpg" alt="Banc de test ESP32"/></p>
+</div>
+
+<h2>Instructions de flashage par microcontrôleur</h2>
+<p>Vous pouvez également tenter une détection automatique du firmware.</p>
+
+<h3>1. Bancs de test à base d'ATmega328</h3>
+<ul>
+    <li>Branchez le câble USB.</li>
+    <li>Choisissez le firmware approprié ou lancez la détection automatique.</li>
+    <li>Appuyez puis relâchez le bouton <strong>reset</strong> du banc de test, puis appuyez sur le bouton <strong>[Flash Firmware]</strong>.</li>
+</ul>
+<p><img src="file:///android_asset/help/images/alti-reset.jpg" alt="Bouton Reset ATmega328"/></p>
+
+<h3>2. Bancs de test à base de STM32</h3>
+<ul>
+    <li>Branchez le câble USB.</li>
+    <li>Choisissez le firmware approprié ou lancez la détection automatique.</li>
+    <li>Déplacez le cavalier <strong>BOOT0</strong> vers la droite (position programmation) :</li>
+</ul>
+<p><img src="file:///android_asset/help/images/stm32-prog2-small.jpg" alt="Cavalier STM32 BOOT0 Droite"/></p>
+<ul>
+    <li>Appuyez sur le bouton <strong>reset</strong> du banc de test.</li>
+    <li>Appuyez sur le bouton <strong>[Flash Firmware]</strong>.</li>
+    <li>Une fois le chargement terminé, remettez le cavalier <strong>BOOT0</strong> vers la gauche (position normale) :</li>
+</ul>
+<p><img src="file:///android_asset/help/images/stm32-prog1-small.jpg" alt="Cavalier STM32 BOOT0 Gauche"/></p>
+<ul>
+    <li>Appuyez sur le bouton <strong>reset</strong> pour redémarrer le banc en mode normal.</li>
+</ul>
+
+<h3>3. Bancs de test à base d'ESP32</h3>
+<ul>
+    <li>Branchez le câble USB.</li>
+    <li>Choisissez le firmware approprié ou lancez la détection automatique.</li>
+    <li>Appuyez et maintenez le bouton du haut :</li>
+</ul>
+<p><img src="file:///android_asset/help/images/testStandESP32-top-switch.jpg" alt="Bouton supérieur ESP32"/></p>
+<ul>
+    <li>Appuyez brièvement sur le bouton du bas puis relâchez-le tout en maintenant le bouton du haut enfoncé :</li>
+</ul>
+<p><img src="file:///android_asset/help/images/testStandESP32-bottom-switch.jpg" alt="Bouton inférieur ESP32"/></p>
+<ul>
+    <li>Relâchez enfin le bouton du haut.</li>
+    <li>Appuyez sur le bouton <strong>[Flash Firmware]</strong>.</li>
+</ul>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; REMARQUE IMPORTANTE</div>
+    <div>Ne débranchez jamais le câble durant l'opération de flashage. Cela corromprait la mémoire du microcontrôleur.</div>
+</div>
+
+</body>
+</html>

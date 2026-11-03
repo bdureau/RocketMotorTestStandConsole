@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        h3 { font-size: 1.05em; color: #37474F; margin-top: 14px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .btn-entry { margin-bottom: 14px; }
+        .btn-entry strong { color: #0277BD; }
+        .hardware-item { margin-bottom: 12px; }
+        img { vertical-align: middle; margin: 4px 6px 4px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Hulpbestand Test Stand-applicatie</h1>
+
+<p>Dit is een beknopte handleiding voor het gebruik van uw Test Stand-applicatie op Android. De app is een handige manier om stuwkrachtcurves van motoren op te nemen en uw teststand in het veld te configureren.</p>
+
+<h2>Eerste configuratie en Bluetooth-koppeling</h2>
+<ol>
+    <li><strong>Firmware-compatibiliteit:</strong> Zorg ervoor dat de printplaat van uw teststand compatibel is (d.w.z. dat de juiste firmware is geladen).</li>
+    <li><strong>Module aansluiten:</strong> Zorg ervoor dat de Bluetooth-module correct is aangesloten op de teststand-printplaat.</li>
+    <li><strong>Systeemkoppeling:</strong> Ga naar de Bluetooth-instellingen van uw Android-toestel en zoek naar de HC-05, HC-06 of andere Bluetooth-module. Voer bij het koppelen de standaard pincode in (standaard <strong>1234</strong>).</li>
+</ol>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; WAARSCHUWING</div>
+    <div>Geef elk gekoppeld Bluetooth-apparaat op uw telefoon een duidelijke herkenbare naam om er zeker van te zijn dat u de juiste teststand configureert.</div>
+</div>
+
+<ol start="4">
+    <li><strong>Inschakelen:</strong> Schakel de teststand in en wacht tot het akoestische piepsignaal stopt.</li>
+    <li><strong>Verbinding maken:</strong> Start de app op uw Android-apparaat, tik op «Gekoppelde apparaten tonen» en selecteer de HC-05 of HC-06 module. De app maakt nu verbinding.</li>
+</ol>
+
+<p>Zodra «Verbonden» verschijnt, is de communicatie actief: u kunt de instellingen van de teststand aanpassen of opgeslagen stuwkrachtcurves uitlezen. Als het verbinden mislukt, controleer dan of het bord is ingeschakeld en de juiste adapter is gekozen.</p>
+
+<h2>Gebruik van de Test Stand-applicatie</h2>
+
+<h3>Functies op het hoofdscherm</h3>
+
+<div class="btn-entry">
+    <p><strong>[Teststand Instellingen]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor settings75x91.png" alt="Teststand Instellingen"/>
+        Leest de actuele configuratie van de teststand uit en biedt de mogelijkheid deze te wijzigen.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Stuwkrachtcurves Uitlezen]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Thrust Curves75x87.png" alt="Stuwkrachtcurves Uitlezen"/>
+        Downloadt alle opgeslagen stuwkrachtmetingen uit het geheugen en geeft deze weer in grafieken.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Telemetrie]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Telemetry75x91.png" alt="Telemetrie"/>
+        Toont realtime telemetriegegevens rechtstreeks vanaf de teststand.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Instellingen Herstellen]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor reset settings75x90.png" alt="Instellingen Herstellen"/>
+        Zet de configuratie terug naar de fabrieksinstellingen en biedt tevens de mogelijkheid om alle opgeslagen curves te wissen.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Status]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Status75x90.png" alt="Status"/>
+        Opent het diagnosescherm voor controle van sensorsignalen, accuspanning en kalibratie.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Firmware Flashen]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor flash75x85.png" alt="Firmware Flashen"/>
+        Biedt de mogelijkheid om de firmware van de printplaat bij te werken via een USB-kabel.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Verbinden / Verbreken]</strong></p>
+    <p>
+        <img src="file:///android_asset/help/images/Motor connect75x87.png" alt="Verbinden"/>
+        <img src="file:///android_asset/help/images/Motor disconnect75x86.png" alt="Verbreken"/>
+    </p>
+    <p>Start of beëindigt de communicatieverbinding met de teststand.</p>
+</div>
+
+<h3>Optiemenu</h3>
+<p>Via het menu kunt u deze handleiding openen, de "Over"-pagina raadplegen met softwareversiegegevens en het visuele thema van de app aanpassen.</p>
+
+<h3>Ondersteunde Hardware</h3>
+<p>Deze applicatie ondersteunt de volgende teststand-printplaten:</p>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Teststand met ATmega328</strong></p>
+</div>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Teststand met STM32 (Versie 1)</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="Teststand V1"/></p>
+</div>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Teststand met STM32 (Versie 2)</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="Teststand V2"/></p>
+</div>
+
+</body>
+</html>

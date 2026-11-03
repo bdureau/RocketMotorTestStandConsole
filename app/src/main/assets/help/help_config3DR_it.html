@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .step-item { margin-bottom: 12px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Configurazione del modulo 3DR</h1>
+
+<p>Per poter effettuare la telemetria a lungo raggio, è necessario sostituire il modulo Bluetooth con un modulo di telemetria 3DR.</p>
+
+<div class="info-box">
+    <strong>Alimentazione elettrica:</strong> Si noti che la batteria del dispositivo Android deve essere sufficientemente potente da alimentare il modulo 3DR. Valutare l'uso di una batteria esterna in caso di modulo ad alta potenza.
+</div>
+
+<h2>Hardware necessario</h2>
+<ul>
+    <li>Un cavo adattatore seriale da USB a TTL.<br/>
+        <img src="file:///android_asset/help/images/ttl_cable-small.jpg" alt="Cavo TTL"/>
+    </li>
+    <li>Un adattatore USB (USB-C o Micro-USB a seconda del dispositivo Android).<br/>
+        <img src="file:///android_asset/help/images/usb_adpter-small.jpg" alt="Adattatore USB"/>
+    </li>
+    <li>Un adattatore JST e cavetti di connessione JST.</li>
+</ul>
+
+<h2>Compatibilità della velocità seriale (Baud Rate)</h2>
+<p>È necessario configurare il modulo per renderlo compatibile con la scheda del banco di prova. Tali moduli vengono solitamente preimpostati a 57600 baud. Tuttavia, il banco di prova funziona per impostazione predefinita a 38400 baud; è quindi indispensabile sincronizzare la velocità operativa corretta.</p>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; ATTENZIONE</div>
+    <div>Assicurarsi di non scollegare il modulo né il cavo durante l'esecuzione dei passaggi seguenti.</div>
+</div>
+
+<h2>Procedura di configurazione</h2>
+<ol>
+    <li class="step-item">
+        <strong>Connessione:</strong> Collegare il modulo al dispositivo Android mediante un cavo OTG o un adattatore USB.
+    </li>
+    <li class="step-item">
+        <strong>Lettura configurazione:</strong> Toccare <strong>[Recupera cfg]</strong>. L'app proverà varie velocità fino a stabilire il collegamento, quindi mostrerà la configurazione.
+    </li>
+    <li class="step-item">
+        <strong>Salvataggio:</strong> Modificare i parametri desiderati. Assicurarsi di impostare una velocità compatibile con la scheda (38400 baud) e toccare <strong>[Salva cfg]</strong>. In caso di errore durante la scrittura, l'operazione verrà annullata.
+    </li>
+</ol>
+
+<div class="info-box">
+    <strong>Moduli in coppia:</strong> I moduli 3DR vengono forniti in coppia, pertanto sarà necessario ripetere la procedura sia per il trasmettitore che per il ricevitore.
+</div>
+
+</body>
+</html>

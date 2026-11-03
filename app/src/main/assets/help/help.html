@@ -1,61 +1,116 @@
-<h1>Test Stand help file</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        h3 { font-size: 1.05em; color: #37474F; margin-top: 14px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .btn-entry { margin-bottom: 14px; }
+        .btn-entry strong { color: #0277BD; }
+        .hardware-item { margin-bottom: 12px; }
+        img { vertical-align: middle; margin: 4px 6px 4px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Test Stand Help File</h1>
+
 <p>This is a quick help file to use your Test Stand application. The Test Stand application is a very convenient way to record your motor thrust curves when you are on the field.</p>
-<p><br />First of all you need to make sure that your Test Stand board is compatible&nbsp;(ie: the correct firmware has been loaded).</p>
-<p>Secondly make sure that the bluetooth module is connected on the Test Stand board.</p>
-<p>Thirdly you need to&nbsp;go to your android device settings, go to the bluetooth configuration and search for the HC-05, HC-06 or other bluetooth module. When you have find it enter the pairing code which by default is 1234.</p>
-<p><span style="color: #ff0000;"><strong>!!! CAUTION !!!!</strong></span></p>
-<p><span style="color: #ff0000;"><strong>You might want to clearly name each bluetooth device paired in your phone to make sure that you configure the correct teststand.</strong></span></p>
-<p>&nbsp;</p>
-<p>Then turn on the TestStand and wait until it stops beeping.</p>
-<p>Then start the application on your Android device, click on the show paired devices and finally select the HC-05 or HC-06&nbsp;device. It now attempt to connect to the altimeter.</p>
-<p>If it says connected, you are now in and can use the application to configure your Test Stand or read the recorded thrust curves. If it cannot connect then make sure that you have the correct bluetooth device selected or that the teststand board is on.</p>
-<p>&nbsp;</p>
-<h2>Using the Test Stand application</h2>
-<h3>Test Stand main screen</h3>
-<p>On the main screen you have a number of buttons, let's go and describe each one.</p>
-<p><strong>[Test Stand Setting]</strong></p>
-<p><img  src="file:///android_asset/help/images/Motor settings75x91.png"/></p>
-<p>Read the Test Stand setting and allow you to modify them.</p>
-<p>&nbsp;</p>
-<p><strong>[Read Thrust Curves]</strong></p>
-<p><img  src="file:///android_asset/help/images/Motor Thrust Curves75x87.png"/></p>
-<p>Read all the thrust curves that have been recorded and plot&nbsp;them.</p>
-<p>&nbsp;</p>
-<p><strong>[Telemetry]</strong></p>
-<p><img  src="file:///android_asset/help/images/Motor Telemetry75x91.png"/></p>
-<p>Go to the Test Stand telemetry. &nbsp;</p>
-<p>&nbsp;</p>
-<p><strong>[Reset Settings]</strong></p>
-<p><img  src="file:///android_asset/help/images/Motor reset settings75x90.png"/></p>
-<p>Give the ability to restore to factory settings&nbsp;of the Test Stand config. It also allow to
-    clear all Thrust Curves.&nbsp;</p>
-<p>&nbsp;</p>
-<p><strong>[Status]</strong></p>
-<p><img  src="file:///android_asset/help/images/Motor Status75x90.png"/></p>
-<p>Go to the Test Stand state screen. &nbsp;</p>
-<p>&nbsp;</p>
-<p><strong>[Flash Firmware]</strong></p>
-<p><img  src="file:///android_asset/help/images/Motor flash75x85.png"/></p>
-<p>Allow to flash the firmware using a USB cable. This is currently supported only for non SMT32 board</p>
-<p>&nbsp;</p>
-<p><strong>[Connect/Disconnect]</strong></p>
-<p><img  src="file:///android_asset/help/images/Motor connect75x87.png"/>
-    <img  src="file:///android_asset/help/images/Motor disconnect75x86.png"/></p>
-<p>Disconnect from the Test Stand</p>
-<p>&nbsp;</p>
-<h3>Test Stand main screen menu</h3>
-<p>From the menu you can access this help file, an about screen that will give you informations about the application and its version and finally you have the option to customize the look and feel of this application.</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>Supported Test Stand board for this application are:</p>
-<p>&nbsp;</p>
-<p>- Test Stand with an Atmega328</p>
-<p>- Test Stand with an SMT32</p>
-<p>Version 1</p>
-<p><img  src="file:///android_asset/help/images/testStandV1-small.jpg"/></p>
-<p>Version 2</p>
-<p><img  src="file:///android_asset/help/images/testStandV2-small-1.jpg"/></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+
+<h2>Initial Setup &amp; Bluetooth Pairing</h2>
+<ol>
+    <li><strong>Firmware Compatibility:</strong> Make sure that your Test Stand board is compatible (i.e. the correct firmware has been loaded).</li>
+    <li><strong>Module Connection:</strong> Make sure that the Bluetooth module is connected to the Test Stand board.</li>
+    <li><strong>Pairing in System:</strong> Go to your Android device settings, open Bluetooth configuration, and search for the HC-05, HC-06, or other Bluetooth module. Enter the pairing PIN code (default is <strong>1234</strong>).</li>
+</ol>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; CAUTION</div>
+    <div>Clearly name each paired Bluetooth device in your phone to make sure you configure the correct test stand.</div>
+</div>
+
+<ol start="4">
+    <li><strong>Power On:</strong> Turn on the Test Stand and wait until it stops beeping.</li>
+    <li><strong>Connect:</strong> Start the application on your Android device, tap "Show paired devices", and select your HC-05 or HC-06 module. The console will now attempt to connect.</li>
+</ol>
+
+<p>Once connected, you can use the application to configure your Test Stand or read recorded thrust curves. If it cannot connect, verify that the board is powered on and that the correct Bluetooth adapter is selected.</p>
+
+<h2>Using the Test Stand Application</h2>
+
+<h3>Main Screen Actions</h3>
+
+<div class="btn-entry">
+    <p><strong>[Test Stand Setting]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor settings75x91.png" alt="Test Stand Setting"/>
+        Reads the current Test Stand configuration and allows you to modify it.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Read Thrust Curves]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Thrust Curves75x87.png" alt="Read Thrust Curves"/>
+        Reads all recorded motor thrust curves from memory and plots them as interactive graphs.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Telemetry]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Telemetry75x91.png" alt="Telemetry"/>
+        Opens real-time telemetry streaming from the test stand.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Reset Settings]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor reset settings75x90.png" alt="Reset Settings"/>
+        Restores factory default parameters. Also allows clearing all stored thrust curves.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Status]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Status75x90.png" alt="Status"/>
+        Opens the hardware diagnostics screen displaying sensor health, battery voltage, and board state.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Flash Firmware]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor flash75x85.png" alt="Flash Firmware"/>
+        Allows updating board firmware directly via a USB cable.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Connect / Disconnect]</strong></p>
+    <p>
+        <img src="file:///android_asset/help/images/Motor connect75x87.png" alt="Connect"/>
+        <img src="file:///android_asset/help/images/Motor disconnect75x86.png" alt="Disconnect"/>
+    </p>
+    <p>Establishes or terminates communication with the Test Stand.</p>
+</div>
+
+<h3>Main Screen Menu</h3>
+<p>From the options menu, you can open this help guide, access the "About" screen displaying version metadata, and customize the visual appearance of the application.</p>
+
+<h3>Supported Hardware</h3>
+<p>This application supports the following Test Stand controller boards:</p>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Test Stand ATmega328</strong></p>
+</div>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Test Stand STM32 (Version 1)</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="Test Stand V1"/></p>
+</div>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Test Stand STM32 (Version 2)</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="Test Stand V2"/></p>
+</div>
+
+</body>
+</html>

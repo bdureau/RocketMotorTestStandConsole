@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        h3 { font-size: 1.05em; color: #37474F; margin-top: 14px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .hardware-item { margin-bottom: 12px; }
+        .step-item { margin-bottom: 10px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Прошивка испытательного стенда</h1>
+
+<p>Сначала необходимо выбрать файл прошивки. Выбор зависит от конкретной модели платы испытательного стенда.</p>
+<p>Затем решите, будете ли вы сразу прошивать рабочую версию или сначала используете прошивку для восстановления (recovery).</p>
+
+<div class="info-box">
+    <strong>Восстановительная прошивка:</strong> Используйте восстановительную прошивку, если конфигурация повреждена и стенд больше не подключается. После загрузки восстановления потребуется заново прошить рабочую версию.
+</div>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; ВНИМАНИЕ</div>
+    <div>Прошивка неподходящей версии приведет к полной неработоспособности стенда или его некорректному поведению.</div>
+</div>
+
+<h2>Необходимое оборудование</h2>
+<p>Для прошивки стенда вам потребуются кабель USB-TTL и OTG-адаптер (USB-C или Micro-USB) для подключения к Android-устройству.</p>
+
+<h2>Поддерживаемые модели стендов</h2>
+<p>Внимательно ознакомьтесь с приведенными фотографиями для точной идентификации вашей платы:</p>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Испытательный стенд на ATmega328</strong> (большая версия)</p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>Испытательный стенд на STM32 V1</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="Стенд STM32 V1"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>Испытательный стенд на STM32 V2</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="Стенд STM32 V2"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>Испытательный стенд на ESP32</strong></p>
+    <p><img src="file:///android_asset/help/images/testStandESP32-small.jpg" alt="Стенд ESP32"/></p>
+</div>
+
+<h2>Инструкции по типам микроконтроллеров</h2>
+<p>Кроме того, вы можете запустить автоматическое определение прошивки.</p>
+
+<h3>1. Стенды на базе ATmega328</h3>
+<ul>
+    <li>Подключите USB-кабель.</li>
+    <li>Выберите нужную прошивку или запустите автоопределение.</li>
+    <li>Нажмите и отпустите кнопку <strong>reset</strong> на стенде, затем нажмите кнопку <strong>[Flash Firmware]</strong>.</li>
+</ul>
+<p><img src="file:///android_asset/help/images/alti-reset.jpg" alt="Кнопка сброса ATmega328"/></p>
+
+<h3>2. Стенды на базе STM32</h3>
+<ul>
+    <li>Подключите USB-кабель.</li>
+    <li>Выберите нужную прошивку или запустите автоопределение.</li>
+    <li>Переместите перемычку <strong>BOOT0</strong> вправо (режим программирования):</li>
+</ul>
+<p><img src="file:///android_asset/help/images/stm32-prog2-small.jpg" alt="Перемычка STM32 BOOT0 вправо"/></p>
+<ul>
+    <li>Нажмите кнопку <strong>reset</strong> на плате.</li>
+    <li>Нажмите кнопку <strong>[Flash Firmware]</strong>.</li>
+    <li>После завершения записи верните перемычку <strong>BOOT0</strong> обратно влево (рабочий режим):</li>
+</ul>
+<p><img src="file:///android_asset/help/images/stm32-prog1-small.jpg" alt="Перемычка STM32 BOOT0 влево"/></p>
+<ul>
+    <li>Нажмите кнопку <strong>reset</strong> для перезапуска стенда в нормальном режиме.</li>
+</ul>
+
+<h3>3. Стенды на базе ESP32</h3>
+<ul>
+    <li>Подключите USB-кабель.</li>
+    <li>Выберите нужную прошивку или запустите автоопределение.</li>
+    <li>Нажмите и удерживайте верхнюю кнопку:</li>
+</ul>
+<p><img src="file:///android_asset/help/images/testStandESP32-top-switch.jpg" alt="Верхняя кнопка ESP32"/></p>
+<ul>
+    <li>Кратковременно нажмите и отпустите нижнюю кнопку, продолжая удерживать верхнюю:</li>
+</ul>
+<p><img src="file:///android_asset/help/images/testStandESP32-bottom-switch.jpg" alt="Нижняя кнопка ESP32"/></p>
+<ul>
+    <li>Отпустите верхнюю кнопку.</li>
+    <li>Нажмите кнопку <strong>[Flash Firmware]</strong>.</li>
+</ul>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; ВАЖНОЕ ПРИМЕЧАНИЕ</div>
+    <div>Никогда не отсоединяйте кабель во время прошивки во избежание повреждения памяти микроконтроллера.</div>
+</div>
+
+</body>
+</html>

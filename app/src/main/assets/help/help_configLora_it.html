@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        h3 { font-size: 1.05em; color: #37474F; margin-top: 14px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .step-item { margin-bottom: 12px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Configurazione del modulo eByte LoRa E220</h1>
+
+<p>Per poter effettuare la telemetria a lungo raggio, è necessario sostituire il modulo Bluetooth con un modulo di telemetria a lunga portata come il LoRa E220.</p>
+
+<h3>Moduli testati con successo</h3>
+<ul>
+    <li>E220-400T30D</li>
+    <li>E220-400T30S</li>
+    <li>E220-900T30D</li>
+    <li>E220-900T30S</li>
+    <li>E220-400T22D</li>
+    <li>E220-900T22S</li>
+</ul>
+
+<p>
+    <img src="file:///android_asset/help/images/E220-900T22S.jpg" alt="Modulo LoRa E220 SMD"/>
+    <img src="file:///android_asset/help/images/E220-900T30D.jpg" alt="Modulo LoRa E220 DIP"/>
+</p>
+
+<div class="info-box">
+    <strong>Alimentazione elettrica:</strong> Si noti che la batteria del dispositivo Android deve essere sufficientemente potente da alimentare il modulo LoRa. Valutare l'uso di una batteria esterna in presenza di un modulo ad alta potenza.
+</div>
+
+<h2>Hardware necessario</h2>
+<ul>
+    <li>Un cavo adattatore seriale da USB a TTL.<br/>
+        <img src="file:///android_asset/help/images/ttl_cable-small.jpg" alt="Cavo TTL"/>
+    </li>
+    <li>Un adattatore USB (USB-C o Micro-USB a seconda del dispositivo Android).<br/>
+        <img src="file:///android_asset/help/images/usb_adpter-small.jpg" alt="Adattatore USB"/>
+    </li>
+    <li>Un adattatore JST e cavetti di collegamento JST.</li>
+</ul>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; CRITICO: PONTICELLI DI CONFIGURAZIONE</div>
+    <div>Per entrare in modalità di configurazione, è necessario inserire <strong>entrambi i ponticelli (jumper)</strong>. Prima dell'uso in volo, assicurarsi di <strong>rimuovere entrambi i ponticelli</strong> per uscire dalla modalità configurazione.</div>
+</div>
+
+<h2>Allineamento della velocità seriale (Baud Rate)</h2>
+<p>È necessario configurare il modulo in modo che comunichi correttamente con la scheda altimetro. Di norma questi moduli arrivano preimpostati a 57600 baud. L'altimetro funziona invece per impostazione predefinita a 38400 baud; è quindi necessario impostare la corretta velocità operativa.</p>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; ATTENZIONE</div>
+    <div>Assicurarsi di non scollegare il modulo né il cavo durante l'esecuzione dei seguenti passaggi.</div>
+</div>
+
+<h2>Procedura di configurazione</h2>
+<ol>
+    <li class="step-item">
+        <strong>Connessione:</strong> Inserire entrambi i ponticelli sul modulo. Collegare il modulo al dispositivo Android tramite cavo OTG o adattatore USB.
+    </li>
+    <li class="step-item">
+        <strong>Lettura configurazione:</strong> Toccare <strong>[Recupera cfg]</strong>. L'app tenterà la connessione al modulo a 9600 baud e caricherà la configurazione attuale.
+    </li>
+    <li class="step-item">
+        <strong>Salvataggio:</strong> Modificare le impostazioni desiderate. Assicurarsi di aver impostato una velocità compatibile con la scheda (predefinita: 38400 baud). Verificare che i canali siano identici sia sul trasmettitore che sul ricevitore. Se si imposta una chiave di crittografia, verificare che sia la stessa su entrambi. Toccare <strong>[Salva cfg]</strong>. In caso di errore durante la scrittura, l'operazione verrà annullata.
+    </li>
+    <li class="step-item">
+        <strong>Modalità normale:</strong> Scollegare il modulo e <strong>rimuovere entrambi i ponticelli</strong> prima del volo.
+    </li>
+</ol>
+
+<div class="info-box">
+    <strong>Moduli in coppia:</strong> I moduli LoRa vengono forniti in coppia, pertanto sarà necessario ripetere la procedura singolarmente per ciascun modulo.<br/>
+    <em>Nota: I moduli di telemetria LoRa attualmente non supportano schede basate su ESP32.</em>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .param-item { margin-bottom: 12px; }
+        .param-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Teststand Configureren</h1>
+
+<p>De configuratie van de teststand is verdeeld over 2 afzonderlijke schermen. Bij het openen van deze schermen leest de app de actuele instellingen uit het boordgeheugen van de teststand uit.</p>
+
+<div class="info-box">
+    <strong>Verbindingsstatus:</strong> Zorg ervoor dat de teststand is ingeschakeld en verbonden via Bluetooth of USB voordat u instellingen wijzigt.
+</div>
+
+<h2>Teststand Configuratie (Pagina 1)</h2>
+<div class="param-item">
+    <p><strong>Baudrate:</strong> Seriële communicatiesnelheid van de teststand (herstart vereist).</p>
+</div>
+<div class="param-item">
+    <p><strong>Resolutie teststand:</strong> Bemonsteringsfrequentie en meetresolutie (aantal metingen per seconde).</p>
+</div>
+<div class="param-item">
+    <p><strong>EEPROM-grootte:</strong> Geheugencapaciteit van de printplaat.</p>
+</div>
+<div class="param-item">
+    <p><strong>Opnameduur:</strong> Maximale opnameduur van een stuwkrachtcurve in seconden.</p>
+</div>
+<div class="param-item">
+    <p><strong>Batterijtype:</strong> Bepaalt het type accu voor automatische waarschuwingen bij een te lage voedingsspanning.</p>
+</div>
+
+<h2>Teststand Configuratie (Pagina 2)</h2>
+<ul>
+    <li><strong>Firmware-informatie:</strong> Toont de firmwareversie en hardwaregegevens van de teststand.</li>
+    <li><strong>Teststand-eenheden:</strong> Schakelt tussen metrieke en imperiale meeteenheden.</li>
+    <li><strong>Sensorkalibratie:</strong> Biedt de mogelijkheid om de krachtsensor te kalibreren met behulp van een gecertificeerd referentiegewicht.</li>
+</ul>
+
+</body>
+</html>

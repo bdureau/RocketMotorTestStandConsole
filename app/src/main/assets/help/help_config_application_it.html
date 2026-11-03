@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .setting-item { margin-bottom: 12px; }
+        .setting-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Configurazione dell'applicazione Test Stand</h1>
+
+<p>Tutte le impostazioni di configurazione sono raggruppate in un'unica schermata.</p>
+
+<h2>Impostazioni Generali</h2>
+<div class="setting-item">
+    <p><strong>Lingua dell'applicazione:</strong> Mostra la lingua attiva (attualmente impostata automaticamente in base alla lingua del dispositivo).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Colore del grafico:</strong> Imposta il colore della traccia delle curve di spinta del motore.</p>
+</div>
+<div class="setting-item">
+    <p><strong>Unità dell'applicazione:</strong> Consente di passare dal sistema metrico (Newton, grammi) al sistema imperiale (lbf, once).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Colore di sfondo del grafico:</strong> Imposta il colore di sfondo della visualizzazione grafica. <em>Assicurarsi che sia ben contrastante con il colore della linea del grafico!</em></p>
+</div>
+<div class="setting-item">
+    <p><strong>Dimensione del carattere:</strong> Regola la dimensione del testo visualizzato sui grafici e nella console.</p>
+</div>
+<div class="setting-item">
+    <p><strong>Baud Rate:</strong> Velocità di comunicazione per il cavo USB (deve corrispondere esattamente alla velocità del banco di prova, di norma 38400 baud).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Tipo di connessione:</strong> Seleziona tra <strong>Bluetooth</strong> (corto raggio) o <strong>USB</strong> (cavo diretto o moduli radio per telemetria a lungo raggio).</p>
+</div>
+<div class="setting-item">
+    <p><strong>Libreria grafica:</strong> Consente di selezionare il motore di rendering. <em>Attenzione: su Android 8 e versioni successive, è obbligatorio utilizzare la libreria <strong>MPAndroidChart</strong> per evitare il blocco improvviso dell'applicazione.</em></p>
+</div>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; AVVISO CONFIGURAZIONE USB</div>
+    <div><strong>Supporto USB completo:</strong> Attivare <strong>solo</strong> in presenza di connessione diretta con cavo USB. <strong>Mantenere disattivato</strong> se si utilizzano moduli radio a lunga portata (LoRa o 3DR) per evitare di danneggiare la memoria di configurazione del banco di prova.</div>
+</div>
+
+<h2>Salvataggio delle modifiche</h2>
+<p>Al termine delle modifiche, toccare <strong>[Salva]</strong> per confermare i parametri. È inoltre possibile uscire senza salvare o ripristinare i valori predefiniti di fabbrica.</p>
+
+</body>
+</html>

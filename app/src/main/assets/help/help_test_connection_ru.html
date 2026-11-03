@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .metric-item { margin-bottom: 12px; }
+        .metric-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Проверка соединения</h1>
+
+<p>Этот экран позволяет проверить надежность связи, в частности при использовании модулей телеметрии 3DR. Здесь отображается количество пакетов данных, потерянных из-за нестабильного радиоканала.</p>
+
+<div class="info-box">
+    <strong>Рекомендация:</strong> Выполняйте проверку качества радиоканала на испытательном стенде перед огневыми испытаниями двигателя, чтобы убедиться в стабильности приема.
+</div>
+
+<h2>Контролируемые параметры канала</h2>
+<div class="metric-item">
+    <p><strong>Отправлено / получено пакетов:</strong> Общее число тестовых кадров данных, переданных по активному каналу связи.</p>
+</div>
+<div class="metric-item">
+    <p><strong>Потерянные пакеты:</strong> Число пакетов, утерянных вследствие радиопомех, неверной ориентации антенн или недостаточного уровня сигнала.</p>
+</div>
+<div class="metric-item">
+    <p><strong>Процент потерь (%):</strong> Доля потерянных кадров относительно общего объема переданных данных. Низкий показатель гарантирует непрерывную передачу телеметрии.</p>
+</div>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; ПРЕДОСТЕРЕЖЕНИЕ ПЕРЕД ТЕСТОМ</div>
+    <div>Воздержитесь от прожига двигателя при заметных потерях пакетов. Это свидетельствует о наличии радиопомех, неправильном положении антенн или недостаточной мощности питания передатчика.</div>
+</div>
+
+</body>
+</html>

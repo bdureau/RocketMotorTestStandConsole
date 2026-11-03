@@ -8,8 +8,8 @@ android {
         applicationId "com.rocketmotorteststand"
         minSdk 23
         targetSdk 37
-        versionCode 21
-        versionName '2.0.21'
+        versionCode 22
+        versionName '2.0.22'
         multiDexEnabled true
     }
 
@@ -29,8 +29,8 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
     namespace 'com.rocketmotorteststand'
-    buildToolsVersion '36.0.0 rc4'
-    compileSdkMinor 0
+    buildToolsVersion '37.0.0'
+    compileSdkMinor 2
 }
 
 dependencies {
@@ -43,7 +43,7 @@ dependencies {
     implementation files('libs/physicaloid.aar')
     implementation files('libs/viewtooltip.aar') //diff
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.appcompat:appcompat:1.8.0'
     implementation 'com.google.android.material:material:1.14.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.2'
     implementation 'junit:junit:4.13.2'

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .step-item { margin-bottom: 12px; }
+        .step-item strong { color: #0277BD; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Selección del módulo Bluetooth</h1>
+
+<p>Se le pedirá que elija un módulo Bluetooth si aún no ha seleccionado uno o si desea conectarse a un banco de pruebas diferente.</p>
+
+<h2>Procedimiento de emparejamiento y selección</h2>
+<ol>
+    <li class="step-item">
+        <strong>Emparejamiento en el sistema:</strong> Primero debe vincular todos los módulos Bluetooth de sus bancos de prueba en los ajustes de Bluetooth de su dispositivo Android (el código PIN por defecto suele ser <code>1234</code> o <code>0000</code>).
+    </li>
+    <li class="step-item">
+        <strong>Selección del módulo:</strong> De la lista de dispositivos configurados, seleccione el que esté utilizando su banco de pruebas.
+    </li>
+    <li class="step-item">
+        <strong>Reconexión:</strong> Salga de la pantalla y vuelva a conectarse. Si ha seleccionado el módulo equivocado o la placa está apagada, no se establecerá la conexión.
+    </li>
+</ol>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; CONSEJO IMPORTANTE</div>
+    <div>Asegúrese de diferenciar claramente y renombrar los dispositivos Bluetooth en su teléfono para conectarse siempre al banco de pruebas correcto.</div>
+</div>
+
+</body>
+</html>

@@ -1,40 +1,69 @@
-<h1>Bluetooth module configuration</h1>
-<p>In order to your bluetooth module to connect your altimeter to your phone you will first need to configure it so that it works at the same speed
-    as your altimeter board.</p>
-<p></p>
-<p>The following screen will help you to configure a bluetooth module so that you can use it with your board.</p>
-<p>Module such as the HC05, HC06 etc ... should work</p>
-<p><img  src="file:///android_asset/help/images/bluetooth_module.jpg"/></p>
-<p>To program the module you need a TTL cable</p>
-<p><img  src="file:///android_asset/help/images/ttl_cable-small.jpg"/></p>
-<p>a USB adapter (USBC or micro USB depending on your Android device)</p>
-<p><img  src="file:///android_asset/help/images/usb_adpter-small.jpg"/></p>
-<p>a jst adapter and some jst cables are required</p>
-<p> </p>
-<p>You will need to configure the module so that it works with your altimeter board.</p>
-<p>Note that those modules usually come pre-set to work at 9600 bauds. However your altimeter board
-by default will work at 38400 bauds so will need to make sure that you are connecting at the correct speed.</p>
-<p></p>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .step-item { margin-bottom: 12px; }
+        .step-item strong { color: #0277BD; }
+        img { vertical-align: middle; margin: 6px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
 
-<p><span style="color: #ff0000;">CAUTION: make sure that you do not unplug the module while doing the following</span></p>
-<p></p>
-<p><strong>Retrieving the module configuration</strong></p>
-<p>Plug the module in your Android device using a TTL cable and a USB adaptor that can work with
-micro USB or type C USB</p>
-<p>You will need to select the bluetooth module that you have. If you do not know which one you have
-    select the default one or any other one that is compatible. If you cannot use any of the module,
-    send me the module references and/or pictures of the module.</p>
-<p>Then click on [retrieve cfg] this will try to connect to the module using the default 38600 baud.
-    If it fails try again, it will use various baudrates until it connects.
-It will then retrieve the module config so that you can change it</p>
-<p></p>
-<p><strong>Saving the module configuration</strong></p>
-<p>Change the settings that you want to change such as the module name or speed. Make sure that you have selected a baudrate that will
-work with your board and click [Save cfg]. This will save the configuration.
-    If any error occur while saving it will abort the save</p>
-<p></p>
-<p>Note that you will need to repeat the same steps for each bluetooth module that you want to configure</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<h1>Bluetooth Module Configuration</h1>
+
+<p>In order for your Bluetooth module to connect your altimeter to your phone, you will first need to configure it so that it works at the same speed as your altimeter board.</p>
+
+<p>This utility enables you to configure compatible modules such as the <strong>HC-05, HC-06, etc.</strong></p>
+
+<p><img src="file:///android_asset/help/images/bluetooth_module.jpg" alt="Bluetooth module"/></p>
+
+<h2>Required Hardware</h2>
+<ul>
+    <li>A USB-to-TTL serial adapter cable.<br/>
+        <img src="file:///android_asset/help/images/ttl_cable-small.jpg" alt="TTL cable"/>
+    </li>
+    <li>A USB adapter (USB-C or Micro-USB depending on your Android device).<br/>
+        <img src="file:///android_asset/help/images/usb_adpter-small.jpg" alt="USB adapter"/>
+    </li>
+    <li>A JST adapter and matching JST cables.</li>
+</ul>
+
+<h2>Baud Rate Alignment</h2>
+<p>You will need to configure the module so that it works with your altimeter board. Note that these modules usually come preset to work at <strong>9600 baud</strong>. However, your altimeter board by default will work at <strong>38400 baud</strong>, so you need to make sure that you are connecting at the correct speed.</p>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; CAUTION</div>
+    <div>Make sure that you do not unplug the module or disconnect the cable while performing the configuration steps below.</div>
+</div>
+
+<h2>Configuration Procedure</h2>
+<ol>
+    <li class="step-item">
+        <strong>Hardware Connection:</strong> Connect the Bluetooth module to your Android device using the TTL cable and USB-OTG adapter.
+    </li>
+    <li class="step-item">
+        <strong>Select Module Type:</strong> Select the Bluetooth module model you have. If you do not know which one you have, select the default one or any other compatible profile. If none work, send pictures and references of your module to support.
+    </li>
+    <li class="step-item">
+        <strong>Retrieve Configuration:</strong> Tap <strong>[Retrieve cfg]</strong>. The application will attempt to connect using 38400 baud. If it fails, try again; it will scan through various standard baud rates until synchronization is achieved and current settings are loaded.
+    </li>
+    <li class="step-item">
+        <strong>Save Configuration:</strong> Change the desired parameters such as module name, PIN, or speed. Ensure you have selected a baud rate that works with your board (typically 38400 baud) and tap <strong>[Save cfg]</strong>. If an error occurs, the save process will safely abort.
+    </li>
+</ol>
+
+<div class="info-box">
+    <strong>Note:</strong> Repeat this configuration procedure individually for each Bluetooth module you wish to configure.
+</div>
+
+</body>
+</html>
