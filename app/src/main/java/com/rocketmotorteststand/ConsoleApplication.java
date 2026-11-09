@@ -6,6 +6,8 @@ package com.rocketmotorteststand;
 
 import android.app.Application;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
@@ -49,6 +51,31 @@ public class ConsoleApplication extends Application {
     private UsbConnection UsbCon = null;
 
     private Handler mHandler;
+
+    /**
+     * Met à jour la locale du contexte en fonction de la configuration de l'application.
+     * 0 = Langue du téléphone, 1 = Anglais
+     */
+    public static Context updateBaseContextLocale(Context context, int appLanguage) {
+        Locale locale;
+        if (appLanguage == 1) {
+            locale = Locale.ENGLISH;
+        } else {
+            locale = Locale.getDefault();
+        }
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration(context.getResources().getConfiguration());
+        config.setLocale(locale);
+        return context.createConfigurationContext(config);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        SharedPreferences prefs = base.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
+        int lang = prefs.getInt("AppLanguage", 0);
+        super.attachBaseContext(updateBaseContextLocale(base, lang));
+    }
 
     public void setHandler(Handler mHandler) {
         this.mHandler = mHandler;

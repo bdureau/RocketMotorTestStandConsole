@@ -445,4 +445,8 @@
     <string name="telemetry_thrust_time">Poussée/Temps</string>
     <string name="telemetry_pressure">Pression</string>
     <string name="telemetry_time">Temps</string>
+    <string name="config_lora_32_module">Config Lora 32 module</string>
+    <string name="config_lora_e220_module">Config Lora E220 module</string>
+    <string name="config_bluetooth_module">Config bluetooth module</string>
+    <string name="config_3dr_module">Config 3DR module</string>
 </resources>

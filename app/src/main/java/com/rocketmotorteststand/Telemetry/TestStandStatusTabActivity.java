@@ -1,6 +1,8 @@
 package com.rocketmotorteststand.Telemetry;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -48,6 +50,15 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
     private String[] units = null;
     private TestStandStatusFragment statusPage1;
     private String TAG ="TestStandStatusTabActivity";
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        // Read language configuration directly from SharedPreferences to ensure
+        // context localization is configured before Activity inflation
+        SharedPreferences prefs = newBase.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
+        int lang = prefs.getInt("AppLanguage", 0);
+        super.attachBaseContext(ConsoleApplication.updateBaseContextLocale(newBase, lang));
+    }
 
     Handler handler = new Handler() {
         @Override

@@ -2,8 +2,10 @@ package com.rocketmotorteststand.Help;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+//import android.os.Build;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -24,6 +26,15 @@ public class HelpActivity extends AppCompatActivity {
     Button btnDismiss;
     WebView webView;
     ConsoleApplication myBT;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        // Read language configuration directly from SharedPreferences to ensure
+        // context localization is configured before Activity inflation
+        SharedPreferences prefs = newBase.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
+        int lang = prefs.getInt("AppLanguage", 0);
+        super.attachBaseContext(ConsoleApplication.updateBaseContextLocale(newBase, lang));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +62,16 @@ public class HelpActivity extends AppCompatActivity {
         if(myBT.getAppConf().getApplicationLanguage()==0) {
             //use phone language
             try {
-                if (Locale.getDefault().getLanguage() == "fr")
+                if (Locale.getDefault().getLanguage().equals("fr")  )
                     webView.loadUrl("file:///android_asset/help/" + FileName + "_fr.html");
+                else if (Locale.getDefault().getLanguage().equals("es"))
+                    webView.loadUrl("file:///android_asset/help/" + FileName + "_es.html");
+                else if (Locale.getDefault().getLanguage().equals("it"))
+                    webView.loadUrl("file:///android_asset/help/" + FileName + "_it.html");
+                else if (Locale.getDefault().getLanguage().equals("nl"))
+                    webView.loadUrl("file:///android_asset/help/" + FileName + "_nl.html");
+                else if (Locale.getDefault().getLanguage().equals("ru"))
+                    webView.loadUrl("file:///android_asset/help/" + FileName + "_ru.html");
                 else
                     webView.loadUrl("file:///android_asset/help/" + FileName + ".html");
             } catch (Exception e) {
