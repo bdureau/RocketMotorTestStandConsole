@@ -1,5 +1,6 @@
 package com.rocketmotorteststand.config.TestStandConfig;
 
+import com.rocketmotorteststand.BoardCapabilities;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,13 @@ public class TestStandConfigTab2Fragment extends Fragment {
 
 
     private TestStandConfigData ltestStandNameCfg = null;
+
+    /**
+     * Empty constructor required by Android to recreate the fragment. A recreated instance
+     * is discarded by the host activity (see FragmentRecreationHelper).
+     */
+    public TestStandConfigTab2Fragment() {
+    }
 
     public TestStandConfigTab2Fragment(TestStandConfigData cfg) {
         ltestStandNameCfg = cfg;
@@ -136,10 +144,13 @@ public class TestStandConfigTab2Fragment extends Fragment {
         txtBluetoothName = (TextView) view.findViewById(R.id.txtBluetoothName);
         bluetoothName = (EditText) view.findViewById(R.id.editBluetoothName);
         bluetoothName.setText(ltestStandNameCfg.getBluetoothName());
-        if ((ltestStandNameCfg.getTestStandName().equals("TestStandESP32") ||
-                ltestStandNameCfg.getTestStandName().equals("TestStandESP32V3") ||
-                ltestStandNameCfg.getTestStandName().equals("TestStandESP32V4")  &&
-                (ltestStandNameCfg.getTestStandMajorVersion() >= 1 && ltestStandNameCfg.getTestStandMinorVersion() > 7))) {
+        // The Bluetooth name can be changed on ESP32 boards from firmware 1.8. The former test
+        // had misplaced parentheses (the version was only checked for the V4) and rejected
+        // a 2.x firmware because it only compared the minor version.
+        int major = ltestStandNameCfg.getTestStandMajorVersion();
+        int minor = ltestStandNameCfg.getTestStandMinorVersion();
+        boolean firmwareHasBtName = (major > 1) || (major == 1 && minor > 7);
+        if (BoardCapabilities.hasBluetoothName(ltestStandNameCfg.getTestStandName()) && firmwareHasBtName) {
             Log.d( TAG, "Version greater  than 1.7");
             txtBluetoothName.setVisibility(View.VISIBLE);
             bluetoothName.setVisibility(View.VISIBLE);

@@ -1,36 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Manifest of the Rocket Motor Test Stand console. It declares the permissions needed to talk
+    to the test stand over Bluetooth classic (SPP) or USB serial, the screens of the application
+    and the FileProvider used to share the exported files.
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!--
-             The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-             Google Maps Android API v2, but you must specify either coarse or fine
-             location permissions for the 'MyLocation' functionality.
-        -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <uses-feature android:name="android.hardware.usb.host" />
+    <!--
+        Bluetooth up to Android 11: install-time permissions. They are ignored from Android 12,
+        where BLUETOOTH_CONNECT replaces them.
+    -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+    <!--
+        Bluetooth from Android 12: runtime permission needed to list the paired modules and to
+        connect to them. BLUETOOTH_SCAN is not requested: the application never runs a discovery.
+        The location permissions (a Google Maps leftover) are not needed either.
+    -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!--
+        Writing the exported files to the public Download folder up to Android 9. From
+        Android 10 the files are written through MediaStore, which needs no permission.
+    -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28"
+        tools:ignore="ScopedStorage" />
+
+    <!--
+        USB host is used for the USB serial connection and for flashing the firmware. It is not
+        required, so that the application stays available on devices without USB host
+        (they can still use Bluetooth).
+    -->
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="false" />
+    <!-- Bluetooth is optional too: USB serial works without it -->
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
 
     <application
         android:name=".ConsoleApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RocketMotorTestStand">
-        <!--  android:usesCleartextTraffic="true"-->
+
+        <!--
+            Telemetry module configuration screens (3DR, Bluetooth, LoRa E220 / E32). They are
+            exported because Android starts them when a matching USB serial adapter is plugged in.
+        -->
         <activity
             android:name=".config.ConfigModules.Config3DR"
-            android:label="@string/config_3dr_module"
             android:exported="true"
+            android:label="@string/config_3dr_module"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
@@ -42,8 +74,8 @@
         </activity>
         <activity
             android:name=".config.ConfigModules.ConfigBT"
-            android:label="@string/config_bluetooth_module"
             android:exported="true"
+            android:label="@string/config_bluetooth_module"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
@@ -77,18 +109,26 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
+
+        <!-- Firmware flashing over USB (STM32 / ESP32 / ATmega boards) -->
         <activity
             android:name=".Flash.FlashFirmware"
-            android:label="Flash firmware"
+            android:label="@string/flash_firmware_title"
             android:screenOrientation="portrait" />
 
+        <!-- Display of one thrust curve (chart and information tabs) -->
         <activity
             android:name=".ThrustCurve.ThrustCurveViewTabActivity"
             android:screenOrientation="portrait" />
+
+        <!--
+            Main screen and launcher entry point. Also started when a USB serial adapter
+            matching res/xml/device_filter.xml is plugged in.
+        -->
         <activity
             android:name=".MainScreenActivity"
-            android:label="@string/app_name"
             android:exported="true"
+            android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -103,36 +143,45 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
+
+        <!-- Connection reliability test -->
         <activity
             android:name=".connection.TestConnection"
-            android:label="Test connection"
+            android:label="@string/test_connection"
             android:screenOrientation="portrait" />
+        <!-- Selection of the paired Bluetooth module -->
         <activity
             android:name=".connection.SearchBluetooth"
             android:label="@string/select_bluetooth_device"
             android:screenOrientation="portrait" />
+        <!-- Test stand board configuration and load cell calibration -->
         <activity
             android:name=".config.TestStandTabConfigActivity"
             android:label="@string/teststand_config"
             android:screenOrientation="portrait" />
+        <!-- List of the thrust curves recorded by the test stand -->
         <activity
             android:name=".ThrustCurve.ThrustCurveListActivity"
             android:label="@string/ThrustCurves_list"
             android:screenOrientation="portrait" />
 
+        <!-- About and help screens -->
         <activity
             android:name=".Help.AboutActivity"
             android:label="@string/about_screen"
             android:screenOrientation="portrait" />
+        <!-- Application settings (language, units, colours, connection type) -->
         <activity
             android:name=".config.AppConfigTabActivity"
             android:label="@string/titre_application_pref"
             android:screenOrientation="portrait" />
         <activity android:name=".Help.HelpActivity" />
+        <!-- Resets the board settings to factory defaults / clears the stored thrust curves -->
         <activity
             android:name=".ResetSettingsActivity"
             android:label="@string/reset_settings"
             android:screenOrientation="portrait" />
+        <!-- Live telemetry and status screens -->
         <activity
             android:name=".Telemetry.TestStandTelemetryTabActivity"
             android:label="@string/telemetry_screen"
@@ -142,9 +191,13 @@
             android:label="@string/status_screen"
             android:screenOrientation="portrait" />
 
+        <!--
+            Gives other applications temporary read access to the files shared by the
+            application (CSV, .eng, zip, screenshots). Exposed folders: res/xml/file_path.xml.
+        -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.rocketmotorteststand.provider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

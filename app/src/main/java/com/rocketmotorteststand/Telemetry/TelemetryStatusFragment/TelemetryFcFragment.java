@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.rocketmotorteststand.BoardCapabilities;
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveView.ChartView;
@@ -28,6 +29,12 @@ import org.afree.graphics.geom.Font;
 
 
 
+/**
+ * @description: Live telemetry tab drawn with the AFreeChart library (used on Android versions
+ * older than 8 when selected in the settings): shows the current thrust and pressure values and
+ * plots them against time.
+ * @author: boris.dureau@neuf.fr
+ **/
 public class TelemetryFcFragment extends Fragment {
     private ConsoleApplication myBT;
     private TextView txtCurrentThrust, txtCurrentPressure, txtCurrentPressure2, textViewlblCurrentPressure2;
@@ -50,6 +57,13 @@ public class TelemetryFcFragment extends Fragment {
         if(ViewCreated)
             txtCurrentPressure2.setText(value);
     }
+    /**
+     * Empty constructor required by Android to recreate the fragment. A recreated instance
+     * is discarded by the host activity (see FragmentRecreationHelper).
+     */
+    public TelemetryFcFragment() {
+    }
+
     public TelemetryFcFragment(ConsoleApplication pBT, String [] pUnits) {
         myBT = pBT;
         units = pUnits;
@@ -57,19 +71,24 @@ public class TelemetryFcFragment extends Fragment {
     public boolean isViewCreated() {
         return ViewCreated;
     }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ViewCreated = false;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         View view = inflater.inflate(R.layout.fragment_telemetry_fc, container, false);
 
         txtCurrentThrust = (TextView) view.findViewById(R.id.textViewCurrentThrust);
         txtCurrentPressure = (TextView) view.findViewById(R.id.textViewCurrentPressure);
         txtCurrentPressure2 = (TextView) view.findViewById(R.id.textViewCurrentPressure2);
+        // This label was never looked up, which crashed the screen with a NullPointerException
+        textViewlblCurrentPressure2 = (TextView) view.findViewById(R.id.textViewlblCurrentPressure2);
 
-        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+        if (BoardCapabilities.hasPressure2(myBT.getBoardName())) {
             txtCurrentPressure2.setVisibility(View.VISIBLE);
             textViewlblCurrentPressure2.setVisibility(View.VISIBLE);
         } else {
@@ -92,8 +111,7 @@ public class TelemetryFcFragment extends Fragment {
         String title;
         String yLabel;
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStand") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32")) {
+        if (!BoardCapabilities.hasPressure(myBT.getBoardName())) {
             title = getResources().getString(R.string.Thrust_time);
             yLabel = getResources().getString(R.string.Thrust) + " (" + units[0] + ") ";
 
@@ -159,17 +177,22 @@ public class TelemetryFcFragment extends Fragment {
         return view;
     }
     public void plotThrust(XYSeries curveData) {
+        // Telemetry may start before the chart view exists
+        if (!ViewCreated || plot == null)
+            return;
         XYSeriesCollection thrustCurveData = new XYSeriesCollection();
         thrustCurveData.addSeries(curveData);
         plot.setDataset(0, thrustCurveData);
     }
 
     public void plotThrustAndPressure(XYSeries curveThrustData, XYSeries curvePressureData, XYSeries curvePressureData2) {
+        // Telemetry may start before the chart view exists
+        if (!ViewCreated || plot == null)
+            return;
         XYSeriesCollection thrustCurveData = new XYSeriesCollection();
         thrustCurveData.addSeries(curveThrustData);
         thrustCurveData.addSeries(curvePressureData);
-        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+        if (BoardCapabilities.hasPressure2(myBT.getBoardName())) {
             thrustCurveData.addSeries(curvePressureData2);
         }
         plot.setDataset(0, thrustCurveData);

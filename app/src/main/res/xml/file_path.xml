@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Folders that the FileProvider (declared in AndroidManifest.xml) may expose to other
+    applications when a file is shared. Only the "share" sub folder of the private cache is
+    exposed: the former configuration exposed the whole external storage.
+-->
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-path
-        name="external_files"
-        path="."/>
+    <!-- CSV, .eng, zip and screenshot files written by FileExportHelper.saveForSharing() -->
+    <cache-path
+        name="shared"
+        path="share/" />
 </paths>

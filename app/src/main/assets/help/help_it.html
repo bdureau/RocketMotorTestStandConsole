@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,67 +20,67 @@
 </head>
 <body>
 
-<h1>File di guida per Banco di Prova Motori</h1>
+<h1>Guida del banco di prova</h1>
 
-<p>Questa è una guida rapida all'utilizzo dell'applicazione Test Stand su Android. L'applicazione è una soluzione molto comoda per registrare le curve di spinta dei motori e configurare il banco di prova direttamente sul campo.</p>
+<p>Questa è una guida rapida all'uso dell'applicazione Test Stand. L'applicazione Test Stand è un modo molto pratico per registrare le curve di spinta dei vostri motori direttamente sul campo.</p>
 
 <h2>Configurazione iniziale e associazione Bluetooth</h2>
 <ol>
-    <li><strong>Compatibilità del firmware:</strong> Assicurati che la scheda del banco di prova sia compatibile (cioè che sia stato caricato il firmware corretto).</li>
-    <li><strong>Connessione del modulo:</strong> Verifica che il modulo Bluetooth sia collegato correttamente alla scheda del banco di prova.</li>
-    <li><strong>Associazione nel sistema:</strong> Accedi alle impostazioni del dispositivo Android, apri la configurazione Bluetooth e cerca il modulo HC-05, HC-06 o compatibile. Inserisci il codice PIN di associazione (predefinito: <strong>1234</strong>).</li>
+    <li><strong>Compatibilità del firmware:</strong> Assicuratevi che la scheda del banco di prova sia compatibile (cioè che sia stato caricato il firmware corretto).</li>
+    <li><strong>Collegamento del modulo:</strong> Assicuratevi che il modulo Bluetooth sia collegato alla scheda del banco di prova.</li>
+    <li><strong>Associazione nel sistema:</strong> Aprite le impostazioni del dispositivo Android, entrate nella configurazione Bluetooth e cercate il modulo HC-05, HC-06 o un altro modulo Bluetooth. Inserite il codice PIN di associazione (predefinito <strong>1234</strong>).</li>
 </ol>
 
 <div class="warning-box">
     <div class="warning-title">&#9888; ATTENZIONE</div>
-    <div>Si consiglia di rinominare in modo chiaro ogni dispositivo Bluetooth associato sullo smartphone per assicurarsi di configurare il banco di prova corretto.</div>
+    <div>Assegnate un nome chiaro a ogni dispositivo Bluetooth associato sul telefono, per essere sicuri di configurare il banco di prova giusto.</div>
 </div>
 
 <ol start="4">
-    <li><strong>Accensione:</strong> Accendi il banco di prova e attendi finché non smette di emettere bip sonori.</li>
-    <li><strong>Connessione:</strong> Avvia l'applicazione sul dispositivo Android, tocca «Mostra dispositivi associati» e seleziona il dispositivo HC-05 o HC-06. L'applicazione tenterà la connessione.</li>
+    <li><strong>Accensione:</strong> Accendete il banco di prova e attendete che smetta di emettere segnali acustici.</li>
+    <li><strong>Connessione:</strong> Avviate l'applicazione sul dispositivo Android, toccate «Mostra dispositivi associati» e selezionate il modulo HC-05 o HC-06. La console tenterà quindi di connettersi.</li>
 </ol>
 
-<p>Se viene visualizzato «Connesso», il collegamento è attivo: puoi utilizzare l'applicazione per configurare il banco di prova o scaricare le curve di spinta memorizzate. Se non riesce a connettersi, verifica che la scheda sia accesa e che sia stato selezionato l'adattatore corretto.</p>
+<p>Una volta connessi, potete usare l'applicazione per configurare il banco di prova o leggere le curve di spinta registrate. Se la connessione non riesce, verificate che la scheda sia accesa e che sia selezionato l'adattatore Bluetooth corretto.</p>
 
-<h2>Utilizzo dell'applicazione Test Stand</h2>
+<h2>Uso dell'applicazione Test Stand</h2>
 
-<h3>Pulsanti della schermata principale</h3>
+<h3>Comandi della schermata principale</h3>
 
 <div class="btn-entry">
     <p><strong>[Impostazioni Banco di Prova]</strong></p>
-    <p><img src="file:///android_asset/help/images/Motor settings75x91.png" alt="Impostazioni Banco"/>
-        Legge la configurazione corrente del banco di prova e consente di modificarla.</p>
+    <p><img src="file:///android_asset/help/images/Motor settings75x91.png" alt="Impostazioni Banco di Prova"/>
+        Legge la configurazione attuale del banco di prova e permette di modificarla.</p>
 </div>
 
 <div class="btn-entry">
     <p><strong>[Leggi Curve di Spinta]</strong></p>
     <p><img src="file:///android_asset/help/images/Motor Thrust Curves75x87.png" alt="Leggi Curve di Spinta"/>
-        Scarica tutte le curve di spinta registrate nella memoria e le mostra sotto forma di grafico vettoriale.</p>
+        Legge dalla memoria tutte le curve di spinta registrate e le visualizza come grafici interattivi.</p>
 </div>
 
 <div class="btn-entry">
     <p><strong>[Telemetria]</strong></p>
     <p><img src="file:///android_asset/help/images/Motor Telemetry75x91.png" alt="Telemetria"/>
-        Accede al flusso di telemetria in tempo reale dal banco di prova.</p>
+        Apre la telemetria in tempo reale trasmessa dal banco di prova.</p>
 </div>
 
 <div class="btn-entry">
     <p><strong>[Ripristina Impostazioni]</strong></p>
     <p><img src="file:///android_asset/help/images/Motor reset settings75x90.png" alt="Ripristina Impostazioni"/>
-        Ripristina i parametri di fabbrica del banco di prova e consente inoltre di cancellare tutte le curve di spinta salvate.</p>
+        Ripristina i parametri di fabbrica. Permette anche di cancellare tutte le curve di spinta memorizzate.</p>
 </div>
 
 <div class="btn-entry">
     <p><strong>[Stato]</strong></p>
     <p><img src="file:///android_asset/help/images/Motor Status75x90.png" alt="Stato"/>
-        Apre la schermata di diagnostica per controllare lo stato dei sensori, la tensione della batteria e la calibrazione.</p>
+        Apre la schermata di diagnostica hardware, che mostra lo stato dei sensori, la tensione della batteria e lo stato della scheda.</p>
 </div>
 
 <div class="btn-entry">
     <p><strong>[Flash Firmware]</strong></p>
     <p><img src="file:///android_asset/help/images/Motor flash75x85.png" alt="Flash Firmware"/>
-        Consente di aggiornare il firmware della scheda tramite cavo USB.</p>
+        Permette di aggiornare il firmware della scheda direttamente tramite cavo USB.</p>
 </div>
 
 <div class="btn-entry">
@@ -93,23 +93,32 @@
 </div>
 
 <h3>Menu della schermata principale</h3>
-<p>Dal menu opzioni è possibile consultare questa guida rapida, aprire la schermata «Informazioni» con i dati di versione e personalizzare l'aspetto grafico dell'applicazione.</p>
+<p>Dal menu delle opzioni potete aprire questa guida, accedere alla schermata «Informazioni», che mostra i dati della versione, e personalizzare l'aspetto dell'applicazione.</p>
 
 <h3>Hardware supportato</h3>
-<p>L'applicazione supporta le seguenti schede di controllo per banco di prova:</p>
+<p>Questa applicazione supporta le seguenti schede per banco di prova:</p>
 
 <div class="hardware-item">
-    <p>&bull; <strong>Banco di prova con ATmega328</strong></p>
+    <p>&bull; <strong>Banco di prova ATmega328</strong></p>
+    <p>È il prototipo originale del banco di prova, che ho realizzato con un ATmega328.</p>
 </div>
 
 <div class="hardware-item">
-    <p>&bull; <strong>Banco di prova con STM32 (Versione 1)</strong></p>
-    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="Banco di prova V1"/></p>
+    <p>&bull; <strong>Banco di prova STM32 (versione 1)</strong></p>
+    <p>È il primo banco di prova di produzione, con una scheda STM32. Ha un solo ingresso per il sensore di forza (cella di carico), quindi può misurare soltanto la spinta.</p>
+    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="Banco di prova STM32 (versione 1)"/></p>
 </div>
 
 <div class="hardware-item">
-    <p>&bull; <strong>Banco di prova con STM32 (Versione 2)</strong></p>
-    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="Banco di prova V2"/></p>
+    <p>&bull; <strong>Banco di prova STM32 (versione 2)</strong></p>
+    <p>È la seconda versione del banco di prova e usa anch'essa una scheda STM32. Ha un ingresso per il sensore di forza per misurare la spinta e 2 ingressi analogici per misurare la pressione all'interno dell'involucro del motore.</p>
+    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="Banco di prova STM32 (versione 2)"/></p>
+</div>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Banco di prova ESP32 (versione 3)</strong></p>
+    <p>È la terza versione del banco di prova e usa un chip ESP32. Ha un ingresso per il sensore di forza per misurare la spinta e 2 ingressi analogici per misurare la pressione all'interno dell'involucro del motore. Notate che, per qualche motivo, registra meno</p>
+    <p><img src="file:///android_asset/help/images/testStandESP32-small.jpg" alt="Banco di prova ESP32 (versione 3)"/></p>
 </div>
 
 </body>

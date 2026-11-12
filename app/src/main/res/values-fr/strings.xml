@@ -449,4 +449,17 @@
     <string name="config_lora_e220_module">Config Lora E220 module</string>
     <string name="config_bluetooth_module">Config bluetooth module</string>
     <string name="config_3dr_module">Config 3DR module</string>
-</resources>
+    <!-- Textes ajoutés pour la boîte de dialogue d'export .eng et les exports de fichiers -->
+    <string name="eng_dialog_title">Données moteur pour le fichier .eng</string>
+    <string name="eng_diameter">Diamètre du moteur (mm)</string>
+    <string name="eng_length">Longueur du moteur (mm)</string>
+    <string name="eng_delays">Retards (ex. 4-6-8, P = bouché)</string>
+    <string name="eng_propellant_mass">Masse de propergol (g)</string>
+    <string name="eng_total_mass">Masse totale du moteur (g)</string>
+    <string name="eng_manufacturer">Fabricant</string>
+    <string name="eng_invalid_values">Veuillez saisir un diamètre, une longueur et des masses supérieurs à 0, avec une masse totale supérieure ou égale à la masse de propergol</string>
+    <string name="export_failed">Le fichier n\'a pas pu être enregistré</string>
+    <string name="files_saved">Fichiers enregistrés dans Download/RocketMotorTestStand :</string>
+    <string name="no_burn_detected">Aucune combustion détectée dans cette courbe (la poussée ne redescend jamais sous 5% de son maximum)</string>
+    <string name="flash_firmware_title">Mise à jour du firmware</string>
+</resources>

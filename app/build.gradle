@@ -15,7 +15,10 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            // R8 shrinks and optimises the release build. The third party libraries
+            // (charts, USB serial, firmware upload) are fully kept in proguard-rules.pro.
+            // Test the release build before publishing it.
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -51,4 +54,4 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
-}
+}

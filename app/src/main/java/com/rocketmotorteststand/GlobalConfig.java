@@ -9,39 +9,59 @@ import android.graphics.Color;
 
 import com.rocketmotorteststand.config.AppConfigData;
 
+/**
+ * @description: Application settings (language, units, graph colours and font, connection type,
+ * USB baud rate, chart library...) stored in the shared preferences.
+ * The default values are defined once (DEFAULT_* constants) and used by the field
+ * initialisation, by ResetDefaultConfig() and by ReadConfig(): they used to differ, so a
+ * fresh installation started with a font size of 0, a 300 baud USB speed and a black graph
+ * background instead of the documented defaults.
+ * @author: boris.dureau@neuf.fr
+ **/
 public class GlobalConfig {
+    // Default values of the settings
+    private static final int DEFAULT_LANGUAGE = 0;         // phone language
+    private static final int DEFAULT_UNITS = 0;            // kg
+    private static final int DEFAULT_UNITS_PRESSURE = 0;   // PSI
+    private static final int DEFAULT_GRAPH_BACK_COLOR = 1; // white
+    private static final int DEFAULT_GRAPH_COLOR = 0;      // black
+    private static final int DEFAULT_FONT_SIZE = 10;
+    private static final int DEFAULT_BAUD_RATE = 8;        // index of 38400 baud
+    private static final int DEFAULT_CONNECTION_TYPE = 0;  // bluetooth
+    private static final int DEFAULT_GRAPHICS_LIB = 1;     // MPAndroidChart
+    private static final boolean DEFAULT_FULL_USB_SUPPORT = false;
+    private static final boolean DEFAULT_MANUAL_RECORDING = true;
+
     Context context;
-    /*public enum ThrustUnits {KG, POUNDS, NEWTONS}
-    public enum PressureUnits {PSI,BAR,KPascal}*/
 
     SharedPreferences appConfig = null;
     SharedPreferences.Editor edit = null;
     AppConfigData appCfgData = null;
     //application language
-    private int applicationLanguage = 0;
+    private int applicationLanguage = DEFAULT_LANGUAGE;
     //Graph units
-    private int units = 0;
-    private int unitsPressure = 0;
+    private int units = DEFAULT_UNITS;
+    private int unitsPressure = DEFAULT_UNITS_PRESSURE;
 
     //graph background color
-    private int graphBackColor = 1;
+    private int graphBackColor = DEFAULT_GRAPH_BACK_COLOR;
     //graph color
-    private int graphColor = 0;
+    private int graphColor = DEFAULT_GRAPH_COLOR;
     //graph font size
-    private int fontSize = 10;
+    private int fontSize = DEFAULT_FONT_SIZE;
     // connection type is bluetooth
-    private int connectionType = 0;
+    private int connectionType = DEFAULT_CONNECTION_TYPE;
     // default baud rate for USB is 38400
-    private int baudRate = 8;
-    private int graphicsLibType = 0;
+    private int baudRate = DEFAULT_BAUD_RATE;
+    private int graphicsLibType = DEFAULT_GRAPHICS_LIB;
 
-    private boolean fullUSBSupport= false;
-    private boolean allowManualRecording = true;
+    private boolean fullUSBSupport = DEFAULT_FULL_USB_SUPPORT;
+    private boolean allowManualRecording = DEFAULT_MANUAL_RECORDING;
 
 
     public GlobalConfig(Context current) {
         context = current;
-        appConfig = context.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
+        appConfig = context.getSharedPreferences(ConsoleApplication.PREFS_NAME, MODE_PRIVATE);
         edit = appConfig.edit();
         context = current;
         appCfgData = new AppConfigData(context);
@@ -49,67 +69,38 @@ public class GlobalConfig {
     }
 
     public void ResetDefaultConfig() {
-        applicationLanguage = 0; // default to phone language
-        graphBackColor = 1;
-        graphColor = 0;
-        fontSize = 10;
-        units = 0; //default to kg
-        unitsPressure = 0; //default to PSI
-        baudRate = 8; // default to 38400 baud
-        connectionType = 0;
-        graphicsLibType = 1; //Default to MP android chart lib
-        fullUSBSupport = false;
-        allowManualRecording = true;
+        applicationLanguage = DEFAULT_LANGUAGE;
+        graphBackColor = DEFAULT_GRAPH_BACK_COLOR;
+        graphColor = DEFAULT_GRAPH_COLOR;
+        fontSize = DEFAULT_FONT_SIZE;
+        units = DEFAULT_UNITS;
+        unitsPressure = DEFAULT_UNITS_PRESSURE;
+        baudRate = DEFAULT_BAUD_RATE;
+        connectionType = DEFAULT_CONNECTION_TYPE;
+        graphicsLibType = DEFAULT_GRAPHICS_LIB;
+        fullUSBSupport = DEFAULT_FULL_USB_SUPPORT;
+        allowManualRecording = DEFAULT_MANUAL_RECORDING;
     }
 
+    /**
+     * Reads the settings from the shared preferences. A setting that was never saved gets
+     * its default value (the same as ResetDefaultConfig()).
+     */
     public void ReadConfig() {
         try {
-            //Application language
-            int applicationLanguage = appConfig.getInt("AppLanguage", 0);
-            setApplicationLanguage(applicationLanguage);
-
-            //Application Units
-            int appUnit = appConfig.getInt("Units", 0);
-            setUnits(appUnit);
-
-            // appUnitPressure;
-            int appUnitPressure = appConfig.getInt("UnitsPressure", 0);
-            setUnitsPressure(appUnitPressure);
-
-            //Graph color
-            int graphColor = appConfig.getInt("GraphColor", 0);
-            setGraphColor(graphColor);
-
-            //Graph Background color
-            graphBackColor = appConfig.getInt("GraphBackColor", 0);
-            setGraphBackColor(graphBackColor);
-
-            //Font size
-            int fontSize = appConfig.getInt("FontSize", 0);
-            setFontSize(fontSize);
-
-            //Baud rate
-            int baudRate = appConfig.getInt("BaudRate", 0);
-            setBaudRate(baudRate);
-
-            //Connection type
-            int connectionType = appConfig.getInt("ConnectionType", 0);
-            setConnectionType(connectionType);
-
-            //Graphics Lib Type
-            graphicsLibType = appConfig.getInt("GraphicsLibType", 1);
-            setGraphicsLibType(graphicsLibType);
-
-
-            //enable full USB support
-            boolean fullUSBSupport = appConfig.getBoolean("fullUSBSupport", false);
-            setFullUSBSupport(fullUSBSupport);
-            //allowManualRecording
-            boolean allowManualRecording = appConfig.getBoolean("allowManualRecording", false);
-            setManualRecording(allowManualRecording);
-
-        } catch (Exception e) {
-
+            setApplicationLanguage(appConfig.getInt("AppLanguage", DEFAULT_LANGUAGE));
+            setUnits(appConfig.getInt("Units", DEFAULT_UNITS));
+            setUnitsPressure(appConfig.getInt("UnitsPressure", DEFAULT_UNITS_PRESSURE));
+            setGraphColor(appConfig.getInt("GraphColor", DEFAULT_GRAPH_COLOR));
+            setGraphBackColor(appConfig.getInt("GraphBackColor", DEFAULT_GRAPH_BACK_COLOR));
+            setFontSize(appConfig.getInt("FontSize", DEFAULT_FONT_SIZE));
+            setBaudRate(appConfig.getInt("BaudRate", DEFAULT_BAUD_RATE));
+            setConnectionType(appConfig.getInt("ConnectionType", DEFAULT_CONNECTION_TYPE));
+            setGraphicsLibType(appConfig.getInt("GraphicsLibType", DEFAULT_GRAPHICS_LIB));
+            setFullUSBSupport(appConfig.getBoolean("fullUSBSupport", DEFAULT_FULL_USB_SUPPORT));
+            setManualRecording(appConfig.getBoolean("allowManualRecording", DEFAULT_MANUAL_RECORDING));
+        } catch (ClassCastException e) {
+            // A preference was stored with another type by an old version: keep the defaults
         }
     }
 
@@ -283,22 +274,23 @@ public class GlobalConfig {
         }
         return myColor;
     }
+    // Setting values. "final": they are constants and must not be modified at run time.
     public static class ThrustUnits
     {
-        public static int KG = 0;
-        public static int POUNDS= 1;
-        public static int NEWTONS = 2;
+        public static final int KG = 0;
+        public static final int POUNDS = 1;
+        public static final int NEWTONS = 2;
     }
     public static class PressureUnits
     {
-        public static int PSI = 0;
-        public static int BAR = 1;
-        public static int KPascal = 2;
+        public static final int PSI = 0;
+        public static final int BAR = 1;
+        public static final int KPascal = 2;
     }
 
     public static class ConnectionType
     {
-        public static int BT =0;
-        public static int USB =1;
+        public static final int BT = 0;
+        public static final int USB = 1;
     }
-}
+}

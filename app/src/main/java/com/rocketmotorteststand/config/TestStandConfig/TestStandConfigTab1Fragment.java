@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.github.florent37.viewtooltip.ViewTooltip;
+import com.rocketmotorteststand.BoardCapabilities;
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
 import com.rocketmotorteststand.config.TestStandConfigData;
@@ -36,6 +37,13 @@ public class TestStandConfigTab1Fragment extends Fragment {
 
     private boolean ViewCreated = false;
     private TextView txtViewEEpromSize, txtViewSensorType, txtViewTelemetryType, txtViewSensorType2;
+
+    /**
+     * Empty constructor required by Android to recreate the fragment. A recreated instance
+     * is discarded by the host activity (see FragmentRecreationHelper).
+     */
+    public TestStandConfigTab1Fragment() {
+    }
 
     public TestStandConfigTab1Fragment(ConsoleApplication lBT, TestStandConfigData cfg) {
         lTestStandCfg = cfg;
@@ -296,20 +304,14 @@ public class TestStandConfigTab1Fragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, itemsTelemetryType);
         dropdownTelemetryType.setAdapter(adapterTelemetryType);
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V4")) {
+        if (BoardCapabilities.hasPressure(myBT.getBoardName())) {
             dropdownSensorType.setVisibility(View.VISIBLE);
             txtViewSensorType.setVisibility(View.VISIBLE);
         } else {
             dropdownSensorType.setVisibility(View.INVISIBLE);
             txtViewSensorType.setVisibility(View.INVISIBLE);
         }
-        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V4")){
+        if (BoardCapabilities.hasPressure2(myBT.getBoardName())) {
             dropdownSensorType2.setVisibility(View.VISIBLE);
             txtViewSensorType2.setVisibility(View.VISIBLE);
         } else {

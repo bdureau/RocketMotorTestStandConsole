@@ -10,7 +10,7 @@
  *                 firmware flashing, and hardware configuration screens.
  *
  * Author:         Bear Instruments / Rocket Motor Test Stand Team
- * Standards:      Android API 21+ compatible, robust asynchronous I/O handling, memory leak-safe.
+ * Standards:      Android API 23+ compatible, robust asynchronous I/O handling, memory leak-safe.
  * =================================================================================================
  */
 
@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.AsyncTask;
@@ -99,15 +98,6 @@ public class MainScreenActivity extends AppCompatActivity {
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private boolean isReceiverRegistered = false;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        // Read language configuration directly from SharedPreferences to ensure
-        // context localization is configured before Activity inflation
-        SharedPreferences prefs = newBase.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
-        int lang = prefs.getInt("AppLanguage", 0);
-        super.attachBaseContext(ConsoleApplication.updateBaseContextLocale(newBase, lang));
-    }
-
     /**
      * BroadcastReceiver monitoring USB hardware events (Permissions, Attach, Detach).
      */
@@ -122,12 +112,35 @@ public class MainScreenActivity extends AppCompatActivity {
                 boolean granted = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false);
 
                 if (granted) {
-                    if (myBT.connect(usbManager, device, 38400)) {
-                        myBT.setConnected(true);
-                        Log.d(TAG, "USB connection successfully established");
-                        myBT.setConnectionType("usb");
-                        loadConfigAndEnableUI();
-                    }
+                    // Opening the port and checking the board answer blocks for up to
+                    // several seconds: never do it on the UI thread (it caused ANRs).
+                    final UsbDevice usbDevice = device;
+                    backgroundExecutor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            final boolean connected = myBT.connect(usbManager, usbDevice, 38400);
+                            if (connected) {
+                                myBT.setConnected(true);
+                                Log.d(TAG, "USB connection successfully established");
+                                myBT.setConnectionType("usb");
+                                // Still on the background thread: read the configuration
+                                final boolean success = readConfigWithRetries();
+                                postToUi(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        applyUIConfiguration(success);
+                                    }
+                                });
+                            } else {
+                                postToUi(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        msg(getString(R.string.MS_msg3));
+                                    }
+                                });
+                            }
+                        }
+                    });
                 } else {
                     msg(getString(R.string.perm_not_granted));
                 }
@@ -310,10 +323,17 @@ public class MainScreenActivity extends AppCompatActivity {
                             for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
                                 device = entry.getValue();
 
-                                // Configure PendingIntent flags safely according to Android OS version
-                                int flags = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ? PendingIntent.FLAG_IMMUTABLE : 0;
+                                // The PendingIntent must be MUTABLE: the system adds the
+                                // EXTRA_PERMISSION_GRANTED and EXTRA_DEVICE extras to it.
+                                // With FLAG_IMMUTABLE "granted" was always false. Since
+                                // Android 14 a mutable PendingIntent must use an explicit
+                                // intent, hence setPackage().
+                                int flags = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                                        ? PendingIntent.FLAG_MUTABLE : 0;
+                                Intent permissionIntent = new Intent(ACTION_USB_PERMISSION);
+                                permissionIntent.setPackage(getPackageName());
                                 PendingIntent pi = PendingIntent.getBroadcast(
-                                        MainScreenActivity.this, 0, new Intent(ACTION_USB_PERMISSION), flags);
+                                        MainScreenActivity.this, 0, permissionIntent, flags);
 
                                 usbManager.requestPermission(device, pi);
                                 break;
@@ -374,19 +394,40 @@ public class MainScreenActivity extends AppCompatActivity {
         backgroundExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                boolean success = false;
-                // Retry up to 4 times to ensure reliable serial handshake
-                for (int attempt = 0; attempt < 4 && !success; attempt++) {
-                    success = readConfig();
-                }
-
-                final boolean finalSuccess = success;
-                mainHandler.post(new Runnable() {
+                final boolean finalSuccess = readConfigWithRetries();
+                postToUi(new Runnable() {
                     @Override
                     public void run() {
                         applyUIConfiguration(finalSuccess);
                     }
                 });
+            }
+        });
+    }
+
+    /**
+     * Reads the board configuration, retrying up to 4 times to ensure a reliable serial
+     * handshake. Must be called from a background thread.
+     */
+    private boolean readConfigWithRetries() {
+        boolean success = false;
+        for (int attempt = 0; attempt < 4 && !success; attempt++) {
+            success = readConfig();
+        }
+        return success;
+    }
+
+    /**
+     * Runs the given code on the UI thread, unless the activity has been destroyed in the
+     * meantime (the views would no longer exist).
+     */
+    private void postToUi(final Runnable r) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!isFinishing() && !isDestroyed()) {
+                    r.run();
+                }
             }
         });
     }
@@ -441,13 +482,7 @@ public class MainScreenActivity extends AppCompatActivity {
      * Checks if the connected board name is supported by the application.
      */
     private boolean isSupportedStand(String name) {
-        return "TestStand".equals(name) ||
-                "TestStandSTM32".equals(name) ||
-                "TestStandSTM32V2".equals(name) ||
-                "TestStandSTM32V3".equals(name) ||
-                "TestStandESP32".equals(name) ||
-                "TestStandESP32V4".equals(name) ||
-                "TestStandESP32V3".equals(name);
+        return BoardCapabilities.isSupported(name);
     }
 
     private void msg(String s) {
@@ -691,4 +726,4 @@ public class MainScreenActivity extends AppCompatActivity {
             return false;
         }
     }
-}
+}

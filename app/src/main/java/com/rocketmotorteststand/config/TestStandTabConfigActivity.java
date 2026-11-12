@@ -4,9 +4,8 @@ package com.rocketmotorteststand.config;
  * The user can then load it back to the test stand
  * @author: boris.dureau@neuf.fr
  **/
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import android.app.AlertDialog;
@@ -37,12 +36,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rocketmotorteststand.BoardCapabilities;
 import com.rocketmotorteststand.ConsoleApplication;
+import com.rocketmotorteststand.FragmentRecreationHelper;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,39 +69,36 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     private TextView[] dotsSlide;
     private LinearLayout linearDots;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        // Read language configuration directly from SharedPreferences to ensure
-        // context localization is configured before Activity inflation
-        SharedPreferences prefs = newBase.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
-        int lang = prefs.getInt("AppLanguage", 0);
-        super.attachBaseContext(ConsoleApplication.updateBaseContextLocale(newBase, lang));
-    }
-    Handler handler = new Handler() {
+    /**
+     * Receives the calibration values decoded by ConsoleApplication.ReadResult.
+     */
+    private final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
+            if (configPage3 == null)
+                return;
+            String value = (String) msg.obj;
             switch (msg.what) {
                 case 1:
-                    // Value 1 contains the offset
-                    Log.d("Calibration", "offset: "+(String) msg.obj );
-                    if (((String) msg.obj).matches("^-?[0-9]\\d+(?:\\.\\d+)?")) {
-                        //progress.
-                        configPage3.setCurrentOffset((String) msg.obj);
+                    // Value 1 contains the offset (single digit and negative values accepted)
+                    Log.d("Calibration", "offset: " + value);
+                    if (ConsoleApplication.isSignedNumber(value)) {
+                        configPage3.setCurrentOffset(value);
                     }
                     break;
                 case 2:
                     // Value 2 contains the calibration
-                    Log.d("Calibration", "factor: "+(String) msg.obj );
-                    if (((String) msg.obj).matches("^-?[0-9]\\d+(?:\\.\\d+)?")) {
-                        configPage3.setCalibrationFactor((String) msg.obj);
-                        alert.setMessage((String) msg.obj);
+                    Log.d("Calibration", "factor: " + value);
+                    if (ConsoleApplication.isSignedNumber(value)) {
+                        configPage3.setCalibrationFactor(value);
+                        if (alert != null)
+                            alert.setMessage(value);
                     }
                     break;
                 case 3:
                     // Value 3 contains the flag
-                    if (((String) msg.obj).equals("Done"))
-                        calibrationComplete=true;
-
+                    if ("Done".equals(value))
+                        calibrationComplete = true;
                     break;
             }
         }
@@ -110,15 +107,15 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // The tab fragments are created below with their data: drop the empty ones that
+        // Android may have restored, they would crash
+        FragmentRecreationHelper.discardRestoredFragments(this);
         //get the bluetooth connection pointer
         myBT = (ConsoleApplication) getApplication();
-
-        readConfig();
 
         setContentView(R.layout.activity_teststand_tab_config);
 
         mViewPager = (ViewPager) findViewById(R.id.container);
-        setupViewPager(mViewPager);
         myBT.setHandler(handler);
         btnCalibrate = (Button) findViewById(R.id.butCalibrate);
         btnCalibrate.setVisibility(View.INVISIBLE);
@@ -192,9 +189,50 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //send back the config to the test Stand and exit if successful
-                sendConfig();
+                if (configPage2 != null && configPage3 != null)
+                    sendConfig();
             }
         });
+
+        // Reading the configuration blocks for several seconds: do it on the I/O background
+        // thread (it used to run on the UI thread and could freeze the application), then
+        // build the tabs once the configuration is known.
+        btnUpload.setEnabled(false);
+        btnCalibrate.setEnabled(false);
+        final AlertDialog loading = new AlertDialog.Builder(this)
+                .setMessage(R.string.msg6)
+                .setCancelable(false)
+                .create();
+        loading.show();
+        myBT.getIoExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                readConfig();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isFinishing() || isDestroyed())
+                            return;
+                        if (loading.isShowing())
+                            loading.dismiss();
+                        if (TestStandCfg == null) {
+                            // Reading failed: fall back on the configuration read at connection
+                            TestStandCfg = myBT.getTestStandConfigData();
+                        }
+                        setupViewPager(mViewPager);
+                        btnUpload.setEnabled(true);
+                        btnCalibrate.setEnabled(true);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+        myBT.clearHandler(handler);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -263,13 +301,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             myBT.write("m0;".toString());
 
             //wait for the result to come back
-            try {
-                while (myBT.getInputStream().available() <= 0) ;
-            } catch (IOException e) {
-                success = false;
-            }
             String myMessage = "";
-            myMessage = myBT.ReadResult(3000);
+            //wait (bounded) for the result to come back
+            if (myBT.waitForData(5000))
+                myMessage = myBT.ReadResult(3000);
             if (myMessage.equals("OK")) {
                 myBT.setDataReady(false);
                 myBT.flush();
@@ -279,12 +314,9 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
                 //get the results
                 //wait for the result to come back
-                try {
-                    while (myBT.getInputStream().available() <= 0) ;
-                } catch (IOException e) {
-                    success = false;
-                }
-                myMessage = myBT.ReadResult(3000);
+                myMessage = "";
+                if (myBT.waitForData(5000))
+                    myMessage = myBT.ReadResult(3000);
                 //reading the config
                 if (myMessage.equals("start teststandconfig end")) {
                     Log.d("TestStandConfig", "attempt 1");
@@ -304,12 +336,9 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                     myBT.flush();
                     //get the results
                     //wait for the result to come back
-                    try {
-                        while (myBT.getInputStream().available() <= 0) ;
-                    } catch (IOException e) {
-                        success = false;
-                    }
-                    myMessage = myBT.ReadResult(3000);
+                    myMessage = "";
+                    if (myBT.waitForData(5000))
+                        myMessage = myBT.ReadResult(3000);
                     //reading the config
                     if (myMessage.equals("start teststandconfig end")) {
                         Log.d("TestStandConfig", "attempt 2");
@@ -331,13 +360,9 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 myBT.write("m1;".toString());
 
 
-                //wait for the result to come back
-                try {
-                    while (myBT.getInputStream().available() <= 0) ;
-                } catch (IOException e) {
-                    success = false;
-                }
-                myMessage = myBT.ReadResult(3000);
+                //wait (bounded) for the result to come back
+                if (myBT.waitForData(5000))
+                    myMessage = myBT.ReadResult(3000);
                 myBT.flush();
             }
         }
@@ -385,9 +410,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                             public void onClick(final DialogInterface dialog, final int id) {
                                 dialog.cancel();
                                 TestStandCfg.setConnectionSpeed(configPage2.getBaudRate());
-                                //sendTestStandCfg();
-                                sendTestStandCfgV2();
-                                finish();
+                                saveConfigAndFinish();
                             }
                         })
                         .setNegativeButton(getResources().getString(R.string.No), new DialogInterface.OnClickListener() {
@@ -398,16 +421,46 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
                 final AlertDialog alert = builder.create();
                 alert.show();
             } else {
-                sendTestStandCfgV2();
-                finish();
+                saveConfigAndFinish();
             }
         } else {
-            sendTestStandCfgV2();
-            finish();
+            saveConfigAndFinish();
         }
         return true;
     }
 
+    /**
+     * Sends the configuration on the I/O background thread (about 15 commands, each waiting
+     * for the board answer: this used to freeze the UI thread), then closes the screen.
+     */
+    private void saveConfigAndFinish() {
+        btnUpload.setEnabled(false);
+        final AlertDialog saving = new AlertDialog.Builder(this)
+                .setMessage(R.string.msg6)
+                .setCancelable(false)
+                .create();
+        saving.show();
+        myBT.getIoExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                sendTestStandCfgV2();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isFinishing() || isDestroyed())
+                            return;
+                        if (saving.isShowing())
+                            saving.dismiss();
+                        finish();
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Sends every configuration parameter to the board. Must run on a background thread.
+     */
     private void sendTestStandCfgV2() {
         if (myBT.getConnected()) {
             myBT.setDataReady(false);
@@ -416,14 +469,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             //switch off the main loop before sending the config
             myBT.write("m0;".toString());
             Log.d("conftab", "switch off main loop");
-            //wait for the result to come back
-            try {
-                while (myBT.getInputStream().available() <= 0) ;
-            } catch (IOException e) {
-
-            }
+            //wait (bounded) for the result to come back
             String myMessage = "";
-            myMessage = myBT.ReadResult(3000);
+            if (myBT.waitForData(5000))
+                myMessage = myBT.ReadResult(3000);
             if (myMessage.equals("OK")) {
                 Log.d("conftab", "switch off main loop ok");
             }
@@ -449,12 +498,12 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
         SendParam("p,10,"+ TestStandCfg.getPressureSensorType());
         SendParam("p,11,"+ TestStandCfg.getTelemetryType());
-        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+        // The TestStandESP32V4 was missing here, so its second pressure sensor type and its
+        // Bluetooth name were never saved
+        if (BoardCapabilities.hasPressure2(myBT.getBoardName())) {
             SendParam("p,12," + TestStandCfg.getPressureSensorType2());
         }
-        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+        if (BoardCapabilities.hasBluetoothName(myBT.getBoardName())) {
             SendParam("z,"+TestStandCfg.getBluetoothName());
         }
 
@@ -468,14 +517,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             myBT.write("q;".toString());
             Log.d("conftab", "write config");
 
-            //wait for the result to come back
-            try {
-                while (myBT.getInputStream().available() <= 0) ;
-            } catch (IOException e) {
-
-            }
+            //wait (bounded) for the result to come back
             myMessage = "";
-            myMessage = myBT.ReadResult(3000);
+            if (myBT.waitForData(5000))
+                myMessage = myBT.ReadResult(3000);
             //msg(getResources().getString(R.string.msg3));
 
             myBT.setDataReady(false);
@@ -485,14 +530,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             myBT.write("m1;".toString());
             Log.d("conftab", "switch on main loop");
 
-            //wait for the result to come back
-            try {
-                while (myBT.getInputStream().available() <= 0) ;
-            } catch (IOException e) {
-
-            }
+            //wait (bounded) for the result to come back
             myMessage = "";
-            myMessage = myBT.ReadResult(3000);
+            if (myBT.waitForData(5000))
+                myMessage = myBT.ReadResult(3000);
             //msg(getResources().getString(R.string.msg3));
 
             myBT.flush();
@@ -520,14 +561,10 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
             Log.d("conftab", altiCfgStr.toString());
             myBT.flush();
             //get the results
-            //wait for the result to come back
-            try {
-                while (myBT.getInputStream().available() <= 0) ;
-            } catch (IOException e) {
-
-            }
+            //wait (bounded) for the result to come back
             myMessage = "";
-            myMessage = myBT.ReadResult(3000);
+            if (myBT.waitForData(5000))
+                myMessage = myBT.ReadResult(3000);
             if (myMessage.equals("OK")) {
                 Log.d("conftab", "config sent succesfully");
 
@@ -552,7 +589,7 @@ public class TestStandTabConfigActivity extends AppCompatActivity {
 
         checksum = checksum % 256;
 
-        return new Long(checksum).intValue();
+        return (int) checksum;
 
     }
 

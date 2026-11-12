@@ -439,4 +439,18 @@
     <string name="config_lora_e220_module">Config Lora E220 module</string>
     <string name="config_bluetooth_module">Config bluetooth module</string>
     <string name="config_3dr_module">Config 3DR module</string>
-</resources>
+    <!-- Strings added for the RASP .eng export dialog and the file exports -->
+    <string name="eng_dialog_title">Motor data for the .eng file</string>
+    <string name="eng_diameter">Motor diameter (mm)</string>
+    <string name="eng_length">Motor length (mm)</string>
+    <string name="eng_delays">Delays (e.g. 4-6-8, P = plugged)</string>
+    <string name="eng_propellant_mass">Propellant mass (g)</string>
+    <string name="eng_total_mass">Total motor mass (g)</string>
+    <string name="eng_manufacturer">Manufacturer</string>
+    <string name="eng_invalid_values">Please enter a diameter, a length and masses greater than 0, with a total mass greater than or equal to the propellant mass</string>
+    <string name="export_failed">The file could not be saved</string>
+    <string name="files_saved">Files saved in Download/RocketMotorTestStand:</string>
+    <string name="no_burn_detected">No burn detected in this curve (the thrust never drops back below 5% of its maximum)</string>
+    <!-- Activity labels that used to be hard coded in the manifest -->
+    <string name="flash_firmware_title">Flash firmware</string>
+</resources>

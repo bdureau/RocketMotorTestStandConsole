@@ -26,6 +26,13 @@ public class AppConfigTab1Fragment extends Fragment {
     private AppConfigData appConfigData = null;
 
 
+    /**
+     * Empty constructor required by Android to recreate the fragment. A recreated instance
+     * is discarded by the host activity (see FragmentRecreationHelper).
+     */
+    public AppConfigTab1Fragment() {
+    }
+
     public AppConfigTab1Fragment(ConsoleApplication lBT, AppConfigData pAppConfigData) {
         BT = lBT;
         appConfigData = pAppConfigData;
@@ -123,7 +130,6 @@ public class AppConfigTab1Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_app_config_part1, container, false);
 
@@ -214,4 +220,4 @@ public class AppConfigTab1Fragment extends Fragment {
         return view;
     }
 
-}
+}

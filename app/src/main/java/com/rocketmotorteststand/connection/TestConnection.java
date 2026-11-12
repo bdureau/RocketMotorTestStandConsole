@@ -3,10 +3,8 @@ package com.rocketmotorteststand.connection;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -24,9 +22,12 @@ import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
 
 
-import java.io.IOException;
 
-
+/**
+ * @description: Connection reliability test. Sends test frames to the board in a loop and
+ * counts the frames received, the frames with a valid checksum and the lost or corrupted ones.
+ * @author: boris.dureau@neuf.fr
+ **/
 public class TestConnection extends AppCompatActivity {
 
     Thread testTelemetry;
@@ -36,7 +37,8 @@ public class TestConnection extends AppCompatActivity {
     private AlertDialog alert;
     private TextView tvRead;
     private Button butStartStop, butDismiss;
-    private boolean testRunning = false;
+    // Written by the UI thread, read by the test thread
+    private volatile boolean testRunning = false;
     private TextView textNbrPacketsSentVal, textNbrPacketsReceivedVal, textNbrPacketsReceivedValOK;
     private TextView textNbrPacketsReceivedValNotOK, textNbrPacketsReceivedValPercentageError;
     private long packetsSent = 0;
@@ -44,15 +46,6 @@ public class TestConnection extends AppCompatActivity {
     private long packetsReceivedOK = 0;
     private long packetsReceivedNotOK = 0;
     private long packetsReceivedPercentageError = 0;
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        // Read language configuration directly from SharedPreferences to ensure
-        // context localization is configured before Activity inflation
-        SharedPreferences prefs = newBase.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
-        int lang = prefs.getInt("AppLanguage", 0);
-        super.attachBaseContext(ConsoleApplication.updateBaseContextLocale(newBase, lang));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +114,12 @@ public class TestConnection extends AppCompatActivity {
     public void startTestTelemetry() {
         testRunning = true;
 
+        final ConsoleApplication.StopCondition stopWhenStopped = new ConsoleApplication.StopCondition() {
+            @Override
+            public boolean shouldStop() {
+                return !testRunning;
+            }
+        };
         Runnable r = new Runnable() {
 
             @Override
@@ -135,13 +134,12 @@ public class TestConnection extends AppCompatActivity {
                     setPacketSent(""+packetsSent);
                     myBT.setDataReady(false);
                     //get the results
-                    //wait for the result to come back
-                    try {
-                        while (myBT.getInputStream().available() <= 0) ;
-                    } catch (IOException e) {
-                        //success = false;
+                    //wait for the result to come back. The wait is bounded: a lost
+                    //packet used to freeze the test forever instead of being counted.
+                    if (myBT.waitForData(3000, stopWhenStopped)) {
+                        myMessage = myBT.ReadResult(3000, stopWhenStopped);
                     }
-                    myMessage = myBT.ReadResult(3000);
+                    if (!testRunning) break;
                     if (myBT.getDataReady()) {
                         Log.d("test conection", myMessage +"\n");
                         //reading the config
@@ -172,6 +170,14 @@ public class TestConnection extends AppCompatActivity {
 
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop the test thread when the screen is closed
+        testRunning = false;
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
     public void EnableUI() {
 
 

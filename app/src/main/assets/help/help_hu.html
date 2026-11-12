@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        h3 { font-size: 1.05em; color: #37474F; margin-top: 14px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .btn-entry { margin-bottom: 14px; }
+        .btn-entry strong { color: #0277BD; }
+        .hardware-item { margin-bottom: 12px; }
+        img { vertical-align: middle; margin: 4px 6px 4px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Bear magasságmérő konzol – súgó</h1>
+
+<p>Ez egy rövid súgó az Android Bear magasságmérő konzol használatához. Az Android konzol nagyon kényelmes módja annak, hogy a magasságmérőt a terepen újrakonfigurálja.</p>
+
+<div class="info-box">
+    <strong>Megjegyzés:</strong> A súgó minden képernyőn környezetfüggő: mindig az éppen használt képernyőhöz tartozó súgót jeleníti meg.
+</div>
+
+<h2>Első beállítás és Bluetooth-párosítás</h2>
+<ol>
+    <li><strong>A firmware ellenőrzése:</strong> Győződjön meg arról, hogy a magasságmérő kompatibilis (azaz a megfelelő firmware van rátöltve).</li>
+    <li><strong>A modul csatlakoztatása:</strong> Győződjön meg arról, hogy a Bluetooth-modul megfelelően csatlakozik a magasságmérőhöz.</li>
+    <li><strong>Párosítás a rendszerben:</strong> Nyissa meg az Android-eszköz beállításait, lépjen a Bluetooth-beállításokhoz, és keresse meg a HC-05, HC-06 vagy HC-07 Bluetooth-modult. Ha megtalálta, adja meg a párosítási PIN-kódot, amely alapértelmezés szerint <strong>1234</strong>.</li>
+</ol>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; FIGYELEM</div>
+    <div>A telefonon minden párosított Bluetooth-eszközt egyértelműen nevezzen át, hogy biztosan a megfelelő magasságmérőt konfigurálja.</div>
+</div>
+
+<ol start="4">
+    <li><strong>Bekapcsolás:</strong> Kapcsolja be a magasságmérőt, és várja meg, amíg a folytonosság megerősítéseként sípol.</li>
+    <li><strong>Csatlakozás:</strong> Indítsa el a BearConsole alkalmazást az Android-eszközön, koppintson a párosított eszközökre, és válassza ki a modult (HC-05 vagy HC-06). A konzol ekkor megpróbál csatlakozni a magasságmérőhöz.</li>
+</ol>
+
+<p>A csatlakozás után a konzollal konfigurálhatja a magasságmérőt, vagy letöltheti a rögzített repülési adatokat. Ha a csatlakozás nem sikerül, ellenőrizze, hogy a magasságmérő be van-e kapcsolva, és hogy a megfelelő Bluetooth-adaptert választotta-e ki.</p>
+
+<h2>A magasságmérő konzol használata</h2>
+
+<h3>A magasságmérő főképernyője</h3>
+<p>A főképernyőn több műveleti kártya található:</p>
+
+<div class="btn-entry">
+    <p><strong>[Magasságmérő beállításai]</strong></p>
+    <p><img src="file:///android_asset/help/images/console Altimeters Settings75x92.png" alt="Magasságmérő beállításai"/>
+        Beolvassa a magasságmérő aktuális beállításait, és lehetővé teszi azok módosítását.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Repülések]</strong></p>
+    <p><img src="file:///android_asset/help/images/console Flights75x92.png" alt="Repülések"/>
+        Beolvassa az EEPROM-/flash-memóriában rögzített összes repülést, és interaktív görbéken jeleníti meg őket.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Telemetria]</strong></p>
+    <p><img src="file:///android_asset/help/images/console Telemetry75x91.png" alt="Telemetria"/>
+        Hozzáférés a fedélzeti számítógép valós idejű telemetriaadataihoz.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Folytonosság Be/Ki]</strong></p>
+    <p><img src="file:///android_asset/help/images/console Continuity on-off75x93.png" alt="Folytonosság Be/Ki"/>
+        Be- és kikapcsolja a folytonosság hangjelzését.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Beállítások visszaállítása]</strong></p>
+    <p><img src="file:///android_asset/help/images/console Reset settings75x92.png" alt="Beállítások visszaállítása"/>
+        Visszaállítja a magasságmérő gyári alapbeállításait. Lehetővé teszi az összes tárolt repülés vagy csak az utolsó repülés törlését is.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Állapot]</strong></p>
+    <p><img src="file:///android_asset/help/images/console Status75x90.png" alt="Állapot"/>
+        Megnyitja a diagnosztikai állapotképernyőt, amely a kioldócsatornák folytonosságát, a memória kihasználtságát, az érzékelők állapotát és az aktuális magasságot mutatja.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Firmware írása]</strong></p>
+    <p><img src="file:///android_asset/help/images/console Flash firmware75x92.png" alt="Firmware írása"/>
+        Lehetővé teszi új firmware-verziók közvetlen feltöltését USB OTG kábelen keresztül (ATmega328, STM32 és ESP32 platformokon).</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Csatlakozás / Szétkapcsolás]</strong></p>
+    <p>
+        <img src="file:///android_asset/help/images/console connect75x93.png" alt="Csatlakozás"/>
+        <img src="file:///android_asset/help/images/console Disconnect75x91.png" alt="Szétkapcsolás"/>
+    </p>
+    <p>Létrehozza vagy megszakítja a soros kapcsolatot a magasságmérővel.</p>
+</div>
+
+<h3>A főképernyő menüje</h3>
+<p>Az opciók menüből elérhető ez a súgó, a verzióadatokat tartalmazó „Névjegy” képernyő, az alkalmazás megjelenési beállításai,
+    valamint a 3DR rádió, a Bluetooth és a LoRa telemetriamodulok konfigurációs paneljei.</p>
+
+<h3>Támogatott magasságmérők</h3>
+<div class="hardware-item">
+    <p>&bull; <strong>AltiDuo</strong> (teljes méretű, ATmega328-as kiadás)</p>
+    <p>Ez az eredeti AltiDuo (az első magasságmérőm) egy speciális firmware-rel, amely lehetővé teszi a magasságmérő teljes konfigurálását ezzel az alkalmazással.
+        A soros portra csatlakoztatott Bluetooth-modult használ.</p>
+    <p><img src="file:///android_asset/help/images/altiDuo-small.jpg" alt="AltiDuo"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>AltiMulti V1</strong></p>
+    <p>Ez egy 3 kimenetes magasságmérő, amely a repülést EEPROM-ban rögzíti. A soros portra csatlakoztatott Bluetooth-modult használ.</p>
+    <p><img src="file:///android_asset/help/images/altiMultiV1-small.jpg" alt="AltiMulti V1"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>AltiMulti V2</strong></p>
+    <p>Az AltiMulti továbbfejlesztett változata. A soros portra csatlakoztatott Bluetooth-modult használ.</p>
+    <p><img src="file:///android_asset/help/images/altiMultiV2-small.jpg" alt="AltiMulti V2"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>AltiServo</strong></p>
+    <p>Pirotechnikai kimenetek helyett szervókat vezérel. A soros portra csatlakoztatott Bluetooth-modult használ. A szervókat és a magasságmérőt ezzel az alkalmazással konfigurálhatja.</p>
+    <p><img src="file:///android_asset/help/images/altiServo-small.jpg" alt="AltiServo"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>AltiMulti STM32</strong></p>
+    <p>Az AltiMulti 3. verziója, amely STM32 chipet használ. 4 pirotechnikai kimenete van, rögzíti a repülést, és egy további soros porttal rendelkezik kiegészítő eszközök csatlakoztatásához.</p>
+    <p><img src="file:///android_asset/help/images/altiMultiSTM32-small.jpg" alt="AltiMulti STM32"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>AltiGPS</strong></p>
+    <p>Az AltiMultiV3 lapot használja egy másik firmware-rel, amely a soros portra csatlakoztatott GPS-t kezeli.</p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>AltiMulti ESP32</strong></p>
+    <p>Az AltiMulti 4. verziója, amely ESP32 chipet használ. 3 pirotechnikai kimenete van, és rögzíti a repülést.
+        Nincs szükség külső Bluetooth-modulra, mert a chip beépített Bluetooth-szal rendelkezik.</p>
+    <p><img src="file:///android_asset/help/images/altiMultiESP32-small.jpg" alt="AltiMulti ESP32"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>AltiMulti ESP32 accel</strong></p>
+    <p>Ugyanaz, mint az AltiMulti ESP32, de 2 gyorsulásmérővel a lapon (ADXL345 és ADXL375).</p>
+    <p><img src="file:///android_asset/help/images/altiMultiESP32-accelero-small.jpg" alt="AltiMulti ESP32 accel"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>AltiMulti ESP32 accel 345</strong></p>
+    <p>Ugyanaz, mint az AltiMulti ESP32, de 1 ADXL345 gyorsulásmérővel a lapon.</p>
+    <p><img src="file:///android_asset/help/images/altiMultiESP32-ADXL345-small.jpg" alt="AltiMulti ESP32 accel 345"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>AltiMulti ESP32 accel 375</strong></p>
+    <p>Ugyanaz, mint az AltiMulti ESP32, de 1 ADXL375 gyorsulásmérővel a lapon.</p>
+    <p><img src="file:///android_asset/help/images/altiMultiESP32-ADXL375-small.jpg" alt="AltiMulti ESP32 accel 375"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>TTGO BearAltimeter</strong></p>
+    <p>Ez a kijelzővel rendelkező LilyGO lap, kiegészítve egy leánykártyával, amelyen légnyomás-érzékelő, gyorsulásmérő és a repülés rögzítésére szolgáló EEPROM található.
+    A laphoz Bluetooth-on keresztül csatlakozhat.
+    </p>
+    <p><img src="file:///android_asset/help/images/ttgo316x165small.jpg" alt="TTGO BearAltimeter"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>TTGO T QT mini BearAltimeter</strong></p>
+    <p>Ez a legkisebb magasságmérő lap; a barometrikus érzékelő szintén egy leánykártyán található.
+        Megjegyzés: Bluetooth-on nem lehet csatlakozni hozzá; a csatlakozáshoz, a konfiguráláshoz és a repülések beolvasásához USB-kábel szükséges.</p>
+    <p><img src="file:///android_asset/help/images/lilygo314x185.jpg" alt="TTGO T QT mini BearAltimeter"/></p>
+</div>
+<div class="hardware-item">
+    <p>&bull; <strong>TS-ESP32-S3 BearAltimeter</strong></p>
+    <p>Ez a kis lap mindent tartalmaz, ami kell: beépített nyomásérzékelővel és gyorsulásmérővel rendelkezik.
+        A repülést a lap saját memóriájában rögzíti. Csak töltse fel rá a firmware-t a listából.
+    Megjegyzés: Bluetooth-on nem lehet csatlakozni hozzá; a csatlakozáshoz, a konfiguráláshoz és a repülések beolvasásához USB-kábel szükséges.</p>
+    <p><img src="file:///android_asset/help/images/ultimateSmall311x139.jpg" alt="TS-ESP32-S3 BearAltimeter"/></p>
+</div>
+
+</body>
+</html>

@@ -1,10 +1,9 @@
 package com.rocketmotorteststand.Telemetry;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.Html;
 import android.util.Log;
@@ -23,8 +22,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.rocketmotorteststand.BoardCapabilities;
 import com.rocketmotorteststand.ConsoleApplication;
-import com.rocketmotorteststand.GlobalConfig;
+import com.rocketmotorteststand.FragmentRecreationHelper;
+import com.rocketmotorteststand.UnitsHelper;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
@@ -34,7 +35,14 @@ import com.rocketmotorteststand.Telemetry.TelemetryStatusFragment.TestStandStatu
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+/**
+ * @description: Test stand status screen. A background thread reads the status sentences
+ * (thrust, pressures, battery voltage, eeprom usage, number of curves) and shows them in the
+ * status tab. Also allows a manual recording to be started.
+ * @author: boris.dureau@neuf.fr
+ **/
 public class TestStandStatusTabActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private SectionsPageAdapter adapter;
@@ -42,8 +50,9 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
     private LinearLayout linearDots;
     private Button btnDismiss, btnRecording;
     private ConsoleApplication myBT;
-    Thread testStandStatus;
-    boolean status = true;
+    // Written by the UI thread, read by the reading thread
+    private volatile Thread testStandStatus;
+    private volatile boolean status = false;
     //boolean recording = false;
     private double CONVERT = 1;
     private double CONVERT_PRESSURE = 1;
@@ -51,86 +60,65 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
     private TestStandStatusFragment statusPage1;
     private String TAG ="TestStandStatusTabActivity";
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        // Read language configuration directly from SharedPreferences to ensure
-        // context localization is configured before Activity inflation
-        SharedPreferences prefs = newBase.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
-        int lang = prefs.getInt("AppLanguage", 0);
-        super.attachBaseContext(ConsoleApplication.updateBaseContextLocale(newBase, lang));
-    }
 
-    Handler handler = new Handler() {
+    /**
+     * Receives the values decoded by ConsoleApplication.ReadResult on the UI thread.
+     */
+    private final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
+            if (statusPage1 == null)
+                return;
+            String value = (String) msg.obj;
             switch (msg.what) {
                 case 1:
-                    String thrust = (String) msg.obj;
-                    if (thrust.matches("\\d+(?:\\.\\d+)?")) {
-                        double temp;
-                        temp = Double.parseDouble(thrust);
-                        thrust = String.format("%.4f", (temp ) * CONVERT);
+                    // Current thrust in grams, may be negative around zero. Negative values
+                    // used to be displayed raw (in grams) next to the kg/lb/N unit.
+                    if (ConsoleApplication.isSignedNumber(value)) {
+                        double temp = ConsoleApplication.parseDoubleSafe(value, 0);
+                        statusPage1.setThrust(String.format(Locale.getDefault(), "%.4f", temp * CONVERT)
+                                + " " + units[0]);
                     }
-                    statusPage1.setThrust(thrust + " " + units[0]);
                     break;
                 case 3:
-                    //Value 4 contains the battery voltage
-                    String voltage = (String) msg.obj;
-                    if (voltage.matches("\\d+(?:\\.\\d+)?")) {
-                        statusPage1.setBatteryVoltage(voltage);
+                    //Value 3 contains the battery voltage
+                    if (ConsoleApplication.isUnsignedNumber(value)) {
+                        statusPage1.setBatteryVoltage(value);
                     } else {
                         statusPage1.setBatteryVoltage("NA");
                     }
                     break;
                 case 4:
                     //Value 4 contains the EEprom usage
-                    String eepromUsage = (String) msg.obj;
-                    if (eepromUsage.matches("\\d+(?:\\.\\d+)?")) {
-                        // if eeprom usage is 100% put it in red to show that it is full
-                        statusPage1.setEEpromUsage(eepromUsage);
+                    if (ConsoleApplication.isUnsignedNumber(value)) {
+                        statusPage1.setEEpromUsage(value);
                     }
-
                     break;
 
                 case 5:
                     //Value 5 contains the number of thrust curves
-                    String nbrOfThrustCurve = (String) msg.obj;
-                    if (nbrOfThrustCurve.matches("\\d+(?:\\.\\d+)?")) {
-                        // If we have the maximum of thrust curve put it in red
-                        statusPage1.setNbrOfThrustCurve(nbrOfThrustCurve);
+                    if (ConsoleApplication.isUnsignedNumber(value)) {
+                        statusPage1.setNbrOfThrustCurve(value);
                     }
-                    //Log.d("TestStandStatus", (String) msg.obj);
                     break;
 
                 case 6:
                     //Value 6 contains the current pressure
-                    String currentPressure = (String) msg.obj;
-                    if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
-                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
-                        if (currentPressure.matches("\\d+(?:\\.\\d+)?")) {
-                            double temp;
-                            temp = Double.parseDouble(currentPressure);
-                            currentPressure = String.format("%.2f", (temp) * CONVERT_PRESSURE);
-                            statusPage1.setPressure(currentPressure + " " + units[1]);
-                        }
+                    if (BoardCapabilities.hasPressure(myBT.getBoardName())
+                            && ConsoleApplication.isSignedNumber(value)) {
+                        double temp = ConsoleApplication.parseDoubleSafe(value, 0);
+                        statusPage1.setPressure(String.format(Locale.getDefault(), "%.2f", temp * CONVERT_PRESSURE)
+                                + " " + units[1]);
                     }
-                    //Log.d("TestStandStatus", (String) msg.obj);
                     break;
                 case 7:
                     //Value 7 contains the current pressure from the second sensor
-                    String currentPressure2 = (String) msg.obj;
-                    if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                            myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-                        if (currentPressure2.matches("\\d+(?:\\.\\d+)?")) {
-                            double temp;
-                            temp = Double.parseDouble(currentPressure2);
-                            currentPressure2 = String.format("%.2f", (temp) * CONVERT_PRESSURE);
-                            statusPage1.setPressure2(currentPressure2 + " " + units[1]);
-                        }
+                    if (BoardCapabilities.hasPressure2(myBT.getBoardName())
+                            && ConsoleApplication.isSignedNumber(value)) {
+                        double temp = ConsoleApplication.parseDoubleSafe(value, 0);
+                        statusPage1.setPressure2(String.format(Locale.getDefault(), "%.2f", temp * CONVERT_PRESSURE)
+                                + " " + units[1]);
                     }
-                    //Log.d("TestStandStatus", (String) msg.obj);
                     break;
             }
         }
@@ -150,6 +138,9 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // The tab fragment is created below with its data: drop the empty one that Android
+        // may have restored, it would crash
+        FragmentRecreationHelper.discardRestoredFragments(this);
         setContentView(R.layout.activity_teststand_tab_status);
         myBT = (ConsoleApplication) getApplication();
         // Read the application config
@@ -165,46 +156,13 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
         else
             btnRecording.setVisibility(View.INVISIBLE);
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStand") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32"))
-            units = new String[1];
-        else
-            units = new String[2];
-
-        if (myBT.getAppConf().getUnits()==GlobalConfig.ThrustUnits.KG) {
-            //kg
-            units[0] = getResources().getString(R.string.Kg_fview);
-            CONVERT = 1.0/1000.0;
-        }
-        else if (myBT.getAppConf().getUnits()==GlobalConfig.ThrustUnits.POUNDS) {
-            //pounds
-            units[0] = getResources().getString(R.string.Pounds_fview);
-            CONVERT = 2.20462/1000.0;
-        }
-        else if (myBT.getAppConf().getUnits()==GlobalConfig.ThrustUnits.NEWTONS) {
-            //newtons
-            units[0] = getResources().getString(R.string.config_unit_newtons);
-            CONVERT = 9.80665/1000.0;
-        }
-
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-            if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
-                //PSI
-                units[1] = "(" + "PSI" + ")";
-                CONVERT_PRESSURE = 1.0;
-            } else if (myBT.getAppConf().getUnits() == GlobalConfig.PressureUnits.BAR) {
-                //BAR
-                units[1] = "BAR";
-                CONVERT_PRESSURE = 0.0689476;
-            } else if (myBT.getAppConf().getUnits() == GlobalConfig.PressureUnits.KPascal) {
-                //Kpascal
-                units[1] = "Kpascal";
-                CONVERT_PRESSURE = 6.89476;
-            }
-        }
+        // Unit labels and conversion factors. The pressure unit used to be compared with the
+        // thrust unit setting by mistake, so bar and kPa were never applied.
+        units = new String[2];
+        units[0] = UnitsHelper.thrustLabel(this, myBT.getAppConf());
+        units[1] = UnitsHelper.pressureLabel(this, myBT.getAppConf());
+        CONVERT = UnitsHelper.thrustFactor(myBT.getAppConf());
+        CONVERT_PRESSURE = UnitsHelper.pressureFactor(myBT.getAppConf());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
@@ -228,18 +186,31 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
         });
 
 
+        myBT.setHandler(handler);
+        startStatusThread();
+    }
+
+    /**
+     * Starts the background thread reading the status sentences sent by the board.
+     */
+    private void startStatusThread() {
+        status = true;
+        final ConsoleApplication.StopCondition stopWhenClosed = new ConsoleApplication.StopCondition() {
+            @Override
+            public boolean shouldStop() {
+                return !status;
+            }
+        };
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                while (true) {
-                    if (!status) break;
-                    myBT.ReadResult(10000);
+                while (status) {
+                    myBT.ReadResult(10000, stopWhenClosed);
                 }
             }
         };
-        testStandStatus = new Thread(r);
+        testStandStatus = new Thread(r, "status-reader");
         testStandStatus.start();
-        myBT.setHandler(handler);
     }
 
     @Override
@@ -251,23 +222,8 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
             myBT.clearInput();
 
             myBT.write("y1;".toString());
-            status = true;
-
-            Log.d(TAG, "onResume2()");
-            Runnable r = new Runnable() {
-
-                @Override
-                public void run() {
-                    while (true) {
-                        if (!status) break;
-                        myBT.ReadResult(10000);
-                    }
-                }
-            };
-            Log.d(TAG, "onResume3()");
-            testStandStatus = new Thread(r);
-            testStandStatus.start();
-            Log.d(TAG, "onResume4()");
+            myBT.setHandler(handler);
+            startStatusThread();
         }
     }
     @Override
@@ -293,18 +249,37 @@ public class TestStandStatusTabActivity extends AppCompatActivity {
         Log.d(TAG, "onDestroy()");
         super.onDestroy();
 
-        if (status) {
-            status = false;
-            myBT.write("h;\n".toString());
-
-            myBT.setExit(true);
-            myBT.clearInput();
-            myBT.flush();
-        }
-        //turn off telemetry
-        myBT.flush();
-        myBT.clearInput();
-        myBT.write("y0;\n".toString());
+        // Stop the reading thread, then (on the I/O background thread, once the reader has
+        // ended so that two threads never read the same stream) switch the telemetry off
+        status = false;
+        myBT.setExit(true);
+        final Thread reader = testStandStatus;
+        testStandStatus = null;
+        myBT.getIoExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                if (reader != null) {
+                    try {
+                        reader.join(1000);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                }
+                if (!myBT.getConnected())
+                    return;
+                myBT.flush();
+                myBT.clearInput();
+                myBT.write("h;\n");
+                myBT.flush();
+                myBT.clearInput();
+                //turn off telemetry
+                myBT.write("y0;\n");
+                myBT.flush();
+            }
+        });
+        handler.removeCallbacksAndMessages(null);
+        myBT.clearHandler(handler);
     }
     @Override
     protected void onStop() {

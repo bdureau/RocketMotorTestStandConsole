@@ -11,8 +11,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.rocketmotorteststand.BoardCapabilities;
 import com.rocketmotorteststand.ConsoleApplication;
-import com.rocketmotorteststand.GlobalConfig;
+import com.rocketmotorteststand.FragmentRecreationHelper;
+import com.rocketmotorteststand.UnitsHelper;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
@@ -47,6 +49,12 @@ import java.util.Arrays;
 import java.util.List;
 
 
+/**
+ * @description: Displays one downloaded thrust curve in two tabs: the chart (MPAndroidChart or
+ * AFreeChart) and the curve information (burn time, impulse, motor class, exports).
+ * ThrustUtil holds the curve analysis helpers shared by the tabs.
+ * @author: boris.dureau@neuf.fr
+ **/
 public class ThrustCurveViewTabActivity extends AppCompatActivity {
     private ThrustCurveData mythrustCurve = null;
     private ViewPager mViewPager;
@@ -76,21 +84,11 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
 
     int numberOfCurves = 0;
 
-    //Permissions
+    //Permissions (only needed up to Android 9: newer versions save through MediaStore)
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static final String[] PERMISSION_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        // Read language configuration directly from SharedPreferences to ensure
-        // context localization is configured before Activity inflation
-        SharedPreferences prefs = newBase.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
-        int lang = prefs.getInt("AppLanguage", 0);
-        super.attachBaseContext(ConsoleApplication.updateBaseContextLocale(newBase, lang));
-    }
 
     @Override
     protected void onDestroy() {
@@ -119,8 +117,11 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // The tab fragments are created below with their data: drop the empty ones that
+        // Android may have restored, they would crash
+        FragmentRecreationHelper.discardRestoredFragments(this);
 
-        if (Build.VERSION.SDK_INT >= 23)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
             verifyStoragePermission(ThrustCurveViewTabActivity.this);
 
         // recovering the instance state
@@ -140,22 +141,21 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         butZoom = (Button) findViewById(R.id.butZoom);
         butZoom.setCompoundDrawablesWithIntrinsicBounds(R.drawable.zoom_30x30_trans,0,0,0);
 
-        numberOfCurves = 1;
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
-            numberOfCurves = 2;
-        }
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V4")) {
-            numberOfCurves = 4;
-        }
-
         Intent newint = getIntent();
         ThrustCurveName = newint.getStringExtra(ThrustCurveListActivity.SELECTED_THRUSTCURVE);
         mythrustCurve = myBT.getThrustCurveData();
         // get all the data that we have recorded for the current thrustCurve
-        allThrustCurveData = mythrustCurve.GetThrustCurveData(ThrustCurveName);
+        allThrustCurveData = (mythrustCurve != null) ? mythrustCurve.GetThrustCurveData(ThrustCurveName) : null;
+        if (allThrustCurveData == null || allThrustCurveData.getSeriesCount() == 0) {
+            // The curve no longer exists (e.g. the application was killed in the background
+            // and the downloaded curves were lost): close the screen instead of crashing
+            finish();
+            return;
+        }
+
+        // Number of series to show: what the board records, limited to what was downloaded
+        numberOfCurves = Math.min(BoardCapabilities.seriesCount(myBT.getBoardName()),
+                allThrustCurveData.getSeriesCount());
 
         // by default we will display the thrust
         // but then the user will be able to change the data
@@ -167,57 +167,19 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
             Log.d("numberOfCurves", allThrustCurveData.getSeries(i).getKey().toString());
         }
 
-        // Read the application config
+        // Read the application config. Unit labels for each series: thrust, pressure,
+        // pressure 2, filtered thrust (the last one used to be missing and showed "null";
+        // the pressure unit used to be compared with the thrust unit setting).
         myBT.getAppConf().ReadConfig();
-        if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.KG) {
-            //kg
-            units[0] = "(" + getResources().getString(R.string.Kg_fview) + ")";
-            //CONVERT = 1.0 / 1000;
-
-        } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.POUNDS) {
-            //pounds
-            units[0] = getResources().getString(R.string.Pounds_fview);
-            //CONVERT = 2.20462 / 1000;
-
-        } else if (myBT.getAppConf().getUnits()== GlobalConfig.ThrustUnits.NEWTONS) {
-            //newtons
-            units[0] = getResources().getString(R.string.Newtons_fview);
-            //CONVERT = 9.80665 / 1000;
-        }
-
-        if (numberOfCurves > 1) {
-            if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
-                //PSI
-                units[1] = "(" + "PSI" + ")";
-                //CONVERT_PRESSURE = 1;
-            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.BAR) {
-                //BAR
-                units[1] = "BAR";
-                //CONVERT_PRESSURE = 0.0689476;
-            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.KPascal) {
-                //Kpascal
-                units[1] = "Kpascal";
-                //CONVERT_PRESSURE = 6.89476;
-            }
-        }
-
-        if (numberOfCurves > 2) {
-            if (myBT.getAppConf().getUnitsPressure()== GlobalConfig.PressureUnits.PSI) {
-                //PSI
-                units[2] = "(" + "PSI" + ")";
-            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.BAR) {
-                //BAR
-                units[2] = "BAR";
-            } else if (myBT.getAppConf().getUnits()== GlobalConfig.PressureUnits.KPascal) {
-                //Kpascal
-                units[2] = "Kpascal";
-            }
+        String[] allUnits = UnitsHelper.seriesUnits(this, myBT.getAppConf());
+        for (int i = 0; i < numberOfCurves; i++) {
+            units[i] = allUnits[i];
         }
 
         if (currentCurvesNames == null) {
             //This is the first time so only display the thrust
             currentCurvesNames = new String[curvesNames.length];
-            currentCurvesNames[0] = this.getResources().getString(R.string.curve_thrust);
+            currentCurvesNames[0] = curvesNames[0];
             checkedItems = new boolean[curvesNames.length];
             checkedItems[0] = true;
         }
@@ -466,43 +428,43 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
     }
 
     public static class ThrustUtil {
+        /** Upper total impulse limit (N.s, inclusive) of each motor class, NAR / NFPA 1125. */
+        private static final double[] CLASS_LIMITS = {0.3125, 0.625, 1.25, 2.5, 5, 10, 20, 40, 80,
+                160, 320, 640, 1280, 2560, 5120, 10240, 20480, 40960, 81920, 163840};
+        private static final String[] CLASS_NAMES = {"1/8A", "1/4A", "1/2A", "A", "B", "C", "D",
+                "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"};
+
+        /**
+         * Returns the motor class letter for a total impulse in N.s.
+         * The former version returned a lower case "c", returned "unknown" on the exact class
+         * limits (2.5, 5, 10 N.s...) because of strict comparisons, and had no class below A.
+         */
         public String motorClass(double totImpulse) {
-            if (totImpulse > 1.26 && totImpulse < 2.5)
-                return "A";
-            else if (totImpulse > 2.5 && totImpulse < 5.0)
-                return "B";
-            else if (totImpulse > 5.0 && totImpulse < 10.0)
-                return "c";
-            else if (totImpulse > 10.0 && totImpulse < 20.0)
-                return "D";
-            else if (totImpulse > 20.0 && totImpulse < 40.0)
-                return "E";
-            else if (totImpulse > 40.0 && totImpulse < 80.0)
-                return "F";
-            else if (totImpulse > 80.0 && totImpulse < 160.0)
-                return "G";
-            else if (totImpulse > 160.0 && totImpulse < 320.0)
-                return "H";
-            else if (totImpulse > 320.0 && totImpulse < 640.0)
-                return "I";
-            else if (totImpulse > 640.0 && totImpulse < 1280.0)
-                return "J";
-            else if (totImpulse > 1280.0 && totImpulse < 2560.0)
-                return "K";
-            else if (totImpulse > 2560.0 && totImpulse < 5120.0)
-                return "L";
-            else if (totImpulse > 5120.0 && totImpulse < 10240.0)
-                return "M";
-            else if (totImpulse > 10240.0 && totImpulse < 20480.0)
-                return "N";
-            else if (totImpulse > 20480.0 && totImpulse < 40960.0)
-                return "O";
-            else if (totImpulse > 40960.0 && totImpulse < 81920.0)
-                return "P";
-            else if (totImpulse > 81920.0 && totImpulse < 163840.0)
-                return "Q";
-            else
+            if (totImpulse <= 0)
                 return "unknown";
+            for (int i = 0; i < CLASS_LIMITS.length; i++) {
+                if (totImpulse <= CLASS_LIMITS[i])
+                    return CLASS_NAMES[i];
+            }
+            return "unknown";
+        }
+
+        /**
+         * Integrates a series between two sample indexes (both inclusive) with the trapezoidal
+         * rule. With thrust in grams and time in ms the result is in gram.seconds.
+         * Unlike "average sample x duration", this stays correct when the sampling interval
+         * is irregular or when some samples were lost.
+         */
+        public double integrate(XYSeries serie, int from, int to) {
+            double sum = 0;
+            int last = Math.min(to, serie.getItemCount() - 1);
+            for (int i = Math.max(0, from); i < last; i++) {
+                double dt = serie.getX(i + 1).doubleValue() - serie.getX(i).doubleValue();
+                if (dt <= 0)
+                    continue; // duplicated or out of order time stamp
+                sum += (serie.getY(i).doubleValue() + serie.getY(i + 1).doubleValue()) / 2.0 * dt;
+            }
+            return sum / 1000.0; // ms -> s
         }
 
         /*
@@ -604,4 +566,4 @@ public class ThrustCurveViewTabActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-}
+}

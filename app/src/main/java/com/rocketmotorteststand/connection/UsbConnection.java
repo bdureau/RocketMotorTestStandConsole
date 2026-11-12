@@ -1,8 +1,9 @@
 package com.rocketmotorteststand.connection;
 /**
  *
- *   @description: This is the USB connection class. Not that the input stream has been overwritten
- *   from the USB library to fix a bug
+ *   @description: USB serial connection to the test stand. The input stream of the USB serial
+ *   library is replaced by SerialInputStream because the library's available() method always
+ *   returned 0.
  *
  *   @author: boris.dureau@neuf.fr
  *
@@ -16,9 +17,6 @@ import android.util.Log;
 import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -27,27 +25,29 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class UsbConnection {
 
-    UsbSerialDevice serialPort;
-    UsbDeviceConnection connection;
-    SerialInputStream usbInputStream;
-    private boolean isUSBConnected = false;
+    private UsbSerialDevice serialPort;
+    private UsbDeviceConnection connection;
+    private SerialInputStream usbInputStream;
+    // Read by the UI thread and written by the connection threads
+    private volatile boolean isUSBConnected = false;
 
-    public boolean connect( UsbManager usbManager,UsbDevice device, int baudRate) {
+    public boolean connect(UsbManager usbManager, UsbDevice device, int baudRate) {
         boolean connected = false;
         connection = usbManager.openDevice(device);
+        if (connection == null) {
+            // No permission or device already gone
+            Log.d("SERIAL", "CANNOT OPEN DEVICE");
+            setUSBConnected(false);
+            return false;
+        }
         serialPort = UsbSerialDevice.createUsbSerialDevice(device, connection);
         if (serialPort != null) {
             if (serialPort.open()) { //Set Serial Connection Parameters.
-
                 serialPort.setBaudRate(baudRate);
-                //serialPort.setBaudRate(38400);
                 serialPort.setDataBits(UsbSerialInterface.DATA_BITS_8);
                 serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
                 serialPort.setParity(UsbSerialInterface.PARITY_NONE);
-                serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);//ok
-                //serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_DSR_DTR);//non
-                //serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_RTS_CTS);//ok
-                //serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_XON_XOFF);//ok
+                serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
 
                 usbInputStream = new SerialInputStream(serialPort);
 
@@ -60,33 +60,46 @@ public class UsbConnection {
         }
         setUSBConnected(connected);
         return connected;
-
     }
+
+    /**
+     * Closes the serial port and the input stream. Closing the input stream wakes up any
+     * thread waiting for data: read() then returns -1 (end of stream).
+     */
     public void Disconnect() {
-        serialPort.close();
+        if (usbInputStream != null) {
+            usbInputStream.close();
+        }
+        if (serialPort != null) {
+            serialPort.close();
+        }
         setUSBConnected(false);
     }
 
-    public void write (String data) {
-
-        serialPort.write(data.getBytes());
-
-    }
-
-    public void flush () {
-     //not implemented
-    }
-
-    public void clearInput() {
-        try {
-        usbInputStream.skip(usbInputStream.available());
-        } catch (IOException e) {
+    public void write(String data) {
+        if (serialPort != null) {
+            serialPort.write(data.getBytes());
         }
     }
 
-    public InputStream getInputStream () {
+    public void flush() {
+        //not implemented
+    }
+
+    public void clearInput() {
+        if (usbInputStream == null)
+            return;
+        try {
+            usbInputStream.skip(usbInputStream.available());
+        } catch (IOException e) {
+            // nothing to clear
+        }
+    }
+
+    public InputStream getInputStream() {
         return usbInputStream;
     }
+
     public void setUSBConnected(boolean UsbConnected) {
         isUSBConnected = UsbConnected;
     }
@@ -94,101 +107,87 @@ public class UsbConnection {
     public boolean getUSBConnected() {
         return isUSBConnected;
     }
+
     /**
      * Created by BDUREAU on 29/07/2017.
-     * Do not use the class from USB serial because the available method always return 0
+     * Input stream fed by the USB serial library callback. Do not use the class from the USB
+     * serial library because its available() method always returns 0.
      */
-   public class SerialInputStream extends InputStream implements UsbSerialInterface.UsbReadCallback
-    {
+    public class SerialInputStream extends InputStream implements UsbSerialInterface.UsbReadCallback {
+        /** Marker queued by close() to wake up a reader blocked in read(). */
+        private static final int END_OF_STREAM = -1;
+
         protected final UsbSerialInterface device;
-        protected ArrayBlockingQueue data = new ArrayBlockingQueue<Integer>(256);
+        protected final ArrayBlockingQueue<Integer> data = new ArrayBlockingQueue<>(256);
 
         protected volatile boolean is_open;
 
-        public SerialInputStream(UsbSerialInterface mydevice)
-        {
+        public SerialInputStream(UsbSerialInterface mydevice) {
             this.device = mydevice;
             is_open = true;
             device.read(this);
         }
 
-        public void appendLog(String text)
-        {
-            File logFile = new File("sdcard/debugfileStream.txt");
-            if (!logFile.exists())
-            {
-                try
-                {
-                    logFile.createNewFile();
-                }
-                catch (IOException e)
-                {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            try
-            {
-                //BufferedWriter for performance, true to set append to file flag
-                BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
-                buf.append(text);
-                buf.newLine();
-                buf.close();
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
         @Override
         public int available() throws IOException {
-
+            // Once closed, report one byte so that pollers call read() and get -1
+            if (!is_open)
+                return 1;
             return data.size();
         }
 
         @Override
-        public int read()
-        {
-            while (is_open)
-            {
-                try
-                {
-                    return (Integer)data.take();
-                } catch (InterruptedException e)
-                {
-                    // ignore, will be retried by while loop
+        public int read() {
+            while (is_open) {
+                try {
+                    int value = data.take();
+                    if (value == END_OF_STREAM)
+                        is_open = false;
+                    return value;
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return END_OF_STREAM;
                 }
             }
-            return -1;
+            return END_OF_STREAM;
         }
 
-        public void close()
-        {
-            is_open = false;
-            try
-            {
-                data.put(-1);
-            } catch (InterruptedException e)
-            {
-                e.printStackTrace();
+        @Override
+        public long skip(long n) {
+            long skipped = 0;
+            while (skipped < n && is_open) {
+                Integer value = data.poll();
+                if (value == null)
+                    break;
+                if (value == END_OF_STREAM) {
+                    is_open = false;
+                    break;
+                }
+                skipped++;
             }
+            return skipped;
         }
 
-        public void onReceivedData(byte[] new_data)
-        {
-            for (byte b : new_data)
-            {
-                try
-                {
-                    data.put(((int)b) & 0xff);
-                } catch (InterruptedException e)
-                {
-                    // ignore, possibly losing bytes when buffer is full
+        @Override
+        public void close() {
+            is_open = false;
+            data.clear();
+            // Wake up a thread blocked in take(); offer() never blocks
+            data.offer(END_OF_STREAM);
+        }
+
+        public void onReceivedData(byte[] new_data) {
+            for (byte b : new_data) {
+                if (!is_open)
+                    return;
+                try {
+                    data.put(((int) b) & 0xff);
+                } catch (InterruptedException e) {
+                    // the library thread is stopping: drop the remaining bytes
+                    Thread.currentThread().interrupt();
+                    return;
                 }
             }
         }
     }
-
 }

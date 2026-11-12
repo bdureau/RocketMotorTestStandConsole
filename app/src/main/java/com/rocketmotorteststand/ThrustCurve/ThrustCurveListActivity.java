@@ -9,7 +9,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -29,7 +28,6 @@ import android.widget.Toast;
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,14 +46,6 @@ public class ThrustCurveListActivity extends AppCompatActivity {
 
     private Button buttonDismiss;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        // Read language configuration directly from SharedPreferences to ensure
-        // context localization is configured before Activity inflation
-        SharedPreferences prefs = newBase.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
-        int lang = prefs.getInt("AppLanguage", 0);
-        super.attachBaseContext(ConsoleApplication.updateBaseContextLocale(newBase, lang));
-    }
     private AdapterView.OnItemClickListener myListClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
             // Get the thrust curve name
@@ -96,7 +86,8 @@ public class ThrustCurveListActivity extends AppCompatActivity {
     {
         private AlertDialog.Builder builder = null;
 
-        private Boolean canceled = false;
+        // Written by the UI thread (cancel button), read by the background thread
+        private volatile boolean canceled = false;
         private String myMessage = "";
         private int NbrOfCurves = 0;
 
@@ -134,17 +125,23 @@ public class ThrustCurveListActivity extends AppCompatActivity {
                 myBT.write("n;".toString());
                 myBT.flush();
 
-                try {
-                    //wait for data to arrive
-                    while (myBT.getInputStream().available() <= 0) ;
-                } catch (IOException e) {
-                    // msg("Failed to retrieve flights");
-                }
+                // Stop waiting as soon as the user presses Cancel
+                ConsoleApplication.StopCondition stopOnCancel = new ConsoleApplication.StopCondition() {
+                    @Override
+                    public boolean shouldStop() {
+                        return canceled;
+                    }
+                };
 
                 myBT.setDataReady(false);
                 myBT.initThrustCurveData();
 
-                myMessage = myBT.ReadResult(60000);
+                //wait for data to arrive (bounded: the board may not answer)
+                if (myBT.waitForData(10000, stopOnCancel)) {
+                    myMessage = myBT.ReadResult(60000, stopOnCancel);
+                } else {
+                    myMessage = "";
+                }
 
                 if (myMessage.equals("start nbrOfThrustCurve end")) {
                     NbrOfCurves = myBT.getNbrOfThrustCurves();
@@ -161,16 +158,12 @@ public class ThrustCurveListActivity extends AppCompatActivity {
                         myBT.write("r" + j + ";".toString());
                         myBT.flush();
 
-                        try {
-                            //wait for data to arrive
-                            while (myBT.getInputStream().available() <= 0) ;
-                        } catch (IOException e) {
-                            // msg("Failed to retrieve Thrust curve");
-                        }
                         myMessage = "";
                         myBT.setDataReady(false);
-
-                        myMessage = myBT.ReadResult(60000);
+                        //wait for data to arrive (bounded: the board may not answer)
+                        if (myBT.waitForData(10000, stopOnCancel)) {
+                            myMessage = myBT.ReadResult(60000, stopOnCancel);
+                        }
 
                         if (myMessage.equals("start end")) {
 
@@ -185,17 +178,19 @@ public class ThrustCurveListActivity extends AppCompatActivity {
                 Log.d("Thrust curve List",  "ready?" +myBT.getDataReady());
 
                 Log.d("Thrust curve List", "myMessage:"+ myMessage);
-                thrustCurveNames = new ArrayList<String>();
 
                 myThrustCurve = myBT.getThrustCurveData();
                 thrustCurveNames = myThrustCurve.getAllThrustCurveNames2();
-                //Log.d("Thrust curve List", "thrustCurveNames:"+ thrustCurveNames.get(0));
-                if (canceled) {
+                if (canceled && !thrustCurveNames.isEmpty()) {
                     //order the names in the collection
                     Collections.sort(thrustCurveNames);
                     //remove the last Thrust curve which might have incomplete data
                     thrustCurveNames.remove(thrustCurveNames.size() - 1);
                 }
+            }
+            if (thrustCurveNames == null) {
+                // not connected (or connection lost): show an empty list instead of crashing
+                thrustCurveNames = new ArrayList<String>();
             }
             return null;
         }
@@ -217,12 +212,14 @@ public class ThrustCurveListActivity extends AppCompatActivity {
             thrustCurveList.setOnItemClickListener(myListClickListener);
 
 
-            alert.dismiss();
+            if (alert != null && alert.isShowing())
+                alert.dismiss();
 
             if (canceled)
                 msg(getResources().getString(R.string.flight_retrieval_canceled));
 
-            if (myThrustCurve == null && !canceled)
+            // myThrustCurve is never null when connected: test for an empty list instead
+            if (thrustCurveNames.isEmpty() && !canceled)
                 msg(getResources().getString(R.string.flight_have_been_recorded));
         }
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,26 +22,26 @@
 
 <h1>Fichier d'aide pour Banc de Test Moteur</h1>
 
-<p>Ceci est une aide rapide pour utiliser votre application Test Stand sur Android. Cette console est très pratique pour reconfigurer votre banc d'essai et enregistrer vos courbes de poussée directement sur le terrain.</p>
+<p>Ceci est une aide rapide pour utiliser votre application Test Stand. L'application Test Stand est un moyen très pratique d'enregistrer les courbes de poussée de vos moteurs directement sur le terrain.</p>
 
 <h2>Configuration initiale et appairage Bluetooth</h2>
 <ol>
-    <li><strong>Compatibilité du firmware :</strong> Assurez-vous que votre banc de test est compatible (c'est-à-dire que le bon firmware y a été flashé).</li>
-    <li><strong>Connexion du module :</strong> Vérifiez que le module Bluetooth est correctement raccordé à la carte du banc d'essai.</li>
-    <li><strong>Appairage système :</strong> Ouvrez les paramètres de votre appareil Android, rendez-vous dans les réglages Bluetooth et recherchez les modules HC-05, HC-06 ou équivalents. Saisissez le code PIN d'association (par défaut <strong>1234</strong>).</li>
+    <li><strong>Compatibilité du firmware :</strong> Assurez-vous que votre carte de banc de test est compatible (c'est-à-dire que le bon firmware y a été chargé).</li>
+    <li><strong>Connexion du module :</strong> Vérifiez que le module Bluetooth est bien raccordé à la carte du banc de test.</li>
+    <li><strong>Appairage système :</strong> Ouvrez les paramètres de votre appareil Android, puis les réglages Bluetooth, et recherchez le module HC-05, HC-06 ou tout autre module Bluetooth. Saisissez le code PIN d'appairage (par défaut <strong>1234</strong>).</li>
 </ol>
 
 <div class="warning-box">
     <div class="warning-title">&#9888; ATTENTION</div>
-    <div>Il est vivement conseillé de renommer clairement chaque adaptateur Bluetooth sur votre téléphone afin d'être certain de configurer le bon banc d'essai.</div>
+    <div>Donnez un nom explicite à chaque appareil Bluetooth appairé sur votre téléphone, afin d'être certain de configurer le bon banc de test.</div>
 </div>
 
 <ol start="4">
-    <li><strong>Mise sous tension :</strong> Allumez le banc de test et attendez qu'il cesse d'émettre des bips sonores.</li>
-    <li><strong>Connexion :</strong> Démarrez l'application Android, touchez « Montrer les périphériques » et sélectionnez votre module HC-05 ou HC-06. L'application établit alors la liaison.</li>
+    <li><strong>Mise sous tension :</strong> Allumez le banc de test et attendez qu'il cesse d'émettre des bips.</li>
+    <li><strong>Connexion :</strong> Lancez l'application sur votre appareil Android, touchez « Montrer les périphériques » et sélectionnez votre module HC-05 ou HC-06. La console tente alors de se connecter.</li>
 </ol>
 
-<p>Lorsque le message « Connecté » s'affiche, la liaison est active : vous pouvez modifier les réglages du banc d'essai ou télécharger les courbes de poussée enregistrées. En cas d'échec, vérifiez l'alimentation de la carte et le module sélectionné.</p>
+<p>Une fois connecté, vous pouvez utiliser l'application pour configurer votre banc de test ou lire les courbes de poussée enregistrées. Si la connexion échoue, vérifiez que la carte est bien alimentée et que le bon adaptateur Bluetooth est sélectionné.</p>
 
 <h2>Utilisation de l'application Test Stand</h2>
 
@@ -49,38 +49,38 @@
 
 <div class="btn-entry">
     <p><strong>[Config Banc de Test Moteur]</strong></p>
-    <p><img src="file:///android_asset/help/images/Motor settings75x91.png" alt="Config Banc de Test"/>
-        Lit la configuration actuelle du banc de test et permet de modifier les paramètres.</p>
+    <p><img src="file:///android_asset/help/images/Motor settings75x91.png" alt="Config Banc de Test Moteur"/>
+        Lit la configuration actuelle du banc de test et vous permet de la modifier.</p>
 </div>
 
 <div class="btn-entry">
     <p><strong>[Chargement Courbes de Poussées]</strong></p>
-    <p><img src="file:///android_asset/help/images/Motor Thrust Curves75x87.png" alt="Chargement Courbes"/>
-        Télécharge l'ensemble des courbes de poussée enregistrées en mémoire et trace les graphiques correspondants.</p>
+    <p><img src="file:///android_asset/help/images/Motor Thrust Curves75x87.png" alt="Chargement Courbes de Poussées"/>
+        Lit toutes les courbes de poussée enregistrées en mémoire et les affiche sous forme de graphiques interactifs.</p>
 </div>
 
 <div class="btn-entry">
     <p><strong>[Télémétrie]</strong></p>
     <p><img src="file:///android_asset/help/images/Motor Telemetry75x91.png" alt="Télémétrie"/>
-        Affiche les flux de télémétrie en temps réel provenant du banc d'essai.</p>
+        Ouvre la télémétrie en temps réel transmise par le banc de test.</p>
 </div>
 
 <div class="btn-entry">
     <p><strong>[Réinit Config]</strong></p>
-    <p><img src="file:///android_asset/help/images/Motor reset settings75x90.png" alt="Réinitialisation"/>
-        Restaure les paramètres d'usine du banc d'essai et permet également d'effacer toutes les courbes de poussée enregistrées.</p>
+    <p><img src="file:///android_asset/help/images/Motor reset settings75x90.png" alt="Réinit Config"/>
+        Restaure les paramètres d'usine. Permet aussi d'effacer toutes les courbes de poussée enregistrées.</p>
 </div>
 
 <div class="btn-entry">
     <p><strong>[État]</strong></p>
     <p><img src="file:///android_asset/help/images/Motor Status75x90.png" alt="État"/>
-        Ouvre l'écran de diagnostic matériel pour contrôler l'état des capteurs, la tension d'alimentation et la calibration.</p>
+        Ouvre l'écran de diagnostic matériel, qui affiche l'état des capteurs, la tension de la batterie et l'état de la carte.</p>
 </div>
 
 <div class="btn-entry">
     <p><strong>[Flash Firmware]</strong></p>
     <p><img src="file:///android_asset/help/images/Motor flash75x85.png" alt="Flash Firmware"/>
-        Permet de mettre à jour le firmware de la carte via un câble USB.</p>
+        Permet de mettre à jour le firmware de la carte directement par câble USB.</p>
 </div>
 
 <div class="btn-entry">
@@ -89,27 +89,36 @@
         <img src="file:///android_asset/help/images/Motor connect75x87.png" alt="Connexion"/>
         <img src="file:///android_asset/help/images/Motor disconnect75x86.png" alt="Déconnexion"/>
     </p>
-    <p>Établit ou interrompt la liaison de communication avec le banc d'essai.</p>
+    <p>Établit ou interrompt la communication avec le banc de test.</p>
 </div>
 
 <h3>Menu de l'écran principal</h3>
-<p>Depuis le menu d'options, vous pouvez ouvrir ce guide d'aide, consulter l'écran « À propos » contenant les informations de version logicielle et personnaliser le thème visuel de l'interface.</p>
+<p>Depuis le menu d'options, vous pouvez ouvrir ce guide d'aide, accéder à l'écran « À propos » qui affiche les informations de version, et personnaliser l'apparence de l'application.</p>
 
-<h3>Matériels compatibles</h3>
-<p>L'application est compatible avec les cartes de banc d'essai suivantes :</p>
+<h3>Matériel pris en charge</h3>
+<p>Cette application prend en charge les cartes de banc de test suivantes :</p>
 
 <div class="hardware-item">
-    <p>&bull; <strong>Banc de test avec ATmega328</strong></p>
+    <p>&bull; <strong>Banc de test ATmega328</strong></p>
+    <p>Il s'agit du prototype de banc de test d'origine, que j'ai réalisé avec un ATmega328.</p>
 </div>
 
 <div class="hardware-item">
-    <p>&bull; <strong>Banc de test avec STM32 (Version 1)</strong></p>
-    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="Banc de test V1"/></p>
+    <p>&bull; <strong>Banc de test STM32 (version 1)</strong></p>
+    <p>Il s'agit du premier banc de test de série, équipé d'une carte STM32. Il n'a qu'une seule entrée pour le capteur de force (jauge) : il ne peut donc mesurer que la poussée.</p>
+    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="Banc de test STM32 (version 1)"/></p>
 </div>
 
 <div class="hardware-item">
-    <p>&bull; <strong>Banc de test avec STM32 (Version 2)</strong></p>
-    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="Banc de test V2"/></p>
+    <p>&bull; <strong>Banc de test STM32 (version 2)</strong></p>
+    <p>Il s'agit de la deuxième version du banc de test, elle aussi équipée d'une carte STM32. Elle dispose d'une entrée pour le capteur de force afin de mesurer la poussée, et de 2 entrées analogiques pour mesurer la pression à l'intérieur du corps du moteur.</p>
+    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="Banc de test STM32 (version 2)"/></p>
+</div>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Banc de test ESP32 (version 3)</strong></p>
+    <p>Il s'agit de la troisième version du banc de test, qui utilise une puce ESP32. Elle dispose d'une entrée pour le capteur de force afin de mesurer la poussée, et de 2 entrées analogiques pour mesurer la pression à l'intérieur du corps du moteur. Notez que, pour une raison inconnue, elle enregistre moins</p>
+    <p><img src="file:///android_asset/help/images/testStandESP32-small.jpg" alt="Banc de test ESP32 (version 3)"/></p>
 </div>
 
 </body>

@@ -1,67 +1,113 @@
 package com.rocketmotorteststand.ThrustCurve.ThrustCurveView;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.rocketmotorteststand.BoardCapabilities;
 import com.rocketmotorteststand.ConsoleApplication;
-import com.rocketmotorteststand.GlobalConfig;
+import com.rocketmotorteststand.FileExportHelper;
 import com.rocketmotorteststand.R;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveData;
 import com.rocketmotorteststand.ThrustCurve.ThrustCurveViewTabActivity;
+import com.rocketmotorteststand.UnitsHelper;
 
+import org.afree.data.xy.XYSeries;
 import org.afree.data.xy.XYSeriesCollection;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import java.util.Locale;
+import java.util.Map;
 
+/**
+ * @description: Information tab of a thrust curve. Analyses the curve (burn time, maximum and
+ * average thrust, total impulse, motor class, maximum pressures) and exports it as CSV files,
+ * as a RASP .eng motor file (OpenRocket, RockSim...) or as a zip of all the files.
+ *
+ * Physics: the burn is delimited by the points where the thrust crosses 5% of its maximum
+ * (rising, then falling after the peak). The total impulse is the integral of the thrust over
+ * that interval (trapezoidal rule) and the average thrust is impulse / burn time.
+ * Raw data: time in ms, thrust in grams (force), pressure in PSI.
+ * @author: boris.dureau@neuf.fr
+ **/
 public class ThrustCurveViewInfoFragment extends Fragment {
 
+    /** Preferences remembering the last motor data typed in the .eng export dialog. */
+    private static final String ENG_PREFS = "EngExportCfg";
+    /** Threshold delimiting the burn, as a fraction of the maximum value. */
+    private static final double BURN_THRESHOLD = 0.05;
+
     private ThrustCurveData mythrustCurve;
-    private XYSeriesCollection thrustCurveData = null;
     private String ThrustCurveName = null;
+    private ConsoleApplication myBT;
+
     private TextView nbrOfSamplesValue, thrustCurveNbrValue;
     private TextView recordingDurationValue, thrustTimeValue, maxThrustValue, averageThrustValue;
     private TextView motorClassValue, totalImpulseValue, maxPressureValue, maxPressureValue2;
     private TextView maxPressure, maxPressure2;
     private Button buttonExportToCsv, buttonExportToCsvFull, buttonExportToEng, buttonShareEng,
             butShareZip;
-    double totalImpulse = 0;
-    int numberOfCurves = 0;
-    private String motorClass = "";
-    double thrustDuration = 0;
-    double averageThrust = 0;
-    private AlertDialog.Builder builder = null;
-    private AlertDialog alert;
-    boolean SavedCurvesOK = false;
-    private ConsoleApplication myBT;
-    private static double CONVERT = 1.0, CONVERT_PRESSURE = 1.0;
-    private String[] units = null;
+
+    private XYSeriesCollection lThrustCurveData;
+    private BurnAnalysis analysis = new BurnAnalysis();
+    private String thrustUnit = "", pressureUnit = "";
+    private double CONVERT = 1.0, CONVERT_PRESSURE = 1.0;
+
+    /**
+     * Result of the analysis of the thrust series.
+     */
+    private static class BurnAnalysis {
+        boolean valid = false;
+        int start = -1, max = -1, stop = -1;  // sample indexes
+        double maxThrustGrams = 0;
+        double burnTimeS = 0;
+        double impulseGramS = 0;               // integral of the thrust, gram.second
+        double totalImpulseNs = 0;
+        double averageThrustGrams = 0;
+        double averageThrustN = 0;
+        String motorClass = "";                 // e.g. "H120"
+    }
+
+    /**
+     * Motor data typed by the user for the .eng file header.
+     */
+    private static class EngSpec {
+        double diameterMm, lengthMm, propellantG, totalG;
+        String delays, manufacturer;
+    }
+
+    /** Called once the user has validated the .eng export dialog. */
+    private interface EngSpecCallback {
+        void onSpec(EngSpec spec);
+    }
+
+    /**
+     * Empty constructor required by Android to recreate the fragment. A recreated instance
+     * is discarded by the host activity (see FragmentRecreationHelper).
+     */
+    public ThrustCurveViewInfoFragment() {
+    }
 
     public ThrustCurveViewInfoFragment(ThrustCurveData data,
                                        ConsoleApplication pBT,
@@ -70,71 +116,12 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         mythrustCurve = data;
         myBT = pBT;
         ThrustCurveName = pThrustCurveName;
-        units = pUnits;
+        // pUnits is no longer modified here: the units are computed from the settings
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        numberOfCurves = 1;
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
-            numberOfCurves = 2;
-        }
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-            numberOfCurves = 3;
-        }
-        // Read the application config
-        myBT.getAppConf().ReadConfig();
-        if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.KG) {
-            //kg
-            units[0] = "(" + getResources().getString(R.string.Kg_fview) + ")";
-            CONVERT = 1.0 / 1000;
-
-        } else if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.POUNDS) {
-            //pounds
-            units[0] = getResources().getString(R.string.Pounds_fview);
-            CONVERT = 2.20462 / 1000;
-
-        } else if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.NEWTONS) {
-            //newtons
-            units[0] = getResources().getString(R.string.Newtons_fview);
-            CONVERT = 9.80665 / 1000;
-        }
-
-        if (numberOfCurves > 1) {
-            if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
-                //PSI
-                units[1] = "(" + getString(R.string.pressure_unit_psi) + ")";
-                CONVERT_PRESSURE = 1.0;
-            } else if (myBT.getAppConf().getUnits() == GlobalConfig.PressureUnits.BAR) {
-                //BAR
-                units[1] = getString(R.string.pressure_unit_bar);
-                CONVERT_PRESSURE = 0.0689476;
-            } else if (myBT.getAppConf().getUnits() == GlobalConfig.PressureUnits.KPascal) {
-                //Kpascal
-                units[1] = getString(R.string.pressure_unit_kpascal);
-                CONVERT_PRESSURE = 6.89476;
-            }
-        }
-        if (numberOfCurves > 2) {
-            if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
-                //PSI
-                units[2] = "(" + getString(R.string.pressure_unit_psi) + ")";
-                CONVERT_PRESSURE = 1.0;
-            } else if (myBT.getAppConf().getUnits() == GlobalConfig.PressureUnits.BAR) {
-                //BAR
-                units[2] = getString(R.string.pressure_unit_bar);
-                CONVERT_PRESSURE = 0.0689476;
-            } else if (myBT.getAppConf().getUnits() == GlobalConfig.PressureUnits.KPascal) {
-                //Kpascal
-                units[2] = getString(R.string.pressure_unit_kpascal);
-                CONVERT_PRESSURE = 6.89476;
-            }
-        }
         View view = inflater.inflate(R.layout.fragment_thrustcurve_info, container, false);
 
         buttonExportToCsv = (Button) view.findViewById(R.id.butExportToCsv);
@@ -146,7 +133,6 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         thrustTimeValue = view.findViewById(R.id.thrustTimeValue);
         maxThrustValue = view.findViewById(R.id.maxThrustValue);
         averageThrustValue = view.findViewById(R.id.averageThrustValue);
-
         nbrOfSamplesValue = view.findViewById(R.id.nbrOfSamplesValue);
         thrustCurveNbrValue = view.findViewById(R.id.thrustCurveNbrValue);
         motorClassValue = view.findViewById(R.id.motorClassValue);
@@ -156,636 +142,505 @@ public class ThrustCurveViewInfoFragment extends Fragment {
         maxPressureValue2 = view.findViewById(R.id.maxPressureValue2);
         maxPressure2 = view.findViewById(R.id.maxPressure2);
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-            maxPressureValue.setVisibility(View.VISIBLE);
-            maxPressure.setVisibility(View.VISIBLE);
+        lThrustCurveData = (mythrustCurve != null) ? mythrustCurve.GetThrustCurveData(ThrustCurveName) : null;
+        if (lThrustCurveData == null || lThrustCurveData.getSeriesCount() == 0)
+            return view;
+
+        // Units chosen in the settings
+        myBT.getAppConf().ReadConfig();
+        thrustUnit = UnitsHelper.thrustLabel(getContext(), myBT.getAppConf());
+        pressureUnit = UnitsHelper.pressureLabel(getContext(), myBT.getAppConf());
+        CONVERT = UnitsHelper.thrustFactor(myBT.getAppConf());
+        // The pressure unit used to be compared with the thrust unit setting by mistake
+        CONVERT_PRESSURE = UnitsHelper.pressureFactor(myBT.getAppConf());
+
+        // The pressure rows depend on the series actually recorded (the TestStandESP32V4
+        // was missing from the former name lists, so its pressures were never shown)
+        int visibility1 = hasPressure() ? View.VISIBLE : View.INVISIBLE;
+        maxPressureValue.setVisibility(visibility1);
+        maxPressure.setVisibility(visibility1);
+        int visibility2 = hasPressure2() ? View.VISIBLE : View.INVISIBLE;
+        maxPressureValue2.setVisibility(visibility2);
+        maxPressure2.setVisibility(visibility2);
+
+        XYSeries thrust = lThrustCurveData.getSeries(BoardCapabilities.SERIES_THRUST);
+        thrustCurveNbrValue.setText(ThrustCurveName);
+        nbrOfSamplesValue.setText(String.valueOf(thrust.getItemCount()));
+        if (thrust.getItemCount() > 0) {
+            double recordingDuration = thrust.getMaxX() / 1000;
+            recordingDurationValue.setText(String.format(Locale.getDefault(), "%.3f secs", recordingDuration));
+        }
+
+        analysis = analyse(thrust);
+        if (analysis.valid) {
+            thrustTimeValue.setText(String.format(Locale.getDefault(), "%.2f secs", analysis.burnTimeS));
+            maxThrustValue.setText(String.format(Locale.getDefault(), "%.1f %s",
+                    analysis.maxThrustGrams * CONVERT, thrustUnit));
+            averageThrustValue.setText(String.format(Locale.getDefault(), "%.1f %s",
+                    analysis.averageThrustGrams * CONVERT, thrustUnit));
+            // An impulse is in newton.seconds (it was labelled "Newtons")
+            totalImpulseValue.setText(String.format(Locale.getDefault(), "%.1f N.s", analysis.totalImpulseNs));
+            motorClassValue.setText(analysis.motorClass);
         } else {
-            maxPressureValue.setVisibility(View.INVISIBLE);
-            maxPressure.setVisibility(View.INVISIBLE);
+            thrustTimeValue.setText("-");
+            totalImpulseValue.setText("-");
+            motorClassValue.setText("-");
+            if (thrust.getItemCount() > 0)
+                maxThrustValue.setText(String.format(Locale.getDefault(), "%.1f %s",
+                        thrust.getMaxY() * CONVERT, thrustUnit));
         }
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-            maxPressureValue2.setVisibility(View.VISIBLE);
-            maxPressure2.setVisibility(View.VISIBLE);
-        } else {
-            maxPressureValue2.setVisibility(View.INVISIBLE);
-            maxPressure2.setVisibility(View.INVISIBLE);
+        // Maximum pressures, in the unit chosen in the settings (it was always shown in PSI)
+        if (hasPressure()) {
+            XYSeries p1 = lThrustCurveData.getSeries(BoardCapabilities.SERIES_PRESSURE);
+            if (p1.getItemCount() > 0)
+                maxPressureValue.setText(String.format(Locale.getDefault(), "%.1f %s",
+                        p1.getMaxY() * CONVERT_PRESSURE, pressureUnit));
         }
-
-        XYSeriesCollection lThrustCurveData;
-
-        lThrustCurveData = mythrustCurve.GetThrustCurveData(ThrustCurveName);
-        int nbrData = lThrustCurveData.getSeries(0).getItemCount();
-
-        // ThrustCurve nbr
-        thrustCurveNbrValue.setText(ThrustCurveName + "");
-
-        //nbr of samples
-        nbrOfSamplesValue.setText(nbrData + "");
-
-        //Recording duration
-        double recordingDuration = lThrustCurveData.getSeries(0).getMaxX() / 1000;
-        recordingDurationValue.setText(String.format("%.3f ", recordingDuration) + " secs");
-
-        ThrustCurveViewTabActivity.ThrustUtil tu = new ThrustCurveViewTabActivity.ThrustUtil();
-        double maxThrust = lThrustCurveData.getSeries(0).getMaxY();
-        double triggerThrust = maxThrust * (5.0 / 100.0);
-
-        int curveStart = tu.searchX(lThrustCurveData.getSeries(0), triggerThrust);
-        int curveMaxThrust = tu.searchX(lThrustCurveData.getSeries(0), maxThrust);
-        int curveStop = tu.searchXFrom(lThrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
-        if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
-            // thrust duration
-            thrustDuration = ((double) lThrustCurveData.getSeries(0).getX(curveStop) - (double) lThrustCurveData.getSeries(0).getX(curveStart)) / 1000.0;
-            thrustTimeValue.setText(String.format("%.2f ", thrustDuration) + " secs");
-            double totThurst = 0;
-            for (int i = curveStart; i < curveStop; i++) {
-                totThurst = totThurst + (double) lThrustCurveData.getSeries(0).getY(i);
-            }
-            averageThrust = totThurst / ((double) (curveStop - curveStart));
-
-            //max thrust
-            maxThrustValue.setText(String.format("%.1f ", maxThrust * CONVERT) + units[0]);
-            //average thrust
-            averageThrustValue.setText(String.format("%.1f ", averageThrust * CONVERT) + units[0]);
-
-            //tot impulse
-            totalImpulse = averageThrust * (9.80665 / 1000) * thrustDuration;
-            totalImpulseValue.setText(String.format("%.0f ", totalImpulse) + " Newtons");
-            //motor class
-            motorClass = tu.motorClass(totalImpulse) + String.format("%.0f ", averageThrust * (9.80665 / 1000));
-            motorClassValue.setText(tu.motorClass(totalImpulse) + String.format("%.0f ", averageThrust * (9.80665 / 1000)));
-        }
-
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-            double maxPres = lThrustCurveData.getSeries(1).getMaxY();
-            maxPressureValue.setText(maxPres + " PSI");
-        }
-
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-            double maxPres2 = lThrustCurveData.getSeries(2).getMaxY();
-            maxPressureValue2.setText(maxPres2 + " PSI");
+        if (hasPressure2()) {
+            XYSeries p2 = lThrustCurveData.getSeries(BoardCapabilities.SERIES_PRESSURE2);
+            if (p2.getItemCount() > 0)
+                maxPressureValue2.setText(String.format(Locale.getDefault(), "%.1f %s",
+                        p2.getMaxY() * CONVERT_PRESSURE, pressureUnit));
         }
 
         buttonExportToCsv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                exportToCSV(motorClass, lThrustCurveData);      //export the data to a csv file
+                saveFiles(buildBurnCsvFiles(newFileBaseName()));
             }
         });
 
         buttonExportToCsvFull.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                exportToCSVFull(motorClass, lThrustCurveData);      //export the data to a csv file
+                saveFiles(buildFullCsvFiles(newFileBaseName()));
             }
         });
 
         buttonExportToEng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                exportToEng(motorClass, lThrustCurveData, getString(R.string.file_saved_msg2));      //export the data to an eng file
+                exportEng();
             }
         });
 
         buttonShareEng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String currentEng = exportToEng(motorClass, lThrustCurveData, "");
-                Log.d("File:", currentEng);
-
-                File engFile = new File(Environment.getExternalStoragePublicDirectory
-                        (Environment.DIRECTORY_DOWNLOADS), currentEng);
-                Toast.makeText(getContext(), currentEng, Toast.LENGTH_SHORT).show();
-                shareFile(engFile);
+                shareEng();
             }
         });
+
         butShareZip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // Create a file for the zip file
-                File zipFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                        "motorData.zip");
-                ArrayList<String> fileNames = new ArrayList<>();
-                fileNames.add(exportThrustToCSV(lThrustCurveData));
-                fileNames.add(exportThrustToCSVFull(lThrustCurveData));
-                if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                        myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
-                        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-                    fileNames.add(exportPressureToCSV(lThrustCurveData));
-                    fileNames.add(exportPressureToCSVFull(lThrustCurveData));
-                }
-                if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                        myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-                    fileNames.add(exportPressure2ToCSV(lThrustCurveData));
-                    fileNames.add(exportPressure2ToCSVFull(lThrustCurveData));
-                }
-                //exportToCSVFull(String motorClass, XYSeriesCollection lThrustCurveData)
-                fileNames.add(exportToEng(motorClass, lThrustCurveData, ""));
-                try {
-                    // Create a zip output stream to write to the zip file
-                    FileOutputStream fos = new FileOutputStream(zipFile);
-                    ZipOutputStream zos = new ZipOutputStream(fos);
-
-                    for (String fileName : fileNames) {
-                        ZipEntry ze = new ZipEntry(fileName);
-                        // Add the zip entry to the zip output stream
-                        zos.putNextEntry(ze);
-                        // Read the file and write it to the zip output stream
-                        File filetoZip = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                                fileName);
-                        FileInputStream fis = new FileInputStream(filetoZip);
-                        byte[] buffer = new byte[1024];
-                        int len;
-                        while ((len = fis.read(buffer)) > 0) {
-                            zos.write(buffer, 0, len);
-                        }
-                        // Close the zip entry and the file input stream
-                        zos.closeEntry();
-                        fis.close();
-                    }
-                    // Close the zip output stream
-                    zos.close();
-                    fos.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d("error", "we have an issue");
-                }
-                //Toast.makeText(getContext(), currentEng, Toast.LENGTH_SHORT).show();
-                shareFile(zipFile);
+                shareZip();
             }
         });
         return view;
     }
 
-
-    private void exportToCSV(String motorClass, XYSeriesCollection lThrustCurveData) {
-        String fileNames = "";
-        String thrustFileName = exportThrustToCSV(lThrustCurveData);
-        fileNames = thrustFileName;
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-            String pressureFileName = exportPressureToCSV(lThrustCurveData);
-            fileNames = fileNames + "\n" + pressureFileName;
-        }
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
-            String pressureFileName2 = exportPressure2ToCSV(lThrustCurveData);
-            fileNames = fileNames + "\n" + pressureFileName2;
-        }
-        Toast.makeText(getContext(), fileNames, Toast.LENGTH_SHORT).show();
+    private boolean hasPressure() {
+        return lThrustCurveData != null
+                && lThrustCurveData.getSeriesCount() > BoardCapabilities.SERIES_PRESSURE;
     }
 
-    private String exportThrustToCSV(XYSeriesCollection lThrustCurveData) {
-        SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-        String date = sdf.format(System.currentTimeMillis());
-        String csv_data = "time,thrust" + units[0] + "\n";/// your csv data as string;
+    private boolean hasPressure2() {
+        return lThrustCurveData != null
+                && lThrustCurveData.getSeriesCount() > BoardCapabilities.SERIES_PRESSURE2;
+    }
 
+    // ---------------------------------------------------------------------------------------
+    // Analysis
+    // ---------------------------------------------------------------------------------------
+
+    /**
+     * Finds the burn (5% of the maximum thrust rising, then falling after the peak) and
+     * computes burn time, total impulse (trapezoidal integration), average thrust and class.
+     */
+    private BurnAnalysis analyse(XYSeries thrust) {
+        BurnAnalysis a = new BurnAnalysis();
+        if (thrust.getItemCount() < 2)
+            return a;
         ThrustCurveViewTabActivity.ThrustUtil tu = new ThrustCurveViewTabActivity.ThrustUtil();
-        double maxThrust = lThrustCurveData.getSeries(0).getMaxY();
-        double triggerThrust = maxThrust * (5.0 / 100.0);
+        a.maxThrustGrams = thrust.getMaxY();
+        double trigger = a.maxThrustGrams * BURN_THRESHOLD;
+        a.start = tu.searchX(thrust, trigger);
+        a.max = tu.searchX(thrust, a.maxThrustGrams);
+        a.stop = tu.searchXFrom(thrust, a.max, trigger);
+        if (a.start == -1 || a.max == -1 || a.stop == -1 || a.stop <= a.start || a.maxThrustGrams <= 0)
+            return a;
 
-        int curveStart = tu.searchX(lThrustCurveData.getSeries(0), triggerThrust);
-        int curveMaxThrust = tu.searchX(lThrustCurveData.getSeries(0), maxThrust);
-        int curveStop = tu.searchXFrom(lThrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
-        // Export Thrust
-        if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
-            for (int k = curveStart; k < curveStop; k++) {
-
-                String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(0).getX(k).floatValue()
-                        - lThrustCurveData.getSeries(0).getX(curveStart).floatValue()) / 1000);
-                if (curTime.contains(","))
-                    curTime = curTime + ";";
-                else
-                    curTime = curTime + ",";
-                String currData = "";
-                if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.KG) {
-                    //kg
-                    currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000));
-                } else if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.POUNDS) {
-                    //pound
-                    currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 2.20462);
-                } else if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.NEWTONS) {
-                    //newton
-                    currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
-                }
-                csv_data = csv_data + curTime + currData + "\n";
-            }
-        }
-
-        //SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-        //String date = sdf.format(System.currentTimeMillis());
-        String fileName = ThrustCurveName + "_" + motorClass + "_" + date + ".csv";
-        createFile(fileName, csv_data, "");
-        return "RocketMotorTestStand/" + fileName;
+        a.burnTimeS = (thrust.getX(a.stop).doubleValue() - thrust.getX(a.start).doubleValue()) / 1000.0;
+        if (a.burnTimeS <= 0)
+            return a;
+        a.impulseGramS = tu.integrate(thrust, a.start, a.stop);
+        a.totalImpulseNs = a.impulseGramS / 1000.0 * UnitsHelper.STANDARD_GRAVITY;
+        a.averageThrustGrams = a.impulseGramS / a.burnTimeS;
+        a.averageThrustN = a.totalImpulseNs / a.burnTimeS;
+        // Motor designation: class letter + average thrust in newtons, e.g. "H120"
+        a.motorClass = tu.motorClass(a.totalImpulseNs) + Math.round(a.averageThrustN);
+        a.valid = true;
+        return a;
     }
 
-    private String exportPressureToCSV(XYSeriesCollection lThrustCurveData) {
-        SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-        String date = sdf.format(System.currentTimeMillis());
-        String fileName = "";
+    /**
+     * Returns the [start, stop] sample indexes of the pressure rise of a pressure series,
+     * using min + 5% of (max - min) as threshold, or null if not found.
+     */
+    private int[] pressureWindow(XYSeries pressure) {
+        if (pressure.getItemCount() < 2)
+            return null;
         ThrustCurveViewTabActivity.ThrustUtil tu = new ThrustCurveViewTabActivity.ThrustUtil();
-        double maxThrust = lThrustCurveData.getSeries(0).getMaxY();
-        double triggerThrust = maxThrust * (5.0 / 100.0);
+        double max = pressure.getMaxY();
+        double min = pressure.getMinY();
+        // The former formula (max x 5% + min) did not scale with the pressure range
+        double trigger = min + (max - min) * BURN_THRESHOLD;
+        int start = tu.searchX(pressure, trigger);
+        int peak = tu.searchX(pressure, max);
+        int stop = tu.searchXFrom(pressure, peak, trigger);
+        if (start == -1 || peak == -1 || stop == -1 || stop <= start)
+            return null;
+        return new int[]{start, stop};
+    }
 
-        int curveStart = tu.searchX(lThrustCurveData.getSeries(0), triggerThrust);
-        String csv_data_pressure = "time,pressure" + units[1] + "\n";/// your csv data as string;
+    // ---------------------------------------------------------------------------------------
+    // File contents
+    // ---------------------------------------------------------------------------------------
 
-        double maxPressure = lThrustCurveData.getSeries(1).getMaxY();
-        double minPressure = lThrustCurveData.getSeries(1).getMinY();
-        double triggerPressure = (maxPressure * (5.0 / 100.0)) + minPressure;
+    /**
+     * Base of the exported file names: curve name, motor class and date, without spaces or
+     * characters that are not allowed in a file name. HH: 24 hour clock (hh was ambiguous).
+     */
+    private String newFileBaseName() {
+        String date = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.US).format(new Date());
+        String name = ThrustCurveName;
+        if (analysis.valid)
+            name = name + "_" + analysis.motorClass;
+        return FileExportHelper.sanitizeFileName(name + "_" + date);
+    }
 
-        int curvePressureStart = tu.searchX(lThrustCurveData.getSeries(1), triggerPressure);
-        int curveMaxPressure = tu.searchX(lThrustCurveData.getSeries(1), maxPressure);
-        int curvePressureStop = tu.searchXFrom(lThrustCurveData.getSeries(1), curveMaxPressure, triggerPressure);
+    /**
+     * Builds a CSV file for one series. Numbers always use a dot as decimal separator
+     * (Locale.US): in French the former code produced "0,123 ;12,5" which broke the columns.
+     *
+     * @param from         first sample index (inclusive)
+     * @param to           last sample index (exclusive)
+     * @param timeOffsetMs time subtracted from each sample
+     */
+    private String buildCsv(XYSeries serie, int serieIndex, int from, int to, double timeOffsetMs) {
+        double factor = UnitsHelper.seriesFactor(myBT.getAppConf(), serieIndex);
+        boolean isThrust = UnitsHelper.isThrustSeries(serieIndex);
+        String header = "time (s)," + (isThrust ? "thrust (" + thrustUnit + ")" : "pressure (" + pressureUnit + ")");
+        StringBuilder sb = new StringBuilder(header).append('\n');
+        int end = Math.min(to, serie.getItemCount());
+        for (int k = Math.max(0, from); k < end; k++) {
+            sb.append(String.format(Locale.US, "%.3f,%.3f%n",
+                    (serie.getX(k).doubleValue() - timeOffsetMs) / 1000.0,
+                    serie.getY(k).doubleValue() * factor));
+        }
+        return sb.toString();
+    }
 
-        if (curvePressureStart != -1 && curveMaxPressure != -1 && curvePressureStop != -1) {
-            for (int k = curvePressureStart; k < curvePressureStop; k++) {
+    /**
+     * CSV files limited to the burn: thrust, then the pressure rises (time relative to the
+     * thrust start so that all the files share the same time base).
+     */
+    private Map<String, String> buildBurnCsvFiles(String base) {
+        Map<String, String> files = new LinkedHashMap<>();
+        XYSeries thrust = lThrustCurveData.getSeries(BoardCapabilities.SERIES_THRUST);
+        double t0 = analysis.valid ? thrust.getX(analysis.start).doubleValue() : 0;
+        if (analysis.valid) {
+            files.put(base + ".csv", buildCsv(thrust, BoardCapabilities.SERIES_THRUST,
+                    analysis.start, analysis.stop + 1, t0));
+        }
+        if (hasPressure())
+            addPressureCsv(files, base + "_pressure.csv", BoardCapabilities.SERIES_PRESSURE, t0);
+        if (hasPressure2())
+            addPressureCsv(files, base + "_pressure2.csv", BoardCapabilities.SERIES_PRESSURE2, t0);
+        return files;
+    }
 
-                String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(1).getX(k).floatValue()
-                        - lThrustCurveData.getSeries(1).getX(curveStart).floatValue()) / 1000);
-                if (curTime.contains(","))
-                    curTime = curTime + ";";
-                else
-                    curTime = curTime + ",";
-                String currData = "";
-                if (myBT.getAppConf().getUnitsPressure() == 0) {
-                    //PSI
-                    currData = String.format("%.1f ", (lThrustCurveData.getSeries(1).getY(k).floatValue()));
-                } else if (myBT.getAppConf().getUnitsPressure() == 1) {
-                    //bar
-                    currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() / (float) 14.504);
-                } else if (myBT.getAppConf().getUnitsPressure() == 2) {
-                    //Kpascal
-                    currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() * (float) 6.895);
+    private void addPressureCsv(Map<String, String> files, String name, int serieIndex, double thrustStartMs) {
+        XYSeries pressure = lThrustCurveData.getSeries(serieIndex);
+        int[] window = pressureWindow(pressure);
+        if (window == null)
+            return;
+        // Without a valid thrust burn, the pressure rise itself is the time reference (the
+        // former code read the sample at index -1 and crashed)
+        double t0 = analysis.valid ? thrustStartMs : pressure.getX(window[0]).doubleValue();
+        files.put(name, buildCsv(pressure, serieIndex, window[0], window[1] + 1, t0));
+    }
+
+    /**
+     * CSV files with the whole recording of every series.
+     */
+    private Map<String, String> buildFullCsvFiles(String base) {
+        Map<String, String> files = new LinkedHashMap<>();
+        XYSeries thrust = lThrustCurveData.getSeries(BoardCapabilities.SERIES_THRUST);
+        files.put(base + "_full.csv", buildCsv(thrust, BoardCapabilities.SERIES_THRUST,
+                0, thrust.getItemCount(), 0));
+        if (hasPressure()) {
+            XYSeries p1 = lThrustCurveData.getSeries(BoardCapabilities.SERIES_PRESSURE);
+            files.put(base + "_pressure_full.csv", buildCsv(p1, BoardCapabilities.SERIES_PRESSURE,
+                    0, p1.getItemCount(), 0));
+        }
+        if (hasPressure2()) {
+            XYSeries p2 = lThrustCurveData.getSeries(BoardCapabilities.SERIES_PRESSURE2);
+            files.put(base + "_pressure2_full.csv", buildCsv(p2, BoardCapabilities.SERIES_PRESSURE2,
+                    0, p2.getItemCount(), 0));
+        }
+        return files;
+    }
+
+    /**
+     * Builds a RASP .eng motor file readable by OpenRocket and RockSim.
+     * Format: comment lines starting with ';', a header line
+     * "name diameter(mm) length(mm) delays propellant(kg) total(kg) manufacturer",
+     * then "time(s) thrust(N)" points with strictly increasing times, ending with thrust 0.
+     * The former export wrote the words "motorDiam casinglength..." in the header, which
+     * the simulators rejected, and had no final zero thrust point.
+     */
+    private String buildEng(EngSpec spec) {
+        XYSeries thrust = lThrustCurveData.getSeries(BoardCapabilities.SERIES_THRUST);
+        StringBuilder sb = new StringBuilder();
+        sb.append(";File generated by RocketMotorTestStand\n");
+        sb.append(String.format(Locale.US, ";%s - total impulse %.2f N.s - burn time %.3f s - average thrust %.1f N%n",
+                ThrustCurveName, analysis.totalImpulseNs, analysis.burnTimeS, analysis.averageThrustN));
+        sb.append(String.format(Locale.US, "%s %.0f %.0f %s %.4f %.4f %s%n",
+                FileExportHelper.sanitizeFileName(analysis.motorClass),
+                spec.diameterMm, spec.lengthMm,
+                FileExportHelper.sanitizeFileName(spec.delays),
+                spec.propellantG / 1000.0, spec.totalG / 1000.0,
+                FileExportHelper.sanitizeFileName(spec.manufacturer)));
+
+        // Time origin: the sample just before the 5% crossing, so that the first point has
+        // a time > 0 (the simulators add the implicit (0, 0) point themselves)
+        double t0 = thrust.getX(analysis.start > 0 ? analysis.start - 1 : analysis.start).doubleValue();
+        double lastTime = 0;
+        double factorN = UnitsHelper.STANDARD_GRAVITY / 1000.0; // grams -> newtons
+        for (int k = analysis.start; k <= analysis.stop; k++) {
+            double t = (thrust.getX(k).doubleValue() - t0) / 1000.0;
+            if (t <= lastTime)
+                continue; // times must be strictly increasing
+            // thrust cannot be negative in a motor file (load cell noise)
+            double f = Math.max(0, thrust.getY(k).doubleValue() * factorN);
+            sb.append(String.format(Locale.US, "%.3f %.3f%n", t, f));
+            lastTime = t;
+        }
+        // Final point: thrust back to zero at the next sample time
+        double endTime;
+        if (analysis.stop + 1 < thrust.getItemCount())
+            endTime = (thrust.getX(analysis.stop + 1).doubleValue() - t0) / 1000.0;
+        else
+            endTime = lastTime + 0.001;
+        if (endTime <= lastTime)
+            endTime = lastTime + 0.001;
+        sb.append(String.format(Locale.US, "%.3f %.3f%n", endTime, 0.0));
+        sb.append(";\n");
+        return sb.toString();
+    }
+
+    // ---------------------------------------------------------------------------------------
+    // Actions
+    // ---------------------------------------------------------------------------------------
+
+    /**
+     * Saves the files in Download/RocketMotorTestStand and tells the user where they are.
+     */
+    private void saveFiles(Map<String, String> files) {
+        if (files.isEmpty()) {
+            Toast.makeText(getContext(), R.string.no_burn_detected, Toast.LENGTH_LONG).show();
+            return;
+        }
+        List<String> saved = new ArrayList<>();
+        for (Map.Entry<String, String> file : files.entrySet()) {
+            String path = FileExportHelper.saveToDownloads(requireContext(), file.getKey(),
+                    file.getValue().getBytes(StandardCharsets.UTF_8));
+            if (path != null)
+                saved.add(file.getKey());
+        }
+        if (saved.isEmpty()) {
+            Toast.makeText(getContext(), R.string.export_failed, Toast.LENGTH_LONG).show();
+        } else {
+            StringBuilder msg = new StringBuilder(getString(R.string.files_saved));
+            for (String name : saved)
+                msg.append('\n').append(name);
+            Toast.makeText(getContext(), msg.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void exportEng() {
+        if (!analysis.valid) {
+            Toast.makeText(getContext(), R.string.no_burn_detected, Toast.LENGTH_LONG).show();
+            return;
+        }
+        askEngSpec(new EngSpecCallback() {
+            @Override
+            public void onSpec(EngSpec spec) {
+                String fileName = newFileBaseName() + ".eng";
+                String path = FileExportHelper.saveToDownloads(requireContext(), fileName,
+                        buildEng(spec).getBytes(StandardCharsets.UTF_8));
+                if (path == null) {
+                    Toast.makeText(getContext(), R.string.export_failed, Toast.LENGTH_LONG).show();
+                    return;
                 }
-                csv_data_pressure = csv_data_pressure + curTime + currData + "\n";
-            }
-            fileName = ThrustCurveName + "_pressure_" + motorClass + "_" + date + ".csv";
-            createFile(fileName, csv_data_pressure, "");
-        }
-        return "RocketMotorTestStand/" + fileName;
-    }
-
-    private String exportPressure2ToCSV(XYSeriesCollection lThrustCurveData) {
-        SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-        String date = sdf.format(System.currentTimeMillis());
-        String fileName = "";
-        ThrustCurveViewTabActivity.ThrustUtil tu = new ThrustCurveViewTabActivity.ThrustUtil();
-        double maxThrust = lThrustCurveData.getSeries(0).getMaxY();
-        double triggerThrust = maxThrust * (5.0 / 100.0);
-
-        int curveStart = tu.searchX(lThrustCurveData.getSeries(0), triggerThrust);
-        String csv_data_pressure = "time,pressure" + units[1] + "\n";/// your csv data as string;
-
-        double maxPressure = lThrustCurveData.getSeries(2).getMaxY();
-        double minPressure = lThrustCurveData.getSeries(2).getMinY();
-        double triggerPressure = (maxPressure * (5.0 / 100.0)) + minPressure;
-
-        int curvePressureStart = tu.searchX(lThrustCurveData.getSeries(2), triggerPressure);
-        int curveMaxPressure = tu.searchX(lThrustCurveData.getSeries(2), maxPressure);
-        int curvePressureStop = tu.searchXFrom(lThrustCurveData.getSeries(2), curveMaxPressure, triggerPressure);
-
-        if (curvePressureStart != -1 && curveMaxPressure != -1 && curvePressureStop != -1) {
-            for (int k = curvePressureStart; k < curvePressureStop; k++) {
-
-                String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(2).getX(k).floatValue()
-                        - lThrustCurveData.getSeries(2).getX(curveStart).floatValue()) / 1000);
-                if (curTime.contains(","))
-                    curTime = curTime + ";";
-                else
-                    curTime = curTime + ",";
-                String currData = "";
-                if (myBT.getAppConf().getUnitsPressure() == 0) {
-                    //PSI
-                    currData = String.format("%.1f ", (lThrustCurveData.getSeries(2).getY(k).floatValue()));
-                } else if (myBT.getAppConf().getUnitsPressure() == 1) {
-                    //bar
-                    currData = String.format("%.1f ", lThrustCurveData.getSeries(2).getY(k).floatValue() / (float) 14.504);
-                } else if (myBT.getAppConf().getUnitsPressure() == 2) {
-                    //Kpascal
-                    currData = String.format("%.1f ", lThrustCurveData.getSeries(2).getY(k).floatValue() * (float) 6.895);
-                }
-                csv_data_pressure = csv_data_pressure + curTime + currData + "\n";
-            }
-            fileName = ThrustCurveName + "_pressure2_" + motorClass + "_" + date + ".csv";
-            createFile(fileName, csv_data_pressure, "");
-        }
-        return "RocketMotorTestStand/" + fileName;
-    }
-
-    private void exportToCSVFull(String motorClass, XYSeriesCollection lThrustCurveData) {
-
-        String csv_data = "time,thrust" + units[0] + "\n";/// your csv data as string;
-
-        for (int k = 0; k < lThrustCurveData.getSeries(0).getItemCount(); k++) {
-            String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(0).getX(k).floatValue()) / 1000);
-            if (curTime.contains(","))
-                curTime = curTime + ";";
-            else
-                curTime = curTime + ",";
-            String currData = "";
-            if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.KG) {
-                //kg
-                currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000));
-            } else if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.POUNDS) {
-                //pound
-                currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 2.20462);
-            } else if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.NEWTONS) {
-                //newton
-                currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
-            }
-            csv_data = csv_data + curTime + currData + "\n";
-        }
-
-
-        SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-        String date = sdf.format(System.currentTimeMillis());
-        createFile(ThrustCurveName + "_full_" + motorClass + "_" + date + ".csv", csv_data, "");
-
-        //export pressure 1
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")
-        ) {
-            String csv_data_pressure = "time,pressure" + units[1] + "\n";
-
-            for (int k = 0; k < lThrustCurveData.getSeries(1).getItemCount(); k++) {
-                String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(1).getX(k).floatValue()) / 1000);
-                if (curTime.contains(","))
-                    curTime = curTime + ";";
-                else
-                    curTime = curTime + ",";
-                String currData = "";
-                if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
-                    //PSI
-                    currData = String.format("%.1f ", (lThrustCurveData.getSeries(1).getY(k).floatValue()));
-                } else if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.BAR) {
-                    //bar
-                    currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() / (float) 14.504);
-                } else if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.KPascal) {
-                    //Kpascal
-                    currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() * (float) 6.895);
-                }
-                csv_data_pressure = csv_data_pressure + curTime + currData + "\n";
-            }
-            createFile(ThrustCurveName + "_pressure_full_" + motorClass + "_" + date + ".csv", csv_data_pressure, "");
-        }
-
-        //export pressure 2
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")
-        ) {
-            String csv_data_pressure = "time,pressure" + units[1] + "\n";
-
-            for (int k = 0; k < lThrustCurveData.getSeries(2).getItemCount(); k++) {
-                String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(2).getX(k).floatValue()) / 1000);
-                if (curTime.contains(","))
-                    curTime = curTime + ";";
-                else
-                    curTime = curTime + ",";
-                String currData = "";
-                if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
-                    //PSI
-                    currData = String.format("%.1f ", (lThrustCurveData.getSeries(2).getY(k).floatValue()));
-                } else if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.BAR) {
-                    //bar
-                    currData = String.format("%.1f ", lThrustCurveData.getSeries(2).getY(k).floatValue() / (float) 14.504);
-                } else if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.KPascal) {
-                    //Kpascal
-                    currData = String.format("%.1f ", lThrustCurveData.getSeries(2).getY(k).floatValue() * (float) 6.895);
-                }
-                csv_data_pressure = csv_data_pressure + curTime + currData + "\n";
-            }
-            createFile(ThrustCurveName + "_pressure2_full_" + motorClass + "_" + date + ".csv", csv_data_pressure, "");
-        }
-    }
-
-    private String exportThrustToCSVFull(XYSeriesCollection lThrustCurveData) {
-        String csv_data = "time,thrust" + units[0] + "\n";/// your csv data as string;
-
-        for (int k = 0; k < lThrustCurveData.getSeries(0).getItemCount(); k++) {
-            String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(0).getX(k).floatValue()) / 1000);
-            if (curTime.contains(","))
-                curTime = curTime + ";";
-            else
-                curTime = curTime + ",";
-            String currData = "";
-            if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.KG) {
-                //kg
-                currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000));
-            } else if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.POUNDS) {
-                //pound
-                currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 2.20462);
-            } else if (myBT.getAppConf().getUnits() == GlobalConfig.ThrustUnits.NEWTONS) {
-                //newton
-                currData = String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
-            }
-            csv_data = csv_data + curTime + currData + "\n";
-        }
-
-
-        SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-        String date = sdf.format(System.currentTimeMillis());
-        //createFile(ThrustCurveName + "_full_" + motorClass + "_" + date + ".csv", csv_data, "");
-        String fileName = ThrustCurveName + "_full_" + motorClass + "_" + date + ".csv";
-        createFile(fileName, csv_data, "");
-        return "RocketMotorTestStand/" + fileName;
-    }
-
-    private String exportPressureToCSVFull(XYSeriesCollection lThrustCurveData) {
-        SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-        String date = sdf.format(System.currentTimeMillis());
-
-        String csv_data_pressure = "time,pressure" + units[1] + "\n";
-
-        for (int k = 0; k < lThrustCurveData.getSeries(1).getItemCount(); k++) {
-            String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(1).getX(k).floatValue()) / 1000);
-            if (curTime.contains(","))
-                curTime = curTime + ";";
-            else
-                curTime = curTime + ",";
-            String currData = "";
-            if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
-                //PSI
-                currData = String.format("%.1f ", (lThrustCurveData.getSeries(1).getY(k).floatValue()));
-            } else if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.BAR) {
-                //bar
-                currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() / (float) 14.504);
-            } else if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.KPascal) {
-                //Kpascal
-                currData = String.format("%.1f ", lThrustCurveData.getSeries(1).getY(k).floatValue() * (float) 6.895);
-            }
-            csv_data_pressure = csv_data_pressure + curTime + currData + "\n";
-        }
-        //createFile(ThrustCurveName + "_pressure_full_" + motorClass + "_" + date + ".csv", csv_data_pressure, "");
-        String fileName = ThrustCurveName + "_pressure_full_" + motorClass + "_" + date + ".csv";
-        createFile(fileName, csv_data_pressure, "");
-        return "RocketMotorTestStand/" + fileName;
-    }
-
-    private String exportPressure2ToCSVFull(XYSeriesCollection lThrustCurveData) {
-        SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-        String date = sdf.format(System.currentTimeMillis());
-        String csv_data_pressure = "time,pressure" + units[1] + "\n";
-
-        for (int k = 0; k < lThrustCurveData.getSeries(2).getItemCount(); k++) {
-            String curTime = String.format("%.3f ", (lThrustCurveData.getSeries(2).getX(k).floatValue()) / 1000);
-            if (curTime.contains(","))
-                curTime = curTime + ";";
-            else
-                curTime = curTime + ",";
-            String currData = "";
-            if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.PSI) {
-                //PSI
-                currData = String.format("%.1f ", (lThrustCurveData.getSeries(2).getY(k).floatValue()));
-            } else if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.BAR) {
-                //bar
-                currData = String.format("%.1f ", lThrustCurveData.getSeries(2).getY(k).floatValue() / (float) 14.504);
-            } else if (myBT.getAppConf().getUnitsPressure() == GlobalConfig.PressureUnits.KPascal) {
-                //Kpascal
-                currData = String.format("%.1f ", lThrustCurveData.getSeries(2).getY(k).floatValue() * (float) 6.895);
-            }
-            csv_data_pressure = csv_data_pressure + curTime + currData + "\n";
-        }
-        //createFile(ThrustCurveName + "_pressure2_full_" + motorClass + "_" + date + ".csv", csv_data_pressure, "");
-        String fileName = ThrustCurveName + "_pressure2_full_" + motorClass + "_" + date + ".csv";
-        createFile(fileName, csv_data_pressure, "");
-        return "RocketMotorTestStand/" + fileName;
-    }
-
-    private void createFile(String fileName, String csv_data, String msg) {
-        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-        //if you want to create a sub-dir
-        root = new File(root, "RocketMotorTestStand");
-        root.mkdir();
-
-        //SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-        //String date = sdf.format(System.currentTimeMillis());
-
-        // select the name for your file
-        root = new File(root, fileName);
-
-        try {
-            FileOutputStream fout = new FileOutputStream(root);
-            fout.write(csv_data.getBytes());
-
-            fout.close();
-            if (!msg.equals("")) {
-                //Confirmation message
-                builder = new AlertDialog.Builder(this.getContext());
-                //Running Saving commands
-                builder.setMessage(getString(R.string.not_saved_msg) + Environment.DIRECTORY_DOWNLOADS +
-                                "\\RocketMotorTestStand\\" + fileName + msg)
+                new AlertDialog.Builder(getContext())
+                        .setMessage(getString(R.string.not_saved_msg) + "\n" + path)
                         .setTitle(R.string.not_saved_title)
                         .setCancelable(false)
                         .setPositiveButton(R.string.not_saved_ok, new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog, final int id) {
                                 dialog.cancel();
                             }
-                        });
-
-                alert = builder.create();
-                alert.show();
+                        })
+                        .show();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-
-            boolean bool = false;
-            try {
-                // try to create the file
-                bool = root.createNewFile();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-            if (bool) {
-                // call the method again
-                createFile(fileName, csv_data, msg);
-            } else {
-                //throw new IllegalStateException(getString(R.string.failed_to_create_csv));
-                SavedCurvesOK = false;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
-    private String exportToEng(String motorClass, XYSeriesCollection lThrustCurveData, String msg) {
-
-        String motorfile_data = ";File generated by RocketMotorTestStand \n;\n";
-        //K1530 54 714 0 1.287998 1.499998 TruCore
-
-        motorfile_data = motorfile_data + "\n";
-        motorfile_data = motorfile_data + motorClass + " " + "motorDiam" + " " + "casinglength"
-                + " " + "delay" + " " + "propellantWeight" + " " + "totalWeight" + " " + "manufacturer" + "\n";
-
-        ThrustCurveViewTabActivity.ThrustUtil tu = new ThrustCurveViewTabActivity.ThrustUtil();
-        double maxThrust = lThrustCurveData.getSeries(0).getMaxY();
-        double triggerThrust = maxThrust * (5.0 / 100.0);
-
-        int curveStart = tu.searchX(lThrustCurveData.getSeries(0), triggerThrust);
-        int curveMaxThrust = tu.searchX(lThrustCurveData.getSeries(0), maxThrust);
-        int curveStop = tu.searchXFrom(lThrustCurveData.getSeries(0), curveMaxThrust, triggerThrust);
-
-        if (curveStart != -1 && curveMaxThrust != -1 && curveStop != -1) {
-            for (int k = curveStart; k < curveStop; k++) {
-                //newton
-                String currData = String.format("%.3f ", (lThrustCurveData.getSeries(0).getX(k).floatValue() - lThrustCurveData.getSeries(0).getX(curveStart).floatValue()) / 1000) + " " +
-                        String.format("%.1f ", (lThrustCurveData.getSeries(0).getY(k).floatValue() / 1000) * (float) 9.80665);
-                currData = currData.replace(",", ".");
-                motorfile_data = motorfile_data + currData + "\n";
-            }
+    private void shareEng() {
+        if (!analysis.valid) {
+            Toast.makeText(getContext(), R.string.no_burn_detected, Toast.LENGTH_LONG).show();
+            return;
         }
-
-        motorfile_data = motorfile_data + ";\n";
-        SimpleDateFormat sdf = new SimpleDateFormat("_dd-MM-yyyy_hh-mm-ss");
-        String date = sdf.format(System.currentTimeMillis());
-        createFile(ThrustCurveName + "_" + motorClass + "_" + date + ".eng", motorfile_data, msg);
-        return "RocketMotorTestStand/" + ThrustCurveName + "_" + motorClass + "_" + date + ".eng";
+        askEngSpec(new EngSpecCallback() {
+            @Override
+            public void onSpec(EngSpec spec) {
+                String fileName = newFileBaseName() + ".eng";
+                Uri uri = FileExportHelper.saveForSharing(requireContext(), fileName,
+                        buildEng(spec).getBytes(StandardCharsets.UTF_8));
+                if (uri == null) {
+                    Toast.makeText(getContext(), R.string.export_failed, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                FileExportHelper.share(requireActivity(), uri, "text/plain",
+                        "MotorTestStand has shared with you some info");
+            }
+        });
     }
 
-    //Share file
-    private void shareFile(File file) {
-
-        Uri uri = FileProvider.getUriForFile(
-                getContext(),
-                getContext().getPackageName() + ".provider",
-                file);
-
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setType("file/*");
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, "MotorTestStand has shared with you some info");
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-
-        Intent chooser = Intent.createChooser(intent, "Share File");
-
-        List<ResolveInfo> resInfoList = getContext().getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
-
-        for (ResolveInfo resolveInfo : resInfoList) {
-            String packageName = resolveInfo.activityInfo.packageName;
-            getContext().grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    /**
+     * Shares a zip with all the CSV files and, when a burn was detected, the .eng file.
+     */
+    private void shareZip() {
+        if (!analysis.valid) {
+            shareZipWith(null);
+            return;
         }
+        askEngSpec(new EngSpecCallback() {
+            @Override
+            public void onSpec(EngSpec spec) {
+                shareZipWith(spec);
+            }
+        });
+    }
 
+    private void shareZipWith(@Nullable EngSpec spec) {
+        String base = newFileBaseName();
+        Map<String, byte[]> entries = new LinkedHashMap<>();
+        for (Map.Entry<String, String> e : buildBurnCsvFiles(base).entrySet())
+            entries.put(e.getKey(), e.getValue().getBytes(StandardCharsets.UTF_8));
+        for (Map.Entry<String, String> e : buildFullCsvFiles(base).entrySet())
+            entries.put(e.getKey(), e.getValue().getBytes(StandardCharsets.UTF_8));
+        if (spec != null)
+            entries.put(base + ".eng", buildEng(spec).getBytes(StandardCharsets.UTF_8));
         try {
-            this.startActivity(chooser);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(getContext(), "No App Available", Toast.LENGTH_SHORT).show();
+            Uri uri = FileExportHelper.saveForSharing(requireContext(), "motorData.zip",
+                    FileExportHelper.zip(entries));
+            if (uri == null) {
+                Toast.makeText(getContext(), R.string.export_failed, Toast.LENGTH_LONG).show();
+                return;
+            }
+            FileExportHelper.share(requireActivity(), uri, "application/zip",
+                    "MotorTestStand has shared with you some info");
+        } catch (IOException e) {
+            Toast.makeText(getContext(), R.string.export_failed, Toast.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     * Asks the motor data needed in the .eng header (diameter, length, delays, masses,
+     * manufacturer). The last values typed are remembered.
+     */
+    private void askEngSpec(final EngSpecCallback callback) {
+        final Context ctx = requireContext();
+        final SharedPreferences prefs = ctx.getSharedPreferences(ENG_PREFS, Context.MODE_PRIVATE);
+
+        LinearLayout layout = new LinearLayout(ctx);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        int padding = (int) (16 * ctx.getResources().getDisplayMetrics().density);
+        layout.setPadding(padding, padding / 2, padding, 0);
+
+        final EditText diameter = addField(layout, R.string.eng_diameter, prefs.getString("diameter", ""), true);
+        final EditText length = addField(layout, R.string.eng_length, prefs.getString("length", ""), true);
+        final EditText delays = addField(layout, R.string.eng_delays, prefs.getString("delays", "P"), false);
+        final EditText propellant = addField(layout, R.string.eng_propellant_mass, prefs.getString("propellant", ""), true);
+        final EditText total = addField(layout, R.string.eng_total_mass, prefs.getString("total", ""), true);
+        final EditText manufacturer = addField(layout, R.string.eng_manufacturer, prefs.getString("manufacturer", "Homemade"), false);
+
+        android.widget.ScrollView scroll = new android.widget.ScrollView(ctx);
+        scroll.addView(layout);
+
+        new AlertDialog.Builder(ctx)
+                .setTitle(R.string.eng_dialog_title)
+                .setView(scroll)
+                .setNegativeButton(R.string.fv_cancel, null)
+                .setPositiveButton(R.string.fv_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EngSpec spec = new EngSpec();
+                        spec.diameterMm = parseUserNumber(diameter);
+                        spec.lengthMm = parseUserNumber(length);
+                        spec.propellantG = parseUserNumber(propellant);
+                        spec.totalG = parseUserNumber(total);
+                        spec.delays = delays.getText().toString().trim();
+                        spec.manufacturer = manufacturer.getText().toString().trim();
+                        if (spec.delays.isEmpty())
+                            spec.delays = "P";
+                        if (spec.manufacturer.isEmpty())
+                            spec.manufacturer = "Homemade";
+                        if (spec.diameterMm <= 0 || spec.lengthMm <= 0 || spec.propellantG <= 0
+                                || spec.totalG < spec.propellantG) {
+                            Toast.makeText(ctx, R.string.eng_invalid_values, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        prefs.edit()
+                                .putString("diameter", diameter.getText().toString().trim())
+                                .putString("length", length.getText().toString().trim())
+                                .putString("delays", spec.delays)
+                                .putString("propellant", propellant.getText().toString().trim())
+                                .putString("total", total.getText().toString().trim())
+                                .putString("manufacturer", spec.manufacturer)
+                                .apply();
+                        callback.onSpec(spec);
+                    }
+                })
+                .show();
+    }
+
+    /**
+     * Reads a number typed by the user, accepting a comma as decimal separator.
+     */
+    private static double parseUserNumber(EditText field) {
+        return ConsoleApplication.parseDoubleSafe(field.getText().toString().replace(',', '.'), -1);
+    }
+
+    /**
+     * Adds a label and a text field to the .eng export dialog.
+     */
+    private EditText addField(LinearLayout layout, int labelRes, String value, boolean numeric) {
+        Context ctx = layout.getContext();
+        TextView label = new TextView(ctx);
+        label.setText(labelRes);
+        layout.addView(label);
+        EditText field = new EditText(ctx);
+        field.setText(value);
+        field.setSingleLine(true);
+        if (numeric)
+            field.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        layout.addView(field);
+        return field;
     }
 }

@@ -12,9 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.rocketmotorteststand.ConsoleApplication;
+import com.rocketmotorteststand.FragmentRecreationHelper;
 import com.rocketmotorteststand.Help.AboutActivity;
 import com.rocketmotorteststand.Help.HelpActivity;
 import com.rocketmotorteststand.R;
@@ -44,17 +43,11 @@ public class AppConfigTabActivity extends AppCompatActivity {
     ConsoleApplication myBT;
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        // Read language configuration directly from SharedPreferences to ensure
-        // context localization is configured before Activity inflation
-        SharedPreferences prefs = newBase.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
-        int lang = prefs.getInt("AppLanguage", 0);
-        super.attachBaseContext(ConsoleApplication.updateBaseContextLocale(newBase, lang));
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // The tab fragment is created below with its data: drop the empty one that Android
+        // may have restored, it would crash
+        FragmentRecreationHelper.discardRestoredFragments(this);
         //get the Connection Application pointer
         myBT = (ConsoleApplication) getApplication();
 
@@ -110,6 +103,9 @@ public class AppConfigTabActivity extends AppCompatActivity {
         myBT.getAppConf().setManualRecording(appConfigPage1.getAllowManualRecording());
         myBT.getAppConf().SaveConfig();
         finish();
+        // Apply the language to every screen (AppCompat recreates the open activities if
+        // the language changed). Restarting the application is no longer needed.
+        ConsoleApplication.applyAppLanguage(myBT.getAppConf().getApplicationLanguage());
     }
 
     private void RestoreToDefault() {

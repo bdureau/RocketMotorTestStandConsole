@@ -1,7 +1,8 @@
 package com.rocketmotorteststand.connection;
 /**
  *
- *   @description: This class has all the methods to deal with your bluetooth connection
+ *   @description: Bluetooth classic (SPP / RFCOMM) connection to the test stand Bluetooth module:
+ *   connect, disconnect, read and write.
  *   @author: boris.dureau@neuf.fr
  *
  **/
@@ -15,32 +16,46 @@ import java.util.UUID;
 
 
 public class BluetoothConnection {
-    //BluetoothDevice device;
-    BluetoothAdapter myBluetooth = null;
-    BluetoothSocket btSocket = null;
-    private boolean isBtConnected = false;
-    //private String address = null;
-    //SPP UUID. Look for it
+    private BluetoothAdapter myBluetooth = null;
+    private volatile BluetoothSocket btSocket = null;
+    // Read by the UI thread and written by the connection threads
+    private volatile boolean isBtConnected = false;
+    //SPP UUID
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
+    /**
+     * Opens an RFCOMM connection to the module with the given MAC address.
+     * Blocking call: must not run on the UI thread.
+     */
     public boolean connect(String address) {
         boolean state;
         try {
-            myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-            BluetoothDevice btDevice = myBluetooth.getRemoteDevice(address);//connects to the device's address and checks if it's available
-            //setBtSocket(btDevice.createInsecureRfcommSocketToServiceRecord(myUUID));//create a RFCOMM (SPP) connection
+            myBluetooth = BluetoothAdapter.getDefaultAdapter();
+            if (myBluetooth == null || address == null) {
+                setBTConnected(false);
+                return false;
+            }
+            BluetoothDevice btDevice = myBluetooth.getRemoteDevice(address);
             setBtSocket(btDevice.createRfcommSocketToServiceRecord(myUUID));
-            BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-            getBtSocket().connect();//start connection
+            try {
+                // The application never starts a discovery. cancelDiscovery() requires the
+                // BLUETOOTH_SCAN permission on Android 12+, which the application no longer
+                // asks for, so a SecurityException is simply ignored.
+                myBluetooth.cancelDiscovery();
+            } catch (SecurityException e) {
+                // ignored
+            }
+            getBtSocket().connect();
             state = true;
             setBTConnected(true);
 
-        } catch (IOException e) {
-            state = false;//if the try failed, you can check the exception here
+        } catch (IOException | SecurityException | IllegalArgumentException e) {
+            state = false;
             setBTConnected(false);
         }
         return state;
     }
+
     public void setBTConnected(boolean BtConnected) {
         isBtConnected = BtConnected;
     }
@@ -57,44 +72,60 @@ public class BluetoothConnection {
         return btSocket;
     }
 
-
-    public InputStream getInputStream () {
-        InputStream tmpIn = null;
+    public InputStream getInputStream() {
+        BluetoothSocket socket = btSocket;
+        if (socket == null)
+            return null;
         try {
-            tmpIn = btSocket.getInputStream();
+            return socket.getInputStream();
         } catch (IOException e) {
-
+            return null;
         }
-        return tmpIn;
     }
+
     public void Disconnect() {
-        if (btSocket != null) //If the btSocket is busy
-        {
+        BluetoothSocket socket = btSocket;
+        if (socket != null) {
             try {
-                btSocket.close(); //close connection
+                socket.close();
             } catch (IOException e) {
-
+                // already closed
             }
-            setBTConnected(false);
+        }
+        setBTConnected(false);
+    }
+
+    public void write(String data) {
+        BluetoothSocket socket = btSocket;
+        if (socket == null)
+            return;
+        try {
+            socket.getOutputStream().write(data.getBytes());
+        } catch (IOException e) {
+            // connection lost: the readers will time out
         }
     }
 
-    public void write (String data) {
-        try {
-            btSocket.getOutputStream().write(data.getBytes());
-        } catch (IOException e) {
-        }
-    }
     public void flush() {
+        BluetoothSocket socket = btSocket;
+        if (socket == null)
+            return;
         try {
-        btSocket.getOutputStream().flush();
+            socket.getOutputStream().flush();
         } catch (IOException e) {
+            // connection lost
         }
     }
+
     public void clearInput() {
+        BluetoothSocket socket = btSocket;
+        if (socket == null)
+            return;
         try {
-            btSocket.getInputStream().skip(btSocket.getInputStream().available());
+            InputStream in = socket.getInputStream();
+            in.skip(in.available());
         } catch (IOException e) {
+            // connection lost
         }
     }
 }

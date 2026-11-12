@@ -11,9 +11,15 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.rocketmotorteststand.BoardCapabilities;
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
 
+/**
+ * @description: Status tab of the test stand: current thrust, casing pressure(s), battery
+ * voltage, eeprom usage and number of recorded thrust curves. Also offers the tare button.
+ * @author: boris.dureau@neuf.fr
+ **/
 public class TestStandStatusFragment extends Fragment {
     private ConsoleApplication myBT;
     private String[] units;
@@ -23,6 +29,13 @@ public class TestStandStatusFragment extends Fragment {
     private TextView txtViewThrust, txtViewVoltage, txtViewLink, txtEEpromUsage, txtNbrOfThrustCurve;
     private TextView txtViewEEprom, txtViewThrustCurve, txtViewCurrentPressureValue, txtViewCurrentPressureValue2;
 
+    /**
+     * Empty constructor required by Android to recreate the fragment. A recreated instance
+     * is discarded by the host activity (see FragmentRecreationHelper).
+     */
+    public TestStandStatusFragment() {
+    }
+
     public TestStandStatusFragment(ConsoleApplication pBT, String[] pUnits) {
         myBT = pBT;
         units = pUnits;
@@ -31,8 +44,8 @@ public class TestStandStatusFragment extends Fragment {
     public void setBatteryVoltage(String value) {
         if (ViewCreated) {
             txtViewVoltage.setText(value + " Volts");
-            if (value.matches("\\d+(?:\\.\\d+)?"))
-                if (Double.parseDouble(value) < 7.0) {
+            if (ConsoleApplication.isUnsignedNumber(value))
+                if (ConsoleApplication.parseDoubleSafe(value, 0) < 7.0) {
                     txtViewVoltage.setTextColor(Color.RED);
                 } else {
                     txtViewVoltage.setTextColor(txtViewThrust.getTextColors());
@@ -58,8 +71,9 @@ public class TestStandStatusFragment extends Fragment {
     public void setEEpromUsage(String value) {
         if (ViewCreated) {
             txtEEpromUsage.setText(value + " %");
-            if (value.matches("\\d+(?:\\.\\d+)?"))
-                if (Integer.parseInt(value) >= 90) {
+            // parseDoubleSafe: Integer.parseInt crashed on decimal values such as "12.5"
+            if (ConsoleApplication.isUnsignedNumber(value))
+                if (ConsoleApplication.parseDoubleSafe(value, 0) >= 90) {
                     txtEEpromUsage.setTextColor(Color.RED);
                 } else {
                     txtEEpromUsage.setTextColor(txtViewThrust.getTextColors());
@@ -71,8 +85,8 @@ public class TestStandStatusFragment extends Fragment {
         if (ViewCreated) {
             txtNbrOfThrustCurve.setText(nbrOfThrustCurve);
             // If we have the maximum of thrust curve put it in red
-            if (nbrOfThrustCurve.matches("\\d+(?:\\.\\d+)?"))
-                if (Integer.parseInt(nbrOfThrustCurve) >= 23) {
+            if (ConsoleApplication.isUnsignedNumber(nbrOfThrustCurve))
+                if (ConsoleApplication.parseDoubleSafe(nbrOfThrustCurve, 0) >= 23) {
                     txtNbrOfThrustCurve.setTextColor(Color.RED);
                 } else {
                     txtNbrOfThrustCurve.setTextColor(txtViewThrust.getTextColors());
@@ -84,9 +98,13 @@ public class TestStandStatusFragment extends Fragment {
         return ViewCreated;
     }
 
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ViewCreated = false;
+    }
 
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_teststand_status, container, false);
 
         txtViewThrust = (TextView) view.findViewById(R.id.txtViewThrust);
@@ -106,10 +124,7 @@ public class TestStandStatusFragment extends Fragment {
         txtViewVoltage.setVisibility(View.VISIBLE);
         txtViewBatteryVoltage.setVisibility(View.VISIBLE);
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V2") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32")) {
+        if (BoardCapabilities.hasPressure(myBT.getBoardName())) {
             txtViewCurrentPressureValue.setVisibility(View.VISIBLE);
             txtViewCurrentPressure.setVisibility(View.VISIBLE);
         } else {
@@ -117,8 +132,7 @@ public class TestStandStatusFragment extends Fragment {
             txtViewCurrentPressure.setVisibility(View.INVISIBLE);
         }
 
-        if (myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+        if (BoardCapabilities.hasPressure2(myBT.getBoardName())) {
             txtViewCurrentPressureValue2.setVisibility(View.VISIBLE);
             txtViewCurrentPressure2.setVisibility(View.VISIBLE);
         } else {

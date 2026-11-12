@@ -107,15 +107,6 @@ public class FlashFirmware extends AppCompatActivity {
     private String[] itemsFirmwares;
     private Spinner dropdownBaudRate;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        // Read language configuration directly from SharedPreferences to ensure
-        // context localization is configured before Activity inflation
-        SharedPreferences prefs = newBase.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
-        int lang = prefs.getInt("AppLanguage", 0);
-        super.attachBaseContext(ConsoleApplication.updateBaseContextLocale(newBase, lang));
-    }
-
     // fast way to call Toast
     private void msg(String s) {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
@@ -866,4 +857,4 @@ public class FlashFirmware extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-}
+}

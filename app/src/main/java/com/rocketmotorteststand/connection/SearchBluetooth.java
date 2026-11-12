@@ -1,6 +1,7 @@
 package com.rocketmotorteststand.connection;
 /**
- *   @description:  This is to select the bluetooth module.
+ *   @description:  Lists the paired Bluetooth devices so that the user can select the test
+ *   stand Bluetooth module. Handles the Android 12+ BLUETOOTH_CONNECT runtime permission.
  *
  *   @author: boris.dureau@neuf.fr
  *
@@ -8,9 +9,7 @@ package com.rocketmotorteststand.connection;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,20 +45,15 @@ public class SearchBluetooth extends AppCompatActivity {
     private Set<BluetoothDevice> pairedDevices;
     public static String EXTRA_ADDRESS = "device_address";
     ConsoleApplication myBT ;
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        // Read language configuration directly from SharedPreferences to ensure
-        // context localization is configured before Activity inflation
-        SharedPreferences prefs = newBase.getSharedPreferences("TestStandConsoleCfg", MODE_PRIVATE);
-        int lang = prefs.getInt("AppLanguage", 0);
-        super.attachBaseContext(ConsoleApplication.updateBaseContextLocale(newBase, lang));
-    }
+    /** Request code used for the BLUETOOTH_CONNECT runtime permission. */
+    private static final int REQUEST_BT_CONNECT = 2;
+    /** Request code used to ask the user to switch Bluetooth on. */
+    private static final int REQUEST_ENABLE_BT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //Check the local and force it if needed
         myBT = (ConsoleApplication) getApplication();
 
         setContentView(R.layout.activity_search_bluetooth);
@@ -69,39 +63,8 @@ public class SearchBluetooth extends AppCompatActivity {
         btnDismiss = (Button) findViewById(R.id.butSearchBTDismiss);
         devicelist = (ListView)findViewById(R.id.listView);
 
-        //if the device has bluetooth
-        myBluetooth = BluetoothAdapter.getDefaultAdapter();
-
-        if(myBluetooth == null)
-        {
-            //Show a mensag. that the device has no bluetooth adapter
-            //Bluetooth Device Not Available
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.BT_msg1), Toast.LENGTH_LONG).show();
-
-            //finish apk
-            finish();
-        }
-        else if(!myBluetooth.isEnabled())
-        {
-            Intent turnBTon = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
-                    return;
-                }
-                startActivityForResult(turnBTon, 1);
-                return;
-            }
-        }
-
+        // The buttons are wired first: the former code returned from onCreate while asking
+        // for the permission, so on Android 12+ the buttons did nothing on first launch.
         btnPaired.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -116,37 +79,93 @@ public class SearchBluetooth extends AppCompatActivity {
                 finish();
             }
         });
+
+        //if the device has bluetooth
+        myBluetooth = BluetoothAdapter.getDefaultAdapter();
+
+        if(myBluetooth == null)
+        {
+            //Bluetooth Device Not Available
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.BT_msg1), Toast.LENGTH_LONG).show();
+            // finish() does not stop onCreate: return, the code below would crash
+            finish();
+            return;
+        }
+
+        if (!hasConnectPermission()) {
+            // The list is filled in onRequestPermissionsResult once the user has answered
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BT_CONNECT);
+            return;
+        }
+        enableBluetoothOrListDevices();
+    }
+
+    /**
+     * BLUETOOTH_CONNECT is a runtime permission on Android 12+ only; it is implicitly granted
+     * on older versions. (BLUETOOTH_SCAN is not needed: the application only lists the
+     * already paired devices and never runs a discovery.)
+     */
+    private boolean hasConnectPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+            return true;
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
+     * Asks the user to switch Bluetooth on if needed, otherwise lists the paired devices.
+     */
+    @SuppressWarnings("MissingPermission")
+    private void enableBluetoothOrListDevices() {
+        if (!myBluetooth.isEnabled()) {
+            Intent turnBTon = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(turnBTon, REQUEST_ENABLE_BT);
+            return;
+        }
         pairedDevicesList();
     }
 
-    private void pairedDevicesList()
-    {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-            {
-                ActivityCompat.requestPermissions(SearchBluetooth.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 2);
-                return;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_BT_CONNECT) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                enableBluetoothOrListDevices();
+            } else {
+                msgPermissionDenied();
             }
         }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            //return;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-            {
-                ActivityCompat.requestPermissions(SearchBluetooth.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
-                return;
-            }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Bluetooth has been switched on (or not): refresh the list
+        if (requestCode == REQUEST_ENABLE_BT && myBluetooth != null && myBluetooth.isEnabled()) {
+            pairedDevicesList();
+        }
+    }
+
+    private void msgPermissionDenied() {
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.perm_not_granted),
+                Toast.LENGTH_LONG).show();
+    }
+
+    @SuppressWarnings("MissingPermission")
+    private void pairedDevicesList()
+    {
+        if (myBluetooth == null)
+            return;
+        if (!hasConnectPermission()) {
+            ActivityCompat.requestPermissions(SearchBluetooth.this,
+                    new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BT_CONNECT);
+            return;
         }
         pairedDevices = myBluetooth.getBondedDevices();
         ArrayList list = new ArrayList();
 
-        if (pairedDevices.size()>0)
+        if (pairedDevices != null && pairedDevices.size()>0)
         {
             for(BluetoothDevice bt : pairedDevices)
             {

@@ -16,11 +16,17 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.rocketmotorteststand.BoardCapabilities;
 import com.rocketmotorteststand.ConsoleApplication;
 import com.rocketmotorteststand.R;
 
 import java.util.ArrayList;
 
+/**
+ * @description: Live telemetry tab drawn with the MPAndroidChart library: shows the current
+ * thrust and pressure values and plots them against time while the motor is fired.
+ * @author: boris.dureau@neuf.fr
+ **/
 public class TelemetryMpFragment extends Fragment {
     private ConsoleApplication myBT;
     private boolean ViewCreated = false;
@@ -51,6 +57,13 @@ public class TelemetryMpFragment extends Fragment {
         if(ViewCreated)
             txtCurrentPressure2.setText(value);
     }
+    /**
+     * Empty constructor required by Android to recreate the fragment. A recreated instance
+     * is discarded by the host activity (see FragmentRecreationHelper).
+     */
+    public TelemetryMpFragment() {
+    }
+
     public TelemetryMpFragment(ConsoleApplication pBT, String [] pUnits) {
         myBT = pBT;
         units = pUnits;
@@ -58,11 +71,15 @@ public class TelemetryMpFragment extends Fragment {
     public boolean isViewCreated() {
         return ViewCreated;
     }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ViewCreated = false;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         View view = inflater.inflate(R.layout.fragment_telemetry_mp, container, false);
 
         txtCurrentThrust = (TextView) view.findViewById(R.id.textViewCurrentThrust);
@@ -70,8 +87,7 @@ public class TelemetryMpFragment extends Fragment {
         txtCurrentPressure2 = (TextView) view.findViewById(R.id.textViewCurrentPressure2);
         textViewlblCurrentPressure2 = (TextView) view.findViewById(R.id.textViewlblCurrentPressure2);
 
-        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+        if (BoardCapabilities.hasPressure2(myBT.getBoardName())) {
             txtCurrentPressure2.setVisibility(View.VISIBLE);
             textViewlblCurrentPressure2.setVisibility(View.VISIBLE);
         } else {
@@ -115,8 +131,7 @@ public class TelemetryMpFragment extends Fragment {
 
         dataSets.add(set1);
         dataSets.add(set2);
-        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+        if (BoardCapabilities.hasPressure2(myBT.getBoardName())) {
             LineDataSet set3 = new LineDataSet(yValuesThrust, getString(R.string.curve_pressure_ch2));
             set3.setValueTextColor(labelColor);
             set3.setValueTextSize(fontSize);
@@ -136,6 +151,9 @@ public class TelemetryMpFragment extends Fragment {
 
 
     public void plotThrust(ArrayList<Entry> yValuesThrust) {
+        // Telemetry may start before the chart view exists
+        if (!ViewCreated || !isAdded())
+            return;
         LineDataSet set1 = new LineDataSet(yValuesThrust, getString(R.string.telemetry_thrust_time));
         set1.setDrawValues(false);
         set1.setDrawCircles(false);
@@ -155,6 +173,10 @@ public class TelemetryMpFragment extends Fragment {
     }
 
     public void plotThrustAndPressure(ArrayList<Entry> yValuesThrust,ArrayList<Entry> yValuesPressure, ArrayList<Entry> yValuesPressure2  ) {
+        // Telemetry may start before the chart view exists
+        if (!ViewCreated || !isAdded())
+            return;
+        boolean hasPressure2 = BoardCapabilities.hasPressure2(myBT.getBoardName());
         LineDataSet set1 = new LineDataSet(yValuesThrust, getResources().getString(R.string.Thrust)  +" (" + units[0] +")/" + getString(R.string.telemetry_time));
         set1.setDrawValues(false);
         set1.setDrawCircles(false);
@@ -171,20 +193,18 @@ public class TelemetryMpFragment extends Fragment {
         set2.setColor(Color.BLUE);
         //set2.setValueTextSize(fontSize);
         LineDataSet set3 =null;
-        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-          myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+        if (hasPressure2) {
             set3 = new LineDataSet(yValuesPressure2, getString(R.string.telemetry_pressure) + " (" + units[2] +")/" +getString(R.string.telemetry_time));
             set3.setDrawValues(false);
             set3.setDrawCircles(false);
-            set3.setLabel(getString(R.string.telemetry_pressure));
+            set3.setLabel(getString(R.string.curve_pressure_ch2));
             set3.setValueTextColor(Color.BLACK);
             set3.setColor(Color.GREEN);
         }
         dataSets.clear();
         dataSets.add(set1);
         dataSets.add(set2);
-        if(myBT.getTestStandConfigData().getTestStandName().equals("TestStandSTM32V3") ||
-                myBT.getTestStandConfigData().getTestStandName().equals("TestStandESP32V3")) {
+        if (hasPressure2) {
             dataSets.add(set3);
         }
         data = new LineData(dataSets);
