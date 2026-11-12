@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; padding: 12px; color: #212121; }
+        h1 { font-size: 1.4em; color: #1976D2; border-bottom: 2px solid #1976D2; padding-bottom: 6px; }
+        h2 { font-size: 1.2em; color: #0D47A1; margin-top: 18px; }
+        h3 { font-size: 1.05em; color: #37474F; margin-top: 14px; }
+        .warning-box { background-color: #FFEBEE; border-left: 4px solid #D32F2F; padding: 10px; margin: 12px 0; }
+        .warning-title { color: #D32F2F; font-weight: bold; margin-bottom: 4px; }
+        .info-box { background-color: #E3F2FD; border-left: 4px solid #1976D2; padding: 10px; margin: 12px 0; }
+        .btn-entry { margin-bottom: 14px; }
+        .btn-entry strong { color: #0277BD; }
+        .hardware-item { margin-bottom: 12px; }
+        img { vertical-align: middle; margin: 4px 6px 4px 0; max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Hilfe zum Motorprüfstand</h1>
+
+<p>Dies ist eine Kurzanleitung für Ihre Test-Stand-App. Mit der Test-Stand-App können Sie die Schubkurven Ihrer Motoren sehr bequem direkt auf dem Startgelände aufzeichnen.</p>
+
+<h2>Ersteinrichtung und Bluetooth-Kopplung</h2>
+<ol>
+    <li><strong>Firmware-Kompatibilität:</strong> Stellen Sie sicher, dass Ihre Prüfstand-Platine kompatibel ist (d. h. dass die richtige Firmware aufgespielt wurde).</li>
+    <li><strong>Modulanschluss:</strong> Stellen Sie sicher, dass das Bluetooth-Modul an die Prüfstand-Platine angeschlossen ist.</li>
+    <li><strong>Kopplung im System:</strong> Öffnen Sie die Einstellungen Ihres Android-Geräts, rufen Sie die Bluetooth-Einstellungen auf und suchen Sie nach dem HC-05-, HC-06- oder einem anderen Bluetooth-Modul. Geben Sie den Kopplungs-PIN ein (Standard: <strong>1234</strong>).</li>
+</ol>
+
+<div class="warning-box">
+    <div class="warning-title">&#9888; ACHTUNG</div>
+    <div>Benennen Sie jedes gekoppelte Bluetooth-Gerät auf Ihrem Telefon eindeutig, damit Sie sicher den richtigen Prüfstand konfigurieren.</div>
+</div>
+
+<ol start="4">
+    <li><strong>Einschalten:</strong> Schalten Sie den Prüfstand ein und warten Sie, bis er aufhört zu piepen.</li>
+    <li><strong>Verbinden:</strong> Starten Sie die App auf Ihrem Android-Gerät, tippen Sie auf „Gekoppelte Geräte anzeigen“ und wählen Sie Ihr HC-05- oder HC-06-Modul aus. Die Konsole versucht nun, eine Verbindung herzustellen.</li>
+</ol>
+
+<p>Sobald die Verbindung besteht, können Sie mit der App Ihren Prüfstand konfigurieren oder die aufgezeichneten Schubkurven auslesen. Kommt keine Verbindung zustande, prüfen Sie, ob die Platine eingeschaltet und der richtige Bluetooth-Adapter ausgewählt ist.</p>
+
+<h2>Verwendung der Test-Stand-App</h2>
+
+<h3>Funktionen des Hauptbildschirms</h3>
+
+<div class="btn-entry">
+    <p><strong>[Prüfstand-Einstellungen]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor settings75x91.png" alt="Prüfstand-Einstellungen"/>
+        Liest die aktuelle Konfiguration des Prüfstands aus und ermöglicht deren Änderung.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Schubkurven lesen]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Thrust Curves75x87.png" alt="Schubkurven lesen"/>
+        Liest alle gespeicherten Schubkurven aus dem Speicher und zeigt sie als interaktive Diagramme an.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Telemetrie]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Telemetry75x91.png" alt="Telemetrie"/>
+        Öffnet die Echtzeit-Telemetrie des Prüfstands.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Einstellungen zurücksetzen]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor reset settings75x90.png" alt="Einstellungen zurücksetzen"/>
+        Stellt die Werkseinstellungen wieder her. Damit können auch alle gespeicherten Schubkurven gelöscht werden.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Status]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor Status75x90.png" alt="Status"/>
+        Öffnet den Hardware-Diagnosebildschirm mit dem Zustand der Sensoren, der Akkuspannung und dem Zustand der Platine.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Firmware flashen]</strong></p>
+    <p><img src="file:///android_asset/help/images/Motor flash75x85.png" alt="Firmware flashen"/>
+        Ermöglicht die Aktualisierung der Platinen-Firmware direkt über ein USB-Kabel.</p>
+</div>
+
+<div class="btn-entry">
+    <p><strong>[Verbinden / Trennen]</strong></p>
+    <p>
+        <img src="file:///android_asset/help/images/Motor connect75x87.png" alt="Verbinden"/>
+        <img src="file:///android_asset/help/images/Motor disconnect75x86.png" alt="Trennen"/>
+    </p>
+    <p>Stellt die Kommunikation mit dem Prüfstand her oder beendet sie.</p>
+</div>
+
+<h3>Menü des Hauptbildschirms</h3>
+<p>Über das Optionsmenü können Sie diese Hilfe öffnen, den Bildschirm „Über“ mit den Versionsinformationen aufrufen und das Erscheinungsbild der App anpassen.</p>
+
+<h3>Unterstützte Hardware</h3>
+<p>Diese App unterstützt die folgenden Prüfstand-Platinen:</p>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Prüfstand ATmega328</strong></p>
+    <p>Dies ist der ursprüngliche Prüfstand-Prototyp, den ich mit einem ATmega328 gebaut habe.</p>
+</div>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Prüfstand STM32 (Version 1)</strong></p>
+    <p>Dies ist der erste Serien-Prüfstand mit einer STM32-Platine. Er hat nur einen Eingang für den Kraftsensor (Wägezelle) und kann daher nur den Schub messen.</p>
+    <p><img src="file:///android_asset/help/images/testStandV1-small.jpg" alt="Prüfstand STM32 (Version 1)"/></p>
+</div>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Prüfstand STM32 (Version 2)</strong></p>
+    <p>Dies ist die zweite Version des Prüfstands, ebenfalls mit einer STM32-Platine. Sie hat einen Eingang für den Kraftsensor zur Schubmessung und 2 Analogeingänge zur Messung des Drucks im Motorgehäuse.</p>
+    <p><img src="file:///android_asset/help/images/testStandV2-small-1.jpg" alt="Prüfstand STM32 (Version 2)"/></p>
+</div>
+
+<div class="hardware-item">
+    <p>&bull; <strong>Prüfstand ESP32 (Version 3)</strong></p>
+    <p>Dies ist die dritte Version des Prüfstands mit einem ESP32-Chip. Sie hat einen Eingang für den Kraftsensor zur Schubmessung und 2 Analogeingänge zur Messung des Drucks im Motorgehäuse. Beachten Sie, dass sie aus irgendeinem Grund weniger aufzeichnet</p>
+    <p><img src="file:///android_asset/help/images/testStandESP32-small.jpg" alt="Prüfstand ESP32 (Version 3)"/></p>
+</div>
+
+</body>
+</html>
